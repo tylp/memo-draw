@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import useSocket from '../hooks/useSocket';
 
+interface HelloMessage {
+    timestamp: number;
+    value: string;
+}
+
 export default function Index() {
 
-    const socket = useSocket();
-    const [value, setValue] = useState("");
+    const socket: SocketIOClient.Socket = useSocket();
+    const [value, setValue] = useState<string>("");
 
     useEffect(() => {
         if (socket) {
-            socket.on("hello-room", message => {
+            socket.on("hello-room", (message: HelloMessage) => {
                 console.log(message)
             });
         }
@@ -25,18 +30,21 @@ export default function Index() {
      * Check the server.js console to see the message.
      */ 
     function emmitData() {
+
+        let msg: HelloMessage = {
+            timestamp: new Date().getTime(),
+            value: value
+        }
+
         socket &&
-            socket.emit("hello-room", {
-                id: new Date().getTime(),
-                value: value
-            });
+            socket.emit("hello-room", msg);
     }
 
     return (
-        <>
+        <div>
             <input onChange={handleInputChange}></input>
             <button onClick={emmitData}>Send</button>
-        </>
+        </div>
 
     );
 }

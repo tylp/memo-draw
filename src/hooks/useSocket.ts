@@ -3,8 +3,13 @@ import io from "socket.io-client";
 
 const socket = io();
 
-export default function useSocket(cb) {
-	const [activeSocket, setActiveSocket] = useState(null);
+interface SocketCallback {
+	(socket: SocketIOClient.Socket): void;
+}
+
+export default function useSocket(cb?: SocketCallback) {
+	
+	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(null);
 
 	useEffect(() => {
 		// debug("Socket updated", { socket, activeSocket });
