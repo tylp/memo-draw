@@ -1,4 +1,4 @@
-# DMC
+# memo-draw
 
 ## Getting started
 
