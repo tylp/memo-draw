@@ -5,7 +5,7 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb-typescript"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -13,13 +13,15 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "plugins": [
         "react",
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": ["error", 4]
+        "indent": "off",
+        "@typescript-eslint/indent" : ["error", 2]
     }
 }
