@@ -1,6 +1,6 @@
-import { Server, Socket } from "socket.io";
-import { createServer } from "http";
-import Client from "socket.io-client";
+import { Server, Socket } from 'socket.io';
+import { createServer } from 'http';
+import Client from 'socket.io-client';
 
 describe("alo", () => {
     let io;

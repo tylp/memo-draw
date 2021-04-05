@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
 const socket = io();
 
 interface SocketCallback {
-	(socket: SocketIOClient.Socket): void;
+	(s: SocketIOClient.Socket): void;
 }
 
 export default function useSocket(cb?: SocketCallback) {
