@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import useSocket from '../hooks/useSocket';
+import {useSocket} from '../hooks';
 
 interface HelloMessage {
     timestamp: number;
     value: string;
 }
 
-export default function Index() : JSX.Element {
+export default function Index() : React.ReactNode {
 
     const socket: SocketIOClient.Socket = useSocket();
     const [value, setValue] = useState<string>("");
