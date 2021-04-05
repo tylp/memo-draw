@@ -1,6 +1,7 @@
-import { Server, Socket } from "socket.io";
-import { createServer } from "http";
-import Client from "socket.io-client";
+import { Server, Socket } from 'socket.io';
+import { createServer } from 'http';
+import Client from 'socket.io-client';
+import { AddressInfo } from 'net';
 
 describe("alo", () => {
     let io;
@@ -11,8 +12,8 @@ describe("alo", () => {
         const httpServer = createServer();
         io = new Server(httpServer);
         httpServer.listen(() => {
-            const port = httpServer.address().port;
-            clientSocket = new Client(`http://localhost:${port}`);
+            const { port } = httpServer.address() as AddressInfo;
+            clientSocket = Client(`http://localhost:${port}`);
             io.on("connection", (socket) => {
                 serverSocket = socket;
             });

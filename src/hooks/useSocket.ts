@@ -1,30 +1,29 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
 const socket = io();
 
 interface SocketCallback {
-	(socket: SocketIOClient.Socket): void;
+    (s: SocketIOClient.Socket): void;
 }
 
-export default function useSocket(cb?: SocketCallback) {
-	
-	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(null);
+export default function useSocket(cb?: SocketCallback): SocketIOClient.Socket {
+    const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(null);
 
-	useEffect(() => {
-		// debug("Socket updated", { socket, activeSocket });
-		if (activeSocket || !socket) return;
-		cb && cb(socket);
-		setActiveSocket(socket);
+    useEffect(() => {
+        // debug("Socket updated", { socket, activeSocket });
+        if (activeSocket || !socket) return;
+        cb && cb(socket);
+        setActiveSocket(socket);
 
         /**
          * Cleanup of all socket handlers
          */
-		return function cleanup() {
-			// debug("Running useSocket cleanup", { socket });
-			socket.off("hello-room", cb);
-		};
-	}, [socket]);
+        return function cleanup() {
+            // debug("Running useSocket cleanup", { socket });
+            socket.off("hello-room", cb);
+        };
+    }, [activeSocket, cb]);
 
-	return activeSocket;
+    return activeSocket;
 }
