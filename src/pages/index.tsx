@@ -6,7 +6,7 @@ interface HelloMessage {
     value: string;
 }
 
-export default function Index() {
+export default function Index() : JSX.Element {
 
     const socket: SocketIOClient.Socket = useSocket();
     const [value, setValue] = useState<string>("");
