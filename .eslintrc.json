@@ -1,27 +1,27 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb-typescript"
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     },
     "plugins": [
-        "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "react-hooks"
+    ],
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
-        "indent": "off",
-        "@typescript-eslint/indent" : ["error", 2]
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off",
+        "@typescript-eslint/no-var-requires": 0
+    },
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        }
     }
 }

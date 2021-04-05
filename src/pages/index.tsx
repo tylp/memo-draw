@@ -31,7 +31,7 @@ export default function Index() {
      */ 
     function emmitData() {
 
-        let msg: HelloMessage = {
+        const msg: HelloMessage = {
             timestamp: new Date().getTime(),
             value: value
         }

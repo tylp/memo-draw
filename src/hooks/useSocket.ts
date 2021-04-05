@@ -7,7 +7,7 @@ interface SocketCallback {
     (s: SocketIOClient.Socket): void;
 }
 
-export default function useSocket(cb?: SocketCallback) {
+export default function useSocket(cb?: SocketCallback): SocketIOClient.Socket {
     const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(null);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function useSocket(cb?: SocketCallback) {
             // debug("Running useSocket cleanup", { socket });
             socket.off("hello-room", cb);
         };
-    }, [socket]);
+    }, [activeSocket, cb]);
 
     return activeSocket;
 }
