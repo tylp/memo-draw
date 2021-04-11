@@ -5,6 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "dev": "node server.ts",
+    "build": "next build",
     "test": "jest",
     "start": "cross-env NODE_ENV=production node server.ts"
   },
