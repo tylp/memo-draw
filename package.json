@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node server.ts",
     "test": "jest",
-    "start": "cross-env NODE_ENV=production node server.ts"
+    "start": "NODE_ENV=production node server.ts"
   },
   "repository": {
     "type": "git",
