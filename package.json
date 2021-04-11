@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
+    "build": "next build",
     "dev": "node server.ts",
     "test": "jest",
     "start": "NODE_ENV=production node server.ts"
