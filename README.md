@@ -2,6 +2,16 @@
 
 # memo-draw
 
+## Memo Draw ?
+MemoDraw is a website game based on the funny concept of the game "in my suitcase", mixing memory and drawing.
+### Rules
+- The first player draws a first picture
+- The second player has to redraw the previous player's drawing from memory and add a new one
+- The third player must reproduce the previous drawings from memory and add a new one
+- And so on
+
+The first to make a mistake or forget a drawing is disqualified.
+
 ## Getting started
 
 Install the dependencies :
