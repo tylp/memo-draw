@@ -32,6 +32,8 @@ Each component consists of four files :
 - <component>.module.css
 - <component>.spec.ts
 - <component>.test.ts
+    
+Component's name have to be in kebab-case.
 
 ## Branching & Commit
 
