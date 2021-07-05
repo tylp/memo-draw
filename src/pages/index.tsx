@@ -41,9 +41,9 @@ export default function Index() : React.ReactNode {
     }
 
     return (
-        <div>
-            <input onChange={handleInputChange}></input>
-            <button onClick={emmitData}>Send</button>
+        <div className="flex p-3">
+            <input className="rounded border-4 bg-green-600" onChange={handleInputChange}></input>
+            <button className="rounded shadow-md bg-green-600 p-3.5 ml-2" onClick={emmitData}>Send</button>
         </div>
 
     );
