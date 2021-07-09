@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useSocket} from '../hooks';
+import {Layout} from "../components/common";
+import {ProfileSelector} from "../components/home";
 
 interface HelloMessage {
     timestamp: number;
@@ -41,10 +43,16 @@ export default function Index() : React.ReactNode {
     }
 
     return (
-        <div className="flex p-3">
-            <input className="rounded border-4 bg-green-600" onChange={handleInputChange}></input>
-            <button className="rounded shadow-md bg-green-600 p-3.5 ml-2" onClick={emmitData}>Send</button>
-        </div>
+        <Layout>
+            <div className="flex flex-wrap flex-auto justify-center md:space-x-32">
+                <div>
+                    <p>Rules list</p>
+                </div>
+                <div >
+                    <ProfileSelector />
+                </div>
+            </div>
+        </Layout>
 
     );
 }
