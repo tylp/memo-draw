@@ -33,7 +33,7 @@ npm test
 ```
 
 ## Run eslint check
-```bash
-npx eslint . --ext .js,.jsx,.ts,.tsx
-```
 
+```bash
+npm run eslint
+```
