@@ -29,7 +29,6 @@ Components shoudl follow the structure defined in the [Components](https://githu
 Each component consists of four files :
 
 - <component>.tsx
-- <component>.module.css
 - <component>.spec.ts
 - <component>.test.ts
     
