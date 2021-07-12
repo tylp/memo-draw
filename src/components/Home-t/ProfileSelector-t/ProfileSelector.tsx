@@ -1,6 +1,6 @@
 import React, {useState } from "react";
-import {SelectButtonSpec} from './profileSelector.spec';
-import { Title } from "../../common";
+import { Title } from "../../Common-t";
+import { SelectButtonSpec } from "./ProfileSelector.spec";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     return (

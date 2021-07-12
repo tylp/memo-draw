@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useSocket} from '../hooks';
-import {Layout} from "../components/common";
-import {ProfileSelector} from "../components/home";
+import {Layout} from "../components/Common-t";
+import {ProfileSelector} from "../components/Home-t";
 
 interface HelloMessage {
     timestamp: number;
