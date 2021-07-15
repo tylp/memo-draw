@@ -1,5 +1,6 @@
 import React, {useState } from "react";
 import { Title } from "../../Common";
+import Button from "../../Common/Button/Button";
 import { SelectButtonSpec } from "./ProfileSelector.spec";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
@@ -113,6 +114,7 @@ export default function ProfileSelector(): JSX.Element {
             <div className="mt-4">
                 <Title>Pseudo</Title>
                 <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={handleUserName} />
+                <Button className="mt-2">Done !</Button>
             </div>
         </div>
     )
