@@ -33,7 +33,7 @@ Each component consists of four files :
 - <component>.spec.ts
 - <component>.test.ts
     
-Component's name have to be in kebab-case.
+Component's name have to be in PascalCase.
 
 ## Branching & Commit
 
