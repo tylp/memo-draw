@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useSocket} from '../hooks';
 import {Layout} from "../components/common";
-import {ProfileSelector} from "../components/home";
+import {ProfileSelector, RuleItem} from "../components/home";
 
 interface HelloMessage {
     timestamp: number;
@@ -46,7 +46,9 @@ export default function Index() : React.ReactNode {
         <Layout>
             <div className="flex flex-wrap flex-auto justify-center md:space-x-32">
                 <div>
-                    <p>Rules list</p>
+                    <RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
+                    <RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
+                    <RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
                 </div>
                 <div >
                     <ProfileSelector />
