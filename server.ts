@@ -4,7 +4,7 @@ const io = require('socket.io')(server);
 const next = require('next');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== 'development';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
