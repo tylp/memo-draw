@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useSocket} from '../hooks';
+// import {useSocket} from '../hooks';
 import {Layout} from "../components/Common";
 import {ProfileSelector, RuleItem} from "../components/Home";
 
@@ -10,23 +10,31 @@ interface HelloMessage {
 
 export default function Index() : React.ReactNode {
 
-    const socket: SocketIOClient.Socket = useSocket();
+    // const socket: SocketIOClient.Socket = useSocket();
     const [value, setValue] = useState<string>("");
+    const [username, setUserName] = useState<string>("");
 
     useEffect(() => {
-        if (socket) {
-            socket.on("hello-room", (message: HelloMessage) => {
-                console.log(message)
-            });
-        }
-    }, [socket]);
+		console.log(username);
+    });
 
     // Handle input change
     const handleInputChange = (event) => {
         setValue(event.target.value);
     };
 
-    
+    // Handle input change
+    const handleUserName = (event) => {
+		setUserName(event.target.value);
+    };
+
+	// Handle submit
+    const handleSubmit = () => {
+		console.log('submit');
+		
+		// setUserName(event.target.value);
+    };
+
     /**
      * Emit <value> to "hello-room" topic.
      * Check the server.js console to see the message.
@@ -51,7 +59,9 @@ export default function Index() : React.ReactNode {
                     <RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
                 </div>
                 <div >
-                    <ProfileSelector />
+                    <ProfileSelector 
+					handleSubmit={handleSubmit}
+					handleUserName={handleUserName}/>
                 </div>
             </div>
         </Layout>

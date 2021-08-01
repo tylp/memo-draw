@@ -34,7 +34,7 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     );
 }
 
-export default function ProfileSelector(): JSX.Element {
+export default function ProfileSelector(props): JSX.Element {
 
     const avatarUrls = [
         "https://media3.chapellerie-traclet.com/14578-thickbox_default/melon-hat.jpg",
@@ -86,9 +86,9 @@ export default function ProfileSelector(): JSX.Element {
             setCurrentUrlIndex(currentUrlIndex + 1);
     }
 
-    function handleUserName(event: React.FormEvent<HTMLInputElement>) {
-        setUserName(event.currentTarget.value);
-    }
+    // function handleUserName(event: React.FormEvent<HTMLInputElement>) {
+    //     setUserName(event.currentTarget.value);
+    // }
 
     return (
         <div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
@@ -113,8 +113,8 @@ export default function ProfileSelector(): JSX.Element {
 
             <div className="mt-4">
                 <Title>Pseudo</Title>
-                <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={handleUserName} />
-                <Button className="mt-2">Done !</Button>
+                <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+                <Button className="mt-2" onClick={() => props.handleSubmit()}>Done !</Button>
             </div>
         </div>
     )
