@@ -84,7 +84,6 @@ export default function RoomSelector(props) {
 					}
 				}
 				user.self = user.userID === socket.userID;
-				// user.connected = true;
 			});
 			// put the current user first, and sort by username
 			users = users.sort((a, b) => {
@@ -94,8 +93,6 @@ export default function RoomSelector(props) {
 				return a.username > b.username ? 1 : 0;
 			});
 			setUsersList(users);
-			console.log('client users event');
-			
 		});
 
 		socket.on("rooms", (rooms) => {
@@ -104,8 +101,6 @@ export default function RoomSelector(props) {
 
 		socket.on("new-room", (room) => {
 			setRoomsList((rooms) => [...rooms, room]);
-			console.log(roomsList);
-			
 		})
 
 		socket.on("add-nb-player", (roomID) => {
@@ -130,17 +125,9 @@ export default function RoomSelector(props) {
 
 		//executed when component is dismounted (one time)
 		return () => {
-			// console.log('client off');
-			// socket.off("connect_error");
-			// socket.off("connect");
-			// socket.off("disconnect");
-			// socket.off("user connected");
-			// socket.off("user disconnected");
-			// socket.off("users");
-			// socket.off("manual-disconnect");
-			// socket.close();
+			// console.log('RoomSelector off');
 		}
-	}, []);
+	}, []);	
 
     function status(connected) {
         if(connected){

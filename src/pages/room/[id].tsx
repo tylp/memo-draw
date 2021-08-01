@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 import {useSocketRoom} from '../../hooks';
 import Link from 'next/link';
-import e from 'express';
 
 const Room = () => {
 	const btnStyle = {
@@ -17,7 +16,6 @@ const Room = () => {
 	const socket = useSocketRoom();
 	const [url, setUrl] = useState('');
 	const [usersList, setUsersList] = useState([]);
-    const [roomsList, setRoomsList] = useState([]);
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [roomID, setRoomID] = useState(id);
@@ -66,6 +64,8 @@ const Room = () => {
 				setConnected(true);
 				socket.auth = { sessionID };
 				socket.connect();
+			} else {
+				
 			}
 		}
 		else if(router.query.id && !roomID){
@@ -87,23 +87,19 @@ const Room = () => {
 		// });
 
 		socket.on("clients", (clients) => {
-			console.log("clients => ", clients);
 			setUsersList(clients);
 		})
 
 		socket.on("player connected", (newUser) => {
             console.log('a new player joined the room');
             setUsersList((prevList) => [...prevList, newUser]);
-			console.log('usersList', usersList);
         });
 
 		socket.on("player disconnected", (oldUserID) => {
-            console.log('a player leaved the room');
             setUsersList((prevList) => prevList.map((user) => {
                 if(user.userID !== oldUserID)
                     return user
             }));
-			console.log('usersList', usersList);
         });
 
 		socket.on("new message", (message) => {
@@ -113,7 +109,6 @@ const Room = () => {
         });
 
 		window.onbeforeunload = (e) => {
-			console.log('client off window');
 			socket.emit('leaving-room');
 			socket.close();
 		};
@@ -136,6 +131,10 @@ const Room = () => {
 	// 	socket.close();
 	// }
 
+	// const unknownUser = () => {
+	// 	setUnknownUsers(true)
+	// }
+
 	const handleMessage = (e) => {
 		setMessage(e.currentTarget.value);
 	}
@@ -151,15 +150,14 @@ const Room = () => {
 		navigator.clipboard.writeText(url).then(function() {
 			console.log('url: ', url);
 			
-		  }, function() {
+		}, function() {
 			console.log('fail');
-			
-		  });
+		});
 	}
 
 	return (
 		<div style={{backgroundColor: 'lightgrey'}}>
-			<Link href="/rooms">
+			<Link href="/">
 				<button style={btnStyle} >
 					&larr; Quitter le salon
 				</button>

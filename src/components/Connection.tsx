@@ -3,50 +3,9 @@ import {Layout, Title} from "../components/Common";
 import Button from "../components/Common/Button/Button";
 
 export default function Connection(props) {
-	// const socket = props.socket;
-
-    // // Handle user name
-    // function handleUsername(event: React.FormEvent<HTMLInputElement>) {
-    //     setUsername(event.currentTarget.value);
-    // }
-
-    // function submitUsername() {
-    //     console.log(username);
-        
-    //     setUsernameAlreadySelected(true);
-    //     socket.auth = { username };
-    //     socket.connect();
-    // }
-
-	// const clearStorage = (e) => {
-    //     e.preventDefault();
-    //     localStorage.clear();
-	// }
-
 	//executed when component is created (one time)
     useEffect(() => {
-		
-        // const sessionID = localStorage.getItem("sessionID");
-
-        // console.log('sessionID: ', sessionID);
-
-        // if (sessionID) {
-        //     console.log('in connection comp déjà connecté !');
-            
-		// 	props.onUsernameSelected(true);
-
-        //     socket.auth = { sessionID };
-        //     socket.connect();
-        // }
-
-		// socket.on("connect_error", (err) => {
-        //     if (err.message === "invalid username") {
-        //         // setUsernameAlreadySelected(false);
-		// 		props.onUsernameSelected(false);
-
-        //     }
-        // });
-
+		// console.log('connecté !');
 	}, []);
 	
 	return (

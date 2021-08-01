@@ -1,3 +1,4 @@
+// export {}
 
 const app = require('express')();
 const server = require('http').createServer(app);
@@ -9,7 +10,8 @@ const roomIO = io.of("/room");
 const cryptoRand = require('crypto');
 const randomId = () => cryptoRand.randomBytes(8).toString("hex");
 
-// import { InMemorySessionStore } from "./sessionStore";
+import SessionStorage from "./sessionStorage";
+import RoomStorage from "./roomStorage";
 // const { InMemorySessionStore } = require("./sessionStore");
 
 const next = require('next');
@@ -18,87 +20,11 @@ const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
-class SessionStorage {
-	sessions;
-	constructor() {
-		this.sessions = new Map();
-	}
-
-	findSession(id) {
-		return this.sessions.get(id);
-	}
-
-	saveSession(id, session) {
-	    this.sessions.set(id, session);
-	}
-
-    setSessionRoomID(id, roomID) {
-        const session = this.findSession(id);
-        this.sessions.set(id, {...session, roomID: roomID});
-    }
-
-	findAllSessions(){
-		return [...this.sessions.values()];
-	}
-
-    findAllSessionsOfRoom(roomID){
-        const room = [];
-        for(const session of this.sessions.values()){
-            if(session.roomID === roomID){
-                room.push(session);
-            }
-        }
-		return room;
-	}
-}
-
 const sessionStore = new SessionStorage();
-
-class RoomStorage {
-	rooms;
-	constructor() {
-		this.rooms = [];
-	}
-
-	findRoom(id) {
-		return this.rooms.find((room) => room.id === id);
-	}
-
-	saveRoom(id) {
-	    this.rooms.push({
-            id : id, 
-            name: "Salon "+(parseInt(this.rooms.length)+1), 
-            nbPlayer: 0
-        });
-	}
-
-    addNbPlayer(id){
-        this.rooms.forEach((room) => {
-            if(room.id === id)
-                room.nbPlayer++;
-        });
-    }
-
-    subNbPlayer(id){
-        this.rooms.forEach((room) => {
-            if(room.id === id)
-                room.nbPlayer--;
-        });
-    }
-
-	findAllRooms(){
-		return this.rooms;
-	}
-
-    isEmpty(){
-        return this.rooms.length === 0
-    }
-}
-
 const roomStore = new RoomStorage();
 
 // fake DB
-const messages = [];
+// const messages = [];
 
 io.use((socket, next) => {
     const sessionID = socket.handshake.auth.sessionID;
@@ -152,10 +78,6 @@ io.on("connection", (socket) => {
     // fetch existing rooms
     if(!roomStore.isEmpty())
     {
-        // const rooms = [];
-        // roomStore.findAllRooms().forEach((room) => {
-        //     rooms.push(room.roomID);
-        // });
         socket.emit("rooms", roomStore.findAllRooms());
     }
 
@@ -168,7 +90,6 @@ io.on("connection", (socket) => {
 
     socket.on("create-room", function(msg){
         const roomID = randomId();
-        // socket.join(roomID);
 		console.log('create-room: ', msg);
         roomStore.saveRoom(roomID);
         io.emit('new-room', roomStore.findRoom(roomID))
@@ -226,8 +147,6 @@ roomIO.on("connection", (socket) => {
         username: socket.username,
         connected: true,
     });
-
-    // socket.join(socket.userID);
     
     socket.emit("session", {
         sessionID: socket.sessionID,
@@ -241,9 +160,6 @@ roomIO.on("connection", (socket) => {
         socket.roomID = roomID;
         sessionStore.setSessionRoomID(user.sessionID, roomID);
         io.of('/room').in(roomID).emit("succesfull join");
-        // console.log(io.of("/room").adapter.rooms);
-        // io.of('/room').in(roomID).emit('un nouveau joueur à rejoint le salon !');
-        // console.log(user);
         
         // send room players list to emmitter
         socket.emit("clients", sessionStore.findAllSessionsOfRoom(roomID));
@@ -257,7 +173,6 @@ roomIO.on("connection", (socket) => {
         // update nbPlayer in room
         roomStore.addNbPlayer(roomID);
         io.of('/').emit('add-nb-player', roomID);
-        // io.of('/room').in(roomID).emit("clients", clients);
 	});
 
 	socket.on("new message", (message, roomID) => {
@@ -301,38 +216,8 @@ roomIO.on("connection", (socket) => {
     });
 });
 
-// io.of("/").adapter.on("create-room", (room) => {
-//     console.log(`room ${room} was created`);
-// });
-
-// io.of("/").adapter.on("delete-room", (room) => {
-//     console.log(`room ${room} was deleted`);
-// });
-
-// io.of("/").adapter.on("join-room", (room, id) => {
-//     console.log(`socket ${id} has joined room ${room}`);
-// });
-
-// io.of("/").adapter.on("leave-room", (room, id) => {
-//     console.log(`socket ${id} has leaved room ${room}`);
-// });
 
 nextApp.prepare().then(() => {
-    // app.get('/messages/:chat', (req, res) => {
-    //     res.json({ messages });
-    // });
-
-    // app.get('/rooms', (req, res) => {
-    //     nextHandler(req, res);
-
-    //     // socket.on('chat message', (msg) => {
-    //     //     console.log('message: ' + msg);
-    //     //     io.emit('chat message', msg);
-    //     // });
-        
-    //     console.log('init room');
-    // });
-
     app.get('*', (req, res) => nextHandler(req, res));
 
     server.listen(port, (err) => {
