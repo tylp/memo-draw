@@ -125,7 +125,17 @@ export default function RoomSelector(props) {
 
 		//executed when component is dismounted (one time)
 		return () => {
-			// console.log('RoomSelector off');
+			console.log('RoomSelector off');
+			socket.off('sub-nb-player')
+			socket.off('add-nb-player')
+			socket.off('new-room')
+			socket.off('rooms')
+			socket.off('users')
+			socket.off('session')
+			socket.off('connect')
+			socket.off('disconnect')
+			socket.off('user connected')
+			socket.off('user disconnected')
 		}
 	}, []);	
 

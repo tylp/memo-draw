@@ -13,6 +13,7 @@ export default function Index() : React.ReactNode {
     // const socket: SocketIOClient.Socket = useSocket();
     // const [value, setValue] = useState<string>("");
     const socket = useSocket();
+    const [isLoading, setIsLoading] = useState(true);
     const [username, setUsername] = useState<string>("");
     const [usernameAlreadySelected, setUsernameAlreadySelected] = useState<boolean>(false);
 
@@ -25,18 +26,23 @@ export default function Index() : React.ReactNode {
     useEffect(() => {
         const sessionID = localStorage.getItem("sessionID");
         if (sessionID) {
+			setIsLoading(true);
             socket.auth = { sessionID };
             socket.connect();
         }
+		else
+			setIsLoading(false)
 
         socket.on("connect_error", (err) => {
             if (err.message === "invalid username") {
+				setIsLoading(false);
                 setUsernameAlreadySelected(false);
             }
         });
 
         socket.on("connect", () => {
             console.log('connect');
+			setIsLoading(false);
             setUsernameAlreadySelected(true);
         });
 
@@ -103,7 +109,8 @@ export default function Index() : React.ReactNode {
 
     return (
 		<div>
-			{!usernameAlreadySelected ?
+			{isLoading ? <div>Loading...</div> : 
+			!usernameAlreadySelected ?
 				<Layout>
 					<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 						<div>

@@ -147,6 +147,13 @@ roomIO.on("connection", (socket) => {
         username: socket.username,
         connected: true,
     });
+
+	// notify existing users
+	io.of('/').emit('user connected', {
+        userID: socket.userID,
+        username: socket.username,
+        connected: true,
+    });
     
     socket.emit("session", {
         sessionID: socket.sessionID,
@@ -154,33 +161,50 @@ roomIO.on("connection", (socket) => {
 		username: socket.username,
     });
     
-    socket.on("joining-room", function(roomID, user){
-		console.log('joining-room: ', roomID);
-        socket.join(roomID);
-        socket.roomID = roomID;
-        sessionStore.setSessionRoomID(user.sessionID, roomID);
-        io.of('/room').in(roomID).emit("succesfull join");
-        
-        // send room players list to emmitter
-        socket.emit("clients", sessionStore.findAllSessionsOfRoom(roomID));
+    socket.on("joining-room", function(roomID, user, isUnknown){
+		if (!roomStore.findRoom(roomID)){
+			return isUnknown();
+		}
+		else {
+			console.log('joining-room: ', roomID);
+			socket.join(roomID);
+			socket.roomID = roomID;
+			sessionStore.setSessionRoomID(user.sessionID, roomID);
+			io.of('/room').in(roomID).emit("succesfull join");
+			
+			// send room players list to emmitter
+			socket.emit("clients", sessionStore.findAllSessionsOfRoom(roomID));
 
-        // send room players newcomer infos
-        socket.to(roomID).emit("player connected", sessionStore.findSession(user.sessionID));
+			// send room players newcomer infos
+			socket.to(roomID).emit("player connected", sessionStore.findSession(user.sessionID));
 
-		// send room players a welcome message
-        io.of('/room').in(roomID).emit("new message", {username: 'Memo-Draw Bot', content: `Bienvenue dans le ${roomStore.findRoom(roomID).name} ${user.username} !`});
+			// send room players a welcome message
+			io.of('/room').in(roomID).emit("new message", {username: 'Memo-Draw Bot', content: `Bienvenue dans le ${roomStore.findRoom(roomID).name} ${user.username} !`});
 
-        // update nbPlayer in room
-        roomStore.addNbPlayer(roomID);
-        io.of('/').emit('add-nb-player', roomID);
+			// update nbPlayer in room
+			roomStore.addNbPlayer(roomID);
+			io.of('/').emit('add-nb-player', roomID);
+		}
 	});
 
 	socket.on("new message", (message, roomID) => {
 		io.of('/room').in(roomID).emit("new message", {username: socket.username, content: message});
 	})
 
-    socket.on('leaving-room', function() {
-        console.log('user leaved room ', socket.roomID);
+	// Broadcast draw to everyone in the room
+	socket.on('drawing', (data) => {
+		socket.to(socket.roomID).emit('drawing', data)
+	});
+
+    // notify users upon disconnection
+    socket.on("disconnect", async () => {
+		// Prepering the emiter to leave the room
+
+		console.log('user leaved room ', socket.userID);
+        // substract nbPlayer of the room
+        roomStore.subNbPlayer(socket.roomID);
+        io.of('/').emit('sub-nb-player', socket.roomID);
+
         // disconnecting emiter from the room
         socket.leave(socket.roomID);
 
@@ -190,29 +214,24 @@ roomIO.on("connection", (socket) => {
 		// alert room players to revome the emitter
         socket.to(socket.roomID).emit("player disconnected", socket.userID);
 
-        // substract nbPlayer of the room
-        roomStore.subNbPlayer(socket.roomID);
-        io.of('/').emit('sub-nb-player', socket.roomID);
-
 		// reset roomID of emitting socket
 		socket.roomID = null;
-    });
 
-    // notify users upon disconnection
-    socket.on("disconnect", async () => {
-        console.log('a user has been disconnected from a room');
-        const matchingSockets = await io.of('/room').in(socket.userID).allSockets();
-        const isDisconnected = matchingSockets.size === 0;
-        if (isDisconnected) {
-            // notify other users
-            socket.broadcast.emit("user disconnected", socket.userID);
-            // update the connection status of the session
-            sessionStore.saveSession(socket.sessionID, {
-                userID: socket.userID,
-                username: socket.username,
-                connected: false,
-            });
-        }
+		socket.broadcast.emit("user disconnected", socket.userID);
+
+        // console.log('a user has been disconnected from a room');
+        // const matchingSockets = await io.of('/room').in(socket.userID).allSockets();
+        // const isDisconnected = matchingSockets.size === 0;
+        // if (isDisconnected) {
+        //     // notify other users
+        //     socket.broadcast.emit("user disconnected", socket.userID);
+        //     // update the connection status of the session
+        //     sessionStore.saveSession(socket.sessionID, {
+        //         userID: socket.userID,
+        //         username: socket.username,
+        //         connected: false,
+        //     });
+        // }
     });
 });
 
