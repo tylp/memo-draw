@@ -13,6 +13,11 @@ export default function Index() : React.ReactNode {
 
 	//executed when component is created (one time)
 	useEffect(() => {
+
+		if(!socket) return
+
+		console.log(socket)
+
 		const sessionID = localStorage.getItem("sessionID");
 		if (sessionID) {
 			setIsLoading(true);

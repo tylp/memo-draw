@@ -1,21 +1,41 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import useLocalStorage from './useLocalStorage';
 import io from "socket.io-client";
 
 const socket = io({ autoConnect: false});
 
-export default function useSocket(eventName, cb) {
-	useEffect(() => {
-		// uncomment to log every socket event
-		// socket.onAny((event, ...args) => {
-		// 	console.log(event, args);
-		// });
+interface IUseSocket {
+    callback?: (s: SocketIOClient.Socket) => void;
+}
 
-		socket.on(eventName, cb)
+export default function useSocket(props?: IUseSocket): SocketIOClient.Socket {
+	const [sessionID, setSessionId] = useLocalStorage('sessionID');
+	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(
+		io(
+			{
+				autoConnect: false,
+				auth: {
+					sessionID: sessionID
+				}
+			}
+		));	
 
-		return function useSocketCleanup() {
-			socket.off(eventName, cb)
-		}
-	}, [eventName, cb])
+    useEffect(() => {
 
-	return socket
+        // console.debug("Socket updated", { socket, activeSocket });
+        if (activeSocket || !socket) return;
+
+        props.callback && props.callback(socket);
+        setActiveSocket(socket);
+
+        /**
+         * Cleanup of all socket handlers
+         */
+        return function cleanup() {
+            // debug("Running useSocket cleanup", { socket });
+			socket.close()
+        };
+    }, [activeSocket, props]);
+
+    return activeSocket;
 }
