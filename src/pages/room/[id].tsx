@@ -5,49 +5,38 @@ import Link from 'next/link';
 import { Layout, Title } from '../../components/Common';
 import Button from '../../components/Common/Button/Button';
 import Loading from '../../components/Common/Loading/Loading';
-import Draw from '../../components/CustomCanvas';
 import Canvas from '../../components/Canvas';
-import { getMaxListeners } from 'process';
-import { getSystemErrorMap } from 'util';
 
 const Room = () => {
-	const btnStyle = {
-		flex: 0.3,
-		fontWeight: 'bold', 
-		color:'white', 
-		backgroundColor: 'black', 
-		padding: 4
-	}
 	const router = useRouter();
 	const { id } = router.query;
-	const socket = useSocketRoom();
+	const socket = useSocketRoom(null, null);
 	const [url, setUrl] = useState('');
 	const [usersList, setUsersList] = useState([]);
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [roomID, setRoomID] = useState(id);
-    const [user, setUser] = useState({});
-    const [inRoom, setInRoom] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isConnected, setIsConnected] = useState(false);
-    const [isValidRoom, setIsValidRoom] = useState(true);
-	const [coord, setCoord] = useState({x: 0, y: 0});
+	const [message, setMessage] = useState("");
+	const [messages, setMessages] = useState([]);
+	const [roomID, setRoomID] = useState('');
+	const [user, setUser] = useState({sessionID: '', userID: '', username: ''});
+	const [inRoom, setInRoom] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isConnected, setIsConnected] = useState(false);
+	const [isValidRoom, setIsValidRoom] = useState(true);
 	const [broadcastedCoords, setBroadcastedCoords] = useState(null);
 
 	//executed when component is updated
 	useEffect(() => {
 		console.log('players: ', usersList);
-		if(!roomID)
-			setRoomID(router.query.id);
-		if(roomID && isConnected && !inRoom)
-		{
-
+		if(!roomID && router.query.id){
+			setRoomID(router.query.id.toString());			
+		}
+		if(roomID && isConnected && !inRoom && isLoading)
+		{			
 			socket.emit("joining-room", 
 				roomID, 
 				{
-					sessionID: socket.auth.sessionID, 
-					userID: socket.userID,
-					username: socket.username
+					sessionID: user.sessionID, 
+					userID: user.userID,
+					username: user.username
 				},
 				// Callback executed when no room correspond to the roomID
 				() => {
@@ -55,29 +44,16 @@ const Room = () => {
 				}
 			);
 			setInRoom(true)
+			setIsLoading(false);
 		}
-	}, [usersList, roomID, isConnected, inRoom, socket, router.query.id]);
-
-	// useEffect(() => {
-	// 	if(coord.x && coord.y){
-	// 		socket.emit('drawing', {
-	// 			x: coord.x,
-	// 			y: coord.y,
-	// 			// x1: x1 / w,
-	// 			// y1: y1 / h,
-	// 			// color: color
-	// 		});
-	// 	}
-	// }, [coord])
+	});
 
 	//executed when component is created (one time)
 	useEffect(() => {
 		// store the current room url to be able to save it to paperclip later
 		setUrl(window.location.href.toString());
-		console.log('je passe !');
 
 		const sessionID = localStorage.getItem("sessionID");
-		console.log('sessionID: ', sessionID);
 		if (sessionID) {
 			console.log('un session existe');
 			socket.auth = { sessionID };
@@ -89,33 +65,23 @@ const Room = () => {
 		}
 
 		socket.on("connect", () => {
-			setIsLoading(false);
-			setIsConnected(true);
 			console.log('connect');
-        });
+		});
 
 		socket.on("connect_error", (err) => {
 			console.log(err);
-            if (err.message === "invalid username") {
+			if (err.message === "invalid username") {
 				setIsLoading(false);
-            }
-        });
-		
-		// socket.onAny((event, ...args) => {
-		// 	console.log(event, args);
-		// });
+			}
+		});
 
 		socket.on("session", ({ sessionID, userID, username }) => {
-			console.log('hydrating session');
-			
 			// attach the session ID to the next reconnection attempts
 			socket.auth = { sessionID };
 			// store it in the localStorage
 			localStorage.setItem("sessionID", sessionID);
-			// save the ID of the user
+			// save the ID & name of the user
 			socket.userID = userID;
-			console.log('username: ', username);
-			
 			socket.username = username;
 
 			setUser({
@@ -123,6 +89,8 @@ const Room = () => {
 				userID: socket.userID,
 				username: socket.username
 			});
+			
+			setIsConnected(true);
 		});
 
 		socket.on("clients", (clients) => {
@@ -130,7 +98,6 @@ const Room = () => {
 		})
 
 		socket.on("player connected", (newUser) => {
-            console.log('a new player joined the room');
 			let inList = false
 			usersList.forEach((user) => {
 				if (user.userID === newUser.userID)
@@ -138,17 +105,15 @@ const Room = () => {
 			});
 			if(!inList)
 				setUsersList((prevList) => [...prevList, newUser]);
-        });
+		});
 
 		socket.on("player disconnected", (oldUserID) => {
-            setUsersList((prevList) => prevList.filter((user) => user.userID !== oldUserID));
-        });
+			setUsersList((prevList) => prevList.filter((user) => user.userID !== oldUserID));
+		});
 
 		socket.on("new message", (message) => {
-            console.log(`message: ${message.content}`);
-            setMessages((prevList) => [...prevList, message]);
-			// console.log('usersList', usersList);
-        });
+			setMessages((prevList) => [...prevList, message]);
+		});
 
 		socket.on('drawing', (broadcastedCoords) => {
 			setBroadcastedCoords(broadcastedCoords)
@@ -163,7 +128,6 @@ const Room = () => {
 			socket.off("player connected");
 			socket.off("player disconnected");
 			socket.close();
-			console.log('client off window');
 		};
 
 		return () => {
@@ -175,7 +139,6 @@ const Room = () => {
 			socket.off("player connected");
 			socket.off("player disconnected");
 			socket.close();
-			console.log('client off component');
 		}
 	}, []);
 
@@ -192,10 +155,7 @@ const Room = () => {
 	const paperClip = (e) => {
 		e.preventDefault();
 		navigator.clipboard.writeText(url).then(function() {
-			console.log('url: ', url);
-			
-		}, function() {
-			console.log('fail');
+			// TODO: inform user that link is in his clipboard now		
 		});
 	}
 
@@ -203,65 +163,55 @@ const Room = () => {
 		socket.emit('drawing', coords);
 	}
 
-	// function handleBroadcastedCoords(data){
-	// 	setBroadcastedCoords(data)
-	// }
-
 	return (
-		
 		<div>
-			{isLoading ? <Loading/>
+			{isLoading ? 
+				<Loading/>
 			: 
 			!isConnected ? 
-			<Layout>
-				<Title>Vous devez vous connecter: </Title>
-				<Button><a href="/">Se connecter</a></Button>
-			</Layout> 
+				<Layout>
+					<Title>Vous devez vous connecter: </Title>
+					<Button><a href="/">Se connecter</a></Button>
+				</Layout> 
 			:
 			!isValidRoom ? 
-			<Layout>
-				<Title>Ce salon n'existe pas, veuillez reessayer: </Title>
-				<Button><a href="/">Créer un salon / rejoindre un salon</a></Button>
-			</Layout> 
-			:
-			<Layout>
-				<Link href="/">
-					<Button>&larr; Quitter le salon</Button>
-				</Link>
-				<p className="text-white-white font-bold">Room: {id}</p>
-				<p className="text-white-white font-bold">Socket: {user.sessionID}</p>
-				<Canvas width="800" height="400"
-					emitCoords={emitCoords}
-					broadcastedCoords={broadcastedCoords}
-					// style={{height: '50%', backgroundColor: 'white'}}
-				/>
-				<p className="text-white-white font-bold">utilisateurs: {JSON.stringify(usersList)}</p>
-				<Button onClick={paperClip}>Envoyer le lien à vos amis</Button>
-				<Title className="text-pink-pink">Messages du salon :</Title>
-				<ul>
-					{messages.map((msg, key) => (
-					<li className="text-white-white" key={key}>
-						<span className="text-white-white font-bold">{msg.username}:</span> {msg.content}
-					</li>
-					))}
-				</ul>
-				<form action="" style={{display: 'flex'}}>
-					<input 
-					type="text" 
-					onChange={handleMessage} 
-					value={message}
-					className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"/>
-					<Button
-					// type="submit" 
-					onClick={sendMessage}>
-						Envoyer
-					</Button>
-				</form>
-				<p>&nbsp;</p>
-			</Layout>
-			// <div style={{backgroundColor: 'lightgrey', position: 'fixed', width: '100%', height: '100%'}}>
-				
-			// </div>
+				<Layout>
+					<Title>Ce salon n`&apos;`existe pas, veuillez reessayer: </Title>
+					<Button><a href="/">Créer un salon / rejoindre un salon</a></Button>
+				</Layout> 
+			:			
+				<Layout>
+					<Link href="/">
+						<a><Button>&larr; Quitter le salon</Button></a>
+					</Link>
+					<p className="text-white-white font-bold">Room: {id}</p>
+					<p className="text-white-white font-bold">Socket: {user.sessionID}</p>
+					<Canvas width="800" height="400"
+						emitCoords={emitCoords}
+						broadcastedCoords={broadcastedCoords}
+					/>
+					<p className="text-white-white font-bold">utilisateurs: {JSON.stringify(usersList)}</p>
+					<Button onClick={paperClip}>Envoyer le lien à vos amis</Button>
+					<Title>Messages du salon :</Title>
+					<ul>
+						{messages.map((msg, key) => (
+						<li className="text-white-white" key={key}>
+							<span className="text-white-white font-bold">{msg.username}:</span> {msg.content}
+						</li>
+						))}
+					</ul>
+					<form action="" style={{display: 'flex'}}>
+						<input 
+						type="text" 
+						onChange={handleMessage} 
+						value={message}
+						className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"/>
+						<Button onClick={sendMessage}>
+							Envoyer
+						</Button>
+					</form>
+					<p>&nbsp;</p>
+				</Layout>
 			}
 		</div>
 	)

@@ -5,10 +5,10 @@ const socket = io("/room", { autoConnect: false});
 
 export default function useSocketRoom(eventName, cb) {
 	useEffect(() => {
-		socket.onAny((event, ...args) => {
-			console.log(event, args);
-		});
-
+		// uncomment to log every socket event
+		// socket.onAny((event, ...args) => {
+		// 	console.log(event, args);
+		// });
 		socket.on(eventName, cb)
 
 		return function useSocketCleanup() {

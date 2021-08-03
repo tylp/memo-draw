@@ -17,17 +17,11 @@ export default class RoomStorage {
 	}
 
     addNbPlayer(id:string):void{
-        this.rooms.forEach((room) => {
-            if(room.id === id)
-                room.nbPlayer++;
-        });
+		this.rooms.find((room) => room.id = id).nbPlayer++;
     }
 
     subNbPlayer(id:string):void{
-        this.rooms.forEach((room) => {
-            if(room.id === id)
-                room.nbPlayer--;
-        });
+		this.rooms.find((room) => room.id = id).nbPlayer--;
     }
 
 	findAllRooms():any{

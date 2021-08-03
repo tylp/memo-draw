@@ -1,10 +1,7 @@
-// export {}
-
 const app = require('express')();
 const server = require('http').createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-// const io = require("socket.io")(server);
 const roomIO = io.of("/room");
 
 const cryptoRand = require('crypto');
@@ -12,7 +9,6 @@ const randomId = () => cryptoRand.randomBytes(8).toString("hex");
 
 import SessionStorage from "./sessionStorage";
 import RoomStorage from "./roomStorage";
-// const { InMemorySessionStore } = require("./sessionStore");
 
 const next = require('next');
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -23,145 +19,142 @@ const nextHandler = nextApp.getRequestHandler();
 const sessionStore = new SessionStorage();
 const roomStore = new RoomStorage();
 
-// fake DB
-// const messages = [];
-
 io.use((socket, next) => {
-    const sessionID = socket.handshake.auth.sessionID;
-    if(sessionID){
-        const session = sessionStore.findSession(sessionID);
-        if(session){
-            socket.sessionID = sessionID;
-            socket.userID = session.userID;
-            socket.username = session.username;
-            return next();
-        }
-    }
-    const username = socket.handshake.auth.username;
-    if (!username) {
-      return next(new Error("invalid username"));
-    }
-    socket.sessionID = randomId();
-    socket.userID = randomId();
-    socket.username = username;
-    next();
+	const sessionID = socket.handshake.auth.sessionID;
+	if(sessionID){
+		const session = sessionStore.findSession(sessionID);
+		if(session){
+			socket.sessionID = sessionID;
+			socket.userID = session.userID;
+			socket.username = session.username;
+			return next();
+		}
+	}
+	const username = socket.handshake.auth.username;
+	if (!username) {
+		return next(new Error("invalid username"));
+	}
+	socket.sessionID = randomId();
+	socket.userID = randomId();
+	socket.username = username;
+	next();
 });
 
 // socket.io server
 io.on("connection", (socket) => {
-    console.log('a user is connected');
-    // persist session
-    sessionStore.saveSession(socket.sessionID, {
-        userID: socket.userID,
-        username: socket.username,
-        connected: true,
-    });
-
-    // socket.join(socket.userID);
-    
-    socket.emit("session", {
-        sessionID: socket.sessionID,
-        userID: socket.userID
-    });
-
-    // fetch existing users
-    const users = [];
-    sessionStore.findAllSessions().forEach((session) => {
-        users.push({
-        userID: session.userID,
-        username: session.username,
-        connected: session.connected,
-        });
-    });
-    socket.emit("users", users);
-
-    // fetch existing rooms
-    if(!roomStore.isEmpty())
-    {
-        socket.emit("rooms", roomStore.findAllRooms());
-    }
-
-    // notify existing users
-    socket.broadcast.emit("user connected", {
-        userID: socket.userID,
-        username: socket.username,
-        connected: true,
-    });
-
-    socket.on("create-room", function(msg){
-        const roomID = randomId();
-		console.log('create-room: ', msg);
-        roomStore.saveRoom(roomID);
-        io.emit('new-room', roomStore.findRoom(roomID))
+	console.log('a user is connected');
+	// persist session
+	sessionStore.saveSession(socket.sessionID, {
+		userID: socket.userID,
+		username: socket.username,
+		connected: true,
 	});
 
-    socket.on("manual-disconnect", function(msg){
+	// socket.join(socket.userID);
+	
+	socket.emit("session", {
+		sessionID: socket.sessionID,
+		userID: socket.userID
+	});
+
+	// fetch existing users
+	const users = [];
+	sessionStore.findAllSessions().forEach((session) => {
+		users.push({
+		userID: session.userID,
+		username: session.username,
+		connected: session.connected,
+		});
+	});
+	socket.emit("users", users);
+
+	// fetch existing rooms
+	if(!roomStore.isEmpty())
+	{
+		socket.emit("rooms", roomStore.findAllRooms());
+	}
+
+	// notify existing users
+	socket.broadcast.emit("user connected", {
+		userID: socket.userID,
+		username: socket.username,
+		connected: true,
+	});
+
+	socket.on("create-room", function(msg){
+		const roomID = randomId();
+		console.log('create-room: ', msg);
+		roomStore.saveRoom(roomID);
+		io.emit('new-room', roomStore.findRoom(roomID))
+	});
+
+	socket.on("manual-disconnect", () => {
 		console.log("manual disconnect");
 	});
 
-    // notify users upon disconnection
-    socket.on("disconnect", async () => {
-        console.log('a user has been disconnected');
-        const matchingSockets = await io.in(socket.userID).allSockets();
-        const isDisconnected = matchingSockets.size === 0;
-        if (isDisconnected) {
-            // notify other users
-            socket.broadcast.emit("user disconnected", socket.userID);
-            // update the connection status of the session
-            sessionStore.saveSession(socket.sessionID, {
-                userID: socket.userID,
-                username: socket.username,
-                connected: false,
-            });
-        }
-    });
+	// notify users upon disconnection
+	socket.on("disconnect", async () => {
+		console.log('a user has been disconnected');
+		const matchingSockets = await io.in(socket.userID).allSockets();
+		const isDisconnected = matchingSockets.size === 0;
+		if (isDisconnected) {
+			// notify other users
+			socket.broadcast.emit("user disconnected", socket.userID);
+			// update the connection status of the session
+			sessionStore.saveSession(socket.sessionID, {
+				userID: socket.userID,
+				username: socket.username,
+				connected: false,
+			});
+		}
+	});
 
 });
 
 roomIO.use((socket, next) => {
-    const sessionID = socket.handshake.auth.sessionID;
-    if(sessionID){
-        const session = sessionStore.findSession(sessionID);
-        if(session){
-            socket.sessionID = sessionID;
-            socket.userID = session.userID;
-            socket.username = session.username;
-            return next();
-        }
-    }
-    const username = socket.handshake.auth.username;
-    if (!username) {
-      return next(new Error("invalid username"));
-    }
-    socket.sessionID = randomId();
-    socket.userID = randomId();
-    socket.username = username;
-    next();
+	const sessionID = socket.handshake.auth.sessionID;
+	if(sessionID){
+		const session = sessionStore.findSession(sessionID);
+		if(session){
+			socket.sessionID = sessionID;
+			socket.userID = session.userID;
+			socket.username = session.username;
+			return next();
+		}
+	}
+	const username = socket.handshake.auth.username;
+	if (!username) {
+		return next(new Error("invalid username"));
+	}
+	socket.sessionID = randomId();
+	socket.userID = randomId();
+	socket.username = username;
+	next();
 });
 
 roomIO.on("connection", (socket) => {
-    console.log('a user is connected to a room');
-    // persist session
-    sessionStore.saveSession(socket.sessionID, {
-        userID: socket.userID,
-        username: socket.username,
-        connected: true,
-    });
+	console.log('a user is connected to a room');
+	// persist session
+	sessionStore.saveSession(socket.sessionID, {
+		userID: socket.userID,
+		username: socket.username,
+		connected: true,
+	});
 
 	// notify existing users
 	io.of('/').emit('user connected', {
-        userID: socket.userID,
-        username: socket.username,
-        connected: true,
-    });
-    
-    socket.emit("session", {
-        sessionID: socket.sessionID,
-        userID: socket.userID,
+		userID: socket.userID,
 		username: socket.username,
-    });
-    
-    socket.on("joining-room", function(roomID, user, isUnknown){
+		connected: true,
+	});
+	
+	socket.emit("session", {
+		sessionID: socket.sessionID,
+		userID: socket.userID,
+		username: socket.username,
+	});
+	
+	socket.on("joining-room", function(roomID, user, isUnknown){
 		if (!roomStore.findRoom(roomID)){
 			return isUnknown();
 		}
@@ -196,51 +189,37 @@ roomIO.on("connection", (socket) => {
 		socket.to(socket.roomID).emit('drawing', data)
 	});
 
-    // notify users upon disconnection
-    socket.on("disconnect", async () => {
+	// notify users upon disconnection
+	socket.on("disconnect", async () => {
 		// Prepering the emiter to leave the room
 
 		console.log('user leaved room ', socket.userID);
-        // substract nbPlayer of the room
-        roomStore.subNbPlayer(socket.roomID);
-        io.of('/').emit('sub-nb-player', socket.roomID);
+		// substract nbPlayer of the room
+		roomStore.subNbPlayer(socket.roomID);
+		io.of('/').emit('sub-nb-player', socket.roomID);
 
-        // disconnecting emiter from the room
-        socket.leave(socket.roomID);
+		// disconnecting emiter from the room
+		socket.leave(socket.roomID);
 
-        // resetting the roomID of the emitter
-        sessionStore.setSessionRoomID(socket.sessionID, null)
+		// resetting the roomID of the emitter
+		sessionStore.setSessionRoomID(socket.sessionID, null)
 
 		// alert room players to revome the emitter
-        socket.to(socket.roomID).emit("player disconnected", socket.userID);
+		socket.to(socket.roomID).emit("player disconnected", socket.userID);
 
 		// reset roomID of emitting socket
 		socket.roomID = null;
 
 		socket.broadcast.emit("user disconnected", socket.userID);
-
-        // console.log('a user has been disconnected from a room');
-        // const matchingSockets = await io.of('/room').in(socket.userID).allSockets();
-        // const isDisconnected = matchingSockets.size === 0;
-        // if (isDisconnected) {
-        //     // notify other users
-        //     socket.broadcast.emit("user disconnected", socket.userID);
-        //     // update the connection status of the session
-        //     sessionStore.saveSession(socket.sessionID, {
-        //         userID: socket.userID,
-        //         username: socket.username,
-        //         connected: false,
-        //     });
-        // }
-    });
+	});
 });
 
 
 nextApp.prepare().then(() => {
-    app.get('*', (req, res) => nextHandler(req, res));
+	app.get('*', (req, res) => nextHandler(req, res));
 
-    server.listen(port, (err) => {
-        if (err) throw err;
-        console.log(`> Ready on http://localhost:${port}`);
-    });
+	server.listen(port, (err) => {
+		if (err) throw err;
+		console.log(`> Ready on http://localhost:${port}`);
+	});
 });
