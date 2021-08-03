@@ -1,34 +1,33 @@
+import Player from "./classes/Player";
+import Room from "./classes/Room";
+
 export default class RoomStorage {
-	rooms;
+	rooms: Map<string, Room>;
 	constructor() {
-		this.rooms = [];
+		this.rooms = new Map<string, Room>();
 	}
 
-	findRoom(id:string):any {
-		return this.rooms.find((room) => room.id === id);
+	find(id: string): Room {
+		return this.rooms.get(id);
 	}
 
-	saveRoom(id:string):void {
-	    this.rooms.push({
-            id : id, 
-            name: "Salon "+(parseInt(this.rooms.length)+1), 
-            nbPlayer: 0
-        });
+	save(room: Room): void {
+	    this.rooms.set(room.id, room);
 	}
 
-    addNbPlayer(id:string):void{
-		this.rooms.find((room) => room.id = id).nbPlayer++;
+    addPlayer(id: string, player: Player): void{
+		this.find(id).addPlayer(player);
     }
 
-    subNbPlayer(id:string):void{
-		this.rooms.find((room) => room.id = id).nbPlayer--;
+    removePlayer(id: string, player: Player):void{
+		this.find(id).addPlayer(player);
     }
 
-	findAllRooms():any{
+	findAll(): Map<string, Room> {
 		return this.rooms;
 	}
 
-    isEmpty():boolean{
-        return this.rooms.length === 0
+    isEmpty(): boolean {
+        return this.rooms.size === 0
     }
 }

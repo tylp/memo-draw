@@ -9,6 +9,8 @@ const randomId = () => cryptoRand.randomBytes(8).toString("hex");
 
 import SessionStorage from "./sessionStorage";
 import RoomStorage from "./roomStorage";
+import Player from "./classes/Player";
+import Room from "./classes/Room";
 
 const next = require('next');
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -43,6 +45,7 @@ io.use((socket, next) => {
 // socket.io server
 io.on("connection", (socket) => {
 	console.log('a user is connected');
+
 	// persist session
 	sessionStore.saveSession(socket.sessionID, {
 		userID: socket.userID,
@@ -71,7 +74,7 @@ io.on("connection", (socket) => {
 	// fetch existing rooms
 	if(!roomStore.isEmpty())
 	{
-		socket.emit("rooms", roomStore.findAllRooms());
+		socket.emit("rooms", roomStore.findAll());
 	}
 
 	// notify existing users
@@ -84,8 +87,8 @@ io.on("connection", (socket) => {
 	socket.on("create-room", function(msg){
 		const roomID = randomId();
 		console.log('create-room: ', msg);
-		roomStore.saveRoom(roomID);
-		io.emit('new-room', roomStore.findRoom(roomID))
+		roomStore.save(new Room(roomID, "new room name"));
+		io.emit('new-room', roomStore.find(roomID))
 	});
 
 	socket.on("manual-disconnect", () => {
@@ -134,6 +137,7 @@ roomIO.use((socket, next) => {
 
 roomIO.on("connection", (socket) => {
 	console.log('a user is connected to a room');
+	
 	// persist session
 	sessionStore.saveSession(socket.sessionID, {
 		userID: socket.userID,
@@ -155,7 +159,10 @@ roomIO.on("connection", (socket) => {
 	});
 	
 	socket.on("joining-room", function(roomID, user, isUnknown){
-		if (!roomStore.findRoom(roomID)){
+
+		const joiningPlayer: Player = new Player(socket.userID, socket.username);
+
+		if (!roomStore.find(roomID)){
 			return isUnknown();
 		}
 		else {
@@ -172,10 +179,10 @@ roomIO.on("connection", (socket) => {
 			socket.to(roomID).emit("player connected", sessionStore.findSession(user.sessionID));
 
 			// send room players a welcome message
-			io.of('/room').in(roomID).emit("new message", {username: 'Memo-Draw Bot', content: `Bienvenue dans le ${roomStore.findRoom(roomID).name} ${user.username} !`});
+			io.of('/room').in(roomID).emit("new message", {username: 'Memo-Draw Bot', content: `Bienvenue dans le ${roomStore.find(roomID).name} ${user.username} !`});
 
 			// update nbPlayer in room
-			roomStore.addNbPlayer(roomID);
+			roomStore.addPlayer(roomID, joiningPlayer);
 			io.of('/').emit('add-nb-player', roomID);
 		}
 	});
@@ -195,7 +202,7 @@ roomIO.on("connection", (socket) => {
 
 		console.log('user leaved room ', socket.userID);
 		// substract nbPlayer of the room
-		roomStore.subNbPlayer(socket.roomID);
+		roomStore.removePlayer(socket.roomID, new Player(socket.userID, socket.username));
 		io.of('/').emit('sub-nb-player', socket.roomID);
 
 		// disconnecting emiter from the room
