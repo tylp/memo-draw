@@ -54,8 +54,8 @@ const Room = () => {
 		setUrl(window.location.href.toString());
 
 		const sessionID = localStorage.getItem("sessionID");
+		
 		if (sessionID) {
-			console.log('un session existe');
 			socket.auth = { sessionID };
 			socket.connect();
 		}

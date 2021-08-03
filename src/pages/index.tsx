@@ -69,7 +69,7 @@ export default function Index() : React.ReactNode {
 	}
 
 	const handleRoomCreation = () => {
-		socket.emit('create-room', socket.userID);
+		socket.emit('create-room');
 	}
 
 	return (

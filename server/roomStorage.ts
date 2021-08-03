@@ -11,8 +11,9 @@ export default class RoomStorage {
 		return this.rooms.get(id);
 	}
 
-	save(room: Room): void {
+	save(room: Room): Room {
 	    this.rooms.set(room.id, room);
+		return room;
 	}
 
     addPlayer(id: string, player: Player): void{
