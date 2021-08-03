@@ -1,15 +1,23 @@
+import IdGeneratorService from "./services/IdGeneratorService";
+
 export default class SessionStorage {
 	sessions;
 	constructor() {
 		this.sessions = new Map();
 	}
 
+	getNewSession(): any {
+		const sessionID = IdGeneratorService.generate();
+		return this.saveSession(sessionID, { sessionID });
+	}
+
 	findSession(id: string):any {
 		return this.sessions.get(id);
 	}
 
-	saveSession(id:string, session:any):void {
+	saveSession(id:string, session: any):void {
 	    this.sessions.set(id, session);
+		return session;
 	}
 
     setSessionRoomID(id:string, roomID:string):void {

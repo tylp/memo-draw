@@ -3,21 +3,22 @@ import RoomStorage from "../RoomStorage";
 import IdGeneratorService from "../services/IdGeneratorService";
 import SessionStorage from "../SessionStorage";
 import Room from "./Room";
-import CommonSocketBinder from "./sockets/CommonSocketBinder";
-import IndexSocketBinder from './sockets/IndexSocketBinder';
 import RoomSocketBinder from './sockets/RoomSocketBinder';
+import SocketIoBinder from './sockets/SocketIoHandler';
+import SocketIoHandler from './sockets/SocketIoHandler';
 
 export default class Application {
     private static instance: Application;
 
     sessionStore: SessionStorage;
     roomStore: RoomStorage;
+    socketIoHandler: SocketIoHandler;
     io: Server;
 
-    private constructor(io) {
+    private constructor(io: Server) {
         this.sessionStore = new SessionStorage();
         this.roomStore = new RoomStorage();
-        this.io = io;
+        this.io = SocketIoBinder.bindServer(io);
     }
 
     static generateInstance(io: Server): Application {
@@ -31,9 +32,11 @@ export default class Application {
         return this.instance;
     }
 
+    getSocketSession(socket): any {
+        return this.sessionStore.findSession(socket.handshake.auth.sessionID);
+    }
+
     handleConnection(socket: Socket): void {
-        CommonSocketBinder.bindSocket(socket);
-        IndexSocketBinder.bindSocket(socket);
         RoomSocketBinder.bindSocket(socket);
     }
 

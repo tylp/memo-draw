@@ -16,8 +16,6 @@ export default function Index() : React.ReactNode {
 
 		if(!socket) return
 
-		console.log(socket)
-
 		const sessionID = localStorage.getItem("sessionID");
 		if (sessionID) {
 			setIsLoading(true);
@@ -62,7 +60,6 @@ export default function Index() : React.ReactNode {
 	// Handle submit
 	const handleSubmit = () => {
 		setUsernameAlreadySelected(true);
-		socket.auth = { username };
 		socket.connect();
 	}
 

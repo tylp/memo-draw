@@ -21,7 +21,7 @@ export default class RoomStorage {
     }
 
     removePlayer(id: string, player: Player):void{
-		this.find(id).addPlayer(player);
+		this.find(id).removePlayer(player);
     }
 
 	findAll(): Map<string, Room> {
