@@ -7,6 +7,7 @@ import Loading from '../../components/Common/Loading/Loading';
 import Canvas from '../../components/Canvas';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import RoomService from '../../services/RoomService';
+import IProfile from '../../../server/interfaces/IProfile';
 
 const Room = (): React.ReactNode => {
 	const roomId = RoomService.getRoomIdFromUrl(window?.location?.href || "");
@@ -17,7 +18,7 @@ const Room = (): React.ReactNode => {
 	
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState(null);
-	const [storageProfile] = useLocalStorage("profile");
+	const [storageProfile] = useLocalStorage<IProfile>("profile");
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
 
