@@ -23,12 +23,14 @@ export default function Index() : React.ReactNode {
 	}, [socket]);
 
 	const handleStart = () => {
+		// TODO: Get profile from ProfileSelector
 		const profile = {
 			username,
 			hat: 1,
 			body: 1,
 			lead: 1,
 		}
+		
 		socket.emit("update-profile", profile, () => {
 			setProfileIsComplete(true);
 			setProfileStorage(profile);

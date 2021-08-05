@@ -1,9 +1,9 @@
 export default class Player {
     id: string;
-    username: string;
+    profile: any;
 
-    constructor(id: string, username: string) {
+    constructor(id: string, profile: any) {
         this.id = id;
-        this.username = username;
+        this.profile = profile;
     }
 }

@@ -1,4 +1,3 @@
-import Application from '../../Application';
 import CommonSocketBinder from '../CommonSocketBinder';
 import IndexSocketBinder from '../IndexSocketBinder';
 import AbstractNamespaceBinder from './AbstractNamespaceBinder';

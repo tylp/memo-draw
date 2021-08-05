@@ -7,7 +7,8 @@ interface IUseSocket {
 }
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
-	const [sessionID, setSessionId] = useLocalStorage('sessionID');
+	const [sessionId, setSessionId] = useLocalStorage('sessionId');
+	const [playerId, setPlayerId] = useLocalStorage('playerId');
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
@@ -20,13 +21,14 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
             {
                 autoConnect: true,
                 auth: {
-                    sessionID: sessionID
+                    sessionId: sessionId,
                 }
             }
         )
 
         newSocket.on("session", (data) => {
-            setSessionId(data.sessionID)
+            setSessionId(data.sessionId)
+            setPlayerId(data.playerId)
         })
 
         setActiveSocket(newSocket)

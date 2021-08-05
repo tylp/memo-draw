@@ -22,7 +22,7 @@ export default class Application {
     }
 
     static generateInstance(io: Server): Application {
-        if(!Application.instance) {
+        if (!Application.instance) {
             Application.instance = new Application(io);
         }
         return Application.getInstance();
@@ -36,8 +36,12 @@ export default class Application {
         return Application.getInstance().sessionStore;
     }
 
+    static getRoomStorage() {
+        return Application.getInstance().roomStore;
+    }
+
     getSocketSession(socket): any {
-        return this.sessionStore.findSession(socket.handshake.auth.sessionID);
+        return this.sessionStore.findSession(socket.handshake.auth.sessionId);
     }
 
     handleConnection(socket: Socket): void {
