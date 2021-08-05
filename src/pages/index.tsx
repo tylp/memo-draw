@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Layout} from "../components/Common";
+import {Layout, SectionTitle} from "../components/Common";
 import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector, RuleItem} from "../components/Home";
 import RoomSelector from '../components/RoomSelector';
@@ -54,6 +54,7 @@ export default function Index() : React.ReactNode {
 				<Layout>
 					<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 						<div>
+							<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
 							<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 							<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 							<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>

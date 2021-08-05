@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from "react";
 import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
+import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { SelectButtonSpec } from "./ProfileSelector.spec";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
@@ -93,31 +94,34 @@ export default function ProfileSelector(props): JSX.Element {
     }
     
     return (
-        <div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
-            <Title>Avatar</Title>
-            <div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
-                <div className="flex flex-col justify-between">
-                    <SelectButton direction="left" name="Hat" onClick={previousHat}/>
-                    <SelectButton direction="left" name="Body" onClick={previousBody}/>
-                    <SelectButton direction="left" name="Lead" onClick={previousLead}/>
-                </div>
+		<div>
+			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
+			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
+				<Title>Avatar</Title>
+				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
+					<div className="flex flex-col justify-between">
+						<SelectButton direction="left" name="Hat" onClick={previousHat}/>
+						<SelectButton direction="left" name="Body" onClick={previousBody}/>
+						<SelectButton direction="left" name="Lead" onClick={previousLead}/>
+					</div>
 
-                <div className="flex items-center">
-                    <img className="rounded-full border-2 border-yellow-dark-yellow" src={avatarUrls[currentUrlIndex]}/>
-                </div>
+					<div className="flex items-center">
+						<img className="rounded-full border-2 border-yellow-dark-yellow" src={avatarUrls[currentUrlIndex]}/>
+					</div>
 
-                <div className="flex flex-col justify-between">
-                    <SelectButton direction="right" name="Hat" onClick={nextHat}/>
-                    <SelectButton direction="right" name="Body" onClick={nextBody}/>
-                    <SelectButton direction="right" name="Lead" onClick={nextLead}/>
-                </div>
-            </div>
+					<div className="flex flex-col justify-between">
+						<SelectButton direction="right" name="Hat" onClick={nextHat}/>
+						<SelectButton direction="right" name="Body" onClick={nextBody}/>
+						<SelectButton direction="right" name="Lead" onClick={nextLead}/>
+					</div>
+				</div>
 
-            <div className="mt-4">
-                <Title>Pseudo</Title>
-                <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-                <Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
-            </div>
-        </div>
+				<div className="mt-4">
+					<Title>Pseudo</Title>
+					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+					<Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
+				</div>
+			</div>
+		</div>
     )
 }
