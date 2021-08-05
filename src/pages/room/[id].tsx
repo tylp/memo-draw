@@ -43,35 +43,8 @@ const Room = () => {
 		})
 
 		socket.on("receive-drawing", (coords) => {
-			console.log("receiveing", coords)
 			setBroadcastedCoords(coords)
 		})
-
-		// socket.on('drawing', (broadcastedCoords) => {
-		// 	setBroadcastedCoords(broadcastedCoords)
-		// });
-
-		// window.onbeforeunload = (e) => {
-		// 	socket.off("session");
-		// 	socket.off("connect");
-		// 	socket.off("joining-room");
-		// 	socket.off("clients");
-		// 	socket.off('new message');
-		// 	socket.off("player connected");
-		// 	socket.off("player disconnected");
-		// 	socket.close();
-		// };
-
-		return () => {
-			// socket.off("session");
-			// socket.off("connect");
-			// socket.off("joining-room");
-			// socket.off("clients");
-			// socket.off('new message');
-			// socket.off("player connected");
-			// socket.off("player disconnected");
-			// socket.close();
-		}
 	}, [socket, sessionId]);
 	
 	const handleMessage = (e) => {
