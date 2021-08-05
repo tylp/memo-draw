@@ -13,12 +13,13 @@ export default class CommonSocketBinder extends SocketBinder {
     }
 
     private static socketHasSession(socket: Socket) {
-        return !!socket.handshake.auth.sessionId
+        const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+        return !!sessionId && Application.getSessionStorage().exists(sessionId)
     }
 
     private static sendSessionToSocket(socket: Socket) {
         const session = Application.getInstance().sessionStore.getNewSession();
-        socket.emit("session", session)
+        socket.emit("new-session", session)
         socket.handshake.auth.sessionId = session.sessionId;
         socket.handshake.auth.playerId = session.playerId;
     }

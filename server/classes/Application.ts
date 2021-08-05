@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import ISession from '../interfaces/ISession';
 import RoomStorage from "../RoomStorage";
 import IdGeneratorService from "../services/IdGeneratorService";
+import SocketIdentifierService from '../services/SocketIdentifierService';
 import SessionStorage from "../SessionStorage";
 import Room from "./Room";
 import RoomSocketBinder from './sockets/RoomSocketBinder';
@@ -42,7 +43,7 @@ export default class Application {
     }
 
     getSocketSession(socket: Socket): ISession {
-        return this.sessionStore.findSession(socket.handshake.auth.sessionId);
+        return this.sessionStore.findSession(SocketIdentifierService.getSessionIdentifier(socket));
     }
 
     handleConnection(socket: Socket): void {

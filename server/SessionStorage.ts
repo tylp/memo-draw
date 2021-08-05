@@ -43,4 +43,8 @@ export default class SessionStorage {
 			profile
 		})
 	}
+
+	exists(sessionId: string): boolean {
+		return this.sessions.has(sessionId);
+	}
 }

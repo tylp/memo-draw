@@ -26,7 +26,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
             }
         )
 
-        newSocket.on("session", (data) => {
+        newSocket.on("new-session", (data) => {
             setSessionId(data.sessionId)
             setPlayerId(data.playerId)
         })
