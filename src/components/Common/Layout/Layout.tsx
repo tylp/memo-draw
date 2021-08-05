@@ -15,9 +15,7 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             justify-center
             items-center
         ">
-            <div className="">
-                {children}
-            </div>
+			{children}
         </div>
     )
 }
