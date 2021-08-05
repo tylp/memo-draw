@@ -9,7 +9,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
 
-const Room = (): React.ReactNode => {
+const Room = (): JSX.Element => {
 	const roomId = RoomService.getRoomIdFromUrl(window?.location?.href || "");
 
 	const [isLoading, setIsLoading] = useState(true);

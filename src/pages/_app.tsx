@@ -2,7 +2,7 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import 'tailwindcss/tailwind.css'
 
-function MemoDraw({Component, pageProps} : AppProps) : React.ReactNode {
+function MemoDraw({Component, pageProps} : AppProps): JSX.Element {
     return <Component {...pageProps} />
 }
 

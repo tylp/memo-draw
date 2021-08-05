@@ -7,7 +7,7 @@ import RoomSelector from '../components/RoomSelector';
 import { useSocket } from '../hooks';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-export default function Index(): React.ReactNode {
+export default function Index(): JSX.Element {
 	const socket = useSocket();
 	const [isLoading, setIsLoading] = useState(true);
 	const [username, setUsername] = useState<string>("");

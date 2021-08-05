@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ICanvas } from './Canvas.spec'
 
-const Canvas = (props: ICanvas): React.ReactNode => {
+const Canvas = (props: ICanvas): JSX.Element => {
 	const canvasRef = useRef(null)
 	const contextRef = useRef(null)
 	const [isDrawing, setIsDrawing] = useState(false)
