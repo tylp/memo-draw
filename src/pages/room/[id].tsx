@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'
-import {useSocket} from '../../hooks';
+import { useSocketRoom} from '../../hooks';
 import Link from 'next/link';
 import { Layout, Title } from '../../components/Common';
 import Button from '../../components/Common/Button/Button';
@@ -9,15 +8,14 @@ import Canvas from '../../components/Canvas';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import RoomService from '../../services/RoomService';
 
-const Room = () => {
-	const roomId = RoomService.getRoomIdFromUrl(window.location.href);
-	
-	const router = useRouter();
+const Room = (): React.ReactNode => {
+	const roomId = RoomService.getRoomIdFromUrl(window?.location?.href || "");
+
 	const [isLoading, setIsLoading] = useState(true);
 	const [broadcastedCoords, setBroadcastedCoords] = useState(null);
 	const [sessionId] = useLocalStorage("sessionId");
 	
-	const socket = useSocket({namespace: "/room"});
+	const socket = useSocketRoom();
 	const [room, setRoom] = useState(null);
 	const [storageProfile] = useLocalStorage("profile");
 	const [message, setMessage] = useState("");
@@ -45,7 +43,7 @@ const Room = () => {
 		socket.on("receive-drawing", (coords) => {
 			setBroadcastedCoords(coords)
 		})
-	}, [socket, sessionId]);
+	}, [socket, sessionId, roomId]);
 	
 	const handleMessage = (e) => {
 		setMessage(e.currentTarget.value);

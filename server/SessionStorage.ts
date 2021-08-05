@@ -1,3 +1,5 @@
+import Profile from "./interfaces/IProfile";
+import ISession from "./interfaces/ISession";
 import IdGeneratorService from "./services/IdGeneratorService";
 
 export default class SessionStorage {
@@ -7,22 +9,22 @@ export default class SessionStorage {
 		this.sessions = new Map();
 	}
 
-	getNewSession(): any {
+	getNewSession(): ISession {
 		const sessionId = IdGeneratorService.generate();
 		const playerId = IdGeneratorService.generate();
 		return this.saveSession(sessionId, { sessionId, playerId });
 	}
 
-	findSession(id: string): any {
+	findSession(id: string): ISession {
 		return this.sessions.get(id);
 	}
 
-	saveSession(id: string, session: any): void {
+	saveSession(id: string, session: ISession): ISession {
 		this.sessions.set(id, session);
 		return session;
 	}
 
-	updateSession(id: string, data: any): void {
+	updateSession(id: string, data: ISession): void {
 		const session = this.findSession(id);
 		this.saveSession(id, { ...session, ...data });
 	}
@@ -32,21 +34,11 @@ export default class SessionStorage {
 		this.sessions.set(id, { ...session, roomID: roomID });
 	}
 
-	findAllSessions(): Array<any> {
+	findAllSessions(): Array<ISession> {
 		return [...this.sessions.values()];
 	}
 
-	findAllSessionsOfRoom(roomID): any {
-		const room = [];
-		for (const session of this.sessions.values()) {
-			if (session.roomID === roomID) {
-				room.push(session);
-			}
-		}
-		return room;
-	}
-
-	updateProfile(id: string, profile: any): void {
+	updateProfile(id: string, profile: Profile): void {
 		this.updateSession(id, {
 			profile
 		})

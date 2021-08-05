@@ -1,4 +1,5 @@
 import { Server, Socket } from 'socket.io';
+import ISession from '../interfaces/ISession';
 import RoomStorage from "../RoomStorage";
 import IdGeneratorService from "../services/IdGeneratorService";
 import SessionStorage from "../SessionStorage";
@@ -32,15 +33,15 @@ export default class Application {
         return this.instance;
     }
 
-    static getSessionStorage() {
+    static getSessionStorage(): SessionStorage {
         return Application.getInstance().sessionStore;
     }
 
-    static getRoomStorage() {
+    static getRoomStorage(): RoomStorage {
         return Application.getInstance().roomStore;
     }
 
-    getSocketSession(socket): any {
+    getSocketSession(socket: Socket): ISession {
         return this.sessionStore.findSession(socket.handshake.auth.sessionId);
     }
 

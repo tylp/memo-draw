@@ -8,7 +8,7 @@ interface IUseSocket {
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
 	const [sessionId, setSessionId] = useLocalStorage('sessionId');
-	const [playerId, setPlayerId] = useLocalStorage('playerId');
+	const [, setPlayerId] = useLocalStorage('playerId');
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
@@ -38,6 +38,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
         return function cleanup() {
 			activeSocket.close()
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setActiveSocket]);
 
     return activeSocket;

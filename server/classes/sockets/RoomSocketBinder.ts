@@ -1,15 +1,16 @@
+import { Socket } from 'socket.io';
 import PlayerFactory from '../../factories/PlayerFactory';
 import Application from "../Application";
 import SocketBinder from "./SocketBinder";
 
 export default class RoomSocketBinder extends SocketBinder {
-    static bindSocket(socket): void {
+    static bindSocket(socket: Socket): void {
         this.onJoinRoom(socket);
         this.onMessageRoom(socket);
         this.onDrawing(socket);
     }
 
-    private static onJoinRoom(socket): void {        
+    private static onJoinRoom(socket: Socket): void {        
         socket.on("join-room", (roomId, ack) => {
             if(Application.getRoomStorage().exists(roomId)) {
                 socket.join(`room-${roomId}`)
@@ -22,7 +23,7 @@ export default class RoomSocketBinder extends SocketBinder {
         })
     }
 
-    private static onMessageRoom(socket): void {
+    private static onMessageRoom(socket: Socket): void {
         const player = PlayerFactory.createPlayer(socket);
         socket.on("send-message-room", (content, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
@@ -34,7 +35,7 @@ export default class RoomSocketBinder extends SocketBinder {
         });
     }
 
-    private static onDrawing(socket): void {
+    private static onDrawing(socket: Socket): void {
         const player = PlayerFactory.createPlayer(socket);
         socket.on("send-drawing", (coords, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {

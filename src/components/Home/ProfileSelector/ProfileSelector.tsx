@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
-import { SelectButtonSpec } from "./ProfileSelector.spec";
+import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     return (
@@ -35,7 +35,7 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     );
 }
 
-export default function ProfileSelector(props): JSX.Element {
+export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
     const avatarUrls = [
         "https://media3.chapellerie-traclet.com/14578-thickbox_default/melon-hat.jpg",
@@ -48,8 +48,6 @@ export default function ProfileSelector(props): JSX.Element {
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
-
-    const [userName, setUserName] = useState<string>("");
 
     function previousHat() {
         if (currentUrlIndex == 0)

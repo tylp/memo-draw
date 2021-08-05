@@ -3,7 +3,7 @@ import Application from "../Application";
 import SocketBinder from "./SocketBinder";
 
 export default class IndexSocketBinder extends SocketBinder {
-    static bindSocket(socket): void {
+    static bindSocket(socket: Socket): void {
         this.onRoomCreation(socket);
     }
     

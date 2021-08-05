@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Layout, Title } from "./Common";
 import Button from "./Common/Button/Button";
+import { IRoomSelector } from './RoomSelector.spec';
 
-export default function RoomSelector(props) {
+export default function RoomSelector(props: IRoomSelector): JSX.Element {
 	const socket = props.socket;
 	const [usersList, setUsersList] = useState([]);
 	const [roomsList, setRoomsList] = useState([]);
@@ -117,6 +118,8 @@ export default function RoomSelector(props) {
 			socket.off('user connected')
 			socket.off('user disconnected')
 		}
+		// Disabled cause this file is gonna be removed soon
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function status(connected) {

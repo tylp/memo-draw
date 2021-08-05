@@ -1,8 +1,10 @@
+import Profile from "../interfaces/IProfile";
+
 export default class Player {
     id: string;
-    profile: any;
+    profile: Profile;
 
-    constructor(id: string, profile: any) {
+    constructor(id: string, profile: Profile) {
         this.id = id;
         this.profile = profile;
     }

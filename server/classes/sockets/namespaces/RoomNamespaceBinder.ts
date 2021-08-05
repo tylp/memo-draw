@@ -1,4 +1,3 @@
-import { Server } from 'socket.io';
 import CommonSocketBinder from '../CommonSocketBinder';
 import RoomSocketBinder from '../RoomSocketBinder';
 import AbstractNamespaceBinder from './AbstractNamespaceBinder';

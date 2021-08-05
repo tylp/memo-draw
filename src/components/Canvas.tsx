@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { ICanvas } from './Canvas.spec'
 
-const Canvas = (props) => {
+const Canvas = (props: ICanvas): React.ReactNode => {
 	const canvasRef = useRef(null)
 	const contextRef = useRef(null)
 	const [isDrawing, setIsDrawing] = useState(false)
-	const [size, setSize] = useState({w: 0, h:0})
+	const [, setSize] = useState({w: 0, h:0})
 	const [prevCoords, setPrevCoords] = useState({x: 0, y: 0})
 	const [currCoords, setCurrCoords] = useState({x: 0, y: 0})
 
@@ -37,6 +38,8 @@ const Canvas = (props) => {
 		return function() {
 			const callNow = immediate && initialCall
 			const next = () => {
+				// Disabling because this component is gonna be removed soon
+				// eslint-disable-next-line prefer-rest-params
 				callback.apply(this, arguments)
 				timeout = null
 			}

@@ -1,9 +1,10 @@
+import { Socket } from 'socket.io';
 import SocketIdentifierService from "../../services/SocketIdentifierService";
 import Application from "../Application";
 import SocketBinder from "./SocketBinder";
 
 export default class CommonSocketBinder extends SocketBinder {
-    static bindSocket(socket): void {
+    static bindSocket(socket: Socket): void {
         if (!this.socketHasSession(socket)) {
             this.sendSessionToSocket(socket);
         }
@@ -11,18 +12,18 @@ export default class CommonSocketBinder extends SocketBinder {
         this.onUpdateProfile(socket);
     }
 
-    private static socketHasSession(socket) {
+    private static socketHasSession(socket: Socket) {
         return !!socket.handshake.auth.sessionId
     }
 
-    private static sendSessionToSocket(socket) {
+    private static sendSessionToSocket(socket: Socket) {
         const session = Application.getInstance().sessionStore.getNewSession();
         socket.emit("session", session)
         socket.handshake.auth.sessionId = session.sessionId;
         socket.handshake.auth.playerId = session.playerId;
     }
 
-    private static onUpdateProfile(socket) {
+    private static onUpdateProfile(socket: Socket) {
         socket.on("update-profile", (profile, ack) => {
             ack();
             Application.getSessionStorage().updateProfile(SocketIdentifierService.getSessionIdentifier(socket), profile);

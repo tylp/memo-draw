@@ -3,3 +3,9 @@ export interface SelectButtonSpec {
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
     direction: 'left'|'right'
 }
+
+export interface IProfileSelector {
+    username: string;
+    handleStart;
+    handleUserName;
+}
