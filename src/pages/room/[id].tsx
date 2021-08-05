@@ -10,6 +10,8 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import RoomService from '../../services/RoomService';
 
 const Room = () => {
+	const roomId = RoomService.getRoomIdFromUrl(window.location.href);
+	
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(true);
 	const [broadcastedCoords, setBroadcastedCoords] = useState(null);
@@ -22,10 +24,7 @@ const Room = () => {
 	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
-		if(!socket) return;
-
-		const roomId = RoomService.getRoomIdFromUrl(window.location.href);
-		
+		if(!socket) return;		
 		socket.emit("join-room", roomId, (data) => {
 			if(data === false) {
 				// TODO: Redirect to homepage, because room does not exist or player is unable to join.
@@ -41,6 +40,11 @@ const Room = () => {
 		
 		socket.on("receive-message-room", (message) => {
 			setMessages((prev) => [...prev, message]);
+		})
+
+		socket.on("receive-drawing", (coords) => {
+			console.log("receiveing", coords)
+			setBroadcastedCoords(coords)
 		})
 
 		// socket.on('drawing', (broadcastedCoords) => {
@@ -81,7 +85,6 @@ const Room = () => {
 			content: message
 		})
 		setMessage('');
-		const roomId = RoomService.getRoomIdFromUrl(window.location.href);
 		socket.emit("send-message-room", message, roomId);
 	}
 
@@ -97,7 +100,7 @@ const Room = () => {
 	// }
 
 	const emitCoords = (coords) => {
-		socket.emit('drawing', coords);
+		socket.emit('send-drawing', coords, roomId);
 	}
 
 	return (

@@ -6,6 +6,7 @@ export default class RoomSocketBinder extends SocketBinder {
     static bindSocket(socket): void {
         this.onJoinRoom(socket);
         this.onMessageRoom(socket);
+        this.onDrawing(socket);
     }
 
     private static onJoinRoom(socket): void {        
@@ -31,5 +32,16 @@ export default class RoomSocketBinder extends SocketBinder {
                 })
             }
         });
+    }
+
+    private static onDrawing(socket): void {
+        const player = PlayerFactory.createPlayer(socket);
+        socket.on("send-drawing", (coords, roomId) => {
+            console.log("sending!!!!", coords)
+            if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
+                console.log("sending!!!!", coords)
+                socket.to(`room-${roomId}`).emit("receive-drawing", coords)
+            }
+        })
     }
 }
