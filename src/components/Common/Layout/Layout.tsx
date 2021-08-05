@@ -16,7 +16,6 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             items-center
         ">
             <div className="">
-				{/* <Rectangle/> */}
                 {children}
             </div>
         </div>

@@ -95,7 +95,7 @@ export default function ProfileSelector(props): JSX.Element {
     
     return (
 		<div>
-			<SectionTitle littleMessage="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
+			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export interface SectionTitleSpec {
-    children: ReactNode;
-	littleMessage?: string;
+	children: ReactNode;
+	subtitle?: string;
 	hintColor?: string;
 }
