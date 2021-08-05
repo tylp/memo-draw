@@ -59,7 +59,8 @@ export default function Index() : React.ReactNode {
 						<div >
 							<ProfileSelector 
 							handleStart={handleStart}
-							handleUserName={(e) => setUsername(e.currentTarget.value)}/>
+							handleUserName={(e) => setUsername(e.currentTarget.value)}
+							username={username}/>
 						</div>
 					</div>
 				</Layout>
