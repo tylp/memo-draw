@@ -10,7 +10,15 @@ import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
 
 const Room = (): JSX.Element => {
-	const roomId = RoomService.getRoomIdFromUrl(window?.location?.href || "");
+	
+	const getRoomId = (): string => {
+		if(typeof window !== "undefined") {
+			return RoomService.getRoomIdFromUrl(window.location.href)
+		}
+		return "";
+	}
+
+	const roomId = getRoomId();
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [broadcastedCoords, setBroadcastedCoords] = useState(null);
