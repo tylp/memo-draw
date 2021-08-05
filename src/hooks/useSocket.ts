@@ -2,42 +2,41 @@ import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 import io from "socket.io-client";
 
-const socket = io({ autoConnect: false});
-
 interface IUseSocket {
     namespace?: string,
-    callback?: (s: SocketIOClient.Socket) => void;
 }
 
-export default function useSocket({callback, namespace}: IUseSocket = {}): SocketIOClient.Socket {
+export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
 	const [sessionID, setSessionId] = useLocalStorage('sessionID');
-	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(
-		io(
-            namespace || null,
-			{
-				autoConnect: false,
-				auth: {
-					sessionID: sessionID
-				}
-			}
-		));	
+	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
+        if(typeof window === "undefined") return;
 
-        // console.debug("Socket updated", { socket, activeSocket });
-        if (activeSocket || !socket) return;
+        if(!setActiveSocket) return;
+        
+        const newSocket = io(
+            namespace || "/",
+            {
+                autoConnect: true,
+                auth: {
+                    sessionID: sessionID
+                }
+            }
+        )
 
-        callback && callback(socket);
-        setActiveSocket(socket);
+        newSocket.on("session", (data) => {
+            setSessionId(data.sessionID)
+        })
 
-        /**
-         * Cleanup of all socket handlers
-         */
+        setActiveSocket(newSocket)
+
+        if(!activeSocket) return;
+
         return function cleanup() {
-            // debug("Running useSocket cleanup", { socket });
-			socket.close()
+			activeSocket.close()
         };
-    }, [activeSocket, callback]);
+    }, [setActiveSocket]);
 
     return activeSocket;
 }

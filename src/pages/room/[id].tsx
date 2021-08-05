@@ -10,7 +10,7 @@ import Canvas from '../../components/Canvas';
 const Room = () => {
 	const router = useRouter();
 	const { id } = router.query;
-	const socket = useSocketRoom(null, null);
+	const socket = useSocketRoom();
 	const [url, setUrl] = useState('');
 	const [usersList, setUsersList] = useState([]);
 	const [message, setMessage] = useState("");
@@ -56,25 +56,10 @@ const Room = () => {
 		const sessionID = localStorage.getItem("sessionID");
 		
 		if (sessionID) {
-			socket.auth = { sessionID };
-			socket.connect();
-		}
-		else {
 			setIsLoading(false)
-			setIsConnected(false)
+			setIsConnected(true)
 		}
-
-		socket.on("connect", () => {
-			console.log('connect');
-		});
-
-		socket.on("connect_error", (err) => {
-			console.log(err);
-			if (err.message === "invalid username") {
-				setIsLoading(false);
-			}
-		});
-
+		
 		socket.on("session", ({ sessionID, userID, username }) => {
 			// attach the session ID to the next reconnection attempts
 			socket.auth = { sessionID };

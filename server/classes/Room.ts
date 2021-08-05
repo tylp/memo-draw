@@ -5,9 +5,9 @@ export default class Room {
     name: string;
     players: Array<Player>;
 
-    constructor(id: string, name: string) {
+    constructor(id: string) {
         this.id = id;
-        this.name = name;
+        this.name = "Player's room";
         this.players = [];
     }
 

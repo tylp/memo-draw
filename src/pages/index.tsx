@@ -4,70 +4,39 @@ import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector, RuleItem} from "../components/Home";
 import RoomSelector from '../components/RoomSelector';
 import { useSocket } from '../hooks';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export default function Index() : React.ReactNode {
 	const socket = useSocket();
 	const [isLoading, setIsLoading] = useState(true);
 	const [username, setUsername] = useState<string>("");
-	const [usernameAlreadySelected, setUsernameAlreadySelected] = useState<boolean>(false);
+	const [profileIsComplete, setProfileIsComplete] = useState<boolean>(false);
+	const [profileStorage, setProfileStorage] = useLocalStorage("profile")
 
-	//executed when component is created (one time)
 	useEffect(() => {
-
-		if(!socket) return
-
-		const sessionID = localStorage.getItem("sessionID");
-		if (sessionID) {
-			setIsLoading(true);
-			socket.auth = { sessionID };
-			socket.connect();
-		}
-		else
+		if(socket) {
 			setIsLoading(false)
-
-		socket.on("connect_error", (err) => {
-			if (err.message === "invalid username") {
-				setIsLoading(false);
-				setUsernameAlreadySelected(false);
+			if(profileStorage) {
+				// TODO: Redirect to correct room.
 			}
-		});
-
-		socket.on("connect", () => {
-			console.log('connect');
-			setIsLoading(false);
-			setUsernameAlreadySelected(true);
-		});
-
-		//executed when component is dismounted (one time)
-		return () => {
-			console.log('client off');
-			socket.off("connect_error");
-			socket.off("connect");
-			socket.off("disconnect");
-			socket.off("user connected");
-			socket.off("user disconnected");
-			socket.off("users");
-			socket.off("manual-disconnect");
-			socket.close();
 		}
-	}, []);
+	}, [socket]);
 
-	// Handle username input change
-	const handleUsername = (e) => {
-		setUsername(e.currentTarget.value);
-	}
-
-	// Handle submit
-	const handleSubmit = () => {
-		setUsernameAlreadySelected(true);
-		socket.connect();
+	const handleStart = () => {
+		const profile = {
+			username,
+			hat: 1,
+			body: 1,
+			lead: 1,
+		}
+		socket.emit("update-profile", profile, () => {
+			setProfileIsComplete(true);
+			setProfileStorage(profile);
+		})
 	}
 
 	const handleDisconnect = () => {
-		localStorage.clear();
-		setUsernameAlreadySelected(false);
-		socket.emit('manual-disconnect', 'manual disconnect');
-		socket.disconnect();
+		setProfileIsComplete(false);
 	}
 
 	const handleRoomCreation = () => {
@@ -79,7 +48,7 @@ export default function Index() : React.ReactNode {
 			{isLoading ? 
 				<Loading/>
 			: 
-			!usernameAlreadySelected ?
+			!profileIsComplete ?
 				<Layout>
 					<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 						<div>
@@ -89,8 +58,8 @@ export default function Index() : React.ReactNode {
 						</div>
 						<div >
 							<ProfileSelector 
-							handleSubmit={handleSubmit}
-							handleUserName={handleUsername}/>
+							handleStart={handleStart}
+							handleUserName={(e) => setUsername(e.currentTarget.value)}/>
 						</div>
 					</div>
 				</Layout>

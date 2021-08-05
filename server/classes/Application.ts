@@ -32,6 +32,10 @@ export default class Application {
         return this.instance;
     }
 
+    static getSessionStorage() {
+        return Application.getInstance().sessionStore;
+    }
+
     getSocketSession(socket): any {
         return this.sessionStore.findSession(socket.handshake.auth.sessionID);
     }
@@ -40,7 +44,7 @@ export default class Application {
         RoomSocketBinder.bindSocket(socket);
     }
 
-    createRoom(name: string): Room {
-        return this.roomStore.save(new Room(IdGeneratorService.generate(), name));
+    createRoom(): Room {
+        return this.roomStore.save(new Room(IdGeneratorService.generate()));
     }
 }

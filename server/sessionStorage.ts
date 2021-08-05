@@ -2,6 +2,7 @@ import IdGeneratorService from "./services/IdGeneratorService";
 
 export default class SessionStorage {
 	sessions;
+
 	constructor() {
 		this.sessions = new Map();
 	}
@@ -18,6 +19,11 @@ export default class SessionStorage {
 	saveSession(id:string, session: any):void {
 	    this.sessions.set(id, session);
 		return session;
+	}
+
+	updateSession(id: string, data: any): void {
+		const session = this.findSession(id);
+		this.saveSession(id, {...session, ...data});
 	}
 
     setSessionRoomID(id:string, roomID:string):void {
@@ -37,5 +43,11 @@ export default class SessionStorage {
             }
         }
 		return room;
+	}
+
+	updateProfile(id: string, profile: any): void {
+		this.updateSession(id, {
+			profile
+		})
 	}
 }

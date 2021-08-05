@@ -9,7 +9,7 @@ export default class IndexSocketBinder extends SocketBinder {
     
     private static onRoomCreation(socket: Socket): void {
         socket.on("create-room", function(){
-            Application.getInstance().io.emit('new-room', Application.getInstance().createRoom("New room name"))
+            Application.getInstance().io.emit('new-room', Application.getInstance().createRoom())
         });
     }
 }
