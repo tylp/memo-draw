@@ -3,7 +3,7 @@
 # memo-draw
 
 ## Memo Draw ?
-MemoDraw is a website game based on the funny concept of the game "in my suitcase", mixing memory and drawing.
+MemoDraw is a website game based on the funny concept of the game "I Packed My Suitcase", mixing memory and drawing.
 ### Rules
 - The first player draws a first picture
 - The second player has to redraw the previous player's drawing from memory and add a new one
