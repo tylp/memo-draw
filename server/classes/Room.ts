@@ -2,12 +2,10 @@ import Player from "./Player";
 
 export default class Room {
     id: string;
-    name: string;
     players: Array<Player>;
 
     constructor(id: string) {
         this.id = id;
-        this.name = "Player's room";
         this.players = [];
     }
 
