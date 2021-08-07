@@ -1,5 +1,9 @@
 export default abstract class Storage<K, T> {
 	private data: Map<K, T>;
+
+	constructor() {
+		this.data = new Map<K, T>();
+	}
 	
 	get(key: K): T {
 		return this.data.get(key)
