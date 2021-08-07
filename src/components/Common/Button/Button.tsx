@@ -17,10 +17,11 @@ export default function Button(props: IButton) : JSX.Element {
     }, [props.disabled, props.className])
 
     return(
-        <button 
+        <button
         onClick={props.onClick}
         disabled={props.disabled || false}
         className={className}
+        type={props.type}
         >
             {props.children}
         </button>
