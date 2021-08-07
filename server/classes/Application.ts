@@ -12,14 +12,14 @@ import SessionStorage from './Storage/SessionStorage';
 export default class Application {
     private static instance: Application;
 
-    sessionStore: SessionStorage;
-    roomStore: RoomStorage;
+    sessionStorage: SessionStorage;
+    roomStorage: RoomStorage;
     socketIoHandler: SocketIoHandler;
     io: Server;
 
     private constructor(io: Server) {
-        this.sessionStore = new SessionStorage();
-        this.roomStore = new RoomStorage();
+        this.sessionStorage = new SessionStorage();
+        this.roomStorage = new RoomStorage();
         this.io = SocketIoBinder.bindServer(io);
     }
 
@@ -35,15 +35,15 @@ export default class Application {
     }
 
     static getSessionStorage(): SessionStorage {
-        return Application.getInstance().sessionStore;
+        return Application.getInstance().sessionStorage;
     }
 
     static getRoomStorage(): RoomStorage {
-        return Application.getInstance().roomStore;
+        return Application.getInstance().roomStorage;
     }
 
     getSocketSession(socket: Socket): ISession {
-        return this.sessionStore.get(SocketIdentifierService.getSessionIdentifier(socket));
+        return Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
     }
 
     handleConnection(socket: Socket): void {
@@ -52,6 +52,6 @@ export default class Application {
 
     createRoom(): Room {
         const roomId = IdGeneratorService.generate()
-        return this.roomStore.set(roomId, new Room(roomId));
+        return Application.getRoomStorage().set(roomId, new Room(roomId));
     }
 }
