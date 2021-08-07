@@ -27,4 +27,8 @@ export default class Room {
     isPlayerPresent(player: Player): boolean {
         return this.players.findIndex(e => e.id === player.id) !== -1;
     }
+
+    static getRoomName(roomId: Room['id']): string {
+        return `room-${roomId}`;
+    }
 }
