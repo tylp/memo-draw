@@ -14,7 +14,6 @@ export default function Button(props: IButton) : JSX.Element {
                         ${props.disabled ? `bg-pink-light-pink text-white-white cursor-default` : `bg-pink-dark-pink text-white-white hover:bg-pink-light-pink`}
                         ${props.className}
                     `);
-                    
     }, [props.disabled])
 
     return(
