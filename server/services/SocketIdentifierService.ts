@@ -7,6 +7,6 @@ export default class SocketIdentifierService {
 
     public static getPlayerIdentifier(socket: Socket): string {
         const sessionId = this.getSessionIdentifier(socket);
-        return Application.getSessionStorage().findSession(sessionId).playerId;
+        return Application.getSessionStorage().get(sessionId)?.playerId;
     }
 }

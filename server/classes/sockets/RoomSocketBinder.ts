@@ -12,7 +12,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
     private static onJoinRoom(socket: Socket): void {        
         socket.on("join-room", (roomId, ack) => {
-            if(Application.getRoomStorage().exists(roomId)) {
+            if(Application.getRoomStorage().containsKey(roomId)) {
                 socket.join(`room-${roomId}`)
                 const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.createPlayer(socket));
                 socket.to(`room-${roomId}`).emit("update-room", updatedRoom);
