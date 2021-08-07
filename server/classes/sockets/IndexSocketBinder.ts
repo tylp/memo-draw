@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import RoomFactory from '../../factories/RoomFactory';
 import Application from "../Application";
 import SocketBinder from "./SocketBinder";
 
@@ -9,7 +10,7 @@ export default class IndexSocketBinder extends SocketBinder {
     
     private static onRoomCreation(socket: Socket): void {
         socket.on("create-room", function(){
-            Application.getInstance().io.emit('new-room', Application.getInstance().createRoom())
+            Application.getInstance().io.emit('new-room', RoomFactory.create())
         });
     }
 }

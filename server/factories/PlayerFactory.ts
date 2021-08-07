@@ -4,7 +4,7 @@ import Player from "../classes/Player";
 import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class PlayerFactory {
-    public static createPlayer(socket: Socket): Player {
+    public static create(socket: Socket): Player {
         const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
         const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
         const session = Application.getSessionStorage().get(sessionId);

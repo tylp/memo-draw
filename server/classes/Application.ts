@@ -40,9 +40,4 @@ export default class Application {
     static getRoomStorage(): RoomStorage {
         return Application.getInstance().roomStorage;
     }
-    
-    createRoom(): Room {
-        const roomId = IdGeneratorService.generate()
-        return Application.getRoomStorage().set(roomId, new Room(roomId));
-    }
 }
