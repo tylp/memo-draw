@@ -7,7 +7,7 @@ export default class PlayerFactory {
     public static createPlayer(socket: Socket): Player {
         const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
         const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
-        const session = Application.getSessionStorage().findSession(sessionId);
+        const session = Application.getSessionStorage().get(sessionId);
         
         return new Player(playerId, session.profile);
     }

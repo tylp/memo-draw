@@ -1,13 +1,13 @@
 import { Server, Socket } from 'socket.io';
 import ISession from '../interfaces/ISession';
-import RoomStorage from "../RoomStorage";
 import IdGeneratorService from "../services/IdGeneratorService";
 import SocketIdentifierService from '../services/SocketIdentifierService';
-import SessionStorage from "../SessionStorage";
 import Room from "./Room";
 import RoomSocketBinder from './sockets/RoomSocketBinder';
 import SocketIoBinder from './sockets/SocketIoHandler';
 import SocketIoHandler from './sockets/SocketIoHandler';
+import RoomStorage from './Storage/RoomStorage';
+import SessionStorage from './Storage/SessionStorage';
 
 export default class Application {
     private static instance: Application;
@@ -43,7 +43,7 @@ export default class Application {
     }
 
     getSocketSession(socket: Socket): ISession {
-        return this.sessionStore.findSession(SocketIdentifierService.getSessionIdentifier(socket));
+        return this.sessionStore.get(SocketIdentifierService.getSessionIdentifier(socket));
     }
 
     handleConnection(socket: Socket): void {
@@ -51,6 +51,7 @@ export default class Application {
     }
 
     createRoom(): Room {
-        return this.roomStore.save(new Room(IdGeneratorService.generate()));
+        const roomId = IdGeneratorService.generate()
+        return this.roomStore.set(roomId, new Room(roomId));
     }
 }
