@@ -1,29 +1,45 @@
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import useLocalStorage from './useLocalStorage';
+import io from "socket.io-client";
 
-const socket = io();
-
-interface SocketCallback {
-    (s: SocketIOClient.Socket): void;
+interface IUseSocket {
+    namespace?: string,
 }
 
-export default function useSocket(cb?: SocketCallback): SocketIOClient.Socket {
-    const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>(null);
+export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
+	const [sessionId, setSessionId] = useLocalStorage('sessionId');
+	const [, setPlayerId] = useLocalStorage('playerId');
+	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
-        // debug("Socket updated", { socket, activeSocket });
-        if (activeSocket || !socket) return;
-        cb && cb(socket);
-        setActiveSocket(socket);
+        if(typeof window === "undefined") return;
 
-        /**
-         * Cleanup of all socket handlers
-         */
+        if(!setActiveSocket) return;
+        
+        const newSocket = io(
+            namespace || "/",
+            {
+                autoConnect: true,
+                auth: {
+                    sessionId: sessionId,
+                }
+            }
+        )
+
+        newSocket.on("new-session", (data) => {
+            setSessionId(data.sessionId)
+            setPlayerId(data.playerId)
+        })
+
+        setActiveSocket(newSocket)
+
+        if(!activeSocket) return;
+
         return function cleanup() {
-            // debug("Running useSocket cleanup", { socket });
-            socket.off("hello-room", cb);
+			activeSocket.close()
         };
-    }, [activeSocket, cb]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [setActiveSocket]);
 
     return activeSocket;
 }

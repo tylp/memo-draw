@@ -1,60 +1,87 @@
 import React, { useEffect, useState } from 'react';
-import {useSocket} from '../hooks';
-import {Layout} from "../components/Common";
-import {ProfileSelector, RuleItem} from "../components/Home";
+import {Layout, SectionTitle} from "../components/Common";
+import Loading from '../components/Common/Loading/Loading';
+import {ProfileSelector} from "../components/Home";
+import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
+import RoomSelector from '../components/RoomSelector';
+import { useSocket } from '../hooks';
+import useLocalStorage from '../hooks/useLocalStorage';
 
-interface HelloMessage {
-    timestamp: number;
-    value: string;
-}
+export default function Index(): JSX.Element {
+	const socket = useSocket();
+	const [isLoading, setIsLoading] = useState(true);
+	const [username, setUsername] = useState<string>("");
+	const [profileIsComplete, setProfileIsComplete] = useState<boolean>(false);
+	const [profileStorage, setProfileStorage] = useLocalStorage("profile")
 
-export default function Index() : React.ReactNode {
+	useEffect(() => {
+		if(socket) {
+			setIsLoading(false)
+			if(profileStorage) {
+				// TODO: Redirect to correct room.
+			}
+		}
+	}, [socket, profileStorage]);
 
-    const socket: SocketIOClient.Socket = useSocket();
-    const [value, setValue] = useState<string>("");
+	const handleStart = () => {
+		// TODO: Get profile from ProfileSelector
+		const profile = {
+			username,
+			hat: 1,
+			body: 1,
+			lead: 1,
+		}
+		
+		socket.emit("update-profile", profile, () => {
+			setProfileIsComplete(true);
+			setProfileStorage(profile);
+		})
+	}
 
-    useEffect(() => {
-        if (socket) {
-            socket.on("hello-room", (message: HelloMessage) => {
-                console.log(message)
-            });
-        }
-    }, [socket]);
+	const handleDisconnect = () => {
+		setProfileIsComplete(false);
+	}
 
-    // Handle input change
-    const handleInputChange = (event) => {
-        setValue(event.target.value);
-    };
+	const handleRoomCreation = () => {
+		socket.emit('create-room');
+	}
 
-    
-    /**
-     * Emit <value> to "hello-room" topic.
-     * Check the server.js console to see the message.
-     */ 
-    function emmitData() {
-
-        const msg: HelloMessage = {
-            timestamp: new Date().getTime(),
-            value: value
-        }
-
-        socket &&
-            socket.emit("hello-room", msg);
-    }
-
-    return (
-        <Layout>
-            <div className="flex flex-wrap flex-auto justify-center md:space-x-32">
-                <div>
-                    <RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-                    <RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-                    <RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-                </div>
-                <div >
-                    <ProfileSelector />
-                </div>
-            </div>
-        </Layout>
-
-    );
+	return (
+		<div>
+			{
+			isLoading
+			? (
+				<Loading/>
+			) 
+			: (
+				!profileIsComplete
+				? (
+					<Layout>
+						<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
+							<div>
+								<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
+								<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
+								<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
+								<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
+							</div>
+							<div >
+								<ProfileSelector 
+								handleStart={handleStart}
+								handleUserName={(e) => setUsername(e.currentTarget.value)}
+								username={username}/>
+							</div>
+						</div>
+					</Layout>
+				)
+			: (
+				<RoomSelector
+					socket={socket}
+					onHandleRoomCreation={handleRoomCreation}
+					onHandleDisconnect={handleDisconnect}
+				/>
+				)
+			)
+			}
+		</div>
+	);
 }

@@ -6,6 +6,7 @@ export default function Button(props: IButton) : JSX.Element {
     return(
         <button 
         onClick={props.onClick}
+        disabled={props.disabled || false}
         className={`
             rounded-sm pl-2 pt-1 pr-2 pb-1
             bg-pink-dark-pink text-white-white
