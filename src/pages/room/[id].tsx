@@ -64,9 +64,10 @@ const Room = (): JSX.Element => {
 			username: storageProfile.username,
 			content: message
 		})
-		setMessage('');
+
 		if(message !== '') {
 			socket.emit("send-message-room", message, roomId);
+			setMessage('');
 		}
 	}
 
