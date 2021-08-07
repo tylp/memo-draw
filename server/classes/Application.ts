@@ -40,11 +40,7 @@ export default class Application {
     static getRoomStorage(): RoomStorage {
         return Application.getInstance().roomStorage;
     }
-
-    getSocketSession(socket: Socket): ISession {
-        return Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-    }
-
+    
     createRoom(): Room {
         const roomId = IdGeneratorService.generate()
         return Application.getRoomStorage().set(roomId, new Room(roomId));
