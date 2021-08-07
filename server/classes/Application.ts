@@ -46,10 +46,6 @@ export default class Application {
         return Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
     }
 
-    handleConnection(socket: Socket): void {
-        RoomSocketBinder.bindSocket(socket);
-    }
-
     createRoom(): Room {
         const roomId = IdGeneratorService.generate()
         return Application.getRoomStorage().set(roomId, new Room(roomId));
