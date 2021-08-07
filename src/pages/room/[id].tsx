@@ -7,6 +7,8 @@ import Canvas from '../../components/Canvas';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
+import Player from '../../../server/classes/Player';
+import UserProfile from '../../components/Room/Id/UserProfile';
 
 const Room = (): JSX.Element => {
 	
@@ -93,6 +95,9 @@ const Room = (): JSX.Element => {
 				<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 					<div>
 						<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
+						{
+							room?.players.map((player: Player) => <UserProfile key={player.id} player={player}/>)
+						}
 					</div>
 					<div>
 						<Canvas width="800" height="400"
