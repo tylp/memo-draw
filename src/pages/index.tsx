@@ -29,7 +29,7 @@ export default function Index(): JSX.Element {
 			body: 1,
 			lead: 1,
 		}
-		
+
 		socket.emit("update-profile", profile, () => {
 			setProfileStorage(profile);
 			handleRoomCreation();

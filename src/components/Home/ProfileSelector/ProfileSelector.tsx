@@ -116,8 +116,13 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
 				<div className="mt-4">
 					<Title>Pseudo</Title>
-					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-					<Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
+                    <form onSubmit={(e) => {
+                            e.preventDefault();
+                            props.handleStart();
+                        }}>
+                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
+                    </form>
 				</div>
 			</div>
 		</div>
