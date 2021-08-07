@@ -65,7 +65,9 @@ const Room = (): JSX.Element => {
 			content: message
 		})
 		setMessage('');
-		socket.emit("send-message-room", message, roomId);
+		if(message !== '') {
+			socket.emit("send-message-room", message, roomId);
+		}
 	}
 
 	const receiveMessage = (message) => {
