@@ -15,7 +15,7 @@ export default class RoomSocketBinder extends SocketBinder {
         socket.on("join-room", (roomId, ack) => {
             if(Application.getRoomStorage().containsKey(roomId)) {
                 socket.join(Room.getRoomName(roomId))
-                const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.createPlayer(socket));
+                const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(socket));
                 socket.to(Room.getRoomName(roomId)).emit("update-room", updatedRoom);
                 ack(updatedRoom);
             } else {
@@ -25,7 +25,7 @@ export default class RoomSocketBinder extends SocketBinder {
     }
 
     private static onMessageRoom(socket: Socket): void {
-        const player = PlayerFactory.createPlayer(socket);
+        const player = PlayerFactory.create(socket);
         socket.on("send-message-room", (content, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
                 socket.to(Room.getRoomName(roomId)).emit("receive-message-room", {
@@ -37,7 +37,7 @@ export default class RoomSocketBinder extends SocketBinder {
     }
 
     private static onDrawing(socket: Socket): void {
-        const player = PlayerFactory.createPlayer(socket);
+        const player = PlayerFactory.create(socket);
         socket.on("send-drawing", (coords, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
                 socket.to(Room.getRoomName(roomId)).emit("receive-drawing", coords)
