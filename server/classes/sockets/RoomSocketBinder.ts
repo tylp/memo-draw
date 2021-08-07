@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import Room from '../Room';
 import PlayerFactory from '../../factories/PlayerFactory';
 import Application from "../Application";
 import SocketBinder from "./SocketBinder";
@@ -13,9 +14,9 @@ export default class RoomSocketBinder extends SocketBinder {
     private static onJoinRoom(socket: Socket): void {        
         socket.on("join-room", (roomId, ack) => {
             if(Application.getRoomStorage().exists(roomId)) {
-                socket.join(`room-${roomId}`)
+                socket.join(Room.getRoomName(roomId))
                 const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.createPlayer(socket));
-                socket.to(`room-${roomId}`).emit("update-room", updatedRoom);
+                socket.to(Room.getRoomName(roomId)).emit("update-room", updatedRoom);
                 ack(updatedRoom);
             } else {
                 ack(false);
@@ -27,7 +28,7 @@ export default class RoomSocketBinder extends SocketBinder {
         const player = PlayerFactory.createPlayer(socket);
         socket.on("send-message-room", (content, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
-                socket.to(`room-${roomId}`).emit("receive-message-room", {
+                socket.to(Room.getRoomName(roomId)).emit("receive-message-room", {
                     username: player.profile.username,
                     content
                 })
@@ -39,7 +40,7 @@ export default class RoomSocketBinder extends SocketBinder {
         const player = PlayerFactory.createPlayer(socket);
         socket.on("send-drawing", (coords, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
-                socket.to(`room-${roomId}`).emit("receive-drawing", coords)
+                socket.to(Room.getRoomName(roomId)).emit("receive-drawing", coords)
             }
         })
     }
