@@ -35,6 +35,13 @@ Each component consists of four files :
 Component's name have to be in PascalCase.
 
 ## Branching & Commit
+    
+### Type of branch
+***In kebab-case***
+- Feature branch (`fea/...`)
+- Bugfix branch (`bug/...`)
+- Enhancement branch (`enh/...`)
+- Refactor branch (`ref/...`)
 
 ### Branching
 
@@ -58,7 +65,7 @@ Commit name must clearly specify the different changes.
 
 For all the contribution, you need to :
 - Fork the project into your personal namespace
-- Create a feature branch (`fea/...`)  or a bugfix branch (`bug/...`) in your fork (don’t work on `main`).
+- Create a branch (see *Type of branch*).
 - Write tests and code.
 - Follow the commit messages guidelines.
 - Push the commit(s) to your working branch in your fork.
@@ -66,3 +73,4 @@ For all the contribution, you need to :
 - Submit a merge request (MR) to the `main` branch in the main GitLab project.
 - Make sure the merge request reference the revelent issue(s).
 - You can aprove the MR by yourself for minor changes, it is necessary to do a code review for major changes.
+
