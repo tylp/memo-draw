@@ -1,6 +1,6 @@
 export default interface IProfile {
     username: string,
-    head: number,
+    hat: number,
     body: number,
     lead: number,
 }

@@ -1,33 +1,33 @@
 import { Server } from 'socket.io';
-import SocketIoBinder from './sockets/SocketIoHandler';
 import SocketIoHandler from './sockets/SocketIoHandler';
+import PlayerRoomStorage from './Storage/PlayerRoomStorage';
 import RoomStorage from './Storage/RoomStorage';
 import SessionStorage from './Storage/SessionStorage';
 
 export default class Application {
     private static instance: Application;
 
-    sessionStorage: SessionStorage;
-    roomStorage: RoomStorage;
-    socketIoHandler: SocketIoHandler;
-    io: Server;
+    private sessionStorage: SessionStorage;
+    private roomStorage: RoomStorage;
+    private playerRoomStorage: PlayerRoomStorage;
 
-    private constructor(io: Server) {
+    private constructor() {
         this.sessionStorage = new SessionStorage();
         this.roomStorage = new RoomStorage();
-        this.io = SocketIoBinder.bindServer(io);
-    }
-
-    static generateInstance(io: Server): Application {
-        if (!Application.instance) {
-            Application.instance = new Application(io);
-        }
-        return Application.getInstance();
+        this.playerRoomStorage = new PlayerRoomStorage();
     }
 
     static getInstance(): Application {
-        return this.instance;
+        if (!Application.instance) {
+            Application.instance = new Application();
+        }
+        return Application.instance;
     }
+
+    static bindServer(io: Server): void {
+        SocketIoHandler.bindServer(io);
+    }
+
 
     static getSessionStorage(): SessionStorage {
         return Application.getInstance().sessionStorage;
@@ -35,5 +35,9 @@ export default class Application {
 
     static getRoomStorage(): RoomStorage {
         return Application.getInstance().roomStorage;
+    }
+
+    static getPlayerRoomStorage(): PlayerRoomStorage {
+        return Application.getInstance().playerRoomStorage;
     }
 }
