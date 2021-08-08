@@ -9,6 +9,7 @@ import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
 import Player from '../../../server/classes/Player';
 import UserProfile from '../../components/Room/Id/UserProfile';
+import RoomType from '../../../server/classes/Room';
 
 const Room = (): JSX.Element => {
 	
@@ -26,7 +27,7 @@ const Room = (): JSX.Element => {
 	const [sessionId] = useLocalStorage("sessionId");
 	
 	const socket = useSocketRoom();
-	const [room, setRoom] = useState(null);
+	const [room, setRoom] = useState<RoomType>();
 	const [storageProfile] = useLocalStorage<IProfile>("profile");
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -96,7 +97,7 @@ const Room = (): JSX.Element => {
 					<div>
 						<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
 						{
-							room?.players.map((player: Player) => <UserProfile key={player.id} player={player}/>)
+							room?.players.map((player: Player) => <UserProfile key={player.id} player={player} creatorId={room.creatorPlayerId}/>)
 						}
 					</div>
 					<div>
