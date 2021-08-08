@@ -21,7 +21,7 @@ export default class Application {
         if (!Application.instance) {
             Application.instance = new Application();
         }
-        return Application.getInstance();
+        return Application.instance;
     }
 
     static bindServer(io: Server): void {
