@@ -4,7 +4,7 @@ import { SectionTitleSpec } from "./SectionTitle.spec";
 export default function SectionTitle({children, subtitle, hintColor}: SectionTitleSpec) : JSX.Element {
 
 	return(
-		<div className="flex flex-col mt-2 mb-6 relative">
+		<div className="flex flex-col mt-2 mb-6 relative uppercase">
 			{subtitle ?
 				<div className="z-10 absolute -top-3 -left-14 p-0.5 pl-2 pr-2 rounded-lg transform -rotate-45 bg-pink-dark-pink font-bold text-white-white">{subtitle}</div>
 			: ''}
