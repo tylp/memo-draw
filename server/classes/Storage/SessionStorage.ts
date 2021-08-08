@@ -11,9 +11,9 @@ export default class RoomStorage extends Storage<string, ISession> {
 			playerId,
 			// TODO: Find a better way to create a default profile, like a profile factory.
 			profile: {
-				hat: 1,
-				body: 1,
-				lead: 1,
+				rubberColor: 1,
+				bodyColor: 1,
+				faceType: 1,
 				username: "Noname"
 			}
 		});

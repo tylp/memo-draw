@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import IProfile from '../../server/interfaces/IProfile';
 import {Layout, SectionTitle} from "../components/Common";
 import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector} from "../components/Home";
@@ -23,13 +24,13 @@ export default function Index(): JSX.Element {
 
 	const handleStart = () => {
 		// TODO: Get profile from ProfileSelector
-		const profile = {
+		const profile: IProfile = {
 			username,
-			hat: 1,
-			body: 1,
-			lead: 1,
+			rubberColor: 1,
+			bodyColor: 1,
+			faceType: 1,
 		}
-
+		
 		socket.emit("update-profile", profile, () => {
 			setProfileStorage(profile);
 			handleRoomCreation();

@@ -49,42 +49,42 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    function previousHat() {
+    function previousRubberColor() {
         if (currentUrlIndex == 0)
             setCurrentUrlIndex(avatarUrls.length - 1);
         else
             setCurrentUrlIndex(currentUrlIndex - 1);
     }
 
-    function previousBody() {
+    function previousBodyColor() {
         if (currentUrlIndex == 0)
             setCurrentUrlIndex(avatarUrls.length - 1);
         else
             setCurrentUrlIndex(currentUrlIndex - 1);
     }
 
-    function previousLead() {
+    function previousFaceType() {
         if (currentUrlIndex == 0)
             setCurrentUrlIndex(avatarUrls.length - 1);
         else
             setCurrentUrlIndex(currentUrlIndex - 1);
     }
 
-    function nextHat() {
+    function nextRubberColor() {
         if (currentUrlIndex == avatarUrls.length - 1)
             setCurrentUrlIndex(0);
         else
             setCurrentUrlIndex(currentUrlIndex + 1);
     }
 
-    function nextBody() {
+    function nextBodyColor() {
         if (currentUrlIndex == avatarUrls.length - 1)
             setCurrentUrlIndex(0);
         else
             setCurrentUrlIndex(currentUrlIndex + 1);
     }
 
-    function nextLead() {
+    function nextFaceType() {
         if (currentUrlIndex == avatarUrls.length - 1)
             setCurrentUrlIndex(0);
         else
@@ -98,9 +98,9 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Hat" onClick={previousHat}/>
-						<SelectButton direction="left" name="Body" onClick={previousBody}/>
-						<SelectButton direction="left" name="Lead" onClick={previousLead}/>
+						<SelectButton direction="left" name="Rubber Color" onClick={previousRubberColor}/>
+						<SelectButton direction="left" name="Body Color" onClick={previousBodyColor}/>
+						<SelectButton direction="left" name="Face Type" onClick={previousFaceType}/>
 					</div>
 
 					<div className="flex items-center">
@@ -108,21 +108,16 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 					</div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Hat" onClick={nextHat}/>
-						<SelectButton direction="right" name="Body" onClick={nextBody}/>
-						<SelectButton direction="right" name="Lead" onClick={nextLead}/>
+						<SelectButton direction="right" name="Rubber Color" onClick={nextRubberColor}/>
+						<SelectButton direction="right" name="Body Color" onClick={nextBodyColor}/>
+						<SelectButton direction="right" name="Face Type" onClick={nextFaceType}/>
 					</div>
 				</div>
 
 				<div className="mt-4">
 					<Title>Pseudo</Title>
-                    <form onSubmit={(e) => {
-                            e.preventDefault();
-                            props.handleStart();
-                        }}>
-                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
-                    </form>
+					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+					<Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
 				</div>
 			</div>
 		</div>
