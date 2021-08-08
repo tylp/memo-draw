@@ -3,10 +3,9 @@ import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
+import Avatar from "../../Common/Avatar/Avatar";
 
-import { RubberColor } from "../../../../server/interfaces/IProfile";
-import { BodyColor } from "../../../../server/interfaces/IProfile";
-import { FaceType } from "../../../../server/interfaces/IProfile";
+import { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     return (
@@ -41,12 +40,6 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
 
 export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
-    const avatarUrls = [
-        "https://media3.chapellerie-traclet.com/14578-thickbox_default/melon-hat.jpg",
-        "https://www.hutstuebele.com/pic/Panama-hat-BORSALINO.10375a.jpg"
-    ];
-
-    const [currentUrlIndex, setCurrentUrlIndex] = useState<number>(0);
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
@@ -57,46 +50,18 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    function previousRubberColor() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
-        else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
-    function previousBodyColor() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
-        else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
     function previousFaceType() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
+        if (faceType == 0)
+            setFaceType(Object.keys(FaceType).length / 2 - 1);
         else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
-    function nextRubberColor() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
-        else
-            setCurrentUrlIndex(currentUrlIndex + 1);
-    }
-
-    function nextBodyColor() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
-        else
-            setCurrentUrlIndex(currentUrlIndex + 1);
+            setFaceType(faceType - 1);
     }
 
     function nextFaceType() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
+        if (faceType == Object.keys(FaceType).length / 2  - 1)
+            setFaceType(0);
         else
-            setCurrentUrlIndex(currentUrlIndex + 1);
+            setFaceType(faceType + 1);
     }
     
     return (
@@ -106,19 +71,19 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Rubber Color" onClick={previousRubberColor}/>
-						<SelectButton direction="left" name="Body Color" onClick={previousBodyColor}/>
-						<SelectButton direction="left" name="Face Type" onClick={previousFaceType}/>
+						<SelectButton direction="left" name="Rubber" /*onClick={previousRubberColor}*//>
+						<SelectButton direction="left" name="Body" /*onClick={previousBodyColor}*//>
+						<SelectButton direction="left" name="Face" onClick={previousFaceType}/>
 					</div>
 
 					<div className="flex items-center">
-						<img className="rounded-full border-2 border-yellow-dark-yellow" src={avatarUrls[currentUrlIndex]}/>
-					</div>
+                        <Avatar rubberColor={rubberColor} bodyColor={bodyColor} faceType={faceType}/>
+                    </div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Rubber Color" onClick={nextRubberColor}/>
-						<SelectButton direction="right" name="Body Color" onClick={nextBodyColor}/>
-						<SelectButton direction="right" name="Face Type" onClick={nextFaceType}/>
+						<SelectButton direction="right" name="Rubber" /*onClick={nextRubberColor}*//>
+						<SelectButton direction="right" name="Body" /*onClick={nextBodyColor}*//>
+						<SelectButton direction="right" name="Face" onClick={nextFaceType}/>
 					</div>
 				</div>
 

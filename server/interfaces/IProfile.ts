@@ -24,14 +24,14 @@ export enum BodyColor {
 }
 
 export enum FaceType {
-    Happy = "Happy",
-    Sad = "Sad",
-    Angry  = "Angry",
-    Surprised  = "Surprised",
-    Neutral  = "Neutral",
-    Cyclops  = "Cyclops",
-    Astonished  = "Astonished",
-    High  = "High",
-    Meh  = "Meh",
-    Triclops  = "Triclops",
+    Happy,
+    Sad,
+    Angry,
+    Surprised,
+    Neutral,
+    Cyclops,
+    Astonished,
+    High,
+    Meh,
+    Triclops,
 }

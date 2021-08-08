@@ -1,9 +1,7 @@
-import { RubberColor } from "../../../../server/interfaces/IProfile";
-import { BodyColor } from "../../../../server/interfaces/IProfile";
-import { FaceType } from "../../../../server/interfaces/IProfile";
+import { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 
 export interface IAvatar {
-    RubberColor: RubberColor,
-    BodyColor: BodyColor,
-    FaceType: FaceType,
+    rubberColor: RubberColor,
+    bodyColor: BodyColor,
+    faceType: FaceType,
 }
