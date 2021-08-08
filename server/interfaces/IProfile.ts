@@ -6,32 +6,32 @@ export default interface IProfile {
 }
 
 export enum RubberColor {
-    Pink,
-    Blue,
+    Pink = "#FF7BAC",
+    Blue = "#7BA8FF",
 }
 
 export enum BodyColor {
-    Yellow,
-    Red,
-    Orange,
-    LightGreen,
-    Green,
-    Blue,
-    Teal,
-    Purple,
-    Pink,
-    White,
+    Yellow = "#FFE500",
+    Red = "#FF2626",
+    Orange = "#FF7E35",
+    LightGreen = "#B3FF38",
+    Green = "#009518",
+    Blue = "#514EFF",
+    Teal = "#3DF3FF",
+    Purple = "#BD00FF",
+    Pink = "#FF70F9",
+    White = "#F2F2F2",
 }
 
 export enum FaceType {
-    Happy,
-    Sad,
-    Angry,
-    Surprised,
-    Neutral,
-    Cyclops,
-    Astonished,
-    High,
-    Meh,
-    Triclops,
+    Happy = "Happy",
+    Sad = "Sad",
+    Angry  = "Angry",
+    Surprised  = "Surprised",
+    Neutral  = "Neutral",
+    Cyclops  = "Cyclops",
+    Astonished  = "Astonished",
+    High  = "High",
+    Meh  = "Meh",
+    Triclops  = "Triclops",
 }
