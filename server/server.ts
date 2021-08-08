@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
-Application.generateInstance(io);
+Application.bindServer(io);
 
 nextApp.prepare().then(() => {
 	app.get('*', (req, res) => nextHandler(req, res));

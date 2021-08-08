@@ -13,7 +13,7 @@ export default class RoomStorage extends Storage<string, Room> {
 		return false;
 	}
 	
-	addPlayer(id: string, player: Player): Room{
+	addPlayer(id: string, player: Player): Room {
 		const room = this.get(id);
 		
 		if(!room.isPlayerPresent(player)) {
@@ -23,7 +23,7 @@ export default class RoomStorage extends Storage<string, Room> {
 		return room;
 	}
 	
-	removePlayer(id: string, player: Player): void{
-		this.get(id).removePlayer(player);
+	removePlayer(id: string, player: Player): Room {
+		return this.get(id).removePlayer(player);
 	}
 }
