@@ -4,6 +4,10 @@ import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
 
+import { RubberColor } from "../../../../server/interfaces/IProfile";
+import { BodyColor } from "../../../../server/interfaces/IProfile";
+import { FaceType } from "../../../../server/interfaces/IProfile";
+
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     return (
         <div className="flex flex-col items-center">
@@ -44,6 +48,10 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
     const [currentUrlIndex, setCurrentUrlIndex] = useState<number>(0);
     const [isStartEnabled, setIsStartEnabled] = useState(true);
+
+    const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
+    const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
@@ -116,8 +124,13 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
 				<div className="mt-4">
 					<Title>Pseudo</Title>
-					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-					<Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
+					<form onSubmit={(e) => {
+                            e.preventDefault();
+                            props.handleStart();
+                        }}>
+                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
+                    </form>
 				</div>
 			</div>
 		</div>
