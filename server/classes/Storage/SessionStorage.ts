@@ -20,9 +20,11 @@ export default class RoomStorage extends Storage<string, ISession> {
 	}
 	
 	update(id: string, value: ISession): void {
-		this.set(id, {
-			...this.get(id),
-			...value
-		})
+		if(this.containsKey(id)) {
+			this.set(id, {
+				...this.get(id),
+				...value
+			})
+		}
 	}
 }
