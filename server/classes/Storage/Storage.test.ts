@@ -14,25 +14,25 @@ describe("Storage", () => {
         storage = new StorageImpl();
     });
     
-    test("get and set", () => {
+    test("get and set should work", () => {
         expect(storage.get(key)).toBeUndefined();
         expect(storage.set(key, value)).toBe(value);
         expect(storage.get(key)).toBe(value);
     });
 
-    test("containsKey", () => {
+    test("containsKey should work", () => {
         expect(storage.containsKey(key)).toBeFalsy();
         storage.set(key, value);
         expect(storage.containsKey(key)).toBeTruthy();
     });
 
-    test("containsValue", () => {
+    test("containsValue should work", () => {
         expect(storage.containsValue(value)).toBeFalsy();
         storage.set(key, value);
         expect(storage.containsValue(value)).toBeTruthy();
     });
 
-    test("all", () => {
+    test("all should work", () => {
         const allEmpty = storage.all();
         expect(allEmpty.size).toBe(0);
         
@@ -41,7 +41,7 @@ describe("Storage", () => {
         expect(allNotEmpty.size).toBe(1);
     });
 
-    test("toArray", () => {
+    test("toArray should work", () => {
         const toArrayEmpty = storage.toArray();
         expect(toArrayEmpty.length).toBe(0);
         
@@ -51,7 +51,7 @@ describe("Storage", () => {
         expect(toArrayNotEmpty.length).toBe(1);
     })
 
-    test("isEmpty", () => {
+    test("isEmpty should work", () => {
         expect(storage.isEmpty()).toBeTruthy();
         storage.set(key, value);
         expect(storage.isEmpty()).toBeFalsy();
