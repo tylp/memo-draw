@@ -1,36 +1,87 @@
 import PlayerFactory from "../../factories/PlayerFactory";
+import ProfileFactory from "../../factories/ProfileFactory";
+import RoomFactory from "../../factories/RoomFactory";
 import RoomStorage from "./RoomStorage";
 import IdGeneratorService from "../../services/IdGeneratorService";
 import ISession from "../../interfaces/ISession";
 
 describe("RoomStorage", () => {
-    let storage: RoomStorage;
-    const roomId = IdGeneratorService.generate();
-    playerOneSession: ISession = {
-        sessionId: "string random",
-        playerId: "string random",
-        profile: {
-            
-        },
-    }
+	let storage = new RoomStorage();
+	const roomId = IdGeneratorService.generate();
+	let room = RoomFactory.create();
+	const roomIdNotExisting = IdGeneratorService.generate();
+	const playerOneSession: ISession = {
+		sessionId: "Random string",
+		playerId: "Random string",
+		profile: ProfileFactory.create()
+	}
+	const playerOne = PlayerFactory.create(playerOneSession);
 
-    beforeEach(() => {
-        storage = new RoomStorage();
-    })
+	const playerTwoSession: ISession = {
+		sessionId: "Random string #2",
+		playerId: "Random string #2",
+		profile: ProfileFactory.create()
+	}
+	const playerTwo = PlayerFactory.create(playerTwoSession);
 
-    test("isPlayerPresent", () => {
-        storage.isPlayerPresent(roomId, PlayerFactory.create(playerOneSession))
-    });
+	beforeEach(() => {
+		storage = new RoomStorage();
+		room = RoomFactory.create();
+		storage.set(roomId, room)
+	})
 
-    // test("addPlayer", () => {
-    //     expect(storage.containsKey(key)).toBeFalsy();
-    //     storage.set(key, value);
-    //     expect(storage.containsKey(key)).toBeTruthy();
-    // });
+	test("isPlayerPresent should work", () => {
+		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
 
-    // test("removePlayer", () => {
-    //     expect(storage.containsValue(value)).toBeFalsy();
-    //     storage.set(key, value);
-    //     expect(storage.containsValue(value)).toBeTruthy();
-    // });
+		storage.addPlayer(roomId, playerOne);
+
+		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
+	});
+
+	test("isPlayerPresent should not crash when room is not found", () => {
+		expect(storage.isPlayerPresent(roomIdNotExisting, playerOne)).toBeFalsy()
+	});
+
+	test("addPlayer should work", () => {
+		expect(storage.get(roomId).isEmpty()).toBeTruthy();
+
+		storage.addPlayer(roomId, playerOne);
+
+		expect(storage.isEmpty()).toBeFalsy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
+
+		storage.addPlayer(roomId, playerTwo);
+
+		expect(storage.isEmpty()).toBeFalsy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerTwo)).toBeTruthy();
+	});
+
+	test("addPlayer should not crash when room is not found", () => {
+		expect(storage.addPlayer(roomIdNotExisting, playerOne)).toBeFalsy()
+	});
+
+	test("removePlayer should work", () => {
+		expect(storage.get(roomId).isEmpty()).toBeTruthy();
+		
+		storage.addPlayer(roomId, playerOne);
+		storage.addPlayer(roomId, playerTwo);
+		expect(storage.get(roomId).isEmpty()).toBeFalsy();
+		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
+		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
+		
+		storage.removePlayer(roomId, playerOne);
+		expect(storage.get(roomId).isEmpty()).toBeFalsy();
+		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
+		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
+
+		storage.removePlayer(roomId, playerTwo);
+		expect(storage.get(roomId).isEmpty()).toBeTruthy();
+		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
+		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeFalsy();
+	});
+
+	test("removePlayer should not crash when room is not found", () => {
+		expect(storage.removePlayer(roomIdNotExisting, playerOne)).toBeFalsy()
+	});
 });
