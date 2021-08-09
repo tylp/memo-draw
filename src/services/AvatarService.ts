@@ -1,15 +1,9 @@
 import { RubberColor, BodyColor, FaceType, BodyType } from "../../server/interfaces/IProfile";
-import Pencil from "../avatars/body/pencil.svg";
 
 export default class AvatarService {
 
     public static getBody(bodyType: BodyType) {
-        switch(bodyType) {
-            case BodyType.Pencil:
-                return Pencil;
-            default:
-                return Pencil;
-        }
+        return require(`../avatars/body/${BodyType[bodyType]}.svg`);
     }
 
     public static getFaceType(faceType: FaceType) {
