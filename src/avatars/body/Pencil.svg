@@ -5,7 +5,7 @@
 <style type="text/css">
 	.ferrule{fill:#CCCCCC;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 	.eraser{fill:#FF7BAC;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.paint{fill:#FFE500;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	#avatar-body-paint{fill:#FFE500;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 	.wood{fill:#FFDEAC;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 	.lead{fill:#333333;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
@@ -13,7 +13,7 @@
 	<rect x="611.78" y="63.29" transform="matrix(0.5299 -0.848 0.848 0.5299 67.1368 673.705)" class="ferrule" width="58.98" height="426"/>
 	<path class="eraser" d="M875.11,304.01l-37.58,60.14L476.26,138.41l37.58-60.14c10.28-16.44,31.92-21.44,48.37-11.17l301.74,188.55
 		C880.39,265.92,885.38,287.57,875.11,304.01z"/>
-	<path class="paint" d="M806.27,414.18L538.38,842.89c0,0-149.39-4.36-180.63-112.87S177.11,617.14,177.11,617.14L445,188.43
+	<path id="avatar-body-paint" d="M806.27,414.18L538.38,842.89c0,0-149.39-4.36-180.63-112.87S177.11,617.14,177.11,617.14L445,188.43
 		L806.27,414.18z"/>
 	<path class="wood" d="M538.38,842.89l-27.83,44.53c-5.98,9.57-16.19,15.67-27.44,16.42l-141.03,9.37l-142.12-88.8l-53.41-130.87
 		c-4.26-10.45-3.25-22.3,2.73-31.86l27.83-44.53c0,0,149.39,4.36,180.63,112.87S538.38,842.89,538.38,842.89z"/>
