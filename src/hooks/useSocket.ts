@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 import io from "socket.io-client";
+import ISession from '../../server/interfaces/ISession';
 
 interface IUseSocket {
     namespace?: string,
@@ -9,6 +10,7 @@ interface IUseSocket {
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
 	const [sessionId, setSessionId] = useLocalStorage('sessionId');
 	const [, setPlayerId] = useLocalStorage('playerId');
+	const [, setProfile] = useLocalStorage('profile');
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
@@ -26,9 +28,10 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
             }
         )
 
-        newSocket.on("new-session", (data) => {
+        newSocket.on("new-session", (data: ISession) => {
             setSessionId(data.sessionId)
             setPlayerId(data.playerId)
+            setProfile(data.profile)
         })
 
         setActiveSocket(newSocket)
