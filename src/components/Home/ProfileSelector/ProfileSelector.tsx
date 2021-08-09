@@ -5,7 +5,7 @@ import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
-import { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 
 export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
     return (
@@ -44,6 +44,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
     const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
+    const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
     useEffect(() => {
@@ -77,7 +78,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 					</div>
 
 					<div className="flex items-center">
-                        <Avatar rubberColor={rubberColor} bodyColor={bodyColor} faceType={faceType}/>
+                        <Avatar rubberColor={rubberColor} bodyType={bodyType} bodyColor={bodyColor} faceType={faceType}/>
                     </div>
 
 					<div className="flex flex-col justify-between">

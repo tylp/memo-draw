@@ -1,6 +1,7 @@
 export default interface IProfile {
     username: string,
     rubberColor: RubberColor,
+    bodyType: BodyType,
     bodyColor: BodyColor,
     faceType: FaceType,
 }
@@ -8,6 +9,10 @@ export default interface IProfile {
 export enum RubberColor {
     Pink = "#FF7BAC",
     Blue = "#7BA8FF",
+}
+
+export enum BodyType {
+    Pencil,
 }
 
 export enum BodyColor {
