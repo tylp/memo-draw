@@ -51,6 +51,25 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
+    function previousBodyColor() {
+
+    }
+
+    const isValue = (e) => e = bodyColor;
+
+    function nextBodyColor() {
+        const bodyColors = Object.keys(BodyColor);
+        console.log(bodyColors)
+        if(bodyColor === bodyColors[0]) {
+            setBodyColor(BodyColor[bodyColors.length - 1]);
+            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
+        }
+        else {
+            setBodyColor(BodyColor[bodyColors.findIndex(isValue) + 1]);
+            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
+        }
+    }    
+
     function previousFaceType() {
         if (faceType == 0)
             setFaceType(Object.keys(FaceType).length / 2 - 1);
@@ -73,7 +92,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flex flex-col justify-between">
 						<SelectButton direction="left" name="Rubber" /*onClick={previousRubberColor}*//>
-						<SelectButton direction="left" name="Body" /*onClick={previousBodyColor}*//>
+						<SelectButton direction="left" name="Body" onClick={previousBodyColor}/>
 						<SelectButton direction="left" name="Face" onClick={previousFaceType}/>
 					</div>
 
@@ -83,7 +102,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
 					<div className="flex flex-col justify-between">
 						<SelectButton direction="right" name="Rubber" /*onClick={nextRubberColor}*//>
-						<SelectButton direction="right" name="Body" /*onClick={nextBodyColor}*//>
+						<SelectButton direction="right" name="Body" onClick={nextBodyColor}/>
 						<SelectButton direction="right" name="Face" onClick={nextFaceType}/>
 					</div>
 				</div>
