@@ -19,7 +19,7 @@ const AvatarBody = (props: IBody) => {
     const avatarBody = AvatarService.getBody(props.type);
 
     return (
-        <object data={avatarBody.default.src} type="image/svg+xml" width="100" height="100" className="relative bottom-0.5"></object>
+        <object id="avatarBody" data={avatarBody.default.src} type="image/svg+xml" width="100" height="100" className="relative bottom-0.5"></object>
     );
 }
 
@@ -27,6 +27,6 @@ const AvatarFace = (props: IFace) => {
     const faceType = AvatarService.getFaceType(props.type);
 
     return (
-        <img width="100" height="100" src={faceType.default.src} className="absolute top-0 left-0"/>
+        <img width="100" height="100" src={faceType.default.src} className="absolute top-0"/>
     );
 }
