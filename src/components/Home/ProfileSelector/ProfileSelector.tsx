@@ -52,23 +52,38 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     }, [props.username]);
 
     function previousBodyColor() {
+        const colors = Object.values(BodyColor);
 
-    }
-
-    const isValue = (e) => e = bodyColor;
-
-    function nextBodyColor() {
-        const bodyColors = Object.keys(BodyColor);
-        console.log(bodyColors)
-        if(bodyColor === bodyColors[0]) {
-            setBodyColor(BodyColor[bodyColors.length - 1]);
+        if(bodyColor === colors[0]) {
+            setBodyColor(colors[colors.length - 1]);
             document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
         else {
-            setBodyColor(BodyColor[bodyColors.findIndex(isValue) + 1]);
+            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
+
+            setBodyColor(colors[indexOfCurrentColor - 1]);
             document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
-    }    
+
+        console.log(colors.findIndex(e => e == bodyColor));
+    }
+
+    function nextBodyColor() {
+        const colors = Object.values(BodyColor);
+
+        if(bodyColor === colors[colors.length - 1]) {
+            setBodyColor(colors[0]);
+            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
+        }
+        else {
+            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
+
+            setBodyColor(colors[indexOfCurrentColor + 1]);
+            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
+        }
+
+        console.log(colors.findIndex(e => e == bodyColor));
+    }
 
     function previousFaceType() {
         if (faceType == 0)
@@ -83,7 +98,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         else
             setFaceType(faceType + 1);
     }
-    
+
     return (
 		<div>
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
