@@ -76,12 +76,11 @@ const Room = (): JSX.Element => {
 		setMessages(prev => [...prev, message])
 	}
 	
-	// const paperClip = (e) => {
-	// 	e.preventDefault();
-	// 	navigator.clipboard.writeText(url).then(function() {
-	// 		// TODO: inform user that link is in his clipboard now		
-	// 	});
-	// }
+	const copyLinkToClipboard = () => {
+		if(typeof window !== "undefined") {
+			navigator.clipboard.writeText(window.location.href)
+		}
+	}
 	
 	const emitCoords = (coords) => {
 		socket.emit('send-drawing', coords, roomId);
@@ -98,6 +97,9 @@ const Room = (): JSX.Element => {
 						{
 							room?.players.map((player: Player) => <UserProfile key={player.id} player={player}/>)
 						}
+						<Button onClick={copyLinkToClipboard}>
+							Copy link
+						</Button>
 					</div>
 					<div>
 						<Canvas width="800" height="400"
