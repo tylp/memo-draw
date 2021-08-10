@@ -7,14 +7,14 @@ import ISession from "../../interfaces/ISession";
 
 describe("RoomStorage", () => {
 	let storage = new RoomStorage();
-	const roomId = IdGeneratorService.generate();
-	let room = RoomFactory.create();
 	const roomIdNotExisting = IdGeneratorService.generate();
 	const playerOneSession: ISession = {
 		sessionId: "Random string",
 		playerId: "Random string",
 		profile: ProfileFactory.create()
 	}
+	const roomId = IdGeneratorService.generate();
+	let room = RoomFactory.create(playerOneSession.playerId);
 	const playerOne = PlayerFactory.create(playerOneSession);
 
 	const playerTwoSession: ISession = {
@@ -26,7 +26,7 @@ describe("RoomStorage", () => {
 
 	beforeEach(() => {
 		storage = new RoomStorage();
-		room = RoomFactory.create();
+		room = RoomFactory.create(playerOneSession.playerId);
 		storage.set(roomId, room)
 	})
 

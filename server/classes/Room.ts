@@ -11,12 +11,12 @@ export default class Room {
         this.players = [];
     }
 
-    addPlayer(player: Player): Room {
+    add(player: Player): Room {
         this.players.push(player);
         return this;
     }
 
-    removePlayer(player: Player): Room {
+    remove(player: Player): Room {
         const index = this.players.findIndex(e => e.id === player.id);
         if(index !== -1) {
             this.players.splice(index, 1);
