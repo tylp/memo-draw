@@ -9,6 +9,7 @@ import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
 import Player from '../../../server/classes/Player';
 import UserProfile from '../../components/Room/Id/UserProfile';
+import Logo from '../../components/Common/Logo/Logo';
 
 const Room = (): JSX.Element => {
 	
@@ -91,7 +92,10 @@ const Room = (): JSX.Element => {
 		:
 		room ? (
 			<Layout>
-				<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
+				<div className="flex-row">
+					<Logo/>
+				</div>
+				<div className="flex flex-wrap flex-auto justify-center md:space-x-14">
 					<div>
 						<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
 						{

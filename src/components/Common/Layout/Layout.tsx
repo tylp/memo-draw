@@ -12,6 +12,7 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             bg-gradient-to-r
             from-blue-blue to-blue-light-blue
             flex
+			flex-col
             justify-center
             items-center
         ">
