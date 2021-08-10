@@ -40,7 +40,8 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
 
 export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
-    const colors = Object.values(BodyColor);
+    const bodyColors = Object.values(BodyColor);
+    const rubberColors = Object.values(RubberColor);
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
@@ -48,9 +49,6 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
-    
-    console.log("1 - " + BodyColor.Yellow);
-    console.log("2 - " + bodyColor);
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
@@ -65,28 +63,53 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         }
     }, [bodyColor]);
 
-    function previousBodyColor() {
-        if(bodyColor === colors[0]) {
-            setBodyColor(colors[colors.length - 1]);
+    useEffect(() => {
+        const avatarElement : any = document.getElementById('avatarBody');
+        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
+            const eraserBodyPaintElement = avatarElement.contentDocument.getElementById('eraser-paint');
+            if(eraserBodyPaintElement)
+            eraserBodyPaintElement.style.fill = rubberColor;
+        }
+    }, [rubberColor]);
+
+    function previousRubberColor() {
+        if(rubberColor === rubberColors[0]) {
+            setRubberColor(rubberColors[rubberColors.length - 1]);
         }
         else {
-            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-            setBodyColor(colors[indexOfCurrentColor - 1]);
+            const indexOfCurrentColor = rubberColors.findIndex(e => e == rubberColor);
+            setRubberColor(rubberColors[indexOfCurrentColor - 1]);
         }
+    }
 
-        console.log(colors.findIndex(e => e == bodyColor));
+    function nextRubberColor() {
+        if(rubberColor === rubberColors[rubberColors.length - 1]) {
+            setRubberColor(rubberColors[0]);
+        }
+        else {
+            const indexOfCurrentColor = rubberColors.findIndex(e => e == rubberColor);
+            setRubberColor(rubberColors[indexOfCurrentColor + 1]);
+        }
+    }
+
+    function previousBodyColor() {
+        if(bodyColor === bodyColors[0]) {
+            setBodyColor(bodyColors[bodyColors.length - 1]);
+        }
+        else {
+            const indexOfCurrentColor = bodyColors.findIndex(e => e == bodyColor);
+            setBodyColor(bodyColors[indexOfCurrentColor - 1]);
+        }
     }
 
     function nextBodyColor() {
-        if(bodyColor === colors[colors.length - 1]) {
-            setBodyColor(colors[0]);
+        if(bodyColor === bodyColors[bodyColors.length - 1]) {
+            setBodyColor(bodyColors[0]);
         }
         else {
-            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-            setBodyColor(colors[indexOfCurrentColor + 1]);
+            const indexOfCurrentColor = bodyColors.findIndex(e => e == bodyColor);
+            setBodyColor(bodyColors[indexOfCurrentColor + 1]);
         }
-
-        console.log(colors.findIndex(e => e == bodyColor));
     }
 
     function previousFaceType() {
@@ -110,7 +133,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Rubber" /*onClick={previousRubberColor}*//>
+						<SelectButton direction="left" name="Rubber" onClick={previousRubberColor}/>
 						<SelectButton direction="left" name="Body" onClick={previousBodyColor}/>
 						<SelectButton direction="left" name="Face" onClick={previousFaceType}/>
 					</div>
@@ -120,7 +143,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
                     </div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Rubber" /*onClick={nextRubberColor}*//>
+						<SelectButton direction="right" name="Rubber" onClick={nextRubberColor}/>
 						<SelectButton direction="right" name="Body" onClick={nextBodyColor}/>
 						<SelectButton direction="right" name="Face" onClick={nextFaceType}/>
 					</div>
