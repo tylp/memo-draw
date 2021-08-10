@@ -1,3 +1,4 @@
+import ProfileFactory from "../../factories/ProfileFactory";
 import ISession from "../../interfaces/ISession";
 import IdGeneratorService from "../../services/IdGeneratorService";
 import Storage from "./Storage";
@@ -9,13 +10,7 @@ export default class RoomStorage extends Storage<string, ISession> {
 		return this.set(sessionId, {
 			sessionId,
 			playerId,
-			// TODO: Find a better way to create a default profile, like a profile factory.
-			profile: {
-				rubberColor: 1,
-				bodyColor: 1,
-				faceType: 1,
-				username: "Noname"
-			}
+			profile: ProfileFactory.create()
 		});
 	}
 	

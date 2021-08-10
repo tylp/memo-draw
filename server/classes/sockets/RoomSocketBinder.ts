@@ -16,9 +16,11 @@ export default class RoomSocketBinder extends SocketBinder {
     private static onJoinRoom(socket: Socket): void {        
         socket.on("join-room", (roomId, ack) => {
             if(Application.getRoomStorage().containsKey(roomId)) {
-                Application.getPlayerRoomStorage().set(SocketIdentifierService.getSessionIdentifier(socket), roomId);
+                const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+                const session = Application.getSessionStorage().get(sessionId);
+                Application.getPlayerRoomStorage().set(sessionId, roomId);
                 socket.join(Room.getRoomName(roomId))
-                const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(socket));
+                const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
                 socket.to(Room.getRoomName(roomId)).emit("update-room", updatedRoom);
                 ack(updatedRoom);
             } else {
@@ -28,7 +30,7 @@ export default class RoomSocketBinder extends SocketBinder {
     }
 
     private static onMessageRoom(socket: Socket): void {
-        const player = PlayerFactory.create(socket);
+        const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
         socket.on("send-message-room", (content, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
                 socket.to(Room.getRoomName(roomId)).emit("receive-message-room", {
@@ -40,7 +42,7 @@ export default class RoomSocketBinder extends SocketBinder {
     }
 
     private static onDrawing(socket: Socket): void {
-        const player = PlayerFactory.create(socket);
+        const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
         socket.on("send-drawing", (coords, roomId) => {
             if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
                 socket.to(Room.getRoomName(roomId)).emit("receive-drawing", coords)
@@ -49,7 +51,7 @@ export default class RoomSocketBinder extends SocketBinder {
     }
     
     private static onDisconnection(socket: Socket): void {
-        const player = PlayerFactory.create(socket);
+        const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
         socket.on("disconnect", () => {
             const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
             const room: Room = Application.getRoomStorage().removePlayer(roomId, player);

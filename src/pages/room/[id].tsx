@@ -9,6 +9,7 @@ import RoomService from '../../services/RoomService';
 import IProfile from '../../../server/interfaces/IProfile';
 import Player from '../../../server/classes/Player';
 import UserProfile from '../../components/Room/Id/UserProfile';
+import RoomType from '../../../server/classes/Room';
 
 const Room = (): JSX.Element => {
 	
@@ -26,7 +27,7 @@ const Room = (): JSX.Element => {
 	const [sessionId] = useLocalStorage("sessionId");
 	
 	const socket = useSocketRoom();
-	const [room, setRoom] = useState(null);
+	const [room, setRoom] = useState<RoomType>();
 	const [storageProfile] = useLocalStorage<IProfile>("profile");
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -76,12 +77,11 @@ const Room = (): JSX.Element => {
 		setMessages(prev => [...prev, message])
 	}
 	
-	// const paperClip = (e) => {
-	// 	e.preventDefault();
-	// 	navigator.clipboard.writeText(url).then(function() {
-	// 		// TODO: inform user that link is in his clipboard now		
-	// 	});
-	// }
+	const copyLinkToClipboard = () => {
+		if(typeof window !== "undefined") {
+			navigator.clipboard.writeText(window.location.href)
+		}
+	}
 	
 	const emitCoords = (coords) => {
 		socket.emit('send-drawing', coords, roomId);
@@ -96,8 +96,11 @@ const Room = (): JSX.Element => {
 					<div>
 						<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
 						{
-							room?.players.map((player: Player) => <UserProfile key={player.id} player={player}/>)
+							room?.players.map((player: Player) => <UserProfile key={player.id} player={player} creatorId={room.creatorPlayerId}/>)
 						}
+						<Button onClick={copyLinkToClipboard}>
+							Copy link
+						</Button>
 					</div>
 					<div>
 						<Canvas width="800" height="400"
