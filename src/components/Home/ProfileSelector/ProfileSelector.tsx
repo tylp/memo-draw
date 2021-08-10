@@ -40,46 +40,50 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
 
 export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
+    const colors = Object.values(BodyColor);
+
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
     const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
+    
+    console.log("1 - " + BodyColor.Yellow);
+    console.log("2 - " + bodyColor);
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    function previousBodyColor() {
-        const colors = Object.values(BodyColor);
+    useEffect(() => {
+        const avatarElement : any = document.getElementById('avatarBody');
+        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
+            const avatarBodyPaintElement = avatarElement.contentDocument.getElementById('avatar-body-paint');
+            if(avatarBodyPaintElement)
+                avatarBodyPaintElement.style.fill = bodyColor;
+        }
+    }, [bodyColor]);
 
+    function previousBodyColor() {
         if(bodyColor === colors[0]) {
             setBodyColor(colors[colors.length - 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
         else {
             const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-
             setBodyColor(colors[indexOfCurrentColor - 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
 
         console.log(colors.findIndex(e => e == bodyColor));
     }
 
     function nextBodyColor() {
-        const colors = Object.values(BodyColor);
-
         if(bodyColor === colors[colors.length - 1]) {
             setBodyColor(colors[0]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
         else {
             const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-
             setBodyColor(colors[indexOfCurrentColor + 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
         }
 
         console.log(colors.findIndex(e => e == bodyColor));
@@ -135,4 +139,5 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 			</div>
 		</div>
     )
+    
 }
