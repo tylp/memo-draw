@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { BodyColor, BodyType } from '../../../../server/interfaces/IProfile';
+import React from 'react';
 
 import AvatarService from '../../../services/AvatarService';
 

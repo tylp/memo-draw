@@ -1,4 +1,4 @@
-import { RubberColor, BodyColor, FaceType, BodyType } from "../../server/interfaces/IProfile";
+import { FaceType, BodyType } from "../../server/interfaces/IProfile";
 
 export default class AvatarService {
 
