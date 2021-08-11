@@ -1,5 +1,6 @@
 const config = {
-    rootDir: 'src',
+    rootDir: './',
+    roots: ['./server/', './src/'],
     verbose: true,
     collectCoverage: true,
     collectCoverageFrom: ['src/**/*.test.ts'],
