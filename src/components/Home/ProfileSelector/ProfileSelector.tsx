@@ -7,32 +7,52 @@ import Avatar from "../../Common/Avatar/Avatar";
 
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 
-export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
+export function SelectButton(props: SelectButtonSpec) : JSX.Element {
+
+    const getNextValue = () => {
+        if(props.list.indexOf(props.value) === props.list.length - 1)
+            return props.list[0];
+        return props.list[props.list.indexOf(props.value) + 1]
+    }
+
+    const getPreviousValue = () => {
+        if(props.list.indexOf(props.value) === 0)
+            return props.list[props.list.length - 1];
+        return props.list[props.list.indexOf(props.value) - 1]
+    }
+
+    const onClick = () => {
+        if(props.direction === "left") {
+            sendPreviousValue();
+        } else {
+            sendNextValue();
+        }
+    }
+
+    const sendNextValue = (): void => {
+        props.setValue(getNextValue());
+    }
+
+    const sendPreviousValue = (): void => {
+        props.setValue(getPreviousValue());
+    }
+
+    const arrowStyle = props.direction === "left" ? "icon icon-arrow-left w-8 fill-current text-white-white" : "transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white";
+
     return (
         <div className="flex flex-col items-center">
-            <p className="text-md text-white-white">{specs.name}</p>
+            <p className="text-md text-white-white">{props.name}</p>
             <button
-                onClick={specs.onClick}
+                onClick={onClick}
                 className="bg-blue-200 hover:bg-yellow-dark-yellow text-gray-800 font-bold py-1 px-1 rounded-full inline-flex items-center transition duration-300"
             >
-                {
-                    specs.direction === 'left'
-                    ?
-                        <svg viewBox="0 0 32 32"
-                            className="icon icon-arrow-left w-8 fill-current text-white-white"
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
-                    :
-                        <svg viewBox="0 0 32 32"
-                            className="transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white"
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
+            <svg viewBox="0 0 32 32"
+                className={arrowStyle}
+                aria-hidden="true"
+            >
+                <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
+            </svg>
 
-                }
             </button>
         </div>
     );
@@ -40,13 +60,14 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
 
 export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
+    const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
-    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Blue);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
@@ -57,74 +78,20 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     useEffect(() => {
         const avatarElement : any = document.getElementById('avatarBody');
         if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
-            const avatarBodyPaintElement = avatarElement.contentDocument.getElementById('avatar-body-paint');
-            if(avatarBodyPaintElement)
-                avatarBodyPaintElement.style.fill = bodyColor;
-        }
-    }, [bodyColor]);
-
-    useEffect(() => {
-        const avatarElement : any = document.getElementById('avatarBody');
-        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
             const eraserBodyPaintElement = avatarElement.contentDocument.getElementById('eraser-paint');
             if(eraserBodyPaintElement)
             eraserBodyPaintElement.style.fill = rubberColor;
         }
     }, [rubberColor]);
 
-    function previousRubberColor() {
-        if(rubberColor === rubberColors[0]) {
-            setRubberColor(rubberColors[rubberColors.length - 1]);
+    useEffect(() => {
+        const avatarElement : any = document.getElementById('avatarBody');
+        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
+            const avatarBodyPaintElement = avatarElement.contentDocument.getElementById('avatar-body-paint');
+            if(avatarBodyPaintElement)
+                avatarBodyPaintElement.style.fill = bodyColor;
         }
-        else {
-            const indexOfCurrentColor = rubberColors.findIndex(e => e == rubberColor);
-            setRubberColor(rubberColors[indexOfCurrentColor - 1]);
-        }
-    }
-
-    function nextRubberColor() {
-        if(rubberColor === rubberColors[rubberColors.length - 1]) {
-            setRubberColor(rubberColors[0]);
-        }
-        else {
-            const indexOfCurrentColor = rubberColors.findIndex(e => e == rubberColor);
-            setRubberColor(rubberColors[indexOfCurrentColor + 1]);
-        }
-    }
-
-    function previousBodyColor() {
-        if(bodyColor === bodyColors[0]) {
-            setBodyColor(bodyColors[bodyColors.length - 1]);
-        }
-        else {
-            const indexOfCurrentColor = bodyColors.findIndex(e => e == bodyColor);
-            setBodyColor(bodyColors[indexOfCurrentColor - 1]);
-        }
-    }
-
-    function nextBodyColor() {
-        if(bodyColor === bodyColors[bodyColors.length - 1]) {
-            setBodyColor(bodyColors[0]);
-        }
-        else {
-            const indexOfCurrentColor = bodyColors.findIndex(e => e == bodyColor);
-            setBodyColor(bodyColors[indexOfCurrentColor + 1]);
-        }
-    }
-
-    function previousFaceType() {
-        if (faceType == 0)
-            setFaceType(Object.keys(FaceType).length / 2 - 1);
-        else
-            setFaceType(faceType - 1);
-    }
-
-    function nextFaceType() {
-        if (faceType == Object.keys(FaceType).length / 2  - 1)
-            setFaceType(0);
-        else
-            setFaceType(faceType + 1);
-    }
+    }, [bodyColor]);
 
     return (
 		<div>
@@ -133,9 +100,9 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Rubber" onClick={previousRubberColor}/>
-						<SelectButton direction="left" name="Body" onClick={previousBodyColor}/>
-						<SelectButton direction="left" name="Face" onClick={previousFaceType}/>
+                        <SelectButton direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 
 					<div className="flex items-center">
@@ -143,9 +110,9 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
                     </div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Rubber" onClick={nextRubberColor}/>
-						<SelectButton direction="right" name="Body" onClick={nextBodyColor}/>
-						<SelectButton direction="right" name="Face" onClick={nextFaceType}/>
+                        <SelectButton direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 				</div>
 

@@ -1,6 +1,8 @@
 export interface SelectButtonSpec {
     name?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>,
+    setValue: any,
+    value: any,
+    list: any,
     direction: 'left'|'right'
 }
 

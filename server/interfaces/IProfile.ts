@@ -12,7 +12,7 @@ export enum RubberColor {
 }
 
 export enum BodyType {
-    Pencil,
+    Pencil = "Pencil.svg",
 }
 
 export enum BodyColor {
@@ -29,14 +29,14 @@ export enum BodyColor {
 }
 
 export enum FaceType {
-    Happy,
-    Sad,
-    Angry,
-    Surprised,
-    Neutral,
-    Cyclops,
-    Astonished,
-    High,
-    Meh,
-    Triclops,
+    Happy = "Happy.svg",
+    Sad = "Sad.svg",
+    Angry = "Angry.svg",
+    Surprised = "Surprised.svg",
+    Neutral = "Neutral.svg",
+    Cyclops = "Cyclops.svg",
+    Astonished = "Astonished.svg",
+    High = "High.svg",
+    Meh = "Meh.svg",
+    Triclops = "Triclops.svg",
 }

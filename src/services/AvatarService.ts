@@ -3,10 +3,10 @@ import { RubberColor, BodyColor, FaceType, BodyType } from "../../server/interfa
 export default class AvatarService {
 
     public static getBody(bodyType: BodyType) {
-        return require(`../avatars/body/${BodyType[bodyType]}.svg`);
+        return require(`../avatars/body/${bodyType}`);
     }
 
     public static getFaceType(faceType: FaceType) {
-        return require(`../avatars/expression/${FaceType[faceType]}.svg`);
+        return require(`../avatars/expression/${faceType}`);
     }
 }
