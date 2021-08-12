@@ -3,33 +3,56 @@ import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
+import Avatar from "../../Common/Avatar/Avatar";
 
-export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
+import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+
+export function SelectButton(props: SelectButtonSpec) : JSX.Element {
+
+    const getNextValue = () => {
+        if(props.list.indexOf(props.value) === props.list.length - 1)
+            return props.list[0];
+        return props.list[props.list.indexOf(props.value) + 1]
+    }
+
+    const getPreviousValue = () => {
+        if(props.list.indexOf(props.value) === 0)
+            return props.list[props.list.length - 1];
+        return props.list[props.list.indexOf(props.value) - 1]
+    }
+
+    const onClick = () => {
+        if(props.direction === "left") {
+            sendPreviousValue();
+        } else {
+            sendNextValue();
+        }
+    }
+
+    const sendNextValue = (): void => {
+        props.setValue(getNextValue());
+    }
+
+    const sendPreviousValue = (): void => {
+        props.setValue(getPreviousValue());
+    }
+
+    const arrowStyle = props.direction === "left" ? "icon icon-arrow-left w-8 fill-current text-white-white" : "transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white";
+
     return (
         <div className="flex flex-col items-center">
-            <p className="text-md text-white-white">{specs.name}</p>
-            <button 
-                onClick={specs.onClick} 
+            <p className="text-md text-white-white">{props.name}</p>
+            <button
+                onClick={onClick}
                 className="bg-blue-200 hover:bg-yellow-dark-yellow text-gray-800 font-bold py-1 px-1 rounded-full inline-flex items-center transition duration-300"
             >
-                {
-                    specs.direction === 'left' 
-                    ? 
-                        <svg viewBox="0 0 32 32" 
-                            className="icon icon-arrow-left w-8 fill-current text-white-white" 
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
-                    : 
-                        <svg viewBox="0 0 32 32" 
-                            className="transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white" 
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
+            <svg viewBox="0 0 32 32"
+                className={arrowStyle}
+                aria-hidden="true"
+            >
+                <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
+            </svg>
 
-                }
             </button>
         </div>
     );
@@ -37,89 +60,56 @@ export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
 
 export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
-    const avatarUrls = [
-        "https://media3.chapellerie-traclet.com/14578-thickbox_default/melon-hat.jpg",
-        "https://www.hutstuebele.com/pic/Panama-hat-BORSALINO.10375a.jpg"
-    ];
+    const faceTypes = Object.values(FaceType);
+    const bodyColors = Object.values(BodyColor);
+    const rubberColors = Object.values(RubberColor);
 
-    const [currentUrlIndex, setCurrentUrlIndex] = useState<number>(0);
     const [isStartEnabled, setIsStartEnabled] = useState(true);
+
+    const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
+    const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
+    const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    function previousRubberColor() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
-        else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
-    function previousBodyColor() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
-        else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
-    function previousFaceType() {
-        if (currentUrlIndex == 0)
-            setCurrentUrlIndex(avatarUrls.length - 1);
-        else
-            setCurrentUrlIndex(currentUrlIndex - 1);
-    }
-
-    function nextRubberColor() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
-        else
-            setCurrentUrlIndex(currentUrlIndex + 1);
-    }
-
-    function nextBodyColor() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
-        else
-            setCurrentUrlIndex(currentUrlIndex + 1);
-    }
-
-    function nextFaceType() {
-        if (currentUrlIndex == avatarUrls.length - 1)
-            setCurrentUrlIndex(0);
-        else
-            setCurrentUrlIndex(currentUrlIndex + 1);
-    }
-    
     return (
 		<div>
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
-					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Rubber Color" onClick={previousRubberColor}/>
-						<SelectButton direction="left" name="Body Color" onClick={previousBodyColor}/>
-						<SelectButton direction="left" name="Face Type" onClick={previousFaceType}/>
+					<div className="flexflex-col justify-between">
+                        <SelectButton direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 
 					<div className="flex items-center">
-						<img className="rounded-full border-2 border-yellow-dark-yellow" src={avatarUrls[currentUrlIndex]}/>
-					</div>
+                        <Avatar rubberColor={rubberColor} bodyType={bodyType} bodyColor={bodyColor} faceType={faceType}/>
+                    </div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Rubber Color" onClick={nextRubberColor}/>
-						<SelectButton direction="right" name="Body Color" onClick={nextBodyColor}/>
-						<SelectButton direction="right" name="Face Type" onClick={nextFaceType}/>
+                        <SelectButton direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 				</div>
 
 				<div className="mt-4">
 					<Title>Pseudo</Title>
-					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-					<Button className="mt-2" disabled={!isStartEnabled} onClick={() => props.handleStart()}>Done !</Button>
+					<form onSubmit={(e) => {
+                            e.preventDefault();
+                            props.handleStart();
+                        }}>
+                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
+                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
+                    </form>
 				</div>
 			</div>
 		</div>
     )
+    
 }
