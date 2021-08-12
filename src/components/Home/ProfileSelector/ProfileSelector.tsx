@@ -67,7 +67,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
-    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Blue);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
