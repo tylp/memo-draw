@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AvatarService from '../../../services/AvatarService';
+import IdGeneratorService from '../../../../server/services/IdGeneratorService';
 
 import { IAvatar, IBody, IFace } from './Avatar.spec';
 
 export default function Avatar(props: IAvatar): JSX.Element {
 
-    const avatarOfPlayerId = props.playerId ? `avatarOfPlayerId${props.playerId}` : 'avatar';
+    const [avatarId, setAvatarId] = useState(IdGeneratorService.generate());
 
     const updateColor = (elementToUpdate: string, value) => {
-        const avatarElement : any = document.getElementById(avatarOfPlayerId);
+        const avatarElement : any = document.getElementById(avatarId);
         if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
             const paintableElement = avatarElement.contentDocument.getElementById(elementToUpdate);
             if(paintableElement)
@@ -18,9 +19,11 @@ export default function Avatar(props: IAvatar): JSX.Element {
     }
 
     useEffect(() => {
-        console.log(`rubber = ${props.rubberColor} & color = ${props.bodyColor}`)
-        updateColor('eraser-paint', props.rubberColor);
-        updateColor('avatar-body-paint', props.bodyColor);
+        const arm = document.getElementById(avatarId);
+        arm.addEventListener('load', function(){
+            updateColor('eraser-paint', props.rubberColor);
+            updateColor('avatar-body-paint', props.bodyColor);
+        });
     }, [])
 
     useEffect(() => {
@@ -33,7 +36,7 @@ export default function Avatar(props: IAvatar): JSX.Element {
 
     return (
         <div className="rounded-full border-2 border-yellow-dark-yellow bg-blue-200 relative">
-            <AvatarBody playerId={avatarOfPlayerId} type={props.bodyType} color={props.bodyColor} />
+            <AvatarBody playerId={avatarId} type={props.bodyType} color={props.bodyColor} />
             <AvatarFace type={props.faceType}/>
         </div>
     );

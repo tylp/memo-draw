@@ -67,7 +67,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
-    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Blue);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
@@ -77,15 +77,6 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 
     return (
 		<div>
-            
-            {/* FOR TEST PURPOSE */}
-            <Avatar playerId='0' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Yellow} faceType={FaceType.Meh}/>
-            <Avatar playerId='1' rubberColor={RubberColor.Pink} bodyType={BodyType.Pencil} bodyColor={BodyColor.Blue} faceType={FaceType.High}/>
-            <Avatar playerId='2' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Green} faceType={FaceType.Surprised}/>
-            <Avatar playerId='3' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Red} faceType={FaceType.Cyclops}/>
-            <Avatar playerId='4' rubberColor={RubberColor.Pink} bodyType={BodyType.Pencil} bodyColor={BodyColor.Orange} faceType={FaceType.Astonished}/>
-
- 
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
