@@ -75,26 +75,17 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    useEffect(() => {
-        const avatarElement : any = document.getElementById('avatarBody');
-        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
-            const eraserBodyPaintElement = avatarElement.contentDocument.getElementById('eraser-paint');
-            if(eraserBodyPaintElement)
-            eraserBodyPaintElement.style.fill = rubberColor;
-        }
-    }, [rubberColor]);
-
-    useEffect(() => {
-        const avatarElement : any = document.getElementById('avatarBody');
-        if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
-            const avatarBodyPaintElement = avatarElement.contentDocument.getElementById('avatar-body-paint');
-            if(avatarBodyPaintElement)
-                avatarBodyPaintElement.style.fill = bodyColor;
-        }
-    }, [bodyColor]);
-
     return (
 		<div>
+            
+            {/* FOR TEST PURPOSE */}
+            <Avatar playerId='0' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Yellow} faceType={FaceType.Meh}/>
+            <Avatar playerId='1' rubberColor={RubberColor.Pink} bodyType={BodyType.Pencil} bodyColor={BodyColor.Blue} faceType={FaceType.High}/>
+            <Avatar playerId='2' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Green} faceType={FaceType.Surprised}/>
+            <Avatar playerId='3' rubberColor={RubberColor.Blue} bodyType={BodyType.Pencil} bodyColor={BodyColor.Red} faceType={FaceType.Cyclops}/>
+            <Avatar playerId='4' rubberColor={RubberColor.Pink} bodyType={BodyType.Pencil} bodyColor={BodyColor.Orange} faceType={FaceType.Astonished}/>
+
+ 
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
