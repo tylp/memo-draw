@@ -67,7 +67,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
-    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
+    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Blue);
     const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
@@ -81,7 +81,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
-					<div className="flex flex-col justify-between">
+					<div className="flexflex-col justify-between">
                         <SelectButton direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
                         <SelectButton direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
                         <SelectButton direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>

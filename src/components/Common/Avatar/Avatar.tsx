@@ -35,7 +35,7 @@ export default function Avatar(props: IAvatar): JSX.Element {
     }, [props.bodyColor]);
 
     return (
-        <div className="rounded-full border-2 border-yellow-dark-yellow bg-blue-200 relative">
+        <div className="w-full rounded-full border-2 border-yellow-dark-yellow bg-blue-200 relative">
             <AvatarBody playerId={avatarId} type={props.bodyType} color={props.bodyColor} />
             <AvatarFace type={props.faceType}/>
         </div>
@@ -45,7 +45,7 @@ export default function Avatar(props: IAvatar): JSX.Element {
 const AvatarBody = (props: IBody) => {
     const avatarBody = AvatarService.getBody(props.type);
     return (
-        <object id={props.playerId} data={avatarBody.default.src} type="image/svg+xml" width="100" height="100" className="relative bottom-0.5"></object>
+        <object id={props.playerId} data={avatarBody.default.src} type="image/svg+xml" className="relative bottom-0.5"></object>
     );
 }
 
@@ -53,6 +53,6 @@ const AvatarFace = (props: IFace) => {
     const faceType = AvatarService.getFaceType(props.type);
 
     return (
-        <img width="100" height="100" src={faceType.default.src} className="absolute top-0"/>
+        <img src={faceType.default.src} className="absolute top-0"/>
     );
 }
