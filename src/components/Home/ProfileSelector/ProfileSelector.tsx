@@ -7,7 +7,6 @@ import Avatar from "../../Common/Avatar/Avatar";
 
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 import { IAvatar } from "../../Common/Avatar/Avatar.spec";
-import AvatarFactory from "../../../../server/factories/AvatarFactory";
 
 export function SelectButton(props: SelectButtonSpec) : JSX.Element {
 
@@ -73,7 +72,12 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [bodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
-    const [avatar, setAvatar] = useState<IAvatar>(AvatarFactory.create());
+    const [avatar, setAvatar] = useState<IAvatar>({
+        rubberColor,
+        bodyColor,
+        bodyType,
+        faceType
+    });
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
