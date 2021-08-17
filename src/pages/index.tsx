@@ -52,7 +52,7 @@ export default function Index(): JSX.Element {
 			) 
 			: (
 				<Layout>
-					<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
+					<div className="flex md:space-x-32">
 						<div>
 							<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
 							<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
