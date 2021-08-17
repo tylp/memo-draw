@@ -7,7 +7,7 @@ import { IAvatar, IBody, IFace } from './Avatar.spec';
 
 export default function Avatar(props: IAvatar): JSX.Element {
 
-    const [avatarId, setAvatarId] = useState(IdGeneratorService.generate());
+    const [avatarId] = useState(IdGeneratorService.generate());
 
     const updateColor = (elementToUpdate: string, value) => {
         const avatarElement : any = document.getElementById(avatarId);
@@ -24,14 +24,17 @@ export default function Avatar(props: IAvatar): JSX.Element {
             updateColor('eraser-paint', props.rubberColor);
             updateColor('avatar-body-paint', props.bodyColor);
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         updateColor('eraser-paint', props.rubberColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.rubberColor]);
     
     useEffect(() => {
         updateColor('avatar-body-paint', props.bodyColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.bodyColor]);
 
     return (

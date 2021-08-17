@@ -1,9 +1,8 @@
+import { IAvatar } from "../../src/components/Common/Avatar/Avatar.spec";
+
 export default interface IProfile {
     username: string,
-    rubberColor: RubberColor,
-    bodyType: BodyType,
-    bodyColor: BodyColor,
-    faceType: FaceType,
+    avatar: IAvatar,
 }
 
 export enum RubberColor {
