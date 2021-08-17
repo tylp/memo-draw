@@ -10,7 +10,7 @@
     "test server": "npm run test ./server",
     "test client": "npm run test ./src",
     "start": "cross-env NODE_ENV=production node server/server.ts",
-    "eslint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
+    "eslint": "npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0"
   },
   "repository": {
     "type": "git",
