@@ -1,6 +1,5 @@
-import { FaceType, RubberColor } from './../../interfaces/IProfile';
-import { BodyColor } from "../../interfaces/IProfile";
 import SessionStorage from "./SessionStorage";
+import AvatarFactory from '../../factories/AvatarFactory';
 
 describe("SessionStorage", () => {
 	let storage = new SessionStorage();
@@ -16,9 +15,9 @@ describe("SessionStorage", () => {
         expect(session).toHaveProperty("playerId");
         expect(session).toHaveProperty("profile");
         expect(session.profile).toHaveProperty("username");
-        expect(session.profile).toHaveProperty("rubberColor");
-        expect(session.profile).toHaveProperty("bodyColor");
-        expect(session.profile).toHaveProperty("faceType");
+        expect(session.profile.avatar).toHaveProperty("rubberColor");
+        expect(session.profile.avatar).toHaveProperty("bodyColor");
+        expect(session.profile.avatar).toHaveProperty("faceType");
 	});
 
 	test("update should work", () => {
@@ -29,9 +28,7 @@ describe("SessionStorage", () => {
         storage.update(session.sessionId, {
             profile: {
             username: newUsername,
-            bodyColor: BodyColor.Blue,
-            faceType: FaceType.Astonished,
-            rubberColor: RubberColor.Blue,
+            avatar: AvatarFactory.create()
         }});
         
         session = storage.get(session.sessionId);
