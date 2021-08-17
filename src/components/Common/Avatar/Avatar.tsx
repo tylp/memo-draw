@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import AvatarService from '../../../services/AvatarService';
 import IdGeneratorService from '../../../../server/services/IdGeneratorService';
 
-import { IAvatar, IBody, IFace } from './Avatar.spec';
+import { AvatarSpecs, IBody, IFace } from './Avatar.spec';
 
-export default function Avatar(props: IAvatar): JSX.Element {
+export default function Avatar(props: AvatarSpecs): JSX.Element {
 
     const [avatarId] = useState(IdGeneratorService.generate());
 
@@ -21,26 +21,26 @@ export default function Avatar(props: IAvatar): JSX.Element {
     useEffect(() => {
         const arm = document.getElementById(avatarId);
         arm.addEventListener('load', function(){
-            updateColor('eraser-paint', props.rubberColor);
-            updateColor('avatar-body-paint', props.bodyColor);
+            updateColor('eraser-paint', props.avatar.rubberColor);
+            updateColor('avatar-body-paint', props.avatar.bodyColor);
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        updateColor('eraser-paint', props.rubberColor);
+        updateColor('eraser-paint', props.avatar.rubberColor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.rubberColor]);
+    }, [props.avatar.rubberColor]);
     
     useEffect(() => {
-        updateColor('avatar-body-paint', props.bodyColor);
+        updateColor('avatar-body-paint', props.avatar.bodyColor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.bodyColor]);
+    }, [props.avatar.bodyColor]);
 
     return (
         <div className="w-full rounded-full border-2 border-yellow-dark-yellow bg-blue-200 relative">
-            <AvatarBody playerId={avatarId} type={props.bodyType} color={props.bodyColor} />
-            <AvatarFace type={props.faceType}/>
+            <AvatarBody playerId={avatarId} type={props.avatar.bodyType} color={props.avatar.bodyColor} />
+            <AvatarFace type={props.avatar.faceType}/>
         </div>
     );
 }

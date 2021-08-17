@@ -6,6 +6,8 @@ import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import { IAvatar } from "../../Common/Avatar/Avatar.spec";
+import AvatarFactory from "../../../../server/factories/AvatarFactory";
 
 export function SelectButton(props: SelectButtonSpec) : JSX.Element {
 
@@ -71,9 +73,20 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
     const [bodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
 
+    const [avatar, setAvatar] = useState<IAvatar>(AvatarFactory.create());
+
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
+
+    useEffect(() => {
+        setAvatar({
+            rubberColor,
+            bodyColor,
+            bodyType,
+            faceType
+        });
+    }, [rubberColor, bodyColor, bodyType, faceType])
 
     return (
 		<div>
@@ -88,7 +101,7 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 					</div>
 
 					<div className="flex items-center">
-                        <Avatar rubberColor={rubberColor} bodyType={bodyType} bodyColor={bodyColor} faceType={faceType}/>
+                        <Avatar avatar={avatar}/>
                     </div>
 
 					<div className="flex flex-col justify-between">
