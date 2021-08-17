@@ -26,10 +26,12 @@ export default function Index(): JSX.Element {
 		// TODO: Get profile from ProfileSelector
 		const profile: IProfile = {
 			username,
-			rubberColor: RubberColor[0],
-			bodyType: BodyType[0],
-			bodyColor: BodyColor[0],
-			faceType: FaceType[0],
+			avatar: {
+				rubberColor: RubberColor[0],
+				bodyType: BodyType[0],
+				bodyColor: BodyColor[0],
+				faceType: FaceType[0],
+			}
 		}
 		
 		socket.emit("update-profile", profile, () => {

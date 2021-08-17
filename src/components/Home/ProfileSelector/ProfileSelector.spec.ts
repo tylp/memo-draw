@@ -1,8 +1,10 @@
-export interface SelectButtonSpec {
+import { Dispatch, SetStateAction } from "react";
+
+export interface SelectButtonSpec<T> {
     name?: string,
-    setValue: any,
-    value: any,
-    list: any,
+    setValue: Dispatch<SetStateAction<T>>,
+    value: T,
+    list: T[],
     direction: 'left'|'right'
 }
 

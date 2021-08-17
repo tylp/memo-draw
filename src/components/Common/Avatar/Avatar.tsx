@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 import AvatarService from '../../../services/AvatarService';
 import IdGeneratorService from '../../../../server/services/IdGeneratorService';
 
-import { IAvatar, IBody, IFace } from './Avatar.spec';
+import { AvatarSpecs, IBody, IFace } from './Avatar.spec';
 
-export default function Avatar(props: IAvatar): JSX.Element {
+export default function Avatar(props: AvatarSpecs): JSX.Element {
 
-    const [avatarId, setAvatarId] = useState(IdGeneratorService.generate());
+    const [avatarId] = useState(IdGeneratorService.generate());
 
     const updateColor = (elementToUpdate: string, value) => {
-        const avatarElement : any = document.getElementById(avatarId);
+        const avatarElement = document.getElementById(avatarId) as HTMLObjectElement;
         if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
             const paintableElement = avatarElement.contentDocument.getElementById(elementToUpdate);
             if(paintableElement)
@@ -21,23 +21,26 @@ export default function Avatar(props: IAvatar): JSX.Element {
     useEffect(() => {
         const arm = document.getElementById(avatarId);
         arm.addEventListener('load', function(){
-            updateColor('eraser-paint', props.rubberColor);
-            updateColor('avatar-body-paint', props.bodyColor);
+            updateColor('eraser-paint', props.avatar.rubberColor);
+            updateColor('avatar-body-paint', props.avatar.bodyColor);
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        updateColor('eraser-paint', props.rubberColor);
-    }, [props.rubberColor]);
+        updateColor('eraser-paint', props.avatar.rubberColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.avatar.rubberColor]);
     
     useEffect(() => {
-        updateColor('avatar-body-paint', props.bodyColor);
-    }, [props.bodyColor]);
+        updateColor('avatar-body-paint', props.avatar.bodyColor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.avatar.bodyColor]);
 
     return (
         <div className="w-full rounded-full border-2 border-yellow-dark-yellow bg-blue-200 relative">
-            <AvatarBody playerId={avatarId} type={props.bodyType} color={props.bodyColor} />
-            <AvatarFace type={props.faceType}/>
+            <AvatarBody playerId={avatarId} type={props.avatar.bodyType} color={props.avatar.bodyColor} />
+            <AvatarFace type={props.avatar.faceType}/>
         </div>
     );
 }
