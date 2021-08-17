@@ -10,7 +10,7 @@ export default function Avatar(props: AvatarSpecs): JSX.Element {
     const [avatarId] = useState(IdGeneratorService.generate());
 
     const updateColor = (elementToUpdate: string, value) => {
-        const avatarElement : any = document.getElementById(avatarId);
+        const avatarElement = document.getElementById(avatarId) as HTMLObjectElement;
         if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
             const paintableElement = avatarElement.contentDocument.getElementById(elementToUpdate);
             if(paintableElement)
