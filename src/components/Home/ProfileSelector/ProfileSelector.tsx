@@ -8,7 +8,7 @@ import Avatar from "../../Common/Avatar/Avatar";
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 import { IAvatar } from "../../Common/Avatar/Avatar.spec";
 
-export function SelectButton(props: SelectButtonSpec) : JSX.Element {
+export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
     const getNextValue = () => {
         if(props.list.indexOf(props.value) === props.list.length - 1)
@@ -99,9 +99,9 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flexflex-col justify-between">
-                        <SelectButton direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
-                        <SelectButton direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
-                        <SelectButton direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
+                        <SelectButton<RubberColor> direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton<BodyColor> direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton<FaceType> direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 
 					<div className="flex items-center">
@@ -109,9 +109,9 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
                     </div>
 
 					<div className="flex flex-col justify-between">
-                        <SelectButton direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
-                        <SelectButton direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
-                        <SelectButton direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
+                        <SelectButton<RubberColor> direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton<BodyColor> direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton<FaceType> direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 				</div>
 
