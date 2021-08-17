@@ -14,7 +14,6 @@ describe("SocketIdentifierService", () => {
 	});
 
 	test("getSessionIdentifier should work", () => {
-
 		expect(SocketIdentifierService.getSessionIdentifier(mockSock)).toBe(session.sessionId);
 	});
 	
