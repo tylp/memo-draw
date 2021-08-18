@@ -8,7 +8,7 @@ export interface SelectButtonSpec<T> {
     direction: 'left'|'right'
 }
 
-export interface IProfileSelector {
+export interface ProfileSelectorSpec {
     username: string;
     handleStart;
     handleUserName;

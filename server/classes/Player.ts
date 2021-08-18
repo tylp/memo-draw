@@ -1,9 +1,9 @@
-import Profile from "../interfaces/IProfile";
+import IProfile from "../interfaces/IProfile";
 import ISession from "../interfaces/ISession";
 
 export default class Player {
     id: string;
-    profile: Profile;
+    profile: IProfile;
 
     constructor(session: ISession) {
         this.id = session.playerId;

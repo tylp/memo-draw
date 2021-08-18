@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
-import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
+import { ProfileSelectorSpec, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
@@ -59,7 +59,7 @@ export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
     );
 }
 
-export default function ProfileSelector(props: IProfileSelector): JSX.Element {
+export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
 
     const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
