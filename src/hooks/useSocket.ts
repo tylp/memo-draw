@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 import io from "socket.io-client";
 import ISession from '../../server/interfaces/ISession';
+import IProfile from '../../server/interfaces/IProfile';
 
 interface IUseSocket {
     namespace?: string,
 }
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
-	const [sessionId, setSessionId] = useLocalStorage('sessionId');
-	const [, setPlayerId] = useLocalStorage('playerId');
-	const [, setProfile] = useLocalStorage('profile');
+	const [sessionId, setSessionId] = useLocalStorage<string>('sessionId');
+	const [, setPlayerId] = useLocalStorage<string>('playerId');
+	const [profile, setProfile] = useLocalStorage<IProfile>('profile');
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
@@ -31,7 +32,13 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
         newSocket.on("new-session", (data: ISession) => {
             setSessionId(data.sessionId)
             setPlayerId(data.playerId)
-            setProfile(data.profile)
+            const mergedProfile = {
+                ...data.profile,
+                ...profile
+            }
+            newSocket.emit("update-profile", mergedProfile, () => {
+                setProfile(mergedProfile)
+            });
         })
 
         setActiveSocket(newSocket)

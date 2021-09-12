@@ -14,12 +14,14 @@ export default class RoomStorage extends Storage<string, ISession> {
 		});
 	}
 	
-	update(id: string, value: ISession): void {
+	update(id: string, value: ISession): ISession | undefined {
 		if(this.containsKey(id)) {
-			this.set(id, {
+			const newSession = {
 				...this.get(id),
 				...value
-			})
+			}
+			this.set(id, newSession)
+			return newSession;
 		}
 	}
 }

@@ -28,7 +28,6 @@ export default class Application {
         SocketIoHandler.bindServer(io);
     }
 
-
     static getSessionStorage(): SessionStorage {
         return Application.getInstance().sessionStorage;
     }
