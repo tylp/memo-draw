@@ -9,8 +9,8 @@ export default class RoomSocketBinder extends SocketBinder {
     static bindSocket(socket: Socket): void {
         this.onJoinRoom(socket);
         this.onMessageRoom(socket);
-        this.onDrawing(socket);
         this.onDisconnection(socket);
+        this.onGameStart(socket);
     }
 
     private static onJoinRoom(socket: Socket): void {        
@@ -40,15 +40,6 @@ export default class RoomSocketBinder extends SocketBinder {
             }
         });
     }
-
-    private static onDrawing(socket: Socket): void {
-        const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-        socket.on("send-drawing", (coords, roomId) => {
-            if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
-                socket.to(Room.getRoomName(roomId)).emit("receive-drawing", coords)
-            }
-        })
-    }
     
     private static onDisconnection(socket: Socket): void {
         const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
@@ -56,6 +47,19 @@ export default class RoomSocketBinder extends SocketBinder {
             const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
             const room: Room = Application.getRoomStorage().removePlayer(roomId, player);
             socket.to(Room.getRoomName(roomId)).emit("update-room", room);
+        })
+    }
+
+    private static onGameStart(socket: Socket): void {
+        socket.on("start-game", () => {
+            const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+            const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+            const room = Application.getRoomStorage().get(roomId);
+            if(room.creatorPlayerId === player.id) {
+                room.startGame();
+                socket.emit("game-started", room, room.game);
+                socket.to(Room.getRoomName(roomId)).emit("game-started", room, room.game);
+            }
         })
     }
 }

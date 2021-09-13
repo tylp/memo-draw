@@ -1,13 +1,17 @@
+import { Game } from "./Game";
 import Player from "./Player";
 
 export default class Room {
     id: string;
     creatorPlayerId: string;
     players: Array<Player>;
+    hasStarted: boolean;
+    game: Game;
 
     constructor(id: string, creatorPlayerId: string) {
         this.id = id;
         this.creatorPlayerId = creatorPlayerId;
+        this.hasStarted = false;
         this.players = [];
     }
 
@@ -30,6 +34,14 @@ export default class Room {
 
     isEmpty(): boolean {
         return this.players.length === 0;
+    }
+
+    startGame(): Game {
+        if(!this.game) {
+            this.hasStarted = true;
+            this.game = new Game(this);
+        }
+        return this.game;
     }
 
     static getRoomName(roomId: Room['id']): string {
