@@ -3,6 +3,7 @@ import useLocalStorage from './useLocalStorage';
 import io from "socket.io-client";
 import ISession from '../../server/interfaces/ISession';
 import IProfile from '../../server/interfaces/IProfile';
+import { EnvironmentChecker } from '../services/EnvironmentChecker';
 
 interface IUseSocket {
     namespace?: string,
@@ -15,7 +16,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
-        if(typeof window === "undefined") return;
+        if(EnvironmentChecker.isServerSide()) return;
 
         if(!setActiveSocket) return;
         
