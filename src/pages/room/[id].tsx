@@ -9,13 +9,14 @@ import RoomType from '../../../server/classes/Room';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView } from '../../components/Room/LobbyView/LobbyView';
 import { GameView } from '../../components/Room/GameView/GameView';
+import { EnvironmentChecker } from '../../services/EnvironmentChecker';
 
 const Room = (): JSX.Element => {
     const getRoomId = (): string => {
-        if(typeof window !== "undefined") {
+        if(EnvironmentChecker.isClientSide()) {
             return RoomService.getRoomIdFromUrl(window.location.href)
         }
-        return "";
+        return undefined;
     }
     
     const roomId = getRoomId();

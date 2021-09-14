@@ -4,6 +4,7 @@ import Room from "../../../../server/classes/Room";
 import IProfile from "../../../../server/interfaces/IProfile";
 import { useSocketRoom } from "../../../hooks";
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import { EnvironmentChecker } from "../../../services/EnvironmentChecker";
 import RoomService from "../../../services/RoomService";
 import { Layout, SectionTitle, Title } from "../../Common";
 import Button from "../../Common/Button/Button";
@@ -23,10 +24,10 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
     const [storageProfile] = useLocalStorage<IProfile>("profile");
 
     const getRoomId = (): string => {
-        if(typeof window !== "undefined") {
+        if(EnvironmentChecker.isClientSide()) {
             return RoomService.getRoomIdFromUrl(window.location.href)
         }
-        return "";
+        return undefined;
     }
     
     const roomId = getRoomId();
@@ -42,7 +43,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
     }, [socket])
 
     const copyLinkToClipboard = () => {
-        if(typeof window !== "undefined") {
+        if(EnvironmentChecker.isClientSide()) {
             navigator.clipboard.writeText(window.location.href)
         }
     }
@@ -80,7 +81,9 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
                 <div>
                     <SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
                     {
-                        props.room?.players.map((player: Player) => <UserProfile key={player.id} player={player} creatorId={props.room.creatorPlayerId}/>)
+                        props.room?.players.map((player: Player) => (
+                            <UserProfile key={player.id} player={player} creatorId={props.room.creatorPlayerId}/>
+                        ))
                     }
                     <Button onClick={copyLinkToClipboard}>
                         Copy link

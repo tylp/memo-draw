@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { EnvironmentChecker } from '../services/EnvironmentChecker'
 
 function useLocalStorage<T>(
     key: string,
@@ -8,7 +9,7 @@ function useLocalStorage<T>(
     // parse stored json or return initialValue
     const readValue = () => {
         // Prevent build error "window is undefined" but keep keep working
-        if (typeof window === 'undefined') {
+        if (EnvironmentChecker.isServerSide()) {
             return initialValue
         }
 
@@ -29,7 +30,7 @@ function useLocalStorage<T>(
     // ... persists the new value to localStorage.
     const setValue: Dispatch<SetStateAction<T>> = value => {
         // Prevent build error "window is undefined" but keeps working
-        if (typeof window == 'undefined') {
+        if (EnvironmentChecker.isServerSide()) {
             console.warn(
                 `Tried setting localStorage key “${key}” even though environment is not a client`,
             )
