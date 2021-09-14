@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface IButton {
+export interface ButtonSpec {
     children: ReactNode,
     className?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement>,

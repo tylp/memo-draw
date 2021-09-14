@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { IButton } from "./Button.spec";
+import { ButtonSpec } from "./Button.spec";
 
 
-export default function Button(props: IButton) : JSX.Element {
+export default function Button(props: ButtonSpec) : JSX.Element {
 
     const [className, setClassName] = useState('');
 

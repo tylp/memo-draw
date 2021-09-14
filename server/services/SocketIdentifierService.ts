@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import Application from '../classes/Application';
 import ISession from '../interfaces/ISession';
+
 export default class SocketIdentifierService {
 	public static getSessionIdentifier(socket: Socket): string {
 		return socket.handshake.auth.sessionId;
