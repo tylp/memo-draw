@@ -1,14 +1,8 @@
-import { Socket } from 'socket.io';
-import Application from '../classes/Application';
 import Player from "../classes/Player";
-import SocketIdentifierService from '../services/SocketIdentifierService';
+import ISession from '../interfaces/ISession';
 
 export default class PlayerFactory {
-    public static create(socket: Socket): Player {
-        const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-        const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
-        const session = Application.getSessionStorage().get(sessionId);
-        
-        return new Player(playerId, session.profile);
+    public static create(session: ISession): Player {
+        return new Player(session);
     }
 }

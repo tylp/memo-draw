@@ -1,10 +1,14 @@
-export interface SelectButtonSpec {
+import { Dispatch, SetStateAction } from "react";
+
+export interface SelectButtonSpec<T> {
     name?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>,
+    setValue: Dispatch<SetStateAction<T>>,
+    value: T,
+    list: T[],
     direction: 'left'|'right'
 }
 
-export interface IProfileSelector {
+export interface ProfileSelectorSpec {
     username: string;
     handleStart;
     handleUserName;

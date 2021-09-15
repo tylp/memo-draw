@@ -1,15 +1,21 @@
 import { Socket } from 'socket.io';
+import ISession from '../../interfaces/ISession';
 import SocketIdentifierService from "../../services/SocketIdentifierService";
 import Application from "../Application";
 import SocketBinder from "./SocketBinder";
 
 export default class CommonSocketBinder extends SocketBinder {
     static bindSocket(socket: Socket): void {
-        if (!this.socketHasSession(socket)) {
-            this.sendSessionToSocket(socket);
-        }
+        this.ensureCorrectSessionFor(socket);
 
         this.onUpdateProfile(socket);
+    }
+
+    private static ensureCorrectSessionFor(socket: Socket) {
+        if (!this.socketHasSession(socket)) {
+            this.generateSessionAndBindIdentifiersFor(socket);
+            this.sendSessionToSocket(socket);
+        }
     }
 
     private static socketHasSession(socket: Socket) {
@@ -17,11 +23,19 @@ export default class CommonSocketBinder extends SocketBinder {
         return !!sessionId && Application.getSessionStorage().containsKey(sessionId)
     }
 
-    private static sendSessionToSocket(socket: Socket) {
+    private static generateSessionAndBindIdentifiersFor(socket: Socket) {
         const session = Application.getSessionStorage().generate();
-        socket.emit("new-session", session)
+        this.bindSessionIdentifiersTo(socket, session);
+    }
+
+    private static bindSessionIdentifiersTo(socket: Socket, session: ISession) {
         socket.handshake.auth.sessionId = session.sessionId;
         socket.handshake.auth.playerId = session.playerId;
+    }
+
+    private static sendSessionToSocket(socket: Socket) {
+        const session = Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+        socket.emit("new-session", session);
     }
 
     private static onUpdateProfile(socket: Socket) {

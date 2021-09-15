@@ -2,102 +2,95 @@ import React, {useEffect, useState } from "react";
 import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
-import { IProfileSelector, SelectButtonSpec } from "./ProfileSelector.spec";
+import { ProfileSelectorSpec, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
 import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import { IAvatar } from "../../Common/Avatar/Avatar.spec";
 
-export function SelectButton(specs: SelectButtonSpec) : JSX.Element {
+export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
+
+    const getNextValue = () => {
+        if(props.list.indexOf(props.value) === props.list.length - 1)
+            return props.list[0];
+        return props.list[props.list.indexOf(props.value) + 1]
+    }
+
+    const getPreviousValue = () => {
+        if(props.list.indexOf(props.value) === 0)
+            return props.list[props.list.length - 1];
+        return props.list[props.list.indexOf(props.value) - 1]
+    }
+
+    const onClick = () => {
+        if(props.direction === "left") {
+            sendPreviousValue();
+        } else {
+            sendNextValue();
+        }
+    }
+
+    const sendNextValue = (): void => {
+        props.setValue(getNextValue());
+    }
+
+    const sendPreviousValue = (): void => {
+        props.setValue(getPreviousValue());
+    }
+
+    const arrowStyle = props.direction === "left" ? "icon icon-arrow-left w-8 fill-current text-white-white" : "transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white";
+
     return (
         <div className="flex flex-col items-center">
-            <p className="text-md text-white-white">{specs.name}</p>
+            <p className="text-md text-white-white">{props.name}</p>
             <button
-                onClick={specs.onClick}
+                onClick={onClick}
                 className="bg-blue-200 hover:bg-yellow-dark-yellow text-gray-800 font-bold py-1 px-1 rounded-full inline-flex items-center transition duration-300"
             >
-                {
-                    specs.direction === 'left'
-                    ?
-                        <svg viewBox="0 0 32 32"
-                            className="icon icon-arrow-left w-8 fill-current text-white-white"
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
-                    :
-                        <svg viewBox="0 0 32 32"
-                            className="transform rotate-180 icon icon-arrow-left w-8 fill-current text-white-white"
-                            aria-hidden="true"
-                        >
-                            <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
-                        </svg>
+            <svg viewBox="0 0 32 32"
+                className={arrowStyle}
+                aria-hidden="true"
+            >
+                <path d="M26.025 14.496l-14.286-.001 6.366-6.366L15.979 6 5.975 16.003 15.971 26l2.129-2.129-6.367-6.366h14.29z"/>
+            </svg>
 
-                }
             </button>
         </div>
     );
 }
 
-export default function ProfileSelector(props: IProfileSelector): JSX.Element {
+export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
+
+    const faceTypes = Object.values(FaceType);
+    const bodyColors = Object.values(BodyColor);
+    const rubberColors = Object.values(RubberColor);
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
     const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
-    const [bodyType, setBodyType] = useState<BodyType>(BodyType.Pencil);
+    const [bodyType] = useState<BodyType>(BodyType.Pencil);
     const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
+
+    const [avatar, setAvatar] = useState<IAvatar>({
+        rubberColor,
+        bodyColor,
+        bodyType,
+        faceType
+    });
 
     useEffect(() => {
         setIsStartEnabled(props.username.length >= 3);
     }, [props.username]);
 
-    function previousBodyColor() {
-        const colors = Object.values(BodyColor);
-
-        if(bodyColor === colors[0]) {
-            setBodyColor(colors[colors.length - 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
-        }
-        else {
-            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-
-            setBodyColor(colors[indexOfCurrentColor - 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
-        }
-
-        console.log(colors.findIndex(e => e == bodyColor));
-    }
-
-    function nextBodyColor() {
-        const colors = Object.values(BodyColor);
-
-        if(bodyColor === colors[colors.length - 1]) {
-            setBodyColor(colors[0]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
-        }
-        else {
-            const indexOfCurrentColor = colors.findIndex(e => e == bodyColor);
-
-            setBodyColor(colors[indexOfCurrentColor + 1]);
-            document.getElementById('avatarBody').contentDocument.getElementById('avatar-body-paint').style.fill = bodyColor;
-        }
-
-        console.log(colors.findIndex(e => e == bodyColor));
-    }
-
-    function previousFaceType() {
-        if (faceType == 0)
-            setFaceType(Object.keys(FaceType).length / 2 - 1);
-        else
-            setFaceType(faceType - 1);
-    }
-
-    function nextFaceType() {
-        if (faceType == Object.keys(FaceType).length / 2  - 1)
-            setFaceType(0);
-        else
-            setFaceType(faceType + 1);
-    }
+    useEffect(() => {
+        setAvatar({
+            rubberColor,
+            bodyColor,
+            bodyType,
+            faceType
+        });
+    }, [rubberColor, bodyColor, bodyType, faceType])
 
     return (
 		<div>
@@ -105,20 +98,20 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
-					<div className="flex flex-col justify-between">
-						<SelectButton direction="left" name="Rubber" /*onClick={previousRubberColor}*//>
-						<SelectButton direction="left" name="Body" onClick={previousBodyColor}/>
-						<SelectButton direction="left" name="Face" onClick={previousFaceType}/>
+					<div className="flexflex-col justify-between">
+                        <SelectButton<RubberColor> direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton<BodyColor> direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton<FaceType> direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 
 					<div className="flex items-center">
-                        <Avatar rubberColor={rubberColor} bodyType={bodyType} bodyColor={bodyColor} faceType={faceType}/>
+                        <Avatar avatar={avatar}/>
                     </div>
 
 					<div className="flex flex-col justify-between">
-						<SelectButton direction="right" name="Rubber" /*onClick={nextRubberColor}*//>
-						<SelectButton direction="right" name="Body" onClick={nextBodyColor}/>
-						<SelectButton direction="right" name="Face" onClick={nextFaceType}/>
+                        <SelectButton<RubberColor> direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
+                        <SelectButton<BodyColor> direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
+                        <SelectButton<FaceType> direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
 					</div>
 				</div>
 
@@ -135,4 +128,5 @@ export default function ProfileSelector(props: IProfileSelector): JSX.Element {
 			</div>
 		</div>
     )
+    
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import IProfile from '../../server/interfaces/IProfile';
+import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
 import {Layout, SectionTitle} from "../components/Common";
 import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector} from "../components/Home";
@@ -26,9 +26,12 @@ export default function Index(): JSX.Element {
 		// TODO: Get profile from ProfileSelector
 		const profile: IProfile = {
 			username,
-			rubberColor: 1,
-			bodyColor: 1,
-			faceType: 1,
+			avatar: {
+				rubberColor: RubberColor[0],
+				bodyType: BodyType[0],
+				bodyColor: BodyColor[0],
+				faceType: FaceType[0],
+			}
 		}
 		
 		socket.emit("update-profile", profile, () => {
