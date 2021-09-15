@@ -1,4 +1,3 @@
-import SocketIdentifierService from "../../services/SocketIdentifierService";
 import Application from "../Application";
 import Room from "../Room";
 import Storage from "./Storage";
