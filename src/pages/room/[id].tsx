@@ -47,6 +47,10 @@ const Room = (): JSX.Element => {
             setRoom(room);
             setGame(game);
         })
+
+        socket.on("update-game", (game) => {
+            setGame(game);
+        })
     }, [socket, sessionId, roomId]);
     
     return isLoading ? (
@@ -66,7 +70,7 @@ const Room = (): JSX.Element => {
 export default Room;
 
 function RoomOrGame(props: {room: RoomType; game: Game}) {
-    return props.room?.hasStarted ? (
+    return props.room?.hasStarted && props.game ? (
         <GameView game={props.game}/>
     ) : (
         <LobbyView room={props.room}/>
