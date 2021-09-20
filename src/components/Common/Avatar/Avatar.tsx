@@ -53,9 +53,13 @@ const AvatarBody = (props: IBody) => {
 }
 
 const AvatarFace = (props: IFace) => {
-    const faceType = AvatarService.getFaceType(props.type);
+    const [imgSrc, setImgSrc] = useState<{default: {src: string}}>();
+    
+    useEffect(() => {
+        setImgSrc(AvatarService.getFaceType(props.type))
+    }, [props.type])
 
-    return (
-        <img src={faceType.default.src} className="absolute top-0"/>
-    );
+    return imgSrc ? (
+        <img src={imgSrc.default.src} className="absolute top-0"/>
+    ) : null;
 }
