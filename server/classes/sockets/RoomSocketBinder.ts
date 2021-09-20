@@ -31,11 +31,12 @@ export default class RoomSocketBinder extends SocketBinder {
 
     private static onMessageRoom(socket: Socket): void {
         const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-        socket.on("send-message-room", (content, roomId) => {
-            if(Application.getRoomStorage().isPlayerPresent(roomId, player)) {
+        socket.on("send-message-room", (content: string, roomId: string) => {
+            const trimmedContent = content.trim();
+            if(Application.getRoomStorage().isPlayerPresent(roomId, player) && trimmedContent.length > 0) {
                 socket.to(Room.getRoomName(roomId)).emit("receive-message-room", {
                     username: player.profile.username,
-                    content
+                    content: trimmedContent
                 })
             }
         });

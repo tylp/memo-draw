@@ -60,13 +60,15 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
     
     const sendMessage = (e) => {
         e.preventDefault();
-        receiveMessage({
-            username: storageProfile.username,
-            content: message
-        })
+        const messageText = message.trim();
         
-        if(message !== '') {
-            socket.emit("send-message-room", message, roomId);
+        if(messageText.length > 0) {
+            receiveMessage({
+                username: storageProfile.username,
+                content: messageText
+            })
+
+            socket.emit("send-message-room", messageText, roomId);
             setMessage('');
         }
     }
