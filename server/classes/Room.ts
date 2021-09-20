@@ -1,3 +1,4 @@
+import Application from "./Application";
 import { Game } from "./Game";
 import Player from "./Player";
 
@@ -40,11 +41,16 @@ export default class Room {
         if(!this.game) {
             this.hasStarted = true;
             this.game = new Game(this);
+            Application.getRoomStorage().set(this.id, this);
         }
         return this.game;
     }
 
     static getRoomName(roomId: Room['id']): string {
         return `room-${roomId}`;
+    }
+
+    getSocketRoomName(): string {
+        return Room.getRoomName(this.id);
     }
 }
