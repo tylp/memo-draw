@@ -3,13 +3,14 @@ import { useSocketRoom} from '../../hooks';
 import { Layout, Title } from '../../components/Common';
 import Button from '../../components/Common/Button/Button';
 import Loading from '../../components/Common/Loading/Loading';
-import useLocalStorage from '../../hooks/useLocalStorage';
+import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
 import RoomService from '../../services/RoomService';
 import RoomType from '../../../server/classes/Room';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView } from '../../components/Room/LobbyView/LobbyView';
 import { GameView } from '../../components/Room/GameView/GameView';
 import { EnvironmentChecker } from '../../services/EnvironmentChecker';
+import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 
 const Room = (): JSX.Element => {
     const getRoomId = (): string => {
@@ -22,7 +23,7 @@ const Room = (): JSX.Element => {
     const roomId = getRoomId();
     
     const [isLoading, setIsLoading] = useState(true);
-    const [sessionId] = useLocalStorage("sessionId");
+    const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
     
     const socket = useSocketRoom();
     const [room, setRoom] = useState<RoomType>();

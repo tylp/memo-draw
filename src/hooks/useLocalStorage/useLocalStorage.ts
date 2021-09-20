@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { EnvironmentChecker } from '../services/EnvironmentChecker'
+import { EnvironmentChecker } from '../../services/EnvironmentChecker'
+import { LocalStorageKey } from './useLocalStorage.types'
 
 function useLocalStorage<T>(
-    key: string,
+    key: LocalStorageKey,
     initialValue?: T | (() => T),
 ): [T, Dispatch<SetStateAction<T>>] {
     // Get from local storage then
