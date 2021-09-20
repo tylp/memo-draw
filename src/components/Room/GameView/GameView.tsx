@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Game } from "../../../../server/classes/Game";
 import Player from "../../../../server/classes/Player";
 import { useSocketRoom } from "../../../hooks";
-import useLocalStorage from "../../../hooks/useLocalStorage";
+import useLocalStorage from "../../../hooks/useLocalStorage/useLocalStorage";
+import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.types";
 import { Layout, SectionTitle } from "../../Common";
 import Button from "../../Common/Button/Button";
 import UserProfile from "./UserProfile";
@@ -13,7 +14,7 @@ interface GameProps {
 
 export function GameView(props: GameProps): JSX.Element {
     const socket = useSocketRoom();
-    const [playerId] = useLocalStorage("playerId"); 
+    const [playerId] = useLocalStorage(LocalStorageKey.PlayerId); 
 
     const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
     

@@ -5,13 +5,14 @@ import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector} from "../components/Home";
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
 import { useSocket } from '../hooks';
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
+import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
 
 export default function Index(): JSX.Element {
 	const socket = useSocket();
 	const [isLoading, setIsLoading] = useState(true);
 	const [username, setUsername] = useState<string>("");
-	const [profileStorage, setProfileStorage] = useLocalStorage("profile")
+	const [profileStorage, setProfileStorage] = useLocalStorage(LocalStorageKey.Profile)
 
 	useEffect(() => {
 		if(socket) {
