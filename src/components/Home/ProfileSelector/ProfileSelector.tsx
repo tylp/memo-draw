@@ -67,7 +67,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     useEffect(() => {
-        setIsStartEnabled(props.profile.username.length >= 3);
+	setIsStartEnabled(props.profile.username.length >= 3);
     }, [props.profile]);
 
     const setUsername = (username: string) => props.setProfile({...props.profile, username})
@@ -82,19 +82,19 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flexflex-col justify-between">
-                        <SelectButton<RubberColor> direction="left" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
-                        <SelectButton<BodyColor> direction="left" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
-                        <SelectButton<FaceType> direction="left" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
+						<SelectButton<RubberColor> direction="left" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
+						<SelectButton<BodyColor> direction="left" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
+						<SelectButton<FaceType> direction="left" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
 					</div>
 
 					<div className="flex items-center">
-                        <Avatar avatar={props.profile.avatar}/>
-                    </div>
+						<Avatar avatar={props.profile.avatar}/>
+					</div>
 
 					<div className="flex flex-col justify-between">
-                        <SelectButton<RubberColor> direction="right" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
-                        <SelectButton<BodyColor> direction="right" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
-                        <SelectButton<FaceType> direction="right" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
+						<SelectButton<RubberColor> direction="right" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
+						<SelectButton<BodyColor> direction="right" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
+						<SelectButton<FaceType> direction="right" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
 					</div>
 				</div>
 
