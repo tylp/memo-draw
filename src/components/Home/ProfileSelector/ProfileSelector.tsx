@@ -5,7 +5,11 @@ import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { ProfileSelectorSpec, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
-import { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import IProfile, { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import { useSocket } from "../../../hooks";
+import { IAvatar } from "../../Common/Avatar/Avatar.spec";
+import useLocalStorage from "../../../hooks/useLocalStorage/useLocalStorage";
+import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.types";
 
 export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
@@ -60,15 +64,24 @@ export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
 
+    const socket = useSocket();
+
     const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
+	const [, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
     useEffect(() => {
         setIsStartEnabled(props.profile.username.length >= 3);
     }, [props.profile]);
+
+    const randomizeProfile = () => {
+        socket.emit("randomize-avatar", (profile: IProfile) => {
+            setProfileStorage(profile)
+        });
+    }
 
     const setUsername = (username: string) => props.setProfile({...props.profile, username})
     const setRubberColor = (rubberColor: RubberColor) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, rubberColor}}})
@@ -99,9 +112,10 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				</div>
 
 				<div className="mt-4">
+                    <Button className="mt-2" disabled={!isStartEnabled} onClick={randomizeProfile}>Randomize</Button>
 					<Title>Pseudo</Title>
 					<form onSubmit={(e) => {
-                            e.preventDefault();
+                        e.preventDefault();
                             props.handleStart();
                         }}>
                         <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />

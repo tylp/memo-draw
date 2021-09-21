@@ -18,11 +18,9 @@ export default function Index(): JSX.Element {
 		if(socket) {
 			setIsLoading(false)
 			if(profileStorage) {
-				console.log("fromStorage", profileStorage)
 				setProfile(profileStorage);
 				//TODO: Redirect to correct room
 			} else {
-				console.log("fromNone")
 				setProfile({
 					username: "",
 					avatar: {
