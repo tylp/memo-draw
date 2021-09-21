@@ -7,7 +7,6 @@ import Avatar from "../../Common/Avatar/Avatar";
 
 import IProfile, { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 import { useSocket } from "../../../hooks";
-import { IAvatar } from "../../Common/Avatar/Avatar.spec";
 import useLocalStorage from "../../../hooks/useLocalStorage/useLocalStorage";
 import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.types";
 
