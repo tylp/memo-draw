@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
 import {Layout, SectionTitle} from "../components/Common";
+import Button from '../components/Common/Button/Button';
 import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector} from "../components/Home";
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
@@ -34,6 +35,12 @@ export default function Index(): JSX.Element {
 		}
 	}, [socket, profileStorage]);
 
+    const [isStartEnabled, setIsStartEnabled] = useState(true);
+
+    useEffect(() => {
+		setIsStartEnabled(profile?.username?.length >= 3);
+    }, [profile]);
+
 	const handleStart = () => {
 		socket.emit("update-profile", profile, () => {
 			setProfileStorage(profile);
@@ -65,10 +72,10 @@ export default function Index(): JSX.Element {
 						</div>
 						<div>
 							<ProfileSelector 
-							handleStart={handleStart}
 							profile={profile}
 							socket={socket}
 							setProfile={setProfile}/>
+                    		<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
 						</div>
 					</div>
 				</Layout>
