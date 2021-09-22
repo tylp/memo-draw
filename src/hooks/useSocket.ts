@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import useLocalStorage from './useLocalStorage';
+import useLocalStorage from './useLocalStorage/useLocalStorage';
 import io from "socket.io-client";
 import ISession from '../../server/interfaces/ISession';
 import IProfile from '../../server/interfaces/IProfile';
 import { EnvironmentChecker } from '../services/EnvironmentChecker';
+import { LocalStorageKey } from './useLocalStorage/useLocalStorage.types';
 
 interface IUseSocket {
     namespace?: string,
 }
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
-	const [sessionId, setSessionId] = useLocalStorage<string>('sessionId');
-	const [, setPlayerId] = useLocalStorage<string>('playerId');
-	const [profile, setProfile] = useLocalStorage<IProfile>('profile');
+	const [sessionId, setSessionId] = useLocalStorage<string>(LocalStorageKey.SessionId);
+	const [, setPlayerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
+	const [profile, setProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
     useEffect(() => {
@@ -37,9 +38,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
                 ...data.profile,
                 ...profile
             }
-            newSocket.emit("update-profile", mergedProfile, () => {
-                setProfile(mergedProfile)
-            });
+            setProfile(mergedProfile)
         })
 
         setActiveSocket(newSocket)
@@ -51,6 +50,11 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setActiveSocket]);
+
+    useEffect(() => {
+        if(!activeSocket) return;
+        activeSocket.emit("update-profile", profile);
+    }, [profile, activeSocket])
 
     return activeSocket;
 }

@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
 import {Layout, SectionTitle} from "../components/Common";
+import Button from '../components/Common/Button/Button';
 import Loading from '../components/Common/Loading/Loading';
 import {ProfileSelector} from "../components/Home";
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
 import { useSocket } from '../hooks';
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
+import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
 
 export default function Index(): JSX.Element {
 	const socket = useSocket();
 	const [isLoading, setIsLoading] = useState(true);
-	const [username, setUsername] = useState<string>("");
-	const [profileStorage, setProfileStorage] = useLocalStorage("profile")
+	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
+	const [profile, setProfile] = useState<IProfile>();
 
 	useEffect(() => {
 		if(socket) {
 			setIsLoading(false)
 			if(profileStorage) {
-				// TODO: Redirect to correct room.
+				setProfile(profileStorage);
+				//TODO: Redirect to correct room
+			} else {
+				setProfile({
+					username: "",
+					avatar: {
+						bodyColor: BodyColor.Yellow,
+						bodyType: BodyType.Pencil,
+						faceType: FaceType.Happy,
+						rubberColor: RubberColor.Pink
+					}
+				})
 			}
 		}
 	}, [socket, profileStorage]);
 
+    const [isStartEnabled, setIsStartEnabled] = useState(true);
+
+    useEffect(() => {
+		setIsStartEnabled(profile?.username?.length >= 3);
+    }, [profile]);
+
 	const handleStart = () => {
-		// TODO: Get profile from ProfileSelector
-		const profile: IProfile = {
-			username,
-			avatar: {
-				rubberColor: RubberColor[0],
-				bodyType: BodyType[0],
-				bodyColor: BodyColor[0],
-				faceType: FaceType[0],
-			}
-		}
-		
 		socket.emit("update-profile", profile, () => {
 			setProfileStorage(profile);
 			handleRoomCreation();
@@ -62,11 +70,12 @@ export default function Index(): JSX.Element {
 							<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 							<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 						</div>
-						<div >
+						<div>
 							<ProfileSelector 
-							handleStart={handleStart}
-							handleUserName={(e) => setUsername(e.currentTarget.value)}
-							username={username}/>
+							profile={profile}
+							socket={socket}
+							setProfile={setProfile}/>
+                    		<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
 						</div>
 					</div>
 				</Layout>

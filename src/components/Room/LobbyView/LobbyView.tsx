@@ -3,7 +3,8 @@ import Player from "../../../../server/classes/Player";
 import Room from "../../../../server/classes/Room";
 import IProfile from "../../../../server/interfaces/IProfile";
 import { useSocketRoom } from "../../../hooks";
-import useLocalStorage from "../../../hooks/useLocalStorage";
+import useLocalStorage from "../../../hooks/useLocalStorage/useLocalStorage";
+import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.types";
 import { EnvironmentChecker } from "../../../services/EnvironmentChecker";
 import RoomService from "../../../services/RoomService";
 import { Layout, SectionTitle, Title } from "../../Common";
@@ -17,11 +18,11 @@ export interface LobbyViewProps {
 export function LobbyView(props: LobbyViewProps): JSX.Element {
     const socket = useSocketRoom();
     
-    const [playerId] = useLocalStorage("playerId");
+    const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
     
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
-    const [storageProfile] = useLocalStorage<IProfile>("profile");
+    const [storageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
 
     const getRoomId = (): string => {
         if(EnvironmentChecker.isClientSide()) {
@@ -60,13 +61,15 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
     
     const sendMessage = (e) => {
         e.preventDefault();
-        receiveMessage({
-            username: storageProfile.username,
-            content: message
-        })
+        const messageText = message.trim();
         
-        if(message !== '') {
-            socket.emit("send-message-room", message, roomId);
+        if(messageText.length > 0) {
+            receiveMessage({
+                username: storageProfile.username,
+                content: messageText
+            })
+
+            socket.emit("send-message-room", messageText, roomId);
             setMessage('');
         }
     }
@@ -86,7 +89,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
                         ))
                     }
                     <Button onClick={copyLinkToClipboard}>
-                        Copy link
+                        Copy link {props.room.creatorPlayerId}
                     </Button>
                     {
                         props.room.creatorPlayerId === playerId && (								

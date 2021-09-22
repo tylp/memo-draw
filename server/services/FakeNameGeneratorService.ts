@@ -1,10 +1,10 @@
 export default class FakeNameGeneratorService {
 	static NAMES = [
-		"Adrien",
-		"Antoine",
-		"Cyril",
-		"Nathan",
-		"Valentin"
+		"Suspicious Roentgen",
+		"Goofy Williams",
+		"Nauseous Goldberg",
+		"Agressive Turing",
+		"Stoic Poincare"
 	];
 
 	static generate(): string {
