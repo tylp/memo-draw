@@ -54,8 +54,7 @@ export default class CommonSocketBinder extends SocketBinder {
             const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
             const newAvatar: IAvatar = AvatarFactory.create();
             const oldProfile: IProfile = Application.getSessionStorage().get(sessionId).profile
-            const newSession = Application.getSessionStorage().update(sessionId, {profile: {...oldProfile, avatar: newAvatar}})
-            ack(newSession.profile);
+            ack({...oldProfile, avatar: newAvatar});
         })
     }
 }
