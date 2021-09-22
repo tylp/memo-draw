@@ -38,9 +38,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
                 ...data.profile,
                 ...profile
             }
-            newSocket.emit("update-profile", mergedProfile, () => {
-                setProfile(mergedProfile)
-            });
+            setProfile(mergedProfile)
         })
 
         setActiveSocket(newSocket)
@@ -52,6 +50,11 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setActiveSocket]);
+
+    useEffect(() => {
+        if(!activeSocket) return;
+        activeSocket.emit("update-profile", profile);
+    }, [profile, activeSocket])
 
     return activeSocket;
 }

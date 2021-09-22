@@ -11,30 +11,30 @@ import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types'
 export default function Index(): JSX.Element {
 	const socket = useSocket();
 	const [isLoading, setIsLoading] = useState(true);
-	const [username, setUsername] = useState<string>("");
-	const [profileStorage, setProfileStorage] = useLocalStorage(LocalStorageKey.Profile)
+	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
+	const [profile, setProfile] = useState<IProfile>();
 
 	useEffect(() => {
 		if(socket) {
 			setIsLoading(false)
 			if(profileStorage) {
-				// TODO: Redirect to correct room.
+				setProfile(profileStorage);
+				//TODO: Redirect to correct room
+			} else {
+				setProfile({
+					username: "",
+					avatar: {
+						bodyColor: BodyColor.Yellow,
+						bodyType: BodyType.Pencil,
+						faceType: FaceType.Happy,
+						rubberColor: RubberColor.Pink
+					}
+				})
 			}
 		}
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {
-		// TODO: Get profile from ProfileSelector
-		const profile: IProfile = {
-			username,
-			avatar: {
-				rubberColor: RubberColor[0],
-				bodyType: BodyType[0],
-				bodyColor: BodyColor[0],
-				faceType: FaceType[0],
-			}
-		}
-		
 		socket.emit("update-profile", profile, () => {
 			setProfileStorage(profile);
 			handleRoomCreation();
@@ -63,11 +63,12 @@ export default function Index(): JSX.Element {
 							<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 							<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
 						</div>
-						<div >
+						<div>
 							<ProfileSelector 
 							handleStart={handleStart}
-							handleUserName={(e) => setUsername(e.currentTarget.value)}
-							username={username}/>
+							profile={profile}
+							socket={socket}
+							setProfile={setProfile}/>
 						</div>
 					</div>
 				</Layout>

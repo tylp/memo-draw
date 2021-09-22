@@ -5,8 +5,7 @@ import SectionTitle from "../../Common/SectionTitle/SectionTitle";
 import { ProfileSelectorSpec, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
-import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
-import { IAvatar } from "../../Common/Avatar/Avatar.spec";
+import IProfile, { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 
 export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
@@ -60,38 +59,27 @@ export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
-
     const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
-    const [rubberColor, setRubberColor] = useState<RubberColor>(RubberColor.Pink);
-    const [bodyColor, setBodyColor] = useState<BodyColor>(BodyColor.Yellow);
-    const [bodyType] = useState<BodyType>(BodyType.Pencil);
-    const [faceType, setFaceType] = useState<FaceType>(FaceType.Happy);
-
-    const [avatar, setAvatar] = useState<IAvatar>({
-        rubberColor,
-        bodyColor,
-        bodyType,
-        faceType
-    });
-
     useEffect(() => {
-        setIsStartEnabled(props.username.length >= 3);
-    }, [props.username]);
+	setIsStartEnabled(props.profile.username.length >= 3);
+    }, [props.profile]);
 
-    useEffect(() => {
-        setAvatar({
-            rubberColor,
-            bodyColor,
-            bodyType,
-            faceType
+    const randomizeAvatar = () => {
+        props.socket.emit("randomize-avatar", (profile: IProfile) => {
+            props.setProfile(profile)
         });
-    }, [rubberColor, bodyColor, bodyType, faceType])
+    }
 
+    const setUsername = (username: string) => props.setProfile({...props.profile, username})
+    const setRubberColor = (rubberColor: RubberColor) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, rubberColor}}})
+    const setBodyColor = (bodyColor: BodyColor) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, bodyColor}}})
+    const setFaceType = (faceType: FaceType) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, faceType}}})
+    
     return (
 		<div>
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
@@ -99,31 +87,27 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				<Title>Avatar</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flexflex-col justify-between">
-                        <SelectButton<RubberColor> direction="left" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
-                        <SelectButton<BodyColor> direction="left" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
-                        <SelectButton<FaceType> direction="left" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
+						<SelectButton<RubberColor> direction="left" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
+						<SelectButton<BodyColor> direction="left" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
+						<SelectButton<FaceType> direction="left" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
 					</div>
 
 					<div className="flex items-center">
-                        <Avatar avatar={avatar}/>
-                    </div>
+						<Avatar avatar={props.profile.avatar}/>
+					</div>
 
 					<div className="flex flex-col justify-between">
-                        <SelectButton<RubberColor> direction="right" name="Eraser" value={rubberColor} list={rubberColors} setValue={setRubberColor}/>
-                        <SelectButton<BodyColor> direction="right" name="Color" value={bodyColor} list={bodyColors} setValue={setBodyColor}/>
-                        <SelectButton<FaceType> direction="right" name="Face" value={faceType} list={faceTypes} setValue={setFaceType}/>
+						<SelectButton<RubberColor> direction="right" name="Eraser" value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)}/>
+						<SelectButton<BodyColor> direction="right" name="Color" value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)}/>
+						<SelectButton<FaceType> direction="right" name="Face" value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)}/>
 					</div>
 				</div>
 
 				<div className="mt-4">
+                    <Button className="mt-2" onClick={randomizeAvatar}>Randomize</Button>
 					<Title>Pseudo</Title>
-					<form onSubmit={(e) => {
-                            e.preventDefault();
-                            props.handleStart();
-                        }}>
-                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" onChange={(e) => props.handleUserName(e)} />
-                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
-                    </form>
+                    <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
+                    <Button className="mt-2" disabled={!isStartEnabled} onClick={props.handleStart}>Done !</Button>
 				</div>
 			</div>
 		</div>

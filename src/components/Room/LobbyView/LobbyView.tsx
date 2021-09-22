@@ -89,7 +89,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
                         ))
                     }
                     <Button onClick={copyLinkToClipboard}>
-                        Copy link
+                        Copy link {props.room.creatorPlayerId}
                     </Button>
                     {
                         props.room.creatorPlayerId === playerId && (								
