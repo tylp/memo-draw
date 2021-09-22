@@ -76,7 +76,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 	setIsStartEnabled(props.profile.username.length >= 3);
     }, [props.profile]);
 
-    const randomizeProfile = () => {
+    const randomizeAvatar = () => {
         socket.emit("randomize-avatar", (profile: IProfile) => {
             setProfileStorage(profile)
         });
@@ -111,7 +111,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				</div>
 
 				<div className="mt-4">
-                    <Button className="mt-2" disabled={!isStartEnabled} onClick={randomizeProfile}>Randomize</Button>
+                    <Button className="mt-2" disabled={!isStartEnabled} onClick={randomizeAvatar}>Randomize</Button>
 					<Title>Pseudo</Title>
 					<form onSubmit={(e) => {
                         e.preventDefault();
