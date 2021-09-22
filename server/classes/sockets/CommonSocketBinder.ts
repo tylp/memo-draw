@@ -24,7 +24,7 @@ export default class CommonSocketBinder extends SocketBinder {
 
     private static socketHasSession(socket: Socket) {
         const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-        return !!sessionId && Application.getSessionStorage().containsKey(sessionId)
+        return sessionId && Application.getSessionStorage().containsKey(sessionId)
     }
 
     private static generateSessionAndBindIdentifiersFor(socket: Socket) {
@@ -44,7 +44,9 @@ export default class CommonSocketBinder extends SocketBinder {
 
     private static onUpdateProfile(socket: Socket) {
         socket.on("update-profile", (profile, ack) => {
-            ack();
+            if(ack) {
+                ack();
+            }
             Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), {profile});
         })
     }

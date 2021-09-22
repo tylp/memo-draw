@@ -6,7 +6,6 @@ import { ProfileSelectorSpec, SelectButtonSpec } from "./ProfileSelector.spec";
 import Avatar from "../../Common/Avatar/Avatar";
 
 import IProfile, { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
-import { useSocket } from "../../../hooks";
 
 export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
@@ -60,9 +59,6 @@ export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
-
-    const socket = useSocket();
-
     const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
@@ -74,7 +70,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
     }, [props.profile]);
 
     const randomizeAvatar = () => {
-        socket.emit("randomize-avatar", (profile: IProfile) => {
+        props.socket.emit("randomize-avatar", (profile: IProfile) => {
             props.setProfile(profile)
         });
     }
@@ -110,13 +106,8 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				<div className="mt-4">
                     <Button className="mt-2" onClick={randomizeAvatar}>Randomize</Button>
 					<Title>Pseudo</Title>
-					<form onSubmit={(e) => {
-                        e.preventDefault();
-                            props.handleStart();
-                        }}>
-                        <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
-                        <Button className="mt-2" disabled={!isStartEnabled} type="submit">Done !</Button>
-                    </form>
+                    <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
+                    <Button className="mt-2" disabled={!isStartEnabled} onClick={props.handleStart}>Done !</Button>
 				</div>
 			</div>
 		</div>

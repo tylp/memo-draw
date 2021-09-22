@@ -67,6 +67,7 @@ export default function Index(): JSX.Element {
 							<ProfileSelector 
 							handleStart={handleStart}
 							profile={profile}
+							socket={socket}
 							setProfile={setProfile}/>
 						</div>
 					</div>
