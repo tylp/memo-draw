@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from "react";
+import React from "react";
 import { Title } from "../../Common";
 import Button from "../../Common/Button/Button";
 import SectionTitle from "../../Common/SectionTitle/SectionTitle";
@@ -63,12 +63,6 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
 
-    const [isStartEnabled, setIsStartEnabled] = useState(true);
-
-    useEffect(() => {
-	setIsStartEnabled(props.profile.username.length >= 3);
-    }, [props.profile]);
-
     const randomizeAvatar = () => {
         props.socket.emit("randomize-avatar", (profile: IProfile) => {
             props.setProfile(profile)
@@ -107,7 +101,6 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
                     <Button className="mt-2" onClick={randomizeAvatar}>Randomize</Button>
 					<Title>Pseudo</Title>
                     <input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
-                    <Button className="mt-2" disabled={!isStartEnabled} onClick={props.handleStart}>Done !</Button>
 				</div>
 			</div>
 		</div>

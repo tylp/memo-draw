@@ -13,5 +13,4 @@ export interface ProfileSelectorSpec {
     profile: IProfile;
     setProfile: Dispatch<SetStateAction<IProfile>>;
     socket: SocketIOClient.Socket;
-    handleStart;
 }
