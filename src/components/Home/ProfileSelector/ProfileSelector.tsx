@@ -68,7 +68,6 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
     const faceTypes = Object.values(FaceType);
     const bodyColors = Object.values(BodyColor);
     const rubberColors = Object.values(RubberColor);
-	const [, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 
     const [isStartEnabled, setIsStartEnabled] = useState(true);
 
@@ -78,7 +77,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 
     const randomizeAvatar = () => {
         socket.emit("randomize-avatar", (profile: IProfile) => {
-            setProfileStorage(profile)
+            props.setProfile(profile)
         });
     }
 
@@ -111,7 +110,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				</div>
 
 				<div className="mt-4">
-                    <Button className="mt-2" disabled={!isStartEnabled} onClick={randomizeAvatar}>Randomize</Button>
+                    <Button className="mt-2" onClick={randomizeAvatar}>Randomize</Button>
 					<Title>Pseudo</Title>
 					<form onSubmit={(e) => {
                         e.preventDefault();
