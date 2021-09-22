@@ -7,8 +7,6 @@ import Avatar from "../../Common/Avatar/Avatar";
 
 import IProfile, { RubberColor, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
 import { useSocket } from "../../../hooks";
-import useLocalStorage from "../../../hooks/useLocalStorage/useLocalStorage";
-import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.types";
 
 export function SelectButton<T>(props: SelectButtonSpec<T>) : JSX.Element {
 
