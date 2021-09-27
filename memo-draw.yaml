@@ -4,9 +4,9 @@ services:
 - build_command: npm run build
   environment_slug: node-js
   github:
-    branch: main
-    deploy_on_push: true
-    repo: tylp/memo-draw
+	branch: main
+	deploy_on_push: true
+	repo: tylp/memo-draw
   http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xxs

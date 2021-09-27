@@ -1,7 +1,7 @@
-describe("ProfileSelector", () => {
-    it("Should be implemented", () => {
-        console.log("Todo");
-    })
+describe('ProfileSelector', () => {
+	it('Should be implemented', () => {
+		console.log('Todo');
+	})
 });
 
 export {}

@@ -4,11 +4,11 @@ import RoomSocketBinder from '../RoomSocketBinder';
 import AbstractNamespaceBinder from './AbstractNamespaceBinder';
 
 export default class RoomNamespaceBinder extends AbstractNamespaceBinder {
-    protected static applyEvents(): void {
-        this.io.of("/room").on("connection", (socket) => {
-            CommonSocketBinder.bindSocket(socket);
-            RoomSocketBinder.bindSocket(socket);
-            GameSocketBinder.bindSocket(socket);
-        });
-    }
+	protected static applyEvents(): void {
+		this.io.of('/room').on('connection', (socket) => {
+			CommonSocketBinder.bindSocket(socket);
+			RoomSocketBinder.bindSocket(socket);
+			GameSocketBinder.bindSocket(socket);
+		});
+	}
 }

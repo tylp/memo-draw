@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import Logo from "../Logo/Logo";
 
 interface LayoutSpec {
-    children: ReactNode
+	children: ReactNode
 }
 
 export default function Layout({ children }: LayoutSpec) : JSX.Element {
