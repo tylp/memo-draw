@@ -73,7 +73,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 	const setRubberColor = (rubberColor: RubberColor) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, rubberColor}}})
 	const setBodyColor = (bodyColor: BodyColor) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, bodyColor}}})
 	const setFaceType = (faceType: FaceType) => props.setProfile({...props.profile, ...{avatar: {...props.profile.avatar, faceType}}})
-    
+	
 	return (
 		<div>
 			<SectionTitle subtitle="Hey there !" hintColor="text-yellow-light-yellow">WHO ARE YOU ?</SectionTitle>
@@ -105,5 +105,5 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 			</div>
 		</div>
 	)
-    
+	
 }

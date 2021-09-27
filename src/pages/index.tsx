@@ -75,7 +75,7 @@ export default function Index(): JSX.Element {
 										profile={profile}
 										socket={socket}
 										setProfile={setProfile}/>
-                    		<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
+									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
 								</div>
 							</div>
 						</Layout>

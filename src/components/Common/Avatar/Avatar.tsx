@@ -31,7 +31,7 @@ export default function Avatar(props: AvatarSpecs): JSX.Element {
 		updateColor('eraser-paint', props.avatar.rubberColor);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.avatar.rubberColor]);
-    
+	
 	useEffect(() => {
 		updateColor('avatar-body-paint', props.avatar.bodyColor);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,7 +54,7 @@ const AvatarBody = (props: IBody) => {
 
 const AvatarFace = (props: IFace) => {
 	const [imgSrc, setImgSrc] = useState<{default: {src: string}}>();
-    
+	
 	useEffect(() => {
 		setImgSrc(AvatarService.getFaceType(props.type))
 	}, [props.type])

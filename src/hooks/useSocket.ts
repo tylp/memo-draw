@@ -7,7 +7,7 @@ import { EnvironmentChecker } from '../services/EnvironmentChecker';
 import { LocalStorageKey } from './useLocalStorage/useLocalStorage.types';
 
 interface IUseSocket {
-    namespace?: string,
+	namespace?: string,
 }
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
@@ -20,7 +20,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 		if(EnvironmentChecker.isServerSide()) return;
 
 		if(!setActiveSocket) return;
-        
+		
 		const newSocket = io(
 			namespace || '/',
 			{

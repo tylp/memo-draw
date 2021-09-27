@@ -13,7 +13,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		this.onGameStart(socket);
 	}
 
-	private static onJoinRoom(socket: Socket): void {        
+	private static onJoinRoom(socket: Socket): void {		
 		socket.on('join-room', (roomId, ack) => {
 			if(Application.getRoomStorage().containsKey(roomId)) {
 				const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
@@ -41,7 +41,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			}
 		});
 	}
-    
+	
 	private static onDisconnection(socket: Socket): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 		socket.on('disconnect', () => {

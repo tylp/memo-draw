@@ -19,27 +19,27 @@ const Room = (): JSX.Element => {
 		}
 		return undefined;
 	}
-    
+	
 	const roomId = getRoomId();
-    
+	
 	const [isLoading, setIsLoading] = useState(true);
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
-    
+	
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState<RoomType>();
 	const [game, setGame] = useState<Game>();
-    
+	
 	useEffect(() => {
 		if(!socket) return;		
 		socket.emit('join-room', roomId, (data) => {
 			if(data === false) {
 				// TODO: Redirect to homepage, because room does not exist or player is unable to join.
 			}
-            
+			
 			setIsLoading(false)
 			setRoom(data);
 		})
-        
+		
 		socket.on('update-room', (data) => {
 			setRoom(data);
 		})
@@ -53,7 +53,7 @@ const Room = (): JSX.Element => {
 			setGame(game);
 		})
 	}, [socket, sessionId, roomId]);
-    
+	
 	return isLoading ? (
 		<Loading/>
 	)

@@ -7,5 +7,5 @@ export default class SocketIoBinder {
 		IndexNamespaceBinder.bindServer(io);
 		RoomNamespaceBinder.bindServer(io);
 		return io;
-	}    
+	}	
 }

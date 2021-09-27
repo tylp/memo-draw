@@ -30,7 +30,7 @@ describe('SessionStorage', () => {
 				username: newUsername,
 				avatar: AvatarFactory.create()
 			}});
-        
+		
 		session = storage.get(session.sessionId);
 
 		expect(session.profile.username).toBe(newUsername);

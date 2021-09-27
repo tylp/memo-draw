@@ -12,14 +12,14 @@ import Button from '../../Common/Button/Button';
 import UserProfile from '../Id/UserProfile';
 
 export interface LobbyViewProps {
-    room: Room;
+	room: Room;
 }
 
 export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
-    
+	
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
-    
+	
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState([]);
 	const [storageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
@@ -30,14 +30,14 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 		return undefined;
 	}
-    
+	
 	const roomId = getRoomId();
 
 	useEffect(() => {
 		if(!socket) {
 			return;
 		}
-        
+		
 		socket.on('receive-message-room', (message) => {
 			setMessages((prev) => [...prev, message]);
 		})
@@ -58,11 +58,11 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const handleMessage = (e) => {
 		setMessage(e.currentTarget.value);
 	}
-    
+	
 	const sendMessage = (e) => {
 		e.preventDefault();
 		const messageText = message.trim();
-        
+		
 		if(messageText.length > 0) {
 			receiveMessage({
 				username: storageProfile.username,
@@ -73,7 +73,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 			setMessage('');
 		}
 	}
-    
+	
 	const receiveMessage = (message) => {
 		setMessages(prev => [...prev, message])
 	}
@@ -89,12 +89,12 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 						))
 					}
 					<Button onClick={copyLinkToClipboard}>
-                        Copy link {props.room.creatorPlayerId}
+						Copy link {props.room.creatorPlayerId}
 					</Button>
 					{
 						props.room.creatorPlayerId === playerId && (								
 							<Button onClick={startGame}>
-                        Start Game
+						Start Game
 							</Button>
 						)
 					}
@@ -115,7 +115,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 							value={message}
 							className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"/>
 						<Button onClick={sendMessage}>
-                        Envoyer
+						Envoyer
 						</Button>
 					</form>
 				</div>

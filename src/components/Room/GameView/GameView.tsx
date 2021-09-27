@@ -9,7 +9,7 @@ import Button from '../../Common/Button/Button';
 import UserProfile from './UserProfile';
 
 interface GameProps {
-    game: Game;
+	game: Game;
 }
 
 export function GameView(props: GameProps): JSX.Element {
@@ -17,7 +17,7 @@ export function GameView(props: GameProps): JSX.Element {
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId); 
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
-    
+	
 	useEffect(() => {
 		if(props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
@@ -42,15 +42,15 @@ export function GameView(props: GameProps): JSX.Element {
 					}
 				</div>
 				<div>
-                    Drawing Board Here
-                    Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
-                    Current Player: {props.game.currentPlayerIndex}
+					Drawing Board Here
+					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
+					Current Player: {props.game.currentPlayerIndex}
 				</div>
 				<div>
 					{
 						playerId === currentPlayer.id ? (
 							<Button onClick={nextDrawing}>
-                                Envoyer
+								Envoyer
 							</Button>
 						) : null
 					}
