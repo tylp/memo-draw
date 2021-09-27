@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             ">
                 <Logo/>
                 <div className="
-                    px-16
+                    px-32
                     py-16
                     border-8
                     border-white-white
