@@ -1,4 +1,4 @@
-import IProfile from "./IProfile";
+import IProfile from './IProfile';
 
 export default interface ISession {
     sessionId?: string,

@@ -1,12 +1,12 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 
 interface LayoutSpec {
     children: ReactNode
 }
 
 export default function Layout({ children }: LayoutSpec) : JSX.Element {
-    return(
-        <div className="
+	return(
+		<div className="
             w-screen
             h-screen
             bg-gradient-to-r
@@ -16,6 +16,6 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             items-center
         ">
 			{children}
-        </div>
-    )
+		</div>
+	)
 }

@@ -1,7 +1,7 @@
-import IdGeneratorService from "./IdGeneratorService";
+import IdGeneratorService from './IdGeneratorService';
 
-describe("IdGeneratorService", () => {
-	test("generate should work", () => {
+describe('IdGeneratorService', () => {
+	test('generate should work', () => {
 		const listOfIds = [];
 		const TESTED_ID_LENGTH = 10000;
 

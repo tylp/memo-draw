@@ -1,5 +1,5 @@
-import Player from "../../../../server/classes/Player";
-import { RubberColor, BodyType, BodyColor, FaceType } from "../../../../server/interfaces/IProfile";
+import Player from '../../../../server/classes/Player';
+import { RubberColor, BodyType, BodyColor, FaceType } from '../../../../server/interfaces/IProfile';
 
 export interface AvatarSpecs {
     avatar: IAvatar;
@@ -13,7 +13,7 @@ export interface IAvatar {
 }
 
 export interface IBody {
-    playerId?: Player["id"],
+    playerId?: Player['id'],
     type: BodyType,
     color: BodyColor,
 }

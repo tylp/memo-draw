@@ -1,4 +1,4 @@
-import { FaceType, BodyType } from "../../server/interfaces/IProfile";
+import { FaceType, BodyType } from '../../server/interfaces/IProfile';
 
 export default class AvatarService {
 	public static getBody(bodyType: BodyType): {default: {

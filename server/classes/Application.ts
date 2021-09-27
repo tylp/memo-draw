@@ -12,31 +12,31 @@ export default class Application {
     private playerRoomStorage: PlayerRoomStorage;
 
     private constructor() {
-        this.sessionStorage = new SessionStorage();
-        this.roomStorage = new RoomStorage();
-        this.playerRoomStorage = new PlayerRoomStorage();
+    	this.sessionStorage = new SessionStorage();
+    	this.roomStorage = new RoomStorage();
+    	this.playerRoomStorage = new PlayerRoomStorage();
     }
 
     static getInstance(): Application {
-        if (!Application.instance) {
-            Application.instance = new Application();
-        }
-        return Application.instance;
+    	if (!Application.instance) {
+    		Application.instance = new Application();
+    	}
+    	return Application.instance;
     }
 
     static bindServer(io: Server): void {
-        SocketIoHandler.bindServer(io);
+    	SocketIoHandler.bindServer(io);
     }
 
     static getSessionStorage(): SessionStorage {
-        return Application.getInstance().sessionStorage;
+    	return Application.getInstance().sessionStorage;
     }
 
     static getRoomStorage(): RoomStorage {
-        return Application.getInstance().roomStorage;
+    	return Application.getInstance().roomStorage;
     }
 
     static getPlayerRoomStorage(): PlayerRoomStorage {
-        return Application.getInstance().playerRoomStorage;
+    	return Application.getInstance().playerRoomStorage;
     }
 }

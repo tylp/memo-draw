@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
-import IProfile from "../../../../server/interfaces/IProfile";
+import { Dispatch, SetStateAction } from 'react';
+import IProfile from '../../../../server/interfaces/IProfile';
 
 export interface SelectButtonSpec<T> {
     name?: string,
