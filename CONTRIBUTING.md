@@ -5,9 +5,9 @@ Guidelines to follow when working on this project.
 ## Project Structure
 The project follows the following structure :
 - src/
-    - hooks/
-    - pages/
-    - components/
+	- hooks/
+	- pages/
+	- components/
 
 ### Hooks
 The hooks folder contains all the hooks of the project.
@@ -31,11 +31,11 @@ Each component consists of four files :
 - <component>.tsx
 - <component>.spec.ts
 - <component>.test.ts
-    
+	
 Component's name have to be in PascalCase.
 
 ## Branching & Commit
-    
+	
 ### Type of branch
 ***In kebab-case***
 - Feature branch (`fea/...`)

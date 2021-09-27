@@ -1,6 +1,6 @@
-import Player from "../Player";
-import Room from "../Room";
-import Storage from "./Storage";
+import Player from '../Player';
+import Room from '../Room';
+import Storage from './Storage';
 
 export default class RoomStorage extends Storage<string, Room> {
 	isPlayerPresent(roomId: string, player: Player): boolean {

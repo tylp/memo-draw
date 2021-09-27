@@ -1,6 +1,6 @@
-import Player from "../../../../server/classes/Player";
+import Player from '../../../../server/classes/Player';
 
 export interface UserProfileSpec {
-    player: Player;
-    creatorId: string;
+	player: Player;
+	creatorId: string;
 }

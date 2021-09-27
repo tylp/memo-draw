@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage/useLocalStorage';
-import io from "socket.io-client";
+import io from 'socket.io-client';
 import ISession from '../../server/interfaces/ISession';
 import IProfile from '../../server/interfaces/IProfile';
 import { EnvironmentChecker } from '../services/EnvironmentChecker';
 import { LocalStorageKey } from './useLocalStorage/useLocalStorage.types';
 
 interface IUseSocket {
-    namespace?: string,
+	namespace?: string,
 }
 
 export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
@@ -16,45 +16,45 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 	const [profile, setProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
 	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
 
-    useEffect(() => {
-        if(EnvironmentChecker.isServerSide()) return;
+	useEffect(() => {
+		if(EnvironmentChecker.isServerSide()) return;
 
-        if(!setActiveSocket) return;
-        
-        const newSocket = io(
-            namespace || "/",
-            {
-                autoConnect: true,
-                auth: {
-                    sessionId: sessionId,
-                }
-            }
-        )
+		if(!setActiveSocket) return;
+		
+		const newSocket = io(
+			namespace || '/',
+			{
+				autoConnect: true,
+				auth: {
+					sessionId: sessionId,
+				}
+			}
+		)
 
-        newSocket.on("new-session", (data: ISession) => {
-            setSessionId(data.sessionId)
-            setPlayerId(data.playerId)
-            const mergedProfile = {
-                ...data.profile,
-                ...profile
-            }
-            setProfile(mergedProfile)
-        })
+		newSocket.on('new-session', (data: ISession) => {
+			setSessionId(data.sessionId)
+			setPlayerId(data.playerId)
+			const mergedProfile = {
+				...data.profile,
+				...profile
+			}
+			setProfile(mergedProfile)
+		})
 
-        setActiveSocket(newSocket)
+		setActiveSocket(newSocket)
 
-        if(!activeSocket) return;
+		if(!activeSocket) return;
 
-        return function cleanup() {
+		return function cleanup() {
 			activeSocket.close()
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [setActiveSocket]);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [setActiveSocket]);
 
-    useEffect(() => {
-        if(!activeSocket) return;
-        activeSocket.emit("update-profile", profile);
-    }, [profile, activeSocket])
+	useEffect(() => {
+		if(!activeSocket) return;
+		activeSocket.emit('update-profile', profile);
+	}, [profile, activeSocket])
 
-    return activeSocket;
+	return activeSocket;
 }
