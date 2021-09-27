@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import Logo from "../Logo/Logo";
 
 interface LayoutSpec {
     children: ReactNode
@@ -12,10 +13,21 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
             bg-gradient-to-r
             from-blue-blue to-blue-light-blue
             flex
+            flex-col
             justify-center
             items-center
         ">
-			{children}
+            <Logo/>
+            <div className="
+                px-16
+                py-16
+                border-8
+                border-white-white
+                border-opacity-10
+                rounded-xl
+            ">
+                {children}
+            </div>
         </div>
     )
 }
