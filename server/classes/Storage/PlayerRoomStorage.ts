@@ -1,6 +1,6 @@
-import Application from "../Application";
-import Room from "../Room";
-import Storage from "./Storage";
+import Application from '../Application';
+import Room from '../Room';
+import Storage from './Storage';
 
 export default class PlayerRoomStorage extends Storage<string, string> {
 	public getRoomOf(sessionId: string): Room {

@@ -1,7 +1,7 @@
-import ProfileFactory from "../../factories/ProfileFactory";
-import ISession from "../../interfaces/ISession";
-import IdGeneratorService from "../../services/IdGeneratorService";
-import Storage from "./Storage";
+import ProfileFactory from '../../factories/ProfileFactory';
+import ISession from '../../interfaces/ISession';
+import IdGeneratorService from '../../services/IdGeneratorService';
+import Storage from './Storage';
 
 export default class RoomStorage extends Storage<string, ISession> {
 	generate(): ISession {

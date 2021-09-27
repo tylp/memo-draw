@@ -1,6 +1,6 @@
 export interface ICanvas {
-    broadcastedCoords;
-    emitCoords;
-    width;
-    height;
+	broadcastedCoords;
+	emitCoords;
+	width;
+	height;
 }
