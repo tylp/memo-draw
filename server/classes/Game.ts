@@ -1,6 +1,7 @@
 import Player from './Player';
 import Room from './Room';
 import { shuffle } from 'lodash';
+import moment from 'moment';
 
 export class Game {
 	id: string;
@@ -9,6 +10,7 @@ export class Game {
 	currentDrawingIndex: number;
 	currentNumberOfDrawings: number;
 	currentPlayerIndex: number;
+	limitDate: moment.Moment;
 
 	constructor(room: Room) {
 		this.id = room.id;
@@ -17,6 +19,7 @@ export class Game {
 		this.currentDrawingIndex = 0;
 		this.currentNumberOfDrawings = 0;
 		this.currentPlayerIndex = 0;
+		this.limitDate = this.initializeDateToReach();
 	}
 
 	isTurnOf(player: Player): boolean {
@@ -24,6 +27,7 @@ export class Game {
 	}
 
 	nextDrawing(): void {
+		this.limitDate = this.initializeDateToReach();
 		if(this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;
 			this.nextPlayer();
@@ -40,4 +44,8 @@ export class Game {
 			this.currentPlayerIndex++;
 		}
 	}
-}
+
+	initializeDateToReach(): moment.Moment {
+		return moment().add(5, 'seconds');
+	}
+ }

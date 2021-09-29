@@ -7,6 +7,7 @@ import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.
 import { Layout, SectionTitle } from '../../Common';
 import Button from '../../Common/Button/Button';
 import UserProfile from './UserProfile';
+import Timer from './Timer/Timer';
 
 interface GameProps {
 	game: Game;
@@ -46,9 +47,7 @@ export function GameView(props: GameProps): JSX.Element {
 					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
 					Current Player: {props.game.currentPlayerIndex}
 				</div>
-				<div>
-					Timer: 00:00:00
-				</div>
+				<Timer game={props.game} onFinish={nextDrawing}/>
 				<div>
 					{
 						playerId === currentPlayer.id ? (
