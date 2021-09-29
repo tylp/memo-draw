@@ -47,6 +47,9 @@ export function GameView(props: GameProps): JSX.Element {
 					Current Player: {props.game.currentPlayerIndex}
 				</div>
 				<div>
+					Timer: 00:00:00
+				</div>
+				<div>
 					{
 						playerId === currentPlayer.id ? (
 							<Button onClick={nextDrawing}>
