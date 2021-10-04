@@ -8,8 +8,10 @@ import { LocalStorageKey } from "../../../hooks/useLocalStorage/useLocalStorage.
 import { EnvironmentChecker } from "../../../services/EnvironmentChecker";
 import RoomService from "../../../services/RoomService";
 import { Layout, SectionTitle, Title } from "../../Common";
-import Button from "../../Common/Button/Button";
-import UserProfile from "../Id/UserProfile";
+import SmallButton from "../../Common/SmallButton/SmallButton";
+import UserCard from "./UserCard";
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 export interface LobbyViewProps {
     room: Room;
@@ -80,27 +82,27 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 
     return (
         <Layout>
-            <div className="flex flex-wrap flex-auto justify-center md:space-x-32">
-                <div>
-                    <SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
-                    {
+            <div className="flex flex-col justify-center">
+                <div className="flex flex-row justify-center align-middle">
+                    <SectionTitle width='w-24' hintColor="text-yellow-light-yellow">Players</SectionTitle>
+					<div className="border-t-4 border-opacity-25 w-96 ml-12 mr-12 self-center border-white-white rounded-md"/>
+                    <SmallButton className='self-center' bgColor='bg-blue-darker-blue' color='text-yellow-light-yellow' onClick={copyLinkToClipboard}
+					icon={faLink}>
+						INVITE
+                        {/* Copy link {props.room.creatorPlayerId} */}
+                    </SmallButton>
+                </div>
+				<div className="flex flex-row">
+					{
                         props.room?.players.map((player: Player) => (
-                            <UserProfile key={player.id} player={player} creatorId={props.room.creatorPlayerId}/>
+                            <UserCard key={player.id} player={player} 
+							// creatorId={props.room.creatorPlayerId}
+							/>
                         ))
                     }
-                    <Button onClick={copyLinkToClipboard}>
-                        Copy link {props.room.creatorPlayerId}
-                    </Button>
-                    {
-                        props.room.creatorPlayerId === playerId && (								
-                    <Button onClick={startGame}>
-                        Start Game
-                    </Button>
-                        )
-                    }
-                </div>
-                <div>
-                    <Title>Messages du salon :</Title>
+				</div>
+                <div className="flex flex-row align-middle">
+                    {/* <Title>Messages du salon :</Title>
                     <ul>
                     {messages.map((msg, key) => (
                         <li className="text-white-white" key={key}>
@@ -118,10 +120,19 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
                         Envoyer
                         </Button>
                         </form>
-                    </div>
-                    <div>
-                        <SectionTitle hintColor="text-pink-dark-pink">Game</SectionTitle>
-                    </div>
+                    </div> */}
+					<SectionTitle width='w-24' hintColor="text-pink-dark-pink">Game</SectionTitle>
+					<div className="border-t-4 border-opacity-25 w-96 ml-12 mr-12 self-center border-white-white rounded-md"/>
+					{
+						props.room.creatorPlayerId === playerId && (			
+						<SmallButton
+						className='self-center' color='text-white-white' bgColor='bg-pink-dark-pink' onClick={startGame}
+						icon={faPlay}>
+							Start
+						</SmallButton>
+						)
+					}
+				</div>
             </div>
         </Layout>
     )
