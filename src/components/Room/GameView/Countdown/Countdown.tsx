@@ -8,29 +8,29 @@ interface TimerProps {
 
 export default function Timer(props: TimerProps): JSX.Element {
 
-	const [timeDiff, setTimeDiff] = useState<number>();
+	const [timeLeft, setTimeLeft] = useState<number>();
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
-	const updateTimeDiff = () => {
-		setTimeDiff(Math.max(0, moment(props.limitDate).diff(moment(), 'milliseconds')));
+	const updateTimeLeft = () => {
+		setTimeLeft(Math.max(0, moment(props.limitDate).diff(moment(), 'milliseconds')));
 	}
 
 	useEffect(() => {
 		if(!props.limitDate) return;
-		updateTimeDiff();
+		updateTimeLeft();
 
 		if(currentInterval) {
 			clearInterval(currentInterval);
 		}
 
 		setCurrentInterval(setInterval(() => {
-			updateTimeDiff()
+			updateTimeLeft()
 		}, 10));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.limitDate])
 
 	useEffect(() => {			
-		if(timeDiff === 0) {
+		if(timeLeft === 0) {
 			if(currentInterval) {
 				clearInterval(currentInterval);
 			}
@@ -39,13 +39,13 @@ export default function Timer(props: TimerProps): JSX.Element {
 			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [timeDiff, currentInterval])
+	}, [timeLeft, currentInterval])
 
 	return props.limitDate ? (
 		<div>
 			Timer: {moment(props.limitDate).format('mm:ss')}
 			<br/>
-			Diff: {timeDiff}
+			Diff: {timeLeft}
 		</div>
 	) : <div>Vide</div>
 }
