@@ -19,6 +19,10 @@ export default function Timer(props: TimerProps): JSX.Element {
 		if(!props.limitDate) return;
 		updateTimeDiff();
 
+		if(currentInterval) {
+			clearInterval(currentInterval);
+		}
+
 		setCurrentInterval(setInterval(() => {
 			updateTimeDiff()
 		}, 10));
@@ -37,7 +41,7 @@ export default function Timer(props: TimerProps): JSX.Element {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [timeDiff, currentInterval])
 
-	return moment(props.limitDate) && moment(props.limitDate).format ? (
+	return props.limitDate ? (
 		<div>
 			Timer: {moment(props.limitDate).format('mm:ss')}
 			<br/>
