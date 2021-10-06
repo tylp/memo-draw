@@ -47,7 +47,7 @@ export function GameView(props: GameProps): JSX.Element {
 					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
 					Current Player: {props.game.currentPlayerIndex}
 				</div>
-				<Countdown limitDate={props.game.limitDate} onFinish={() => {console.log('hey I\'m done')}}/>
+				<Countdown limitDate={props.game.limitDate} onFinish={nextDrawing}/>
 				<div>
 					{
 						playerId === currentPlayer.id ? (

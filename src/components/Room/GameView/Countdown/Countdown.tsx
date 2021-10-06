@@ -11,18 +11,22 @@ export default function Timer(props: TimerProps): JSX.Element {
 	const [timeDiff, setTimeDiff] = useState<number>();
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
+	const updateTimeDiff = () => {
+		setTimeDiff(moment(props.limitDate).diff(moment(), 'milliseconds'));
+	}
+
 	useEffect(() => {
 		if(!props.limitDate) return;
-		setTimeDiff(moment(props.limitDate).diff(moment(), 'seconds'));
+		updateTimeDiff();
 
 		if(currentInterval) {
 			clearInterval(currentInterval);
 		}
 
-		console.log('setting an interval', moment(props.limitDate))
 		setCurrentInterval(setInterval(() => {
-			setTimeDiff(moment(props.limitDate).diff(moment(), 'seconds'));
-		}, 1000));
+			updateTimeDiff()
+		}, 10));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.limitDate])
 
 	useEffect(() => {			
@@ -30,7 +34,8 @@ export default function Timer(props: TimerProps): JSX.Element {
 			clearInterval(currentInterval);
 			props.onFinish();
 		}
-	}, [timeDiff])
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [timeDiff, currentInterval])
 
 	return moment(props.limitDate) && moment(props.limitDate).format ? (
 		<div>
