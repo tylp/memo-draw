@@ -28,7 +28,7 @@ const Room = (): JSX.Element => {
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState<RoomType>();
 	const [game, setGame] = useState<Game>();
-	
+
 	useEffect(() => {
 		if(!socket) return;		
 		socket.emit('join-room', roomId, (data) => {

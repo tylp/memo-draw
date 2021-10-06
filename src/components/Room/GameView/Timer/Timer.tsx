@@ -1,49 +1,43 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Game } from '../../../../../server/classes/Game';
-import Button from '../../../Common/Button/Button';
 
 interface TimerProps {
 	game: Game;
 	onFinish: () => void;
-};
+}
 
 export default function Timer(props: TimerProps): JSX.Element {
 
-	const getTimeDifference = (): number => {
-		return limitDate.diff(moment(), 'seconds');
-	}
-
-	const [limitDate, setLimitDate] = useState(moment(props.game.limitDate));
-	const [timeDiff, setTimeDiff] = useState(getTimeDifference());
+	const [timeDiff, setTimeDiff] = useState<number>();
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
-	const intervalHandler = () => {
-		setTimeDiff(getTimeDifference());
-	}
-
 	useEffect(() => {
-		setCurrentInterval(setInterval(intervalHandler, 1000));
-	}, [])
+		if(!props.game) return;
+		setTimeDiff(moment(props.game.limitDate).diff(moment(), 'seconds'));
 
-	useEffect(() => {
+		if(currentInterval) {
+			clearInterval(currentInterval);
+		}
+
+		console.log('setting an interval', moment(props.game.limitDate))
+		setCurrentInterval(setInterval(() => {
+			setTimeDiff(moment(props.game.limitDate).diff(moment(), 'seconds'));
+		}, 1000));
+	}, [props.game.limitDate])
+
+	useEffect(() => {			
 		if(timeDiff < 0) {
 			clearInterval(currentInterval);
 			props.onFinish();
 		}
-		getTimeDifference();
-	}, [timeDiff]);
+	}, [timeDiff])
 
-	useEffect(() => {
-		setCurrentInterval(setInterval(intervalHandler, 1000));
-		setLimitDate(moment(props.game.limitDate));
-	}, [props.game.limitDate]);
-
-	return (
+	return moment(props.game.limitDate) && moment(props.game.limitDate).format ? (
 		<div>
-			Timer: {limitDate.format('mm:ss')}
+			Timer: {moment(props.game.limitDate).format('mm:ss')}
 			<br/>
 			Diff: {timeDiff}
 		</div>
-	)
+	) : <div>Vide</div>
 }

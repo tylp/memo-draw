@@ -47,7 +47,7 @@ export function GameView(props: GameProps): JSX.Element {
 					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
 					Current Player: {props.game.currentPlayerIndex}
 				</div>
-				<Timer game={props.game} onFinish={nextDrawing}/>
+				<Timer game={props.game} onFinish={() => {console.log('hey I\'m done')}}/>
 				<div>
 					{
 						playerId === currentPlayer.id ? (
