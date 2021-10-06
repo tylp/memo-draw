@@ -12,16 +12,12 @@ export default function Timer(props: TimerProps): JSX.Element {
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
 	const updateTimeDiff = () => {
-		setTimeDiff(moment(props.limitDate).diff(moment(), 'milliseconds'));
+		setTimeDiff(Math.max(0, moment(props.limitDate).diff(moment(), 'milliseconds')));
 	}
 
 	useEffect(() => {
 		if(!props.limitDate) return;
 		updateTimeDiff();
-
-		if(currentInterval) {
-			clearInterval(currentInterval);
-		}
 
 		setCurrentInterval(setInterval(() => {
 			updateTimeDiff()
@@ -30,9 +26,13 @@ export default function Timer(props: TimerProps): JSX.Element {
 	}, [props.limitDate])
 
 	useEffect(() => {			
-		if(timeDiff < 0) {
-			clearInterval(currentInterval);
-			props.onFinish();
+		if(timeDiff === 0) {
+			if(currentInterval) {
+				clearInterval(currentInterval);
+			}
+			if(props.onFinish) {
+				props.onFinish();
+			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [timeDiff, currentInterval])
