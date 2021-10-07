@@ -19,7 +19,7 @@ export default function Timer(props: TimerProps): JSX.Element {
 		if(currentInterval) {
 			clearInterval(currentInterval);
 		}
-		
+
 		updateTimeLeft();
 
 		if(!props.limitDate) return;

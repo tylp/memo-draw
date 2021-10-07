@@ -19,7 +19,7 @@ export class Game {
 		this.currentDrawingIndex = 0;
 		this.currentNumberOfDrawings = 0;
 		this.currentPlayerIndex = 0;
-		this.limitDate = this.initializeDateToReach();
+		this.limitDate = this.refreshLimitDate();
 	}
 
 	isTurnOf(player: Player): boolean {
@@ -27,7 +27,7 @@ export class Game {
 	}
 
 	nextDrawing(): void {
-		this.limitDate = this.initializeDateToReach();
+		this.limitDate = this.refreshLimitDate();
 		if(this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;
 			this.nextPlayer();
@@ -45,7 +45,7 @@ export class Game {
 		}
 	}
 
-	initializeDateToReach(): moment.Moment {
+	refreshLimitDate(): moment.Moment {
 		return moment().add(5, 'seconds');
 	}
- }
+}
