@@ -11,14 +11,18 @@ export default function Timer(props: TimerProps): JSX.Element {
 	const [timeLeft, setTimeLeft] = useState<number>();
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
+	const timeBetweenNowAndLimitDate = moment(props.limitDate).diff(moment(), 'milliseconds');
+
 	const updateTimeLeft = () => {
-		setTimeLeft(Math.max(0, moment(props.limitDate).diff(moment(), 'millisecond')));
+		setTimeLeft(Math.max(0, timeBetweenNowAndLimitDate));
+	}
+
+	const clearIntervalIfExist = () => {
+		if(currentInterval) clearInterval(currentInterval);
 	}
 
 	useEffect(() => {
-		if(currentInterval) {
-			clearInterval(currentInterval);
-		}
+		clearIntervalIfExist();
 
 		updateTimeLeft();
 
@@ -32,9 +36,8 @@ export default function Timer(props: TimerProps): JSX.Element {
 
 	useEffect(() => {			
 		if(moment().isAfter(props.limitDate)) {
-			if(currentInterval) {
-				clearInterval(currentInterval);
-			}
+			clearIntervalIfExist();
+
 			if(props.onFinish) {
 				props.onFinish();
 			}
