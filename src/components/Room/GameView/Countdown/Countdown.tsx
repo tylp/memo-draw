@@ -12,16 +12,17 @@ export default function Timer(props: TimerProps): JSX.Element {
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
 	const updateTimeLeft = () => {
-		setTimeLeft(Math.max(0, moment(props.limitDate).diff(moment(), 'milliseconds')));
+		setTimeLeft(Math.max(0, moment(props.limitDate).diff(moment(), 'millisecond')));
 	}
 
 	useEffect(() => {
-		if(!props.limitDate) return;
-		updateTimeLeft();
-
 		if(currentInterval) {
 			clearInterval(currentInterval);
 		}
+		
+		updateTimeLeft();
+
+		if(!props.limitDate) return;
 
 		setCurrentInterval(setInterval(() => {
 			updateTimeLeft()
@@ -30,7 +31,7 @@ export default function Timer(props: TimerProps): JSX.Element {
 	}, [props.limitDate])
 
 	useEffect(() => {			
-		if(timeLeft === 0) {
+		if(moment().isAfter(props.limitDate)) {
 			if(currentInterval) {
 				clearInterval(currentInterval);
 			}
@@ -42,10 +43,8 @@ export default function Timer(props: TimerProps): JSX.Element {
 	}, [timeLeft, currentInterval])
 
 	return props.limitDate ? (
-		<div>
-			Timer: {moment(props.limitDate).format('mm:ss')}
-			<br/>
-			Diff: {timeLeft}
+		<div className="max-w-sm bg-blue-darker-blue rounded-md p-3 h-16 w-16">
+			<div className="text-lg font-semibold text-white-white">{Math.floor(timeLeft/1000)} s</div>
 		</div>
 	) : <div>Vide</div>
 }
