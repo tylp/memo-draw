@@ -10,8 +10,10 @@ import RoomService from "../../../services/RoomService";
 import { Layout, SectionTitle, Title } from "../../Common";
 import SmallButton from "../../Common/SmallButton/SmallButton";
 import UserCard from "./UserCard";
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faArrowLeft, faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Divider from "../../Common/Divider/Divider";
 
 export interface LobbyViewProps {
     room: Room;
@@ -84,45 +86,29 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
         <Layout>
             <div className="flex flex-col justify-center">
                 <div className="flex flex-row justify-center align-middle">
-                    <SectionTitle width='w-24' hintColor="text-yellow-light-yellow">Players</SectionTitle>
-					<div className="border-t-4 border-opacity-25 w-96 ml-12 mr-12 self-center border-white-white rounded-md"/>
+                    <SectionTitle width='w-36' hintColor="text-yellow-light-yellow">Players</SectionTitle>
+					<Divider className="w-96 ml-12 mr-12 self-center"/>
                     <SmallButton className='self-center' bgColor='bg-blue-darker-blue' color='text-yellow-light-yellow' onClick={copyLinkToClipboard}
 					icon={faLink}>
 						INVITE
-                        {/* Copy link {props.room.creatorPlayerId} */}
                     </SmallButton>
                 </div>
-				<div className="flex flex-row">
+				<div className="flex flex-row items-center">
+					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft}/>
 					{
                         props.room?.players.map((player: Player) => (
-                            <UserCard key={player.id} player={player} 
-							// creatorId={props.room.creatorPlayerId}
+                            <UserCard key={player.id} player={player} currentPlayer={player.id === playerId ? player : null}
+							creatorId={props.room?.creatorPlayerId}
+							isCreator={props.room?.creatorPlayerId === playerId}
 							/>
                         ))
                     }
+					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight}/>
 				</div>
+				<div className="self-end pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.room?.players.length} / 10</div>
                 <div className="flex flex-row align-middle">
-                    {/* <Title>Messages du salon :</Title>
-                    <ul>
-                    {messages.map((msg, key) => (
-                        <li className="text-white-white" key={key}>
-                        <span className="text-white-white font-bold">{msg.username}:</span> {msg.content}
-                        </li>
-                        ))}
-                        </ul>
-                        <form action="" style={{display: 'flex'}}>
-                        <input 
-                        type="text" 
-                        onChange={handleMessage} 
-                        value={message}
-                        className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"/>
-                        <Button onClick={sendMessage}>
-                        Envoyer
-                        </Button>
-                        </form>
-                    </div> */}
-					<SectionTitle width='w-24' hintColor="text-pink-dark-pink">Game</SectionTitle>
-					<div className="border-t-4 border-opacity-25 w-96 ml-12 mr-12 self-center border-white-white rounded-md"/>
+					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">Game</SectionTitle>
+					<Divider className="w-96 ml-12 mr-12 self-center"/>
 					{
 						props.room.creatorPlayerId === playerId && (			
 						<SmallButton

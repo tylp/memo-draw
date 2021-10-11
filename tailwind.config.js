@@ -5,7 +5,14 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+		fontFamily: {
+			'rubik': ['Rubik'],
+			'rubik-bold': ['Rubik-Bold'],
+			'rubik-extra-bold': ['Rubik-ExtraBold'],
+			'rubik-black': ['Rubik-Black'],
+		},
+	},
     colors: {
       blue: {
         'darker-blue': '#004063',

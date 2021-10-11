@@ -11,7 +11,7 @@ export default function SmallButton(props: SmallButtonSpec) : JSX.Element {
         setClassName(`
                         rounded-md pl-3 pr-3 h-8
                         transition duration-300
-                        font-bold uppercase
+                        font-rubik-bold uppercase
                         ${props.disabled ? `${props.bgColor} text-white-white cursor-default` : `${props.bgColor} ${props.color} hover:${props.bgColor}`}
                         ${props.className}
                     `);
