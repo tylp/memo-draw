@@ -8,15 +8,16 @@ import SocketIdentifierService from '../../services/SocketIdentifierService';
 export default class RoomSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.onJoinRoom(socket);
-		this.onMessageRoom(socket);
+		this.onInvitedInRoom(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 	}
 
-	private static onJoinRoom(socket: Socket): void {		
-		socket.on('join-room', (roomId, ack) => {
-			if(Application.getRoomStorage().containsKey(roomId)) {
-				const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+	private static onJoinRoom(socket: Socket): void {
+		socket.on('join-room', (ack) => {
+			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+			const roomId = Application.getPlayerRoomStorage().get(sessionId);
+			if (Application.getRoomStorage().containsKey(roomId)) {
 				const session = Application.getSessionStorage().get(sessionId);
 				Application.getPlayerRoomStorage().set(sessionId, roomId);
 				socket.join(Room.getRoomName(roomId))
@@ -24,24 +25,23 @@ export default class RoomSocketBinder extends SocketBinder {
 				socket.to(Room.getRoomName(roomId)).emit('update-room', updatedRoom);
 				ack(updatedRoom);
 			} else {
+				Application.getPlayerRoomStorage().delete(sessionId);
 				ack(false);
 			}
 		})
 	}
 
-	private static onMessageRoom(socket: Socket): void {
-		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-		socket.on('send-message-room', (content: string, roomId: string) => {
-			const trimmedContent = content.trim();
-			if(Application.getRoomStorage().isPlayerPresent(roomId, player) && trimmedContent.length > 0) {
-				socket.to(Room.getRoomName(roomId)).emit('receive-message-room', {
-					username: player.profile.username,
-					content: trimmedContent
-				})
+	private static onInvitedInRoom(socket: Socket): void {
+		socket.on('invited-in-room', (roomId, ack) => {
+			if (Application.getRoomStorage().containsKey(roomId)) {
+				Application.getPlayerRoomStorage().set(SocketIdentifierService.getSessionIdentifier(socket), roomId);
+				ack(true);
+			} else {
+				ack(false);
 			}
-		});
+		})
 	}
-	
+
 	private static onDisconnection(socket: Socket): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 		socket.on('disconnect', () => {
@@ -56,7 +56,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room = Application.getRoomStorage().get(roomId);
-			if(room.creatorPlayerId === player.id) {
+			if (room.creatorPlayerId === player.id) {
 				room.startGame();
 				socket.emit('game-started', room, room.game);
 				socket.to(Room.getRoomName(roomId)).emit('game-started', room, room.game);
