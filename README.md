@@ -35,7 +35,7 @@ npm test
 ## Run eslint check
 
 ```bash
-npm run eslint
+npm run lint
 ```
 
 The engine can be found [here](https://github.com/tylp/memo-draw-engine).
