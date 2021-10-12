@@ -9,10 +9,15 @@ import { Game } from '../../server/classes/Game';
 import { LobbyView } from '../components/Room/LobbyView/LobbyView';
 import { GameView } from '../components/Room/GameView/GameView';
 import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
+import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar';
+import { useHistory } from 'react-router-dom';
 
 const Lobby = (): JSX.Element => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
+	const history = useHistory();
+
+	const [openSnackbar] = useDangerSnackbar()
 
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState<RoomType>();
@@ -23,7 +28,8 @@ const Lobby = (): JSX.Element => {
 
 		socket.emit('join-room', (data) => {
 			if (data === false) {
-				// TODO: Redirect to homepage, because room does not exist or player is unable to join.
+				openSnackbar('You haven\'t joined a room yet.')
+				history.push('/')
 			} else {
 				setIsLoading(false)
 				setRoom(data);
@@ -42,6 +48,7 @@ const Lobby = (): JSX.Element => {
 		socket.on('update-game', (game) => {
 			setGame(game);
 		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
 	return isLoading ? (
