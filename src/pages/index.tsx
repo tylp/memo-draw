@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
-import {Layout, SectionTitle} from "../components/Common";
+import {Layout, SectionTitle} from '../components/Common';
 import Button from '../components/Common/Button/Button';
 import Loading from '../components/Common/Loading/Loading';
-import {ProfileSelector} from "../components/Home";
+import {ProfileSelector} from '../components/Home';
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
 import { useSocket } from '../hooks';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
@@ -23,7 +23,7 @@ export default function Index(): JSX.Element {
 				//TODO: Redirect to correct room
 			} else {
 				setProfile({
-					username: "",
+					username: '',
 					avatar: {
 						bodyColor: BodyColor.Yellow,
 						bodyType: BodyType.Pencil,
@@ -35,14 +35,14 @@ export default function Index(): JSX.Element {
 		}
 	}, [socket, profileStorage]);
 
-    const [isStartEnabled, setIsStartEnabled] = useState(true);
+	const [isStartEnabled, setIsStartEnabled] = useState(true);
 
-    useEffect(() => {
+	useEffect(() => {
 		setIsStartEnabled(profile?.username?.length >= 3);
-    }, [profile]);
+	}, [profile]);
 
 	const handleStart = () => {
-		socket.emit("update-profile", profile, () => {
+		socket.emit('update-profile', profile, () => {
 			setProfileStorage(profile);
 			handleRoomCreation();
 		})

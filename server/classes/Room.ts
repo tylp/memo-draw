@@ -1,56 +1,56 @@
-import Application from "./Application";
-import { Game } from "./Game";
-import Player from "./Player";
+import Application from './Application';
+import { Game } from './Game';
+import Player from './Player';
 
 export default class Room {
-    id: string;
-    creatorPlayerId: string;
-    players: Array<Player>;
-    hasStarted: boolean;
-    game: Game;
+	id: string;
+	creatorPlayerId: string;
+	players: Array<Player>;
+	hasStarted: boolean;
+	game: Game;
 
-    constructor(id: string, creatorPlayerId: string) {
-        this.id = id;
-        this.creatorPlayerId = creatorPlayerId;
-        this.hasStarted = false;
-        this.players = [];
-    }
+	constructor(id: string, creatorPlayerId: string) {
+		this.id = id;
+		this.creatorPlayerId = creatorPlayerId;
+		this.hasStarted = false;
+		this.players = [];
+	}
 
-    add(player: Player): Room {
-        this.players.push(player);
-        return this;
-    }
+	add(player: Player): Room {
+		this.players.push(player);
+		return this;
+	}
 
-    remove(player: Player): Room {
-        const index = this.players.findIndex(e => e.id === player.id);
-        if(index !== -1) {
-            this.players.splice(index, 1);
-        }
-        return this;
-    }
+	remove(player: Player): Room {
+		const index = this.players.findIndex(e => e.id === player.id);
+		if(index !== -1) {
+			this.players.splice(index, 1);
+		}
+		return this;
+	}
 
-    isPlayerPresent(player: Player): boolean {
-        return this.players.findIndex(e => e.id === player.id) !== -1;
-    }
+	isPlayerPresent(player: Player): boolean {
+		return this.players.findIndex(e => e.id === player.id) !== -1;
+	}
 
-    isEmpty(): boolean {
-        return this.players.length === 0;
-    }
+	isEmpty(): boolean {
+		return this.players.length === 0;
+	}
 
-    startGame(): Game {
-        if(!this.game) {
-            this.hasStarted = true;
-            this.game = new Game(this);
-            Application.getRoomStorage().set(this.id, this);
-        }
-        return this.game;
-    }
+	startGame(): Game {
+		if(!this.game) {
+			this.hasStarted = true;
+			this.game = new Game(this);
+			Application.getRoomStorage().set(this.id, this);
+		}
+		return this.game;
+	}
 
-    static getRoomName(roomId: Room['id']): string {
-        return `room-${roomId}`;
-    }
+	static getRoomName(roomId: Room['id']): string {
+		return `room-${roomId}`;
+	}
 
-    getSocketRoomName(): string {
-        return Room.getRoomName(this.id);
-    }
+	getSocketRoomName(): string {
+		return Room.getRoomName(this.id);
+	}
 }

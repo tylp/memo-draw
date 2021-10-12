@@ -16,71 +16,71 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Divider from "../../Common/Divider/Divider";
 
 export interface LobbyViewProps {
-    room: Room;
+	room: Room;
 }
 
 export function LobbyView(props: LobbyViewProps): JSX.Element {
-    const socket = useSocketRoom();
-    
-    const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
-    
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [storageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
+	const socket = useSocketRoom();
+	
+	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
+	
+	const [message, setMessage] = useState('');
+	const [messages, setMessages] = useState([]);
+	const [storageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
 
-    const getRoomId = (): string => {
-        if(EnvironmentChecker.isClientSide()) {
-            return RoomService.getRoomIdFromUrl(window.location.href)
-        }
-        return undefined;
-    }
-    
-    const roomId = getRoomId();
+	const getRoomId = (): string => {
+		if(EnvironmentChecker.isClientSide()) {
+			return RoomService.getRoomIdFromUrl(window.location.href)
+		}
+		return undefined;
+	}
+	
+	const roomId = getRoomId();
 
-    useEffect(() => {
-        if(!socket) {
-            return;
-        }
-        
-        socket.on("receive-message-room", (message) => {
-            setMessages((prev) => [...prev, message]);
-        })
-    }, [socket])
+	useEffect(() => {
+		if(!socket) {
+			return;
+		}
+		
+		socket.on('receive-message-room', (message) => {
+			setMessages((prev) => [...prev, message]);
+		})
+	}, [socket])
 
-    const copyLinkToClipboard = () => {
-        if(EnvironmentChecker.isClientSide()) {
-            navigator.clipboard.writeText(window.location.href)
-        }
-    }
+	const copyLinkToClipboard = () => {
+		if(EnvironmentChecker.isClientSide()) {
+			navigator.clipboard.writeText(window.location.href)
+		}
+	}
 
-    const startGame = () => {
-        if(props.room.creatorPlayerId === playerId) {
-            socket.emit('start-game');
-        }
-    }
+	const startGame = () => {
+		if(props.room.creatorPlayerId === playerId) {
+			socket.emit('start-game');
+		}
+	}
 
-    const handleMessage = (e) => {
-        setMessage(e.currentTarget.value);
-    }
-    
-    const sendMessage = (e) => {
-        e.preventDefault();
-        const messageText = message.trim();
-        
-        if(messageText.length > 0) {
-            receiveMessage({
-                username: storageProfile.username,
-                content: messageText
-            })
+	const handleMessage = (e) => {
+		setMessage(e.currentTarget.value);
+	}
+	
+	const sendMessage = (e) => {
+		e.preventDefault();
+		const messageText = message.trim();
+		
+		if(messageText.length > 0) {
+			receiveMessage({
+				username: storageProfile.username,
+				content: messageText
+			})
 
-            socket.emit("send-message-room", messageText, roomId);
-            setMessage('');
-        }
-    }
-    
-    const receiveMessage = (message) => {
-        setMessages(prev => [...prev, message])
-    }
+			socket.emit('send-message-room', messageText, roomId);
+			setMessage('');
+		}
+	}
+	
+	const receiveMessage = (message) => {
+		setMessages(prev => [...prev, message])
+	}
 
     return (
         <Layout>

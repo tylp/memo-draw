@@ -1,5 +1,5 @@
-import React from "react";
-import { SectionTitleSpec } from "./SectionTitle.spec";
+import React from 'react';
+import { SectionTitleSpec } from './SectionTitle.spec';
 
 export default function SectionTitle(props: SectionTitleSpec) : JSX.Element {
 

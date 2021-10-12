@@ -4,11 +4,11 @@
  * the code.
  */
 export class EnvironmentChecker {
-    static isClientSide(): boolean {
-        return typeof window !== "undefined";
-    }
+	static isClientSide(): boolean {
+		return typeof window !== 'undefined';
+	}
 
-    static isServerSide(): boolean {
-        return !this.isClientSide();
-    }
+	static isServerSide(): boolean {
+		return !this.isClientSide();
+	}
 }

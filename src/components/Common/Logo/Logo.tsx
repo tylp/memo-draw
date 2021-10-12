@@ -1,11 +1,10 @@
-import React from "react";
+import React from 'react';
 
 export default function Logo(): JSX.Element {
-	
-    return(
+	return(
 		<img 
-			src="/img/logo.svg"
-			className="w-80 h-44"
+			src='/img/logo.svg'
+			className='w-80 h-44'
 		/>
-    )
+	)
 }

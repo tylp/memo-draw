@@ -1,16 +1,16 @@
-import PlayerFactory from "../../factories/PlayerFactory";
-import ProfileFactory from "../../factories/ProfileFactory";
-import RoomFactory from "../../factories/RoomFactory";
-import RoomStorage from "./RoomStorage";
-import IdGeneratorService from "../../services/IdGeneratorService";
-import ISession from "../../interfaces/ISession";
+import PlayerFactory from '../../factories/PlayerFactory';
+import ProfileFactory from '../../factories/ProfileFactory';
+import RoomFactory from '../../factories/RoomFactory';
+import RoomStorage from './RoomStorage';
+import IdGeneratorService from '../../services/IdGeneratorService';
+import ISession from '../../interfaces/ISession';
 
-describe("RoomStorage", () => {
+describe('RoomStorage', () => {
 	let storage = new RoomStorage();
 	const roomIdNotExisting = IdGeneratorService.generate();
 	const playerOneSession: ISession = {
-		sessionId: "Random string",
-		playerId: "Random string",
+		sessionId: 'Random string',
+		playerId: 'Random string',
 		profile: ProfileFactory.create()
 	}
 	const roomId = IdGeneratorService.generate();
@@ -18,8 +18,8 @@ describe("RoomStorage", () => {
 	const playerOne = PlayerFactory.create(playerOneSession);
 
 	const playerTwoSession: ISession = {
-		sessionId: "Random string #2",
-		playerId: "Random string #2",
+		sessionId: 'Random string #2',
+		playerId: 'Random string #2',
 		profile: ProfileFactory.create()
 	}
 	const playerTwo = PlayerFactory.create(playerTwoSession);
@@ -30,7 +30,7 @@ describe("RoomStorage", () => {
 		storage.set(roomId, room)
 	})
 
-	test("isPlayerPresent should work", () => {
+	test('isPlayerPresent should work', () => {
 		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
 
 		storage.addPlayer(roomId, playerOne);
@@ -38,11 +38,11 @@ describe("RoomStorage", () => {
 		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
 	});
 
-	test("isPlayerPresent should not crash when room is not found", () => {
+	test('isPlayerPresent should not crash when room is not found', () => {
 		expect(storage.isPlayerPresent(roomIdNotExisting, playerOne)).toBeFalsy()
 	});
 
-	test("addPlayer should work", () => {
+	test('addPlayer should work', () => {
 		expect(storage.get(roomId).isEmpty()).toBeTruthy();
 
 		storage.addPlayer(roomId, playerOne);
@@ -57,11 +57,11 @@ describe("RoomStorage", () => {
 		expect(storage.get(roomId).isPlayerPresent(playerTwo)).toBeTruthy();
 	});
 
-	test("addPlayer should not crash when room is not found", () => {
+	test('addPlayer should not crash when room is not found', () => {
 		expect(storage.addPlayer(roomIdNotExisting, playerOne)).toBeFalsy()
 	});
 
-	test("removePlayer should work", () => {
+	test('removePlayer should work', () => {
 		expect(storage.get(roomId).isEmpty()).toBeTruthy();
 		
 		storage.addPlayer(roomId, playerOne);
@@ -81,7 +81,7 @@ describe("RoomStorage", () => {
 		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeFalsy();
 	});
 
-	test("removePlayer should not crash when room is not found", () => {
+	test('removePlayer should not crash when room is not found', () => {
 		expect(storage.removePlayer(roomIdNotExisting, playerOne)).toBeFalsy()
 	});
 });

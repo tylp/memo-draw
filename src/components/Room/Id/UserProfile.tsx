@@ -1,5 +1,5 @@
-import React from "react";
-import { UserProfileSpec } from "./UserProfile.spec";
+import React from 'react';
+import { UserProfileSpec } from './UserProfile.spec';
 
 export default function UserProfile(props: UserProfileSpec): JSX.Element {
     return (
