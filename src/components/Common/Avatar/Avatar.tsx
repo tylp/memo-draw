@@ -11,16 +11,16 @@ export default function Avatar(props: AvatarSpecs): JSX.Element {
 
 	const updateColor = (elementToUpdate: string, value) => {
 		const avatarElement = document.getElementById(avatarId) as HTMLObjectElement;
-		if(typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
+		if (typeof document !== 'undefined' && avatarElement && avatarElement.contentDocument) {
 			const paintableElement = avatarElement.contentDocument.getElementById(elementToUpdate);
-			if(paintableElement)
+			if (paintableElement)
 				paintableElement.style.fill = value;
 		}
 	}
 
 	useEffect(() => {
 		const arm = document.getElementById(avatarId);
-		arm.addEventListener('load', function(){
+		arm.addEventListener('load', function () {
 			updateColor('eraser-paint', props.avatar.rubberColor);
 			updateColor('avatar-body-paint', props.avatar.bodyColor);
 		});
@@ -31,18 +31,18 @@ export default function Avatar(props: AvatarSpecs): JSX.Element {
 		updateColor('eraser-paint', props.avatar.rubberColor);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.avatar.rubberColor]);
-	
+
 	useEffect(() => {
 		updateColor('avatar-body-paint', props.avatar.bodyColor);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.avatar.bodyColor]);
 
-    return (
-        <div className="w-full rounded-full border-4 border-yellow-light-yellow bg-blue-200 relative">
-            <AvatarBody playerId={avatarId} type={props.avatar.bodyType} color={props.avatar.bodyColor} />
-            <AvatarFace type={props.avatar.faceType}/>
-        </div>
-    );
+	return (
+		<div className="w-full rounded-full border-4 border-yellow-light-yellow bg-blue-200 relative">
+			<AvatarBody playerId={avatarId} type={props.avatar.bodyType} color={props.avatar.bodyColor} />
+			<AvatarFace type={props.avatar.faceType} />
+		</div>
+	);
 }
 
 const AvatarBody = (props: IBody) => {
@@ -53,13 +53,13 @@ const AvatarBody = (props: IBody) => {
 }
 
 const AvatarFace = (props: IFace) => {
-	const [imgSrc, setImgSrc] = useState<{default: {src: string}}>();
-	
+	const [imgSrc, setImgSrc] = useState<{ default: { src: string } }>();
+
 	useEffect(() => {
 		setImgSrc(AvatarService.getFaceType(props.type))
 	}, [props.type])
 
 	return imgSrc ? (
-		<img src={imgSrc.default.src} className="absolute top-0"/>
+		<img src={imgSrc.default.src} className="absolute top-0" />
 	) : null;
 }

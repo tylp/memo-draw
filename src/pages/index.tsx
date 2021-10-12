@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
-import {Layout, SectionTitle} from '../components/Common';
+import { Layout, SectionTitle } from '../components/Common';
 import Button from '../components/Common/Button/Button';
 import Loading from '../components/Common/Loading/Loading';
-import {ProfileSelector} from '../components/Home';
+import { ProfileSelector } from '../components/Home';
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
 import { useSocket } from '../hooks';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
@@ -16,9 +16,9 @@ export default function Index(): JSX.Element {
 	const [profile, setProfile] = useState<IProfile>();
 
 	useEffect(() => {
-		if(socket) {
+		if (socket) {
 			setIsLoading(false)
-			if(profileStorage) {
+			if (profileStorage) {
 				setProfile(profileStorage);
 				//TODO: Redirect to correct room
 			} else {
@@ -57,29 +57,29 @@ export default function Index(): JSX.Element {
 	return (
 		<div>
 			{
-			isLoading
-			? (
-				<Loading/>
-			) 
-			: (
-				<Layout>
-					<div className="flex md:space-x-32">
-						<div>
-							<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
-							<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-							<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-							<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..."/>
-						</div>
-						<div>
-							<ProfileSelector 
-							profile={profile}
-							socket={socket}
-							setProfile={setProfile}/>
-                    		<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
-						</div>
-					</div>
-				</Layout>
-			)
+				isLoading
+					? (
+						<Loading />
+					)
+					: (
+						<Layout>
+							<div className="flex md:space-x-32">
+								<div>
+									<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
+									<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
+									<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
+									<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
+								</div>
+								<div>
+									<ProfileSelector
+										profile={profile}
+										socket={socket}
+										setProfile={setProfile} />
+									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
+								</div>
+							</div>
+						</Layout>
+					)
 			}
 		</div>
 	);

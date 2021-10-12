@@ -4,7 +4,7 @@ import Title from '../Title/Title';
 
 export default function Loading(): JSX.Element {
 	// TODO : make a true loader
-    return(
+	return (
 		<Layout><Title>Loading...</Title></Layout>
 	)
 }
