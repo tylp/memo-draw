@@ -1,7 +1,7 @@
 import Player from './Player';
 import Room from './Room';
 import { shuffle } from 'lodash';
-import moment from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 
 export class Game {
 	id: string;
@@ -10,7 +10,7 @@ export class Game {
 	currentDrawingIndex: number;
 	currentNumberOfDrawings: number;
 	currentPlayerIndex: number;
-	limitDate: moment.Moment;
+	limitDate: Dayjs;
 
 	constructor(room: Room) {
 		this.id = room.id;
@@ -28,7 +28,7 @@ export class Game {
 
 	nextDrawing(): void {
 		this.refreshLimitDate();
-		if(this.currentDrawingIndex === this.currentNumberOfDrawings) {
+		if (this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;
 			this.nextPlayer();
 		} else {
@@ -38,7 +38,7 @@ export class Game {
 
 	nextPlayer(): void {
 		this.currentDrawingIndex = 0;
-		if(this.currentPlayerIndex === this.players.length - 1) {
+		if (this.currentPlayerIndex === this.players.length - 1) {
 			this.currentPlayerIndex = 0;
 		} else {
 			this.currentPlayerIndex++;
@@ -46,6 +46,6 @@ export class Game {
 	}
 
 	refreshLimitDate(): void {
-		this.limitDate = moment().add(5, 'seconds');
+		this.limitDate = dayjs().add(5, 'seconds');
 	}
 }

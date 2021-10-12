@@ -8,6 +8,7 @@ import { Layout, SectionTitle } from '../../Common';
 import Button from '../../Common/Button/Button';
 import UserProfile from './UserProfile';
 import Countdown from './Countdown/Countdown';
+import dayjs from 'dayjs';
 
 interface GameProps {
 	game: Game;
@@ -15,18 +16,18 @@ interface GameProps {
 
 export function GameView(props: GameProps): JSX.Element {
 	const socket = useSocketRoom();
-	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId); 
+	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
-	
+
 	useEffect(() => {
-		if(props.game) {
+		if (props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
 		}
 	}, [props.game])
 
 	const nextDrawing = () => {
-		if(playerId === currentPlayer.id) {
+		if (playerId === currentPlayer.id) {
 			socket.emit('next-drawing')
 		}
 	}
@@ -38,7 +39,7 @@ export function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserProfile key={player.id} player={player} creatorId={props.game.creatorPlayerId} currentPlayer={currentPlayer}/>
+							<UserProfile key={player.id} player={player} creatorId={props.game.creatorPlayerId} currentPlayer={currentPlayer} />
 						))
 					}
 				</div>
@@ -47,7 +48,7 @@ export function GameView(props: GameProps): JSX.Element {
 					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
 					Current Player: {props.game.currentPlayerIndex}
 				</div>
-				<Countdown limitDate={props.game.limitDate} onFinish={nextDrawing}/>
+				<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 				<div>
 					{
 						playerId === currentPlayer.id ? (
