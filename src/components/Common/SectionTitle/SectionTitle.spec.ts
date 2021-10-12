@@ -4,4 +4,5 @@ export interface SectionTitleSpec {
 	children: ReactNode;
 	subtitle?: string;
 	hintColor?: string;
+	width?: string;
 }

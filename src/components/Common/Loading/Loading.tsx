@@ -3,8 +3,8 @@ import Layout from '../Layout/Layout';
 import Title from '../Title/Title';
 
 export default function Loading(): JSX.Element {
-	// To modify later
-	return(
+	// TODO : make a true loader
+	return (
 		<Layout><Title>Loading...</Title></Layout>
 	)
 }
