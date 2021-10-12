@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Homepage from './Homepage';
+import Homepage from './homepage';
 import Room from './room/[id]';
 
 export default function App(): JSX.Element {
