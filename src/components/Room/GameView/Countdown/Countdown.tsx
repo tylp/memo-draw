@@ -1,8 +1,8 @@
-import moment from 'moment';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
 interface CountdownProps {
-	limitDate: moment.Moment;
+	limitDate: Dayjs;
 	onFinish: () => void;
 }
 
@@ -12,7 +12,7 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
 	const updateTimeLeft = () => {
-		const timeBetweenNowAndLimitDate = moment(props.limitDate).diff(moment(), 'milliseconds');
+		const timeBetweenNowAndLimitDate = props.limitDate.diff(dayjs(), 'milliseconds');
 		setTimeLeft(Math.max(0, timeBetweenNowAndLimitDate));
 	}
 
@@ -34,7 +34,7 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	}, [props.limitDate])
 
 	useEffect(() => {
-		if (moment().isAfter(props.limitDate)) {
+		if (dayjs().isAfter(props.limitDate)) {
 			clearIntervalIfExist();
 
 			if (props.onFinish) {
