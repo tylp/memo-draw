@@ -10,17 +10,17 @@ interface IUseSocket {
 	namespace?: string,
 }
 
-export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.Socket {
+export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClient.Socket {
 	const [sessionId, setSessionId] = useLocalStorage<string>(LocalStorageKey.SessionId);
 	const [, setPlayerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 	const [profile, setProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
-	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();	
+	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();
 
 	useEffect(() => {
-		if(EnvironmentChecker.isServerSide()) return;
+		if (EnvironmentChecker.isServerSide()) return;
 
-		if(!setActiveSocket) return;
-		
+		if (!setActiveSocket) return;
+
 		const newSocket = io(
 			namespace || '/',
 			{
@@ -31,7 +31,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 			}
 		)
 
-		newSocket.on('new-session', (data: ISession) => {
+		newSocket.on('update-session', (data: ISession) => {
 			setSessionId(data.sessionId)
 			setPlayerId(data.playerId)
 			const mergedProfile = {
@@ -43,7 +43,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 
 		setActiveSocket(newSocket)
 
-		if(!activeSocket) return;
+		if (!activeSocket) return;
 
 		return function cleanup() {
 			activeSocket.close()
@@ -52,7 +52,7 @@ export default function useSocket({namespace}: IUseSocket = {}): SocketIOClient.
 	}, [setActiveSocket]);
 
 	useEffect(() => {
-		if(!activeSocket) return;
+		if (!activeSocket) return;
 		activeSocket.emit('update-profile', profile);
 	}, [profile, activeSocket])
 

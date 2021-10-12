@@ -39,15 +39,15 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static sendSessionToSocket(socket: Socket) {
 		const session = Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-		socket.emit('new-session', session);
+		socket.emit('update-session', session);
 	}
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			if(ack) {
+			if (ack) {
 				ack();
 			}
-			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), {profile});
+			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
 		})
 	}
 
@@ -56,7 +56,7 @@ export default class CommonSocketBinder extends SocketBinder {
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
 			const newAvatar: IAvatar = AvatarFactory.create();
 			const oldProfile: IProfile = Application.getSessionStorage().get(sessionId).profile
-			ack({...oldProfile, avatar: newAvatar});
+			ack({ ...oldProfile, avatar: newAvatar });
 		})
 	}
 }

@@ -52,9 +52,8 @@ export default function Homepage(): JSX.Element {
 	}
 
 	const handleRoomCreation = () => {
-		socket.emit('create-room', (room) => {
-			console.log('test');
-			history.push(`/room/${room.id}`)
+		socket.emit('create-room', () => {
+			history.push('/lobby')
 		});
 	}
 

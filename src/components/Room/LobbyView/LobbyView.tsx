@@ -36,7 +36,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
-			navigator.clipboard.writeText(window.location.href)
+			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`)
 		}
 	}
 
