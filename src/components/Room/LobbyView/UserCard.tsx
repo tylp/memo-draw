@@ -1,15 +1,17 @@
 import { faCrown, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '../../Common/Avatar/Avatar';
 import { UserCardSpec } from './UserCard.spec';
 
 export default function UserCard(props: UserCardSpec): JSX.Element {
+	const [isCreator] = useState(props.creatorId === props.currentPlayerId)
+
 	return (
 		<div className="bg-blue-darker-blue h-40 w-32 rounded-md flex flex-col items-center m-2">
 			<div className="w-full relative -top-3">
 				<div className="flex flex-row">
-					{props.currentPlayer ?
+					{props.player.id === props.currentPlayerId ?
 						<div className="absolute -left-4 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">It&apos;s you !</div>
 						:
 						''
@@ -21,7 +23,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 						:
 						''
 					}
-					{props.isCreator ?
+					{(isCreator && props.player.id !== props.creatorId) ?
 						<div className="absolute right-2 rounded-full w-6 h-6 bg-pink-dark-pink font-bold text-white-white text-center">
 							<FontAwesomeIcon icon={faTrash} />
 						</div>

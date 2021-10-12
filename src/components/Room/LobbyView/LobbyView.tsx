@@ -61,10 +61,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
 					{
 						props.room?.players.map((player: Player) => (
-							<UserCard key={player.id} player={player} currentPlayer={player.id === playerId ? player : null}
-								creatorId={props.room?.creatorPlayerId}
-								isCreator={props.room?.creatorPlayerId === playerId}
-							/>
+							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.creatorPlayerId} />
 						))
 					}
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
