@@ -38,6 +38,9 @@ module.exports = {
 			white: {
 				'white': '#FFFFFF'
 			}
+		},
+		animation: {
+			'spin-bezier': 'spin 1s cubic-bezier(.20, 1, .8, .5) infinite'
 		}
 	},
 	variants: {

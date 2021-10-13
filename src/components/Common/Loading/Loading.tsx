@@ -1,10 +1,14 @@
 import React from 'react';
-import Layout from '../Layout/Layout';
-import Title from '../Title/Title';
+import AvatarFactory from '../../../../server/factories/AvatarFactory';
+import Avatar from '../Avatar/Avatar';
+import { IAvatar } from '../Avatar/Avatar.spec';
 
 export default function Loading(): JSX.Element {
-	// TODO : make a true loader
+
+	const a: IAvatar = AvatarFactory.create();
 	return (
-		<Layout><Title>Loading...</Title></Layout>
+		<div className="animate-spin-bezier h-28 w-28">
+			<Avatar avatar={a} />
+		</div>
 	)
 }
