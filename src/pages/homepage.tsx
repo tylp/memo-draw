@@ -20,7 +20,7 @@ export default function Homepage(): JSX.Element {
 
 	useEffect(() => {
 		if (socket) {
-			setIsLoading(false)
+			setIsLoading(false);
 			if (profileStorage) {
 				setProfile(profileStorage);
 				//TODO: Redirect to correct room
@@ -59,13 +59,13 @@ export default function Homepage(): JSX.Element {
 
 	return (
 		<div>
-			{
-				isLoading
-					? (
-						<Loading />
-					)
-					: (
-						<Layout>
+			<Layout>
+				{
+					isLoading
+						? (
+							<Loading />
+						)
+						: (
 							<div className="flex md:space-x-32">
 								<div>
 									<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
@@ -81,9 +81,9 @@ export default function Homepage(): JSX.Element {
 									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
 								</div>
 							</div>
-						</Layout>
-					)
-			}
+						)
+				}
+			</Layout>
 		</div>
 	);
 }
