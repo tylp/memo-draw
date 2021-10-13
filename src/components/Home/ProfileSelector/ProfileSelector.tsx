@@ -4,8 +4,9 @@ import Button from '../../Common/Button/Button';
 import { ProfileSelectorSpec, SelectButtonSpec } from './ProfileSelector.spec';
 import Avatar from '../../Common/Avatar/Avatar';
 
-import IProfile, { RubberColor, BodyColor, FaceType } from '../../../../server/interfaces/IProfile';
+import { RubberColor, BodyColor, FaceType } from '../../../../server/interfaces/IProfile';
 import { useTranslation } from 'react-i18next';
+import AvatarFactory from '../../../../server/factories/AvatarFactory';
 
 export function SelectButton<T>(props: SelectButtonSpec<T>): JSX.Element {
 	const getNextValue = () => {
@@ -65,8 +66,9 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 	const rubberColors = Object.values(RubberColor);
 
 	const randomizeAvatar = () => {
-		props.socket.emit('randomize-avatar', (profile: IProfile) => {
-			props.setProfile(profile)
+		props.setProfile({
+			username: props.profile.username,
+			avatar: AvatarFactory.create()
 		});
 	}
 
