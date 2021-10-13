@@ -9,10 +9,12 @@ import { useSocket } from '../hooks';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
@@ -68,17 +70,17 @@ export default function Homepage(): JSX.Element {
 						: (
 							<div className="flex md:space-x-32">
 								<div>
-									<SectionTitle hintColor="text-pink-dark-pink">THE GAME</SectionTitle>
-									<RuleItem id={1} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
-									<RuleItem id={2} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
-									<RuleItem id={3} title="Invite tes copaing" content="Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet..." />
+									<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
+									<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
+									<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
+									<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
 								</div>
 								<div>
 									<ProfileSelector
 										profile={profile}
 										socket={socket}
 										setProfile={setProfile} />
-									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>Done !</Button>
+									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 								</div>
 							</div>
 						)
