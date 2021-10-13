@@ -9,6 +9,7 @@ import Button from '../../Common/Button/Button';
 import UserProfile from './UserProfile';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 interface GameProps {
 	game: Game;
@@ -16,6 +17,7 @@ interface GameProps {
 
 export function GameView(props: GameProps): JSX.Element {
 	const socket = useSocketRoom();
+	const { t } = useTranslation();
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
@@ -36,7 +38,7 @@ export function GameView(props: GameProps): JSX.Element {
 		<Layout>
 			<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 				<div>
-					<SectionTitle hintColor="text-yellow-light-yellow">Players</SectionTitle>
+					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
 							<UserProfile key={player.id} player={player} creatorId={props.game.creatorPlayerId} currentPlayer={currentPlayer} />
@@ -53,7 +55,7 @@ export function GameView(props: GameProps): JSX.Element {
 					{
 						playerId === currentPlayer.id ? (
 							<Button onClick={nextDrawing}>
-								Envoyer
+								{t('gameView.sendDrawing')}
 							</Button>
 						) : null
 					}

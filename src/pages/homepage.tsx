@@ -76,6 +76,7 @@ export default function Homepage(): JSX.Element {
 									<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
 								</div>
 								<div>
+									<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
 									<ProfileSelector
 										profile={profile}
 										socket={socket}

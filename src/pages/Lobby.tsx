@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSocketRoom } from '../hooks';
-import { Layout, Title } from '../components/Common';
-import Button from '../components/Common/Button/Button';
 import Loading from '../components/Common/Loading/Loading';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
 import RoomType from '../../server/classes/Room';
@@ -11,12 +9,13 @@ import { GameView } from '../components/Room/GameView/GameView';
 import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
 import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Lobby = (): JSX.Element => {
-	const [isLoading, setIsLoading] = useState(true);
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const [openSnackbar] = useDangerSnackbar()
 
@@ -29,10 +28,9 @@ const Lobby = (): JSX.Element => {
 
 		socket.emit('join-room', (data) => {
 			if (data === false) {
-				openSnackbar('You haven\'t joined a room yet.')
+				openSnackbar(t('snackbar.haventJoinedRoomYet'))
 				history.push('/')
 			} else {
-				setIsLoading(false)
 				setRoom(data);
 			}
 		})
@@ -44,7 +42,7 @@ const Lobby = (): JSX.Element => {
 		socket.on('kicked-player', (kickedPlayerId) => {
 			if (kickedPlayerId === playerId) {
 				socket.emit('reset-linked-room')
-				openSnackbar('You got kicked.')
+				openSnackbar('snackbar.youGotKicked')
 				history.push('/')
 			}
 		})
@@ -60,19 +58,11 @@ const Lobby = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
-	return isLoading ? (
+	return room ? (
+		<RoomOrGame room={room} game={game}></RoomOrGame>
+	) : (
 		<Loading />
 	)
-		:
-		room ? (
-			<RoomOrGame room={room} game={game}></RoomOrGame>
-		)
-			: (
-				<Layout>
-					<Title>Ce salon n`&apos;`existe pas, veuillez reessayer: </Title>
-					<Button><a href="/">Créer un salon / rejoindre un salon</a></Button>
-				</Layout>
-			)
 }
 export default Lobby;
 

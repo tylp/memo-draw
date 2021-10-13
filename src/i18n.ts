@@ -5,7 +5,6 @@ const resources = {
 		translation: {
 			'homepage': {
 				'start': 'Done !',
-				'randomize': 'Randomize',
 				'rules': {
 					'title': 'The Game',
 					1: {
@@ -20,8 +19,38 @@ const resources = {
 						'title': 'Rule 3',
 						'content': 'Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet...'
 					}
+				},
+				'profile': {
+					'title': 'Who are you ?',
+					'subtitle': 'Hey there!'
 				}
 			},
+			'profileSelector': {
+				'title': 'Avatar',
+				'eraser': 'Eraser',
+				'color': 'Color',
+				'face': 'Face',
+				'randomize': 'Randomize',
+				'nickname': 'Nickname'
+			},
+			'snackbar': {
+				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+				'youGotKicked': 'You got kicked.',
+				'roomDoesNotExist': 'Room does not exist'
+			},
+			'gameView': {
+				'playersTitle': 'Players',
+				'sendDrawing': 'Send Drawing'
+			},
+			'lobbyView': {
+				'playersTitle': 'Players',
+				'invite': 'Invite',
+				'gameTitle': 'Game',
+				'start': 'Start'
+			},
+			'userCard': {
+				'badge:': 'It\'s you '
+			}
 		}
 	},
 };

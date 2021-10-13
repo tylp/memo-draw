@@ -12,6 +12,7 @@ import { faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-s
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Divider from '../../Common/Divider/Divider';
+import { useTranslation } from 'react-i18next';
 
 export interface LobbyViewProps {
 	room: Room;
@@ -19,6 +20,7 @@ export interface LobbyViewProps {
 
 export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
+	const { t } = useTranslation();
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
@@ -38,11 +40,11 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 		<Layout>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-row justify-center align-middle">
-					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">Players</SectionTitle>
+					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider className="w-96 ml-12 mr-12 self-center" />
 					<SmallButton className='self-center' bgColor='bg-blue-darker-blue' color='text-yellow-light-yellow' onClick={copyLinkToClipboard}
 						icon={faLink}>
-						INVITE
+						{t('lobbyView.invite')}
 					</SmallButton>
 				</div>
 				<div className="flex flex-row items-center">
@@ -56,14 +58,14 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 				</div>
 				<div className="self-end pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.room?.players.length} / 10</div>
 				<div className="flex flex-row align-middle">
-					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">Game</SectionTitle>
+					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider className="w-96 ml-12 mr-12 self-center" />
 					{
 						props.room.creatorPlayerId === playerId && (
 							<SmallButton
 								className='self-center' color='text-white-white' bgColor='bg-pink-dark-pink' onClick={startGame}
 								icon={faPlay}>
-								Start
+								{t('lobbyView.start')}
 							</SmallButton>
 						)
 					}
