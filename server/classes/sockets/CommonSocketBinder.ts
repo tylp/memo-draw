@@ -1,7 +1,4 @@
-import { IAvatar } from './../../../src/components/Common/Avatar/Avatar.spec';
 import { Socket } from 'socket.io';
-import AvatarFactory from '../../factories/AvatarFactory';
-import IProfile from '../../interfaces/IProfile';
 import ISession from '../../interfaces/ISession';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
@@ -12,7 +9,6 @@ export default class CommonSocketBinder extends SocketBinder {
 		this.ensureCorrectSessionFor(socket);
 
 		this.onUpdateProfile(socket);
-		this.onRandomizeAvatar(socket);
 	}
 
 	private static ensureCorrectSessionFor(socket: Socket) {
@@ -48,15 +44,6 @@ export default class CommonSocketBinder extends SocketBinder {
 				ack();
 			}
 			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
-		})
-	}
-
-	private static onRandomizeAvatar(socket: Socket) {
-		socket.on('randomize-avatar', (ack) => {
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			const newAvatar: IAvatar = AvatarFactory.create();
-			const oldProfile: IProfile = Application.getSessionStorage().get(sessionId).profile
-			ack({ ...oldProfile, avatar: newAvatar });
 		})
 	}
 }
