@@ -49,7 +49,7 @@ const resources = {
 				'start': 'Start'
 			},
 			'userCard': {
-				'badge:': 'It\'s you '
+				'badge': 'It\'s you '
 			}
 		}
 	},
