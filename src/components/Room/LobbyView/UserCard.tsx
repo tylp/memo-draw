@@ -1,11 +1,21 @@
 import { faCrown, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import Player from '../../../../server/classes/Player';
+import { useSocketRoom } from '../../../hooks';
 import Avatar from '../../Common/Avatar/Avatar';
 import { UserCardSpec } from './UserCard.spec';
 
 export default function UserCard(props: UserCardSpec): JSX.Element {
 	const [isCreator] = useState(props.creatorId === props.currentPlayerId)
+
+	const socket = useSocketRoom();
+
+	const kickPlayer = (player: Player) => {
+		if (!isCreator) return;
+
+		socket.emit('kick-player-from-room', player.id);
+	}
 
 	return (
 		<div className="bg-blue-darker-blue h-40 w-32 rounded-md flex flex-col items-center m-2">
@@ -24,7 +34,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 						''
 					}
 					{(isCreator && props.player.id !== props.creatorId) ?
-						<div className="absolute right-2 rounded-full w-6 h-6 bg-pink-dark-pink font-bold text-white-white text-center">
+						<div onClick={() => kickPlayer(props.player)} className="absolute right-2 rounded-full w-6 h-6 bg-pink-dark-pink font-bold text-white-white text-center">
 							<FontAwesomeIcon icon={faTrash} />
 						</div>
 						:

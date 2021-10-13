@@ -5,31 +5,31 @@ import Storage from './Storage';
 export default class RoomStorage extends Storage<string, Room> {
 	isPlayerPresent(roomId: string, player: Player): boolean {
 		const foundRoom: Room = this.get(roomId);
-		
-		if(foundRoom) {
+
+		if (foundRoom) {
 			return foundRoom.isPlayerPresent(player);
 		}
-		
+
 		return false;
 	}
-	
+
 	addPlayer(id: string, player: Player): Room {
 		const room = this.get(id);
-		
-		if(room && !room.isPlayerPresent(player)) {
+
+		if (room && !room.isPlayerPresent(player)) {
 			room.add(player);
 		}
-		
+
 		return room;
 	}
-	
-	removePlayer(id: string, player: Player): Room {
+
+	removePlayer(id: string, playerId: string): Room {
 		const room = this.get(id);
-		
-		if(room) {
-			room.remove(player);
+
+		if (room) {
+			room.remove(playerId);
 		}
-		
+
 		return room;
 	}
 }

@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 const Lobby = (): JSX.Element => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
+	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 	const history = useHistory();
 
 	const [openSnackbar] = useDangerSnackbar()
@@ -38,6 +39,14 @@ const Lobby = (): JSX.Element => {
 
 		socket.on('update-room', (data) => {
 			setRoom(data);
+		})
+
+		socket.on('kicked-player', (kickedPlayerId) => {
+			if (kickedPlayerId === playerId) {
+				socket.emit('reset-linked-room')
+				openSnackbar('You got kicked.')
+				history.push('/')
+			}
 		})
 
 		socket.on('game-started', (room, game) => {
