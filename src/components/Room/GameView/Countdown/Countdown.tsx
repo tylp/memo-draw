@@ -44,9 +44,13 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [timeLeft, currentInterval])
 
-	return props.limitDate ? (
+	return (
 		<div className="max-w-sm bg-blue-darker-blue rounded-md p-3 h-16 w-16">
-			<div className="text-lg font-semibold text-white-white">{Math.floor(timeLeft / 1000)} s</div>
+			{
+				props.limitDate ? (
+					<div className="text-lg font-semibold text-white-white">{Math.floor(timeLeft / 1000)} s</div>
+				) : null
+			}
 		</div>
-	) : <div>Vide</div>
+	)
 }
