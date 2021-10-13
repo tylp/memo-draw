@@ -9,6 +9,8 @@ export default class RoomSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.onJoinRoom(socket);
 		this.onInvitedInRoom(socket);
+		this.onKickPlayerFromRoom(socket);
+		this.onResetLinkedRoom(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 	}
@@ -42,11 +44,30 @@ export default class RoomSocketBinder extends SocketBinder {
 		})
 	}
 
+	private static onKickPlayerFromRoom(socket: Socket): void {
+		socket.on('kick-player-from-room', (kickedPlayerId) => {
+			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
+			const currentPlayersRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
+			if (currentPlayersRoom.creatorIs(playerId)) {
+				currentPlayersRoom.remove(kickedPlayerId);
+				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('update-room', currentPlayersRoom);
+				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('kicked-player', kickedPlayerId);
+			}
+		})
+	}
+
+	private static onResetLinkedRoom(socket: Socket): void {
+		socket.on('reset-linked-room', () => {
+			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+			Application.getPlayerRoomStorage().delete(sessionId);
+		})
+	}
+
 	private static onDisconnection(socket: Socket): void {
-		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Room = Application.getRoomStorage().removePlayer(roomId, player);
+			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}

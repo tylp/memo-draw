@@ -21,9 +21,9 @@ export default class Room {
 		return this;
 	}
 
-	remove(player: Player): Room {
-		const index = this.players.findIndex(e => e.id === player.id);
-		if(index !== -1) {
+	remove(playerId: string): Room {
+		const index = this.players.findIndex(e => e.id === playerId);
+		if (index !== -1) {
 			this.players.splice(index, 1);
 		}
 		return this;
@@ -33,12 +33,16 @@ export default class Room {
 		return this.players.findIndex(e => e.id === player.id) !== -1;
 	}
 
+	creatorIs(playerId: string): boolean {
+		return this.creatorPlayerId === playerId;
+	}
+
 	isEmpty(): boolean {
 		return this.players.length === 0;
 	}
 
 	startGame(): Game {
-		if(!this.game) {
+		if (!this.game) {
 			this.hasStarted = true;
 			this.game = new Game(this);
 			Application.getRoomStorage().set(this.id, this);

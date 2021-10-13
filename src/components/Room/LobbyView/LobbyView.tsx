@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Player from '../../../../server/classes/Player';
 import Room from '../../../../server/classes/Room';
 import { useSocketRoom } from '../../../hooks';
@@ -21,18 +21,6 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
-
-	const [, setMessages] = useState([]);
-
-	useEffect(() => {
-		if (!socket) {
-			return;
-		}
-
-		socket.on('receive-message-room', (message) => {
-			setMessages((prev) => [...prev, message]);
-		})
-	}, [socket])
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {

@@ -63,25 +63,25 @@ describe('RoomStorage', () => {
 
 	test('removePlayer should work', () => {
 		expect(storage.get(roomId).isEmpty()).toBeTruthy();
-		
+
 		storage.addPlayer(roomId, playerOne);
 		storage.addPlayer(roomId, playerTwo);
 		expect(storage.get(roomId).isEmpty()).toBeFalsy();
 		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
 		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
-		
-		storage.removePlayer(roomId, playerOne);
+
+		storage.removePlayer(roomId, playerOne.id);
 		expect(storage.get(roomId).isEmpty()).toBeFalsy();
 		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
 		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
 
-		storage.removePlayer(roomId, playerTwo);
+		storage.removePlayer(roomId, playerTwo.id);
 		expect(storage.get(roomId).isEmpty()).toBeTruthy();
 		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
 		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeFalsy();
 	});
 
 	test('removePlayer should not crash when room is not found', () => {
-		expect(storage.removePlayer(roomIdNotExisting, playerOne)).toBeFalsy()
+		expect(storage.removePlayer(roomIdNotExisting, playerOne.id)).toBeFalsy()
 	});
 });
