@@ -60,6 +60,6 @@ const AvatarFace = (props: IFace) => {
 	}, [props.type])
 
 	return imgSrc ? (
-		<img src={imgSrc.default.src} className="absolute top-0 right-0.5 left-0.5" />
+		<img src={imgSrc.default.src} draggable="false" className="absolute top-0 right-0.5 left-0.5" />
 	) : null;
 }
