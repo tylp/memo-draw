@@ -17,7 +17,7 @@ export default function Button(props: ButtonSpec) : JSX.Element {
 						${props.disabled ? `${props.bgColor} text-white-white cursor-default` : `${props.bgColor} ${props.color} hover:${props.bgColorHover}`}
 						${props.className}
 					`);
-	}, [props.disabled, props.className, props.bgColor, props.color])
+	}, [props.disabled, props.className, props.bgColor, props.bgColorHover, props.size, props.color])
 
 	return(
 		<button
