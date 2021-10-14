@@ -9,6 +9,9 @@ import Button from '../../Common/Button/Button';
 import UserProfile from './UserProfile';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
+
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
 import { useTranslation } from 'react-i18next';
 
 interface GameProps {
@@ -54,7 +57,9 @@ export function GameView(props: GameProps): JSX.Element {
 				<div>
 					{
 						playerId === currentPlayer.id ? (
-							<Button onClick={nextDrawing}>
+							<Button
+							color='text-white-white' bgColor='bg-pink-dark-pink' bgColorHover='bg-pink-light-pink' size='normal' icon={faArrowRight}
+							onClick={nextDrawing}>
 								{t('gameView.sendDrawing')}
 							</Button>
 						) : null

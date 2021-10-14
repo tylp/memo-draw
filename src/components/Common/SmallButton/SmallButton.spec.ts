@@ -7,7 +7,9 @@ export interface SmallButtonSpec {
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
     disabled?: boolean,
     type?: 'submit' | 'reset' | 'button',
+    size?: 'small' | 'normal',
     bgColor: string,
+    bgColorHover: string,
     color: string,
     icon?: IconDefinition
 }

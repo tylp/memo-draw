@@ -6,7 +6,7 @@ import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
 import { Layout, SectionTitle } from '../../Common';
-import SmallButton from '../../Common/SmallButton/SmallButton';
+import Button from '../../Common/Button/Button';
 import UserCard from './UserCard';
 import { faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
@@ -42,10 +42,10 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider className="w-96 ml-12 mr-12 self-center" />
-					<SmallButton className='self-center' bgColor='bg-blue-darker-blue' color='text-yellow-light-yellow' onClick={copyLinkToClipboard}
+					<Button className='self-center' bgColor='bg-blue-darker-blue' bgColorHover='bg-blue-blue' color='text-yellow-light-yellow' size='small' onClick={copyLinkToClipboard}
 						icon={faLink}>
 						{t('lobbyView.invite')}
-					</SmallButton>
+					</Button>
 				</div>
 				<div className="flex flex-row items-center">
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
@@ -62,11 +62,11 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					<Divider className="w-96 ml-12 mr-12 self-center" />
 					{
 						props.room.creatorPlayerId === playerId && (
-							<SmallButton
-								className='self-center' color='text-white-white' bgColor='bg-pink-dark-pink' onClick={startGame}
+							<Button
+								className='self-center' color='text-white-white' bgColor='bg-pink-dark-pink' bgColorHover='bg-pink-light-pink' size='small' onClick={startGame}
 								icon={faPlay}>
 								{t('lobbyView.start')}
-							</SmallButton>
+							</Button>
 						)
 					}
 				</div>
