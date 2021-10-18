@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
-import { Layout, SectionTitle } from '../components/Common';
+import { Layout, LoadingFull, SectionTitle } from '../components/Common';
 import Button from '../components/Common/Button/Button';
-import Loading from '../components/Common/Loading/Loading';
 import { ProfileSelector } from '../components/Home';
 import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
 import { useSocket } from '../hooks';
@@ -65,7 +64,7 @@ export default function Homepage(): JSX.Element {
 				{
 					isLoading
 						? (
-							<Loading />
+							<LoadingFull></LoadingFull>
 						)
 						: (
 							<div className="flex md:space-x-32">

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSocketRoom } from '../hooks';
-import Loading from '../components/Common/Loading/Loading';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
 import RoomType from '../../server/classes/Room';
 import { Game } from '../../server/classes/Game';
@@ -10,6 +9,7 @@ import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types'
 import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LoadingFull } from '../components/Common';
 
 const Lobby = (): JSX.Element => {
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
@@ -61,7 +61,7 @@ const Lobby = (): JSX.Element => {
 	return room ? (
 		<RoomOrGame room={room} game={game}></RoomOrGame>
 	) : (
-		<Loading />
+		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
