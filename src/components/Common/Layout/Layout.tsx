@@ -5,8 +5,8 @@ interface LayoutSpec {
 	children: ReactNode
 }
 
-export default function Layout({ children }: LayoutSpec) : JSX.Element {
-	return(
+export default function Layout({ children }: LayoutSpec): JSX.Element {
+	return (
 		<div className='
 			min-w-screen
 			min-h-screen
@@ -19,10 +19,10 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
 				justify-center
 				items-center
 			'>
-				<Logo/>
+				<Logo />
 				<div className='
 					px-32
-					py-16
+					py-4
 					border-8
 					border-white-white
 					border-opacity-10
@@ -32,6 +32,6 @@ export default function Layout({ children }: LayoutSpec) : JSX.Element {
 				</div>
 			</div>
 		</div>
-		
+
 	)
 }
