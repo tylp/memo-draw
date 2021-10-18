@@ -8,6 +8,9 @@ import { useSocket } from '../hooks';
 import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
 import { useHistory } from 'react-router-dom';
+
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+
 import { useTranslation } from 'react-i18next';
 
 export default function Homepage(): JSX.Element {
@@ -80,7 +83,7 @@ export default function Homepage(): JSX.Element {
 										profile={profile}
 										socket={socket}
 										setProfile={setProfile} />
-									<Button className="mt-2" disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+									<Button className="mt-2 w-32" color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 								</div>
 							</div>
 						)
