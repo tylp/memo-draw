@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSocketRoom } from '../hooks';
-import Loading from '../components/Common/Loading/Loading';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar'
 import { useTranslation } from 'react-i18next';
+import { LoadingFull } from '../components/Common';
 
 export default function JoinRoom(): JSX.Element {
 	const { roomId } = useParams();
@@ -28,5 +28,5 @@ export default function JoinRoom(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket]);
 
-	return <Loading />
+	return <LoadingFull></LoadingFull>
 }
