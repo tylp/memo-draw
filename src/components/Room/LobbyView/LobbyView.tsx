@@ -13,6 +13,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Divider from '../../Common/Divider/Divider';
 import { useTranslation } from 'react-i18next';
+import { useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 export interface LobbyViewProps {
 	room: Room;
@@ -22,11 +23,14 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
 	const { t } = useTranslation();
 
+	const [openSnackbar] = useSuccessSnackbar()
+
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
-			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`)
+			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`);
+			openSnackbar(t('snackbar.successfullyCopied'))
 		}
 	}
 
@@ -42,7 +46,8 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider className="w-96 ml-12 mr-12 self-center" />
-					<Button className='self-center' color='secondary' size='small' onClick={copyLinkToClipboard}
+					<Button className='self-center' color='secondary' size='small'
+						onClick={copyLinkToClipboard}
 						icon={faLink}>
 						{t('lobbyView.invite')}
 					</Button>
