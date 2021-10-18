@@ -102,7 +102,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				</div>
 
 				<div className="mt-4">
-					<Button className="mt-2" color='primary' size='normal' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
+					<Button className="mt-2" color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
 					<Title>{t('profileSelector.nickname')}</Title>
 					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
 				</div>

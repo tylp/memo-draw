@@ -6,7 +6,7 @@ export interface ButtonSpec {
     className?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
     disabled?: boolean,
-    size: 'small' | 'normal',
+    size: 'small' | 'medium',
     color: 'primary' | 'secondary',
     icon?: IconDefinition
 }

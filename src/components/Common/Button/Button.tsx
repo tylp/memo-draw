@@ -24,8 +24,8 @@ export default function Button(props: ButtonSpec) : JSX.Element {
 		setClassName(`
 						rounded-md
 						${props.className}
-						${props.size === 'small' ? 'pl-3 pr-3 h-8' : ''}
-						${props.size === 'normal' ? 'pl-2 pt-1 pr-2 pb-1' : ''}
+						${props.size === 'small' ? 'pl-3 pr-3 h-8' : null}
+						${props.size === 'medium' ? 'pl-2 pt-1 pr-2 pb-1' : null}
 						transition duration-300
 						font-rubik-bold uppercase
 						${color}
@@ -38,7 +38,7 @@ export default function Button(props: ButtonSpec) : JSX.Element {
 			disabled={props.disabled || false}
 			className={className}
 		>
-			<span className='pr-1'>{props.icon ? <FontAwesomeIcon icon={props.icon} /> : ''}</span>
+			{props.icon ? <span className='pr-1'><FontAwesomeIcon icon={props.icon} /></span> : null}
 			{props.children}
 		</button>
 	)
