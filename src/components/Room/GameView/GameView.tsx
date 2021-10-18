@@ -58,7 +58,7 @@ export function GameView(props: GameProps): JSX.Element {
 					{
 						playerId === currentPlayer.id ? (
 							<Button
-								color='text-white-white' bgColor='bg-pink-dark-pink' bgColorHover='bg-pink-light-pink' size='normal' icon={faArrowRight}
+								color='primary' size='normal' icon={faArrowRight}
 								onClick={nextDrawing}>
 								{t('gameView.sendDrawing')}
 							</Button>

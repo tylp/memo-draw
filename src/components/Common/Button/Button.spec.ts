@@ -8,8 +8,6 @@ export interface ButtonSpec {
     disabled?: boolean,
     type?: 'submit' | 'reset' | 'button',
     size: 'small' | 'normal',
-    bgColor: string,
-    bgColorHover: string,
-    color: string,
+    color: 'primary' | 'secondary',
     icon?: IconDefinition
 }

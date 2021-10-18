@@ -42,7 +42,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider className="w-96 ml-12 mr-12 self-center" />
-					<Button className='self-center' bgColor='bg-blue-darker-blue' bgColorHover='bg-blue-blue' color='text-yellow-light-yellow' size='small' onClick={copyLinkToClipboard}
+					<Button className='self-center' color='secondary' size='small' onClick={copyLinkToClipboard}
 						icon={faLink}>
 						{t('lobbyView.invite')}
 					</Button>
@@ -63,7 +63,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					{
 						props.room.creatorPlayerId === playerId && (
 							<Button
-								className='self-center' color='text-white-white' bgColor='bg-pink-dark-pink' bgColorHover='bg-pink-light-pink' size='small' onClick={startGame}
+								className='self-center' color='primary' size='small' onClick={startGame}
 								icon={faPlay}>
 								{t('lobbyView.start')}
 							</Button>

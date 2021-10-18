@@ -84,7 +84,7 @@ export default function Homepage(): JSX.Element {
 										profile={profile}
 										socket={socket}
 										setProfile={setProfile} />
-									<Button className="mt-2 w-32" color='text-white-white' bgColor='bg-pink-dark-pink' bgColorHover='bg-pink-light-pink' size='normal' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+									<Button className="mt-2 w-32" color='primary' size='normal' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 								</div>
 							</div>
 						)
