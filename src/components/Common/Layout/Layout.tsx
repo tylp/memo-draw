@@ -19,7 +19,9 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 				justify-center
 				items-center
 			'>
-				<Logo />
+				<div className='py-2'>
+					<Logo size='small' />
+				</div>
 				<div className='
 					px-32
 					py-4
