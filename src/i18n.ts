@@ -36,7 +36,8 @@ const resources = {
 			'snackbar': {
 				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
 				'youGotKicked': 'You got kicked.',
-				'roomDoesNotExist': 'Room does not exist'
+				'roomDoesNotExist': 'Room does not exist',
+				'successfullyCopied' : 'Copied !'
 			},
 			'gameView': {
 				'playersTitle': 'Players',
