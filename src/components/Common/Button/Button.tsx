@@ -37,7 +37,6 @@ export default function Button(props: ButtonSpec) : JSX.Element {
 			onClick={props.onClick}
 			disabled={props.disabled || false}
 			className={className}
-			type={props.type}
 		>
 			<span className='pr-1'>{props.icon ? <FontAwesomeIcon icon={props.icon} /> : ''}</span>
 			{props.children}
