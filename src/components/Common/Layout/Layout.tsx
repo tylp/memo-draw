@@ -8,8 +8,8 @@ interface LayoutSpec {
 export default function Layout({ children }: LayoutSpec) : JSX.Element {
 	return(
 		<div className='
-			w-screen
-			h-screen
+			min-w-screen
+			min-h-screen
 			bg-gradient-to-r
 			from-blue-blue to-blue-light-blue
 		'>
