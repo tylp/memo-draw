@@ -6,6 +6,7 @@ import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 
 export default class RoomSocketBinder extends SocketBinder {
+
 	static bindSocket(socket: Socket): void {
 		this.onJoinRoom(socket);
 		this.onInvitedInRoom(socket);
@@ -13,6 +14,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		this.onResetLinkedRoom(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
+		this.onQuitGame(socket);
 	}
 
 	private static onJoinRoom(socket: Socket): void {
@@ -84,4 +86,15 @@ export default class RoomSocketBinder extends SocketBinder {
 			}
 		})
 	}
+
+	//TODO : Refactor by using service (in another issue)
+	private static onQuitGame(socket: Socket): void {
+		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
+		socket.on('quit-game', () => {
+				const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+				const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
+				socket.to(Room.getRoomName(roomId)).emit('update-room', room);
+		})
+	}
+
 }

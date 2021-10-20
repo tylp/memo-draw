@@ -36,7 +36,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 						''
 					}
 					{(isCreator && props.player.id !== props.creatorId) ?
-						<div onClick={() => kickPlayer(props.player)} className="absolute right-2 rounded-full w-6 h-6 bg-pink-dark-pink font-bold text-white-white text-center">
+						<div onClick={() => kickPlayer(props.player)} className="absolute cursor-pointer right-2 rounded-full w-6 h-6 bg-pink-dark-pink hover:bg-pink-light-pink font-bold text-white-white text-center">
 							<FontAwesomeIcon icon={faTrash} />
 						</div>
 						:

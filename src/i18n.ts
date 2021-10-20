@@ -46,6 +46,7 @@ const resources = {
 			'lobbyView': {
 				'playersTitle': 'Players',
 				'invite': 'Invite',
+				'leave': 'Leave room',
 				'gameTitle': 'Game',
 				'start': 'Start'
 			},
