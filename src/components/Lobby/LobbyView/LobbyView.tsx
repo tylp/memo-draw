@@ -16,7 +16,7 @@ import { GameSetting } from './GameSetting/GameSetting';
 
 import { useHistory } from 'react-router-dom'
 
-export interface LobbyViewProps {
+interface LobbyViewProps {
 	room: Room;
 }
 

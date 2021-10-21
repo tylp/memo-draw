@@ -1,5 +1,11 @@
 import React from 'react';
-import { UserProfileSpec } from './UserProfile.spec';
+import Player from '../../../../../server/classes/Player';
+
+interface UserProfileSpec {
+	player: Player;
+	creatorId: string;
+	currentPlayer: Player;
+}
 
 export default function UserProfile(props: UserProfileSpec): JSX.Element {
 	return (

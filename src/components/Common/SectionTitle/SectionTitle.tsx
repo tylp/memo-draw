@@ -1,6 +1,11 @@
-import React from 'react';
-import { SectionTitleSpec } from './SectionTitle.spec';
+import React, { ReactNode } from 'react';
 
+interface SectionTitleSpec {
+	children: ReactNode;
+	subtitle?: string;
+	hintColor?: string;
+	width?: string;
+}
 export default function SectionTitle(props: SectionTitleSpec): JSX.Element {
 
 	return (

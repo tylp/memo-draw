@@ -1,9 +1,12 @@
-import React from 'react';
-import { TitleSpec } from './Title.spec';
+import React, { ReactNode } from 'react';
 
-export default function Title({children}: TitleSpec) : JSX.Element {
+interface TitleSpec {
+	children: ReactNode;
+}
 
-	return(
+export default function Title({ children }: TitleSpec): JSX.Element {
+
+	return (
 		<div className="flex space-x-2 mt-2 mb-2">
 			<svg version="1.1" className="w-4 fill-current text-yellow-light-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 552.611 552.611"
 			>
@@ -16,6 +19,6 @@ export default function Title({children}: TitleSpec) : JSX.Element {
 				{children}
 			</h1>
 		</div>
-		
+
 	);
 }
