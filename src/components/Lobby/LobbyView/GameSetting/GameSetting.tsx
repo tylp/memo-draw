@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, RadioList, Title } from "../../../Common";
+import React from 'react';
+import { Button, RadioList, Title } from '../../../Common';
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -19,9 +19,9 @@ export function GameSetting<T>(props: GameSettingSpec<T>): JSX.Element {
 			</div>
 
 			<p className="leading-tight text-white-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam </p>
-			
+
 			<div className="flex flex-row justify-between">
-				<RadioList name={props.name} list={speedPropertiesValues} color='light-secondary' size='big'/>
+				<RadioList name={props.name} list={speedPropertiesValues} color='light-secondary' size='big' />
 			</div>
 		</div>
 	);

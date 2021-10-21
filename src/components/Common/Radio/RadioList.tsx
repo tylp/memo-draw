@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 interface RadioSpec {
 	className?: string,
@@ -20,7 +20,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 		if (props.color === 'light-secondary') {
 			color = 'bg-grey-light-grey hover:bg-blue-blue text-white-white';
 		}
-		
+
 		setLabelClassName(`
 			${props.className}
 			${color}
@@ -44,7 +44,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 		<>
 			{
 				props.list.map(element => <button className={labelClassName}>{element}</button>)
-			}	
+			}
 			{/* <button className={labelClassName}>Slow</button>
 			<button className={labelClassName}>Normal</button>
 			<button className={labelClassName}>Fast</button> */}

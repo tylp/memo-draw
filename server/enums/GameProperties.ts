@@ -5,5 +5,5 @@ export enum SpeedProperties {
 }
 
 export enum GameModeProperties {
-	Classic
+	Classic,
 }
