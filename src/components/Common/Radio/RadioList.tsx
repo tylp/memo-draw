@@ -1,22 +1,20 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RadioNode } from '../../../../server/enums/RadioNode';
+import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 
 interface RadioSpec {
 	className?: string,
 	name: string,
-	list: RadioNode[],
+	list: IRadioNode[],
 	size: 'small' | 'medium' | 'big',
 	color: 'primary' | 'secondary' | 'light-secondary',
-    setCurrentValue: Dispatch<SetStateAction<string | number>>,
-    currentValue: string | number,
+	setCurrentValue: Dispatch<SetStateAction<string | number>>,
+	currentValue: string | number,
 }
 
 export default function RadioList(props: RadioSpec): JSX.Element {
 
 	const [className, setClassName] = useState('');
-
-    const { t } = useTranslation();
 
 	useEffect(() => {
 		let color = '';
@@ -30,7 +28,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			${color}
 			${props.size === 'big' ? 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4' : null}
 			text-center
-            w-32
+			w-32
 			rounded-md
 			transition duration-300
 			font-rubik-bold
@@ -38,12 +36,12 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			ring-yellow-light-yellow
 		`);
 
-	}, [props.size, props.color, props.currentValue])
+	}, [props.size, props.color, props.currentValue, props.className])
 
 	return (
 		<>
 			{
-				props.list.map(element => <button className={className + (props.currentValue === element.value ? ' ring-2' : null)} onClick={() => props.setCurrentValue(element.value)}>{element.content}</button>)
+				props.list.map(element => <button key={element.value} className={className + (props.currentValue === element.value ? ' ring-2' : null)} onClick={() => props.setCurrentValue(element.value)}>{element.content}</button>)
 			}
 		</>
 	)

@@ -16,7 +16,7 @@ import { GameSetting } from './GameSetting/GameSetting';
 import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
-import { RadioNode } from '../../../../server/enums/RadioNode';
+import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 
 interface LobbyViewProps {
 	room: Room;
@@ -34,18 +34,18 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
-    const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
-    const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
+	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
-	const speedPropertiesValues: RadioNode[] = Object.values(SpeedProperties)
+	const speedPropertiesValues: IRadioNode[] = Object.values(SpeedProperties)
 		.filter((value) => typeof value === 'number')
 		.map((value) => value as SpeedProperties)
-        .map((value) => ({value, 'content': t(`speeds.${value}`)}));
+		.map((value) => ({value, 'content': t(`speeds.${value}`)}));
 
-	const gameModePropertiesValues: RadioNode[] = Object.values(GameModeProperties)
+	const gameModePropertiesValues: IRadioNode[] = Object.values(GameModeProperties)
 		.filter((value) => typeof value === 'number')
 		.map((value) => value as GameModeProperties)
-        .map((value) => ({value, 'content': t(`gameModes.${value}`)}));
+		.map((value) => ({value, 'content': t(`gameModes.${value}`)}));
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {

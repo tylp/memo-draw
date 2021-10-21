@@ -1,15 +1,15 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Button, RadioList, Title } from '../../../Common';
+import { RadioList, Title } from '../../../Common';
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RadioNode } from '../../../../../server/enums/RadioNode';
+import { IRadioNode } from '../../../../../server/interfaces/IRadioNode';
 
 interface GameSettingSpec {
 	name: string,
-    title: string,
-    list: RadioNode[],
-    setCurrentValue: Dispatch<SetStateAction<string | number>>,
-    currentValue: string | number
+	title: string,
+	list: IRadioNode[],
+	setCurrentValue: Dispatch<SetStateAction<string | number>>,
+	currentValue: string | number
 }
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {

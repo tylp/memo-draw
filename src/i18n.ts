@@ -54,12 +54,12 @@ const resources = {
 			'userCard': {
 				'badge': 'It\'s you'
 			},
-            'speeds': {
-                '0': 'Normal',
-            },
-            'gameModes': {
-                '0': 'Classic'
-            }
+			'speeds': {
+				'0': 'Normal',
+			},
+			'gameModes': {
+				'0': 'Classic'
+			}
 		}
 	},
 };
