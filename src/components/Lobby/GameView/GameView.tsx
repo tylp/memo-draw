@@ -5,7 +5,7 @@ import { useSocketRoom } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { Layout, SectionTitle, Button } from '../../../components/Common';
-import UserProfile from './UserProfile';
+import UserProfile from './UserProfile/UserProfile';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
 

@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { DividerSpec } from './Divider.spec';
+import React from 'react';
 
-
-export default function Divider(props: DividerSpec): JSX.Element {
-
-	const [className, setClassName] = useState('');
-
-	useEffect(() => {
-		setClassName(`w-full ml-12 mr-12 self-center border-t-4 border-opacity-25 border-white-white rounded-md ${props.className}`);
-	}, [props.className])
-
+export default function Divider(): JSX.Element {
 	return (
-		<div className={className} />
+		<div className="w-full ml-12 mr-12 self-center border-t-4 border-opacity-25 border-white-white rounded-md" />
 	)
-
 }

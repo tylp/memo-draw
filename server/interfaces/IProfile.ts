@@ -1,4 +1,4 @@
-import { IAvatar } from '../../src/components/Common/Avatar/Avatar.spec';
+import { IAvatar } from './IAvatar';
 
 export default interface IProfile {
 	username: string,

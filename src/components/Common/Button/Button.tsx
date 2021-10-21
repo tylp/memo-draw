@@ -1,8 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ButtonSpec } from './Button.spec';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
-export default function Button(props: ButtonSpec) : JSX.Element {
+interface ButtonSpec {
+	children: ReactNode,
+	className?: string,
+	onClick?: React.MouseEventHandler<HTMLButtonElement>,
+	disabled?: boolean,
+	size: 'small' | 'medium',
+	color: 'primary' | 'secondary',
+	icon?: IconDefinition
+}
+
+export default function Button(props: ButtonSpec): JSX.Element {
 
 	const [className, setClassName] = useState('');
 
@@ -33,7 +43,7 @@ export default function Button(props: ButtonSpec) : JSX.Element {
 					`);
 	}, [props.disabled, props.className, props.size, props.color])
 
-	return(
+	return (
 		<button
 			onClick={props.onClick}
 			disabled={props.disabled || false}

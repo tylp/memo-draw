@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 import Player from '../../../../server/classes/Player';
 import { Avatar } from '../../../components/Common';
 import { useSocketRoom } from '../../../hooks';
-import { UserCardSpec } from './UserCard.spec';
+
+interface UserCardSpec {
+	player: Player;
+	creatorId?: string;
+	currentPlayerId?: string | unknown;
+	subtitle?: string;
+}
 
 export default function UserCard(props: UserCardSpec): JSX.Element {
 	const [isCreator] = useState(props.creatorId === props.currentPlayerId)
