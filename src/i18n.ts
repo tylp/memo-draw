@@ -5,8 +5,8 @@ const resources = {
 		translation: {
 			'alert': {
 				'youGotKicked': 'You got kicked.',
-				'roomDoesNotExist': 'Room does not exist',
-				'leavedLobby': 'You leaved the room',
+				'roomDoesNotExist': 'Room does not exist.',
+				'leavedLobby': 'You leaved the room.',
 				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
 			},
 			'homepage': {
@@ -27,7 +27,7 @@ const resources = {
 					}
 				},
 				'profile': {
-					'title': 'Who are you ?',
+					'title': 'Who are you?',
 					'subtitle': 'Hey there!'
 				}
 			},
@@ -52,7 +52,7 @@ const resources = {
 				'startBtnLabel': 'Start'
 			},
 			'userCard': {
-				'badge': 'It\'s you '
+				'badge': 'It\'s you'
 			}
 		}
 	},

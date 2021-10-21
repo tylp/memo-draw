@@ -13,7 +13,7 @@ import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Divider from '../../Common/Divider/Divider';
 import { useTranslation } from 'react-i18next';
-import { useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 import { useHistory } from 'react-router-dom'
 
@@ -27,14 +27,16 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const history = useHistory();
 
-	const [openSnackbar] = useSuccessSnackbar()
+	const [openSuccessSnackbar] = useSuccessSnackbar()
+
+	const [openInfoSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
 			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`);
-			openSnackbar(t('lobbyView.successfullyCopied'))
+			openSuccessSnackbar(t('lobbyView.successfullyCopied'))
 		}
 	}
 
@@ -45,7 +47,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	const leaveGame = () => {
-		openSnackbar(t('alert.leavedLobby'))
+		openInfoSnackBar(t('alert.leavedLobby'))
 		history.push('/');
 		socket.emit('leave-game');
 		socket.emit('reset-linked-room');
