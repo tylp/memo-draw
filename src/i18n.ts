@@ -50,6 +50,7 @@ const resources = {
 			'lobbyView': {
 				'playersTitle': 'Players',
 				'inviteBtnLabel': 'Invite',
+				'editProfileBtnLabel': 'Edit',
 				'successfullyCopied': 'Invite link copied !',
 				'leaveBtnLabel': 'Leave room',
 				'gameTitle': 'Game',

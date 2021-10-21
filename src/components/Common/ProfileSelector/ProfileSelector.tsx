@@ -11,7 +11,6 @@ import SelectButton from './SelectButton/SelectButton';
 interface ProfileSelectorSpec {
 	profile: IProfile;
 	setProfile: Dispatch<SetStateAction<IProfile>>;
-	socket: SocketIOClient.Socket;
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
@@ -35,7 +34,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 
 	return (
 		<div>
-			<div className="bg-blue-darker-blue rounded-md p-4 pt-2 md:max-w-xs">
+			<div className="bg-blue-darker-blue rounded-md p-4 pt-2">
 				<Title>{t('profileSelector.title')}</Title>
 				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
 					<div className="flexflex-col justify-between">

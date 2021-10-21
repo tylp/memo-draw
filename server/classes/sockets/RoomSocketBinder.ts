@@ -53,7 +53,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		socket.on('kick-player-from-room', (kickedPlayerId) => {
 			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
 			const currentPlayersRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
-			if (currentPlayersRoom.hostIs(playerId)) {
+			if (currentPlayersRoom?.hostIs(playerId)) {
 				currentPlayersRoom.remove(kickedPlayerId);
 				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('update-room', currentPlayersRoom);
 				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('kicked-player', kickedPlayerId);
@@ -73,7 +73,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		socket.on('disconnect', () => {
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
-			if (room.hostIs(playerId)) {
+			if (room?.hostIs(playerId)) {
 				room.assignRandomHost();
 			}
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
