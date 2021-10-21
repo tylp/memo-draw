@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
 interface ButtonSpec {
-	children: ReactNode,
-	className?: string,
-	onClick?: React.MouseEventHandler<HTMLButtonElement>,
-	disabled?: boolean,
-	size: 'small' | 'medium',
-	color: 'primary' | 'secondary',
-	icon?: IconDefinition
+    children: ReactNode,
+    className?: string,
+    onClick?: React.MouseEventHandler<HTMLButtonElement>,
+    disabled?: boolean,
+    size: 'small' | 'medium' | 'big',
+    color: 'primary' | 'secondary' | 'light-secondary',
+    icon?: IconDefinition
 }
 
 export default function Button(props: ButtonSpec): JSX.Element {
