@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Player from '../../../../server/classes/Player';
 import Room from '../../../../server/classes/Room';
 import { useSocketRoom } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
-import { Divider, Layout, SectionTitle, Button } from '../../../components/Common';
+import { Divider, Layout, SectionTitle, Button, ProfileSelector } from '../../../components/Common';
 import UserCard from './UserCard';
-import { faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import { GameSetting } from './GameSetting/GameSetting';
 import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
+import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+
+import Modal from '../../Common/Modal/Modal';
+import IProfile from '../../../../server/interfaces/IProfile';
+import ProfileFactory from '../../../../server/factories/ProfileFactory';
 
 interface LobbyViewProps {
 	room: Room;
@@ -29,10 +33,23 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const history = useHistory();
 
 	const [openSuccessSnackbar] = useSuccessSnackbar()
-
-	const [openInfoSnackBar] = useWarningSnackbar()
+	const [openInfoSnackBar] = useInfoSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
+	const [localStorageProfile, setLocalStorageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
+
+	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
+	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
+
+	useEffect(() => {
+		setProfile(localStorageProfile);
+	}, [localStorageProfile])
+
+	const handleSaveProfile = () => {
+		socket.emit('update-profile', profile, () => {
+			setLocalStorageProfile(profile);
+		})
+	}
 
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
 	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
@@ -69,6 +86,15 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	return (
 		<Layout>
+			<Modal
+				visible={isEditProfileVisible}
+				onClose={() => setIsEditProfileVisible(false)}
+				onValidate={handleSaveProfile}
+			>
+				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+					<ProfileSelector profile={profile} setProfile={setProfile}></ProfileSelector>
+				</p>
+			</Modal>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
@@ -77,6 +103,11 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 						onClick={copyLinkToClipboard}
 						icon={faLink}>
 						{t('lobbyView.inviteBtnLabel')}
+					</Button>
+					<Button className='self-center' color='secondary' size='small'
+						onClick={() => setIsEditProfileVisible(true)}
+						icon={faEdit}>
+						{t('lobbyView.editProfileBtnLabel')}
 					</Button>
 					<Button className='self-center' color='secondary' size='small'
 						onClick={leaveGame}
@@ -112,6 +143,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<GameSetting title="game" name="gameModes" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
 				</div>
 			</div>
-		</Layout>
+		</Layout >
 	)
 }
