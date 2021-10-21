@@ -16,6 +16,7 @@ import { GameSetting } from './GameSetting/GameSetting';
 import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
+import { RadioNode } from '../../../../server/enums/RadioNode';
 
 interface LobbyViewProps {
 	room: Room;
@@ -36,13 +37,15 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
     const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
     const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
-	const speedPropertiesValues: SpeedProperties[] = Object.values(SpeedProperties)
+	const speedPropertiesValues: RadioNode[] = Object.values(SpeedProperties)
 		.filter((value) => typeof value === 'number')
-		.map((value) => value as SpeedProperties);
+		.map((value) => value as SpeedProperties)
+        .map((value) => ({value, 'content': t(`speeds.${value}`)}));
 
-	const gameModePropertiesValues: GameModeProperties[] = Object.values(GameModeProperties)
+	const gameModePropertiesValues: RadioNode[] = Object.values(GameModeProperties)
 		.filter((value) => typeof value === 'number')
-		.map((value) => value as GameModeProperties);
+		.map((value) => value as GameModeProperties)
+        .map((value) => ({value, 'content': t(`gameModes.${value}`)}));
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
@@ -105,8 +108,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 				</div>
 				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting<SpeedProperties> title="speed" name="speeds" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
-					<GameSetting<GameModeProperties> title="game" name="gameModes" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
+					<GameSetting title="speed" name="speeds" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
+					<GameSetting title="game" name="gameModes" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
 				</div>
 			</div>
 		</Layout>

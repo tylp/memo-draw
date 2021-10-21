@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RadioNode } from '../../../../server/enums/RadioNode';
 
 interface RadioSpec {
 	className?: string,
 	name: string,
-	list: any,
+	list: RadioNode[],
 	size: 'small' | 'medium' | 'big',
 	color: 'primary' | 'secondary' | 'light-secondary',
     setCurrentValue: Dispatch<SetStateAction<string | number>>,
@@ -34,7 +35,6 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			transition duration-300
 			font-rubik-bold
 			capitalize
-
 			ring-yellow-light-yellow
 		`);
 
@@ -43,7 +43,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 	return (
 		<>
 			{
-				props.list.map(element => <button className={className + (props.currentValue === element ? ' ring-2' : null)} onClick={() => props.setCurrentValue(element)}>{element}</button>)
+				props.list.map(element => <button className={className + (props.currentValue === element.value ? ' ring-2' : null)} onClick={() => props.setCurrentValue(element.value)}>{element.content}</button>)
 			}
 		</>
 	)

@@ -2,16 +2,17 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Button, RadioList, Title } from '../../../Common';
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RadioNode } from '../../../../../server/enums/RadioNode';
 
-interface GameSettingSpec<T> {
+interface GameSettingSpec {
 	name: string,
     title: string,
-	list: T[],
+    list: RadioNode[],
     setCurrentValue: Dispatch<SetStateAction<string | number>>,
     currentValue: string | number
 }
 
-export function GameSetting<T>(props: GameSettingSpec<T>): JSX.Element {
+export function GameSetting(props: GameSettingSpec): JSX.Element {
 	const speedPropertiesValues = Object.values(props.list)
 
 	return (
