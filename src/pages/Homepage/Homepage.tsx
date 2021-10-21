@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
+import Modal from '../../components/Common/Modal/Modal';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -70,6 +71,7 @@ export default function Homepage(): JSX.Element {
 						: (
 							<div className="flex md:space-x-32">
 								<div>
+									<Modal></Modal>
 									<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
 									<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
 									<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
