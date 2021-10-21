@@ -33,11 +33,11 @@ const resources = {
 				'randomize': 'Randomize',
 				'nickname': 'Nickname'
 			},
-			'snackbar': {
-				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+			'alert': {
 				'youGotKicked': 'You got kicked.',
 				'roomDoesNotExist': 'Room does not exist',
-				'successfullyCopied' : 'Copied !'
+				'leavedLobby': 'You leaved the room',
+				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
 			},
 			'gameView': {
 				'playersTitle': 'Players',
@@ -45,10 +45,11 @@ const resources = {
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',
-				'invite': 'Invite',
-				'leave': 'Leave room',
+				'inviteBtnLabel': 'Invite',
+				'successfullyCopied' : 'Invite link copied !',
+				'leaveBtnLabel': 'Leave room',
 				'gameTitle': 'Game',
-				'start': 'Start'
+				'startBtnLabel': 'Start'
 			},
 			'userCard': {
 				'badge': 'It\'s you '

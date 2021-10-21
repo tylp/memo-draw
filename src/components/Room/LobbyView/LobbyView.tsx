@@ -34,7 +34,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
 			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`);
-			openSnackbar(t('snackbar.successfullyCopied'))
+			openSnackbar(t('lobbyView.successfullyCopied'))
 		}
 	}
 
@@ -44,9 +44,11 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 	}
 
-	const quitGame = () => {
+	const leaveGame = () => {
+		openSnackbar('alert.leavedLobby')
 		history.push('/');
-		socket.emit('quit-game');
+		socket.emit('leave-game');
+		socket.emit('reset-linked-room');
 	}
 
 	return (
@@ -58,12 +60,12 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					<Button className='self-center' color='secondary' size='small'
 						onClick={copyLinkToClipboard}
 						icon={faLink}>
-						{t('lobbyView.invite')}
+						{t('lobbyView.inviteBtnLabel')}
 					</Button>
 					<Button className='self-center' color='secondary' size='small'
-						onClick={quitGame}
+						onClick={leaveGame}
 						icon={faTimes}>
-						{t('lobbyView.leave')}
+						{t('lobbyView.leaveBtnLabel')}
 					</Button>
 				</div>
 				<div className="flex flex-row items-center">
@@ -83,7 +85,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 							<Button
 							className='self-center' color='primary' size='small' onClick={startGame}
 							icon={faPlay}>
-								{t('lobbyView.start')}
+								{t('lobbyView.startBtnLabel')}
 							</Button>
 						)
 					}
