@@ -8,7 +8,7 @@ const MAX_SECONDS_POSSIBLE = 10;
 
 export class Game {
 	id: string;
-	creatorPlayerId: string;
+	hostPlayerId: string;
 	players: Array<Player>;
 	currentDrawingIndex = 0;
 	currentNumberOfDrawings = 0;
@@ -19,7 +19,7 @@ export class Game {
 
 	constructor(room: Room) {
 		this.id = room.id;
-		this.creatorPlayerId = room.creatorPlayerId;
+		this.hostPlayerId = room.hostPlayerId;
 		this.players = shuffle(room.players);
 		this.refreshLimitDate();
 	}

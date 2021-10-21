@@ -39,7 +39,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	const startGame = () => {
-		if (props.room.creatorPlayerId === playerId) {
+		if (props.room.hostPlayerId === playerId) {
 			socket.emit('start-game');
 		}
 	}
@@ -72,7 +72,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
 					{
 						props.room?.players.map((player: Player) => (
-							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.creatorPlayerId} />
+							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
 						))
 					}
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
@@ -81,7 +81,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
 					{
-						props.room.creatorPlayerId === playerId && (
+						props.room.hostPlayerId === playerId && (
 							<Button
 								className='self-center' color='primary' size='small' onClick={startGame}
 								icon={faPlay}>
