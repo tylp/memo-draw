@@ -9,6 +9,10 @@ const resources = {
 				'leavedLobby': 'You leaved the room.',
 				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
 			},
+			'modal': {
+				'close': 'Close',
+				'validate': 'Validate'
+			},
 			'homepage': {
 				'start': 'Done !',
 				'rules': {
@@ -46,7 +50,7 @@ const resources = {
 			'lobbyView': {
 				'playersTitle': 'Players',
 				'inviteBtnLabel': 'Invite',
-				'successfullyCopied' : 'Invite link copied !',
+				'successfullyCopied': 'Invite link copied !',
 				'leaveBtnLabel': 'Leave room',
 				'gameTitle': 'Game',
 				'startBtnLabel': 'Start'

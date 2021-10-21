@@ -71,7 +71,15 @@ export default function Homepage(): JSX.Element {
 						: (
 							<div className="flex md:space-x-32">
 								<div>
-									<Modal></Modal>
+									<Modal visible>
+										<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+											I always felt like I could do anything. That’s the main
+											thing people are controlled by! Thoughts- their perception
+											of themselves! They're slowed down by their perception of
+											themselves. If you're taught you can’t do anything, you
+											won’t do anything. I was taught I could do everything.
+										</p>
+									</Modal>
 									<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
 									<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
 									<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
