@@ -10,7 +10,6 @@ import { useHistory } from 'react-router-dom';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
-import Modal from '../../components/Common/Modal/Modal';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
