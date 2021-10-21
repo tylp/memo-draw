@@ -45,7 +45,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	const leaveGame = () => {
-		openSnackbar('alert.leavedLobby')
+		openSnackbar(t('alert.leavedLobby'))
 		history.push('/');
 		socket.emit('leave-game');
 		socket.emit('reset-linked-room');

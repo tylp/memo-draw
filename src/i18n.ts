@@ -3,6 +3,12 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
 	en: {
 		translation: {
+			'alert': {
+				'youGotKicked': 'You got kicked.',
+				'roomDoesNotExist': 'Room does not exist',
+				'leavedLobby': 'You leaved the room',
+				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+			},
 			'homepage': {
 				'start': 'Done !',
 				'rules': {
@@ -32,12 +38,6 @@ const resources = {
 				'face': 'Face',
 				'randomize': 'Randomize',
 				'nickname': 'Nickname'
-			},
-			'alert': {
-				'youGotKicked': 'You got kicked.',
-				'roomDoesNotExist': 'Room does not exist',
-				'leavedLobby': 'You leaved the room',
-				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
 			},
 			'gameView': {
 				'playersTitle': 'Players',

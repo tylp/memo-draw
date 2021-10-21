@@ -42,7 +42,7 @@ const Lobby = (): JSX.Element => {
 		socket.on('kicked-player', (kickedPlayerId) => {
 			if (kickedPlayerId === playerId) {
 				socket.emit('reset-linked-room')
-				openSnackbar('alert.youGotKicked')
+				openSnackbar(t('alert.youGotKicked'))
 				history.push('/')
 			}
 		})
