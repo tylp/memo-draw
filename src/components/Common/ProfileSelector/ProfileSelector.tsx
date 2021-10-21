@@ -1,8 +1,8 @@
 import React from 'react';
-import { Title } from '../../Common';
-import Button from '../../Common/Button/Button';
+import { Title } from '..';
+import Button from '../Button/Button';
 import { ProfileSelectorSpec, SelectButtonSpec } from './ProfileSelector.spec';
-import Avatar from '../../Common/Avatar/Avatar';
+import Avatar from '../Avatar/Avatar';
 
 import { faRandom } from '@fortawesome/free-solid-svg-icons';
 

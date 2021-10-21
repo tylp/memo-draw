@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Homepage from './homepage';
-import JoinRoom from './JoinRoom';
-import Lobby from './Lobby';
+import Homepage from './Homepage/Homepage';
+import JoinRoom from './JoinRoom/JoinRoom';
+import Lobby from './Lobby/Lobby';
 import SnackbarProvider from 'react-simple-snackbar'
 
 export default function App(): JSX.Element {

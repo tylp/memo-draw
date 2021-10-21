@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../server/interfaces/IProfile';
-import { Layout, LoadingFull, SectionTitle } from '../components/Common';
-import Button from '../components/Common/Button/Button';
-import { ProfileSelector } from '../components/Home';
-import RuleItem from '../components/Home/RuleList/RuleItem/RuleItem';
-import { useSocket } from '../hooks';
-import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
-import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
+import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../../server/interfaces/IProfile';
+import { Layout, LoadingFull, SectionTitle, Button, ProfileSelector } from '../../components/Common';
+import { RuleItem } from '../../components/Homepage';
+import { useSocket } from '../../hooks';
+import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
+import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 import { useHistory } from 'react-router-dom';
 
 import { faPlay } from '@fortawesome/free-solid-svg-icons';

@@ -5,13 +5,11 @@ import { useSocketRoom } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
-import { Layout, SectionTitle } from '../../Common';
-import Button from '../../Common/Button/Button';
+import { Divider, Layout, SectionTitle, Button } from '../../../components/Common';
 import UserCard from './UserCard';
 import { faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Divider from '../../Common/Divider/Divider';
 import { useTranslation } from 'react-i18next';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
@@ -21,7 +19,7 @@ export interface LobbyViewProps {
 	room: Room;
 }
 
-export function LobbyView(props: LobbyViewProps): JSX.Element {
+export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
 	const { t } = useTranslation();
 
