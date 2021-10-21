@@ -85,8 +85,8 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					{
 						props.room.creatorPlayerId === playerId && (
 							<Button
-							className='self-center' color='primary' size='small' onClick={startGame}
-							icon={faPlay}>
+								className='self-center' color='primary' size='small' onClick={startGame}
+								icon={faPlay}>
 								{t('lobbyView.startBtnLabel')}
 							</Button>
 						)
