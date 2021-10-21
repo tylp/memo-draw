@@ -7,7 +7,7 @@ interface ModalProps {
 	children: ReactNode,
 	onClose: (() => void);
 	closeButtonTranslationKey?: string | undefined;
-	onValidate?: (() => void);
+	onValidate: (() => void);
 	validateButtonTranslationKey?: string | undefined;
 }
 
