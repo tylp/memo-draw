@@ -79,7 +79,6 @@ export default function Homepage(): JSX.Element {
 									<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
 									<ProfileSelector
 										profile={profile}
-										socket={socket}
 										setProfile={setProfile} />
 									<Button className="mt-2 w-32" color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 								</div>
