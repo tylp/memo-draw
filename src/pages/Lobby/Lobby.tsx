@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useSocketRoom } from '../hooks';
-import useLocalStorage from '../hooks/useLocalStorage/useLocalStorage';
-import RoomType from '../../server/classes/Room';
-import { Game } from '../../server/classes/Game';
-import { LobbyView } from '../components/Room/LobbyView/LobbyView';
-import { GameView } from '../components/Room/GameView/GameView';
-import { LocalStorageKey } from '../hooks/useLocalStorage/useLocalStorage.types';
-import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar';
+import { useSocketRoom } from '../../hooks';
+import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
+import RoomType from '../../../server/classes/Room';
+import { Game } from '../../../server/classes/Game';
+import { LobbyView, GameView } from '../../components/Lobby';
+import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
+import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoadingFull } from '../components/Common';
+import { LoadingFull } from '../../components/Common';
 
 const Lobby = (): JSX.Element => {
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
