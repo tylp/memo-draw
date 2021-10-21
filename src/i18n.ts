@@ -53,7 +53,15 @@ const resources = {
 			},
 			'userCard': {
 				'badge': 'It\'s you'
-			}
+			},
+            'speeds': {
+                '0': 'Slow',
+                '1': 'Normal',
+                '2': 'Fast'
+            },
+            'gameModes': {
+                '0': 'Classic'
+            }
 		}
 	},
 };

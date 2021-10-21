@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface RadioSpec {
 	className?: string,
@@ -6,13 +7,15 @@ interface RadioSpec {
 	list: any,
 	size: 'small' | 'medium' | 'big',
 	color: 'primary' | 'secondary' | 'light-secondary',
+    setCurrentValue: Dispatch<SetStateAction<string | number>>,
+    currentValue: string | number,
 }
 
 export default function RadioList(props: RadioSpec): JSX.Element {
 
-	const [currentSelection, setCurrentSelection] = useState('');
+	const [className, setClassName] = useState('');
 
-	const [labelClassName, setLabelClassName] = useState('');
+    const { t } = useTranslation();
 
 	useEffect(() => {
 		let color = '';
@@ -21,7 +24,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			color = 'bg-grey-light-grey hover:bg-blue-blue text-white-white';
 		}
 
-		setLabelClassName(`
+		setClassName(`
 			${props.className}
 			${color}
 			${props.size === 'big' ? 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4' : null}
@@ -33,21 +36,15 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			capitalize
 
 			ring-yellow-light-yellow
-			focus:ring-2
 		`);
 
-	}, [props.size, props.color])
-
-	console.log(props.list)
+	}, [props.size, props.color, props.currentValue])
 
 	return (
 		<>
 			{
-				props.list.map(element => <button className={labelClassName}>{element}</button>)
+				props.list.map(element => <button className={className + (props.currentValue === element ? ' ring-2' : null)} onClick={() => props.setCurrentValue(element)}>{element}</button>)
 			}
-			{/* <button className={labelClassName}>Slow</button>
-			<button className={labelClassName}>Normal</button>
-			<button className={labelClassName}>Fast</button> */}
 		</>
 	)
 }

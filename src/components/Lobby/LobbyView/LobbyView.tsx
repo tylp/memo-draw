@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Player from '../../../../server/classes/Player';
 import Room from '../../../../server/classes/Room';
 import { useSocketRoom } from '../../../hooks';
@@ -33,12 +33,15 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
+    const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
+    const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+
 	const speedPropertiesValues: SpeedProperties[] = Object.values(SpeedProperties)
-		.filter((value) => typeof value === 'string')
+		.filter((value) => typeof value === 'number')
 		.map((value) => value as SpeedProperties);
 
 	const gameModePropertiesValues: GameModeProperties[] = Object.values(GameModeProperties)
-		.filter((value) => typeof value === 'string')
+		.filter((value) => typeof value === 'number')
 		.map((value) => value as GameModeProperties);
 
 	const copyLinkToClipboard = () => {
@@ -102,8 +105,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 				</div>
 				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting<SpeedProperties> name="speed" list={speedPropertiesValues} />
-					<GameSetting<GameModeProperties> name="game" list={gameModePropertiesValues} />
+					<GameSetting<SpeedProperties> title="speed" name="speeds" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
+					<GameSetting<GameModeProperties> title="game" name="gameModes" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
 				</div>
 			</div>
 		</Layout>
