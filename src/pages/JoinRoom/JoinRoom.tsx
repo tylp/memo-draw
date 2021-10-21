@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useSocketRoom } from '../hooks';
+import { useSocketRoom } from '../../hooks';
 import { useParams, useHistory } from 'react-router-dom';
-import { useDangerSnackbar } from '../hooks/useSnackbar/useSnackbar'
+import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar'
 import { useTranslation } from 'react-i18next';
-import { LoadingFull } from '../components/Common';
+import { LoadingFull } from '../../components/Common';
 
 export default function JoinRoom(): JSX.Element {
 	const { roomId } = useParams();

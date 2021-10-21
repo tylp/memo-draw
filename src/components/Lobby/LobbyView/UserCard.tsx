@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Player from '../../../../server/classes/Player';
+import { Avatar } from '../../../components/Common';
 import { useSocketRoom } from '../../../hooks';
-import Avatar from '../../Common/Avatar/Avatar';
 import { UserCardSpec } from './UserCard.spec';
 
 export default function UserCard(props: UserCardSpec): JSX.Element {

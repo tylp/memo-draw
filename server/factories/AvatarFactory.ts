@@ -1,4 +1,4 @@
-import { IAvatar } from './../../src/components/Common/Avatar/Avatar.spec';
+import { IAvatar } from '../../src/components/Common/Avatar/Avatar.spec';
 import { BodyColor, RubberColor, BodyType, FaceType } from '../interfaces/IProfile';
 import RandomEnumPickerService from '../services/RandomEnumPickerService';
 
