@@ -44,7 +44,7 @@ export function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserProfile key={player.id} player={player} creatorId={props.game.creatorPlayerId} currentPlayer={currentPlayer} />
+							<UserProfile key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 						))
 					}
 				</div>

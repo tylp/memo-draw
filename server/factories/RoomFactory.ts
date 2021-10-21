@@ -3,8 +3,8 @@ import Room from '../classes/Room';
 import IdGeneratorService from '../services/IdGeneratorService';
 
 export default class RoomFactory {
-	public static create(creatorPlayerId: string): Room {
+	public static create(hostPlayerId: string): Room {
 		const roomId = IdGeneratorService.generate()
-		return Application.getRoomStorage().set(roomId, new Room(roomId, creatorPlayerId));
+		return Application.getRoomStorage().set(roomId, new Room(roomId, hostPlayerId));
 	}
 }
