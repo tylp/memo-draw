@@ -99,7 +99,9 @@ export default class RoomSocketBinder extends SocketBinder {
 			const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
-
+			if (room?.hostIs(playerId)) {
+				room.assignRandomHost();
+			}
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}
