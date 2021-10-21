@@ -5,13 +5,11 @@ import { useSocketRoom } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
-import { Layout, SectionTitle } from '../../Common';
-import Button from '../../Common/Button/Button';
+import { Divider, Layout, SectionTitle, Button } from '../../../components/Common';
 import UserCard from './UserCard';
 import { faChevronLeft, faChevronRight, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Divider from '../../Common/Divider/Divider';
 import { useTranslation } from 'react-i18next';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import { GameSetting } from './GameSetting/GameSetting';
@@ -22,7 +20,7 @@ export interface LobbyViewProps {
 	room: Room;
 }
 
-export function LobbyView(props: LobbyViewProps): JSX.Element {
+export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketRoom();
 	const { t } = useTranslation();
 
@@ -42,7 +40,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	const startGame = () => {
-		if (props.room.creatorPlayerId === playerId) {
+		if (props.room.hostPlayerId === playerId) {
 			socket.emit('start-game');
 		}
 	}
@@ -75,7 +73,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
 					{
 						props.room?.players.map((player: Player) => (
-							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.creatorPlayerId} />
+							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
 						))
 					}
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
@@ -84,7 +82,7 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
 					{
-						props.room.creatorPlayerId === playerId && (
+						props.room.hostPlayerId === playerId && (
 							<Button
 								className='self-center' color='primary' size='small' onClick={startGame}
 								icon={faPlay}>

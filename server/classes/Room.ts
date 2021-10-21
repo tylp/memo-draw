@@ -1,17 +1,18 @@
 import Application from './Application';
 import { Game } from './Game';
 import Player from './Player';
+import { random } from 'lodash';
 
 export default class Room {
 	id: string;
-	creatorPlayerId: string;
+	hostPlayerId: string;
 	players: Array<Player>;
 	hasStarted: boolean;
 	game: Game;
 
-	constructor(id: string, creatorPlayerId: string) {
+	constructor(id: string, hostPlayerId: string) {
 		this.id = id;
-		this.creatorPlayerId = creatorPlayerId;
+		this.hostPlayerId = hostPlayerId;
 		this.hasStarted = false;
 		this.players = [];
 	}
@@ -33,8 +34,8 @@ export default class Room {
 		return this.players.findIndex(e => e.id === player.id) !== -1;
 	}
 
-	creatorIs(playerId: string): boolean {
-		return this.creatorPlayerId === playerId;
+	hostIs(playerId: string): boolean {
+		return this.hostPlayerId === playerId;
 	}
 
 	isEmpty(): boolean {
@@ -56,5 +57,17 @@ export default class Room {
 
 	getSocketRoomName(): string {
 		return Room.getRoomName(this.id);
+	}
+
+	assignRandomHost(): void {
+		this.assignHost(this.players[random(this.players.length - 1)]?.id);
+	}
+
+	assignHost(playerId: string): void {
+		this.hostPlayerId = playerId;
+	}
+
+	hasHost(): boolean {
+		return !!this.hostPlayerId;
 	}
 }

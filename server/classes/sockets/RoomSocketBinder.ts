@@ -19,13 +19,16 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onJoinRoom(socket: Socket): void {
 		socket.on('join-room', (ack) => {
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+			const { playerId, sessionId } = SocketIdentifierService.getIdentifiersOf(socket);
 			const roomId = Application.getPlayerRoomStorage().get(sessionId);
 			if (Application.getRoomStorage().containsKey(roomId)) {
 				const session = Application.getSessionStorage().get(sessionId);
 				Application.getPlayerRoomStorage().set(sessionId, roomId);
 				socket.join(Room.getRoomName(roomId))
 				const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
+				if (!updatedRoom.hasHost()) {
+					updatedRoom.assignHost(playerId);
+				}
 				socket.to(Room.getRoomName(roomId)).emit('update-room', updatedRoom);
 				ack(updatedRoom);
 			} else {
@@ -50,7 +53,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		socket.on('kick-player-from-room', (kickedPlayerId) => {
 			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
 			const currentPlayersRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
-			if (currentPlayersRoom.creatorIs(playerId)) {
+			if (currentPlayersRoom.hostIs(playerId)) {
 				currentPlayersRoom.remove(kickedPlayerId);
 				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('update-room', currentPlayersRoom);
 				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('kicked-player', kickedPlayerId);
@@ -70,6 +73,9 @@ export default class RoomSocketBinder extends SocketBinder {
 		socket.on('disconnect', () => {
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
+			if (room.hostIs(playerId)) {
+				room.assignRandomHost();
+			}
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}
@@ -79,7 +85,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room = Application.getRoomStorage().get(roomId);
-			if (room.creatorPlayerId === player.id) {
+			if (room.hostPlayerId === player.id) {
 				room.startGame();
 				socket.emit('game-started', room, room.game);
 				socket.to(Room.getRoomName(roomId)).emit('game-started', room, room.game);
@@ -93,7 +99,9 @@ export default class RoomSocketBinder extends SocketBinder {
 			const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
-
+			if (room?.hostIs(playerId)) {
+				room.assignRandomHost();
+			}
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}

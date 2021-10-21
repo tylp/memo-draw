@@ -4,8 +4,7 @@ import Player from '../../../../server/classes/Player';
 import { useSocketRoom } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
-import { Layout, SectionTitle } from '../../Common';
-import Button from '../../Common/Button/Button';
+import { Layout, SectionTitle, Button } from '../../../components/Common';
 import UserProfile from './UserProfile';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
@@ -18,7 +17,7 @@ interface GameProps {
 	game: Game;
 }
 
-export function GameView(props: GameProps): JSX.Element {
+export default function GameView(props: GameProps): JSX.Element {
 	const socket = useSocketRoom();
 	const { t } = useTranslation();
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
@@ -44,7 +43,7 @@ export function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserProfile key={player.id} player={player} creatorId={props.game.creatorPlayerId} currentPlayer={currentPlayer} />
+							<UserProfile key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 						))
 					}
 				</div>

@@ -4,7 +4,11 @@ import '../../styles/globals.css';
 import '../i18n';
 
 function MemoDraw({ Component, pageProps }: AppProps): JSX.Element {
-	return typeof window === 'undefined' ? null : <Component {...pageProps} />
+	return (
+		<div suppressHydrationWarning>
+			{typeof window === 'undefined' ? null : <Component {...pageProps} />}
+		</div>
+	)
 }
 
 export default MemoDraw;
