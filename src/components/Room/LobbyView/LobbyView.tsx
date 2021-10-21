@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Divider from '../../Common/Divider/Divider';
 import { useTranslation } from 'react-i18next';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import { GameSetting } from './GameSetting/GameSetting';
 
 import { useHistory } from 'react-router-dom'
 
@@ -92,6 +93,10 @@ export function LobbyView(props: LobbyViewProps): JSX.Element {
 						)
 					}
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
+				</div>
+				<div className="flex flex-row justify-evenly  flex-wrap">
+					<GameSetting />
+					<GameSetting />
 				</div>
 			</div>
 		</Layout>
