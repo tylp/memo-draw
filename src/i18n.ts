@@ -3,6 +3,12 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
 	en: {
 		translation: {
+			'alert': {
+				'youGotKicked': 'You got kicked.',
+				'roomDoesNotExist': 'Room does not exist.',
+				'leavedLobby': 'You leaved the room.',
+				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+			},
 			'homepage': {
 				'start': 'Done !',
 				'rules': {
@@ -21,7 +27,7 @@ const resources = {
 					}
 				},
 				'profile': {
-					'title': 'Who are you ?',
+					'title': 'Who are you?',
 					'subtitle': 'Hey there!'
 				}
 			},
@@ -33,24 +39,20 @@ const resources = {
 				'randomize': 'Randomize',
 				'nickname': 'Nickname'
 			},
-			'snackbar': {
-				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
-				'youGotKicked': 'You got kicked.',
-				'roomDoesNotExist': 'Room does not exist',
-				'successfullyCopied' : 'Copied !'
-			},
 			'gameView': {
 				'playersTitle': 'Players',
 				'sendDrawing': 'Send Drawing'
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',
-				'invite': 'Invite',
+				'inviteBtnLabel': 'Invite',
+				'successfullyCopied' : 'Invite link copied !',
+				'leaveBtnLabel': 'Leave room',
 				'gameTitle': 'Game',
-				'start': 'Start'
+				'startBtnLabel': 'Start'
 			},
 			'userCard': {
-				'badge': 'It\'s you '
+				'badge': 'It\'s you'
 			}
 		}
 	},

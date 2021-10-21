@@ -29,6 +29,7 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 					border-white-white
 					border-opacity-10
 					rounded-xl
+					w-3/5
 				'>
 					{children}
 				</div>

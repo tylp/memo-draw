@@ -7,7 +7,7 @@ export default function Divider(props: DividerSpec): JSX.Element {
 	const [className, setClassName] = useState('');
 
 	useEffect(() => {
-		setClassName(`border-t-4 border-opacity-25 border-white-white rounded-md ${props.className}`);
+		setClassName(`w-full ml-12 mr-12 self-center border-t-4 border-opacity-25 border-white-white rounded-md ${props.className}`);
 	}, [props.className])
 
 	return (
