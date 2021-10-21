@@ -55,9 +55,7 @@ const resources = {
 				'badge': 'It\'s you'
 			},
             'speeds': {
-                '0': 'Slow',
-                '1': 'Normal',
-                '2': 'Fast'
+                '0': 'Normal',
             },
             'gameModes': {
                 '0': 'Classic'
