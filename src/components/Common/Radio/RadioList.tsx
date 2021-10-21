@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 
 interface RadioSpec {
