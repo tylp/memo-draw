@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import { GameSetting } from './GameSetting/GameSetting';
+import { SpeedProperties, GameModeProperties } from "../../../../server/enums/GameProperties";
 
 import { useHistory } from 'react-router-dom'
 
@@ -31,6 +32,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [openInfoSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
+
+	const speedPropertiesValues = Object.values(SpeedProperties).filter(e => !Number.isInteger(e))
+	const gameModePropertiesValues = Object.values(GameModeProperties).filter(e => !Number.isInteger(e))
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
@@ -92,9 +96,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					}
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 				</div>
-				<div className="flex flex-row justify-evenly  flex-wrap">
-					<GameSetting />
-					<GameSetting />
+				<div className="flex flex-row justify-start flex-wrap">
+					<GameSetting<SpeedProperties> name="speed" list={speedPropertiesValues}/>
+					<GameSetting<GameModeProperties> name="game" list={gameModePropertiesValues}/>
 				</div>
 			</div>
 		</Layout>
