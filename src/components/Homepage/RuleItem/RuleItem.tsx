@@ -1,7 +1,12 @@
 import React from 'react'
-import { RuleItemSpec } from './RuleItem.spec';
 
-const RuleItem = (props: RuleItemSpec) : JSX.Element => {
+interface RuleItemSpec {
+	id: number,
+	title: string,
+	content?: string,
+}
+
+const RuleItem = (props: RuleItemSpec): JSX.Element => {
 	return (
 		<div className="flex mb-7">
 			<div className="items-center text-center bg-white-white rounded-full h-12 w-12 mr-8">

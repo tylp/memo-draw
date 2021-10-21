@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import AvatarService from '../../../services/AvatarService';
 import IdGeneratorService from '../../../../server/services/IdGeneratorService';
+import { IAvatar, IBody, IFace } from '../../../../server/interfaces/IAvatar';
 
-import { AvatarSpecs, IBody, IFace } from './Avatar.spec';
+interface AvatarSpecs {
+	avatar: IAvatar;
+}
 
 export default function Avatar(props: AvatarSpecs): JSX.Element {
 

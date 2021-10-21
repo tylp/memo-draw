@@ -15,7 +15,7 @@ import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackb
 
 import { useHistory } from 'react-router-dom'
 
-export interface LobbyViewProps {
+interface LobbyViewProps {
 	room: Room;
 }
 
