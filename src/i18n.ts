@@ -23,7 +23,7 @@ const resources = {
 					},
 					2: {
 						'title': 'Invite your friends',
-						'content': 'Call your friends on Discord and send them a link!'
+						'content': 'Call your friends and send them an invite!'
 					},
 					3: {
 						'title': 'Have fun!',
