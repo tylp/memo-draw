@@ -55,7 +55,7 @@ export default class StylingBuilder {
 		this.result += ' ';
 	}
 
-	getResult() {
+	getResult(): string {
 		return this.result;
 	}
 

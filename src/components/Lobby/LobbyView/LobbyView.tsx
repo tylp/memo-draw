@@ -54,6 +54,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
 	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
 		return Object.values(T)
 			.filter((value) => typeof value === 'number')
