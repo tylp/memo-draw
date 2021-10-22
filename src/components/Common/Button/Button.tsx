@@ -7,9 +7,9 @@ import StylingBuilder from '../../../../server/classes/StylingBuilder';
 
 interface ButtonSpec {
 	children: ReactNode,
-	className?: string,
 	onClick?: React.MouseEventHandler<HTMLButtonElement>,
 	disabled?: boolean,
+	fullWidth?: boolean,
 	size: Size,
 	color: Color,
 	icon?: IconDefinition
@@ -23,12 +23,12 @@ export default function Button(props: ButtonSpec): JSX.Element {
 		setClassName(`
 						rounded-md
 						whitespace-nowrap
-						${props.className}
+						${props.fullWidth ? 'w-full' : ''}
 						${(new StylingBuilder(props.disabled ? 'disabled' : props.color, props.size)).buildColor().buildSize().getResult()}
 						transition duration-300
 						font-rubik-bold uppercase
 					`);
-	}, [props.disabled, props.className, props.size, props.color])
+	}, [props.disabled, props.size, props.color, props.fullWidth])
 
 	return (
 		<button

@@ -7,6 +7,7 @@ import IProfile, { RubberColor, BodyColor, FaceType } from '../../../../server/i
 import { useTranslation } from 'react-i18next';
 import AvatarFactory from '../../../../server/factories/AvatarFactory';
 import SelectButton from './SelectButton/SelectButton';
+import Box from '../Box/Box';
 
 interface ProfileSelectorSpec {
 	profile: IProfile;
@@ -54,11 +55,11 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 					</div>
 				</div>
 
-				<div className="mt-4">
-					<Button className="mt-2" color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
+				<Box mt={2}>
+					<Button fullWidth color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
 					<Title>{t('profileSelector.nickname')}</Title>
 					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
-				</div>
+				</Box>
 			</div>
 		</div>
 	)
