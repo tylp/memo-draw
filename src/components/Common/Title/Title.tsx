@@ -15,7 +15,7 @@ export default function Title({ children }: TitleSpec): JSX.Element {
 					l364.066-208.49C539.351,300.887,539.351,251.731,486.413,221.412z"/>
 				</g>
 			</svg>
-			<h1 className="text-white-white font-bold leading-3">
+			<h1 className="capitalize text-white-white font-bold leading-3">
 				{children}
 			</h1>
 		</div>

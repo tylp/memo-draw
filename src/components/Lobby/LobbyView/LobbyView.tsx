@@ -11,9 +11,13 @@ import { faChevronLeft, faChevronRight, faEdit, faPlay } from '@fortawesome/free
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import { GameSetting } from './GameSetting/GameSetting';
+import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
+import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
+import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
@@ -46,6 +50,21 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			setLocalStorageProfile(profile);
 		})
 	}
+
+	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
+	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
+		return Object.values(T)
+			.filter((value) => typeof value === 'number')
+			.map((value) => value as typeof T)
+			.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
+	}
+
+	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
+
+	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperties, 'gamemodes')
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
@@ -110,6 +129,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row align-middle">
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
+					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 					{
 						props.room.hostPlayerId === playerId && (
 							<Button
@@ -119,7 +139,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 							</Button>
 						)
 					}
-					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
+				</div>
+				<div className="flex flex-row justify-start flex-wrap">
+					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
+					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
 				</div>
 			</div>
 		</Layout >
