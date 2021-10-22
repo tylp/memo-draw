@@ -1,17 +1,17 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { Size } from '../../../../server/types/size';
-import { Color } from '../../../../server/types/color';
+import { Size } from '../../../../server/types/Size';
+import { Color } from '../../../../server/types/Color';
 
 interface ButtonSpec {
-    children: ReactNode,
-    className?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>,
-    disabled?: boolean,
-    size: Size,
-    color: Color,
-    icon?: IconDefinition
+	children: ReactNode,
+	className?: string,
+	onClick?: React.MouseEventHandler<HTMLButtonElement>,
+	disabled?: boolean,
+	size: Size,
+	color: Color,
+	icon?: IconDefinition
 }
 
 export default function Button(props: ButtonSpec): JSX.Element {

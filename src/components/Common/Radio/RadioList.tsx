@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
-import { Color } from '../../../../server/types/color';
-import { Size } from '../../../../server/types/size';
+import { Color } from '../../../../server/types/Color';
+import { Size } from '../../../../server/types/Size';
 
 interface RadioSpec {
 	className?: string,
