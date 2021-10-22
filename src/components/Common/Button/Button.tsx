@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { Size } from '../../../../server/types/Size';
 import { Color } from '../../../../server/types/Color';
-import StylingBuilder from '../../../../server/classes/StylingBuilder8';
+import StylingBuilder from '../../../../server/classes/StylingBuilder';
 
 interface ButtonSpec {
 	children: ReactNode,

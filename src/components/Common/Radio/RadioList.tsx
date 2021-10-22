@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import StylingBuilder from '../../../../server/classes/stylingBuilder';
+import StylingBuilder from '../../../../server/classes/StylingBuilder';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 import { Color } from '../../../../server/types/Color';
 import { Size } from '../../../../server/types/Size';
