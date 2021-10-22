@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import StylingBuilder from '../../../../server/classes/stylingBuilder';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 import { Color } from '../../../../server/types/Color';
 import { Size } from '../../../../server/types/Size';
@@ -17,16 +18,10 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 	const [className, setClassName] = useState('');
 
 	useEffect(() => {
-		let color = '';
-
-		if (props.color === 'light-secondary') {
-			color = 'bg-grey-light-grey hover:bg-blue-blue text-white-white';
-		}
 
 		setClassName(`
 			${props.className}
-			${color}
-			${props.size === 'large' ? 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4' : null}
+			${(new StylingBuilder(props.color, props.size)).buildColor().buildSize().getResult()}
 			text-center
 			w-32
 			rounded-md
