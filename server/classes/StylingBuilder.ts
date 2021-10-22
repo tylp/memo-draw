@@ -3,9 +3,9 @@ import { Size } from '../types/Size';
 
 export default class StylingBuilder {
 
-	color = '';
-	size = '';
-	result = '';
+	private color: Color | 'disabled';
+	private size: Size;
+	private result = '';
 
 	constructor(color: Color | 'disabled', size: Size) {
 		this.color = color;

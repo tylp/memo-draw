@@ -5,7 +5,6 @@ import { Color } from '../../../../server/types/Color';
 import { Size } from '../../../../server/types/Size';
 
 interface RadioSpec {
-	className?: string,
 	list: IRadioNode[],
 	size: Size,
 	color: Color,
@@ -20,7 +19,6 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 	useEffect(() => {
 
 		setClassName(`
-			${props.className}
 			${(new StylingBuilder(props.color, props.size)).buildColor().buildSize().getResult()}
 			text-center
 			w-32
@@ -31,7 +29,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 			ring-yellow-light-yellow
 		`);
 
-	}, [props.size, props.color, props.currentValue, props.className])
+	}, [props.size, props.color, props.currentValue])
 
 	return (
 		<>
