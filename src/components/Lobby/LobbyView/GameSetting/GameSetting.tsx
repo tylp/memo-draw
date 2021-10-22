@@ -7,14 +7,14 @@ import { useTranslation } from 'react-i18next';
 
 
 interface GameSettingSpec {
-    for: string,
+	for: string,
 	list: IRadioNode[],
 	setCurrentValue: Dispatch<SetStateAction<string | number>>,
 	currentValue: string | number
 }
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {
-    const { t } = useTranslation()
+	const { t } = useTranslation()
 	const speedPropertiesValues = Object.values(props.list)
 
 	return (

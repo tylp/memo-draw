@@ -127,11 +127,11 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row align-middle">
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
-                    <div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
+					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 					{
-                        props.room.hostPlayerId === playerId && (
-                            <Button
-                            className='self-center' color='primary' size='small' onClick={startGame}
+						props.room.hostPlayerId === playerId && (
+							<Button
+							className='self-center' color='primary' size='small' onClick={startGame}
 								icon={faPlay}>
 								{t('lobbyView.startBtnLabel')}
 							</Button>
