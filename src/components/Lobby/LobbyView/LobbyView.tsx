@@ -48,6 +48,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const handleSaveProfile = () => {
 		socket.emit('update-profile', profile, () => {
 			setLocalStorageProfile(profile);
+			setIsEditProfileVisible(false)
 		})
 	}
 
