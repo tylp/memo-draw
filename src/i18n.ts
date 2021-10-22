@@ -18,16 +18,16 @@ const resources = {
 				'rules': {
 					'title': 'The Game',
 					1: {
-						'title': 'Rule 1',
-						'content': 'Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet...'
+						'title': 'Create a lobby',
+						'content': 'Customize your avatar and, when ready, click done!'
 					},
 					2: {
-						'title': 'Rule 2',
-						'content': 'Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet...'
+						'title': 'Invite your friends',
+						'content': 'Call your friends and send them an invite!'
 					},
 					3: {
-						'title': 'Rule 3',
-						'content': 'Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet... Lorem Ipsum Dolor sit amet...'
+						'title': 'Have fun!',
+						'content': 'Draw faster and faster, be the last one standing!'
 					}
 				},
 				'profile': {
