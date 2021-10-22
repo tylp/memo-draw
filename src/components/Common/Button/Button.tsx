@@ -35,8 +35,8 @@ export default function Button(props: ButtonSpec): JSX.Element {
 						rounded-md
 						whitespace-nowrap
 						${props.className}
-						${props.size === 'small' ? 'pl-4 pr-3 m-1 mr-1 h-8' : null}
-						${props.size === 'medium' ? 'pl-4 pr-4 pt-1 ml-1 mr-1 pb-1' : null}
+						${props.size === 'small' ? 'pl-4 pr-3 h-8' : null}
+						${props.size === 'medium' ? 'pl-4 pr-4 pt-1 pb-1' : null}
 						transition duration-300
 						font-rubik-bold uppercase
 						${color}
