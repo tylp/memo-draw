@@ -25,7 +25,7 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 			<p className="leading-tight text-white-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
 			<div className="flex flex-row justify-around">
-				<RadioList name={props.name} list={speedPropertiesValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='big' />
+				<RadioList name={props.name} list={speedPropertiesValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
 			</div>
 		</div>
 	);

@@ -1,14 +1,16 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { Size } from '../../../../server/types/size';
+import { Color } from '../../../../server/types/color';
 
 interface ButtonSpec {
     children: ReactNode,
     className?: string,
     onClick?: React.MouseEventHandler<HTMLButtonElement>,
     disabled?: boolean,
-    size: 'small' | 'medium' | 'big',
-    color: 'primary' | 'secondary' | 'light-secondary',
+    size: Size,
+    color: Color,
     icon?: IconDefinition
 }
 
@@ -40,7 +42,7 @@ export default function Button(props: ButtonSpec): JSX.Element {
 						${props.className}
 						${props.size === 'small' ? 'pl-4 pr-3 m-1 mr-1 h-8' : null}
 						${props.size === 'medium' ? 'pl-4 pr-4 pt-1 ml-1 mr-1 pb-1' : null}
-						${props.size === 'big' ? 'w-1/2 pt-4 pb-4 ml-1 mr-1' : null}
+						${props.size === 'large' ? 'w-1/2 pt-4 pb-4 ml-1 mr-1' : null}
 						transition duration-300
 						font-rubik-bold uppercase
 						${color}

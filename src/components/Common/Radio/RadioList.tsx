@@ -1,12 +1,14 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
+import { Color } from '../../../../server/types/color';
+import { Size } from '../../../../server/types/size';
 
 interface RadioSpec {
 	className?: string,
 	name: string,
 	list: IRadioNode[],
-	size: 'small' | 'medium' | 'big',
-	color: 'primary' | 'secondary' | 'light-secondary',
+	size: Size,
+	color: Color,
 	setCurrentValue: Dispatch<SetStateAction<string | number>>,
 	currentValue: string | number,
 }
@@ -25,7 +27,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 		setClassName(`
 			${props.className}
 			${color}
-			${props.size === 'big' ? 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4' : null}
+			${props.size === 'large' ? 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4' : null}
 			text-center
 			w-32
 			rounded-md
