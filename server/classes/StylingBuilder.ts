@@ -1,5 +1,5 @@
-import { Color } from "../types/Color";
-import { Size } from "../types/Size";
+import { Color } from '../types/Color';
+import { Size } from '../types/Size';
 
 export default class StylingBuilder {
 

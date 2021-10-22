@@ -56,9 +56,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
 		return Object.values(T)
-		.filter((value) => typeof value === 'number')
-		.map((value) => value as typeof T)
-		.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
+			.filter((value) => typeof value === 'number')
+			.map((value) => value as typeof T)
+			.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
 	}
 
 	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
