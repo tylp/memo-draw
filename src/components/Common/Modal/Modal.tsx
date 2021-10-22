@@ -3,6 +3,8 @@ import { SectionTitle } from '..';
 import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
 
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+
 interface ModalProps {
 	visible: boolean;
 	children: ReactNode,
@@ -37,10 +39,11 @@ export default function Modal(props: ModalProps): JSX.Element {
 						<div className="relative pl-10 pr-10 flex-auto">
 							{props.children}
 						</div>
-						<div className="flex items-center justify-end p-6">
+						<div className="flex items-center pl-10 pr-10 pb-6 justify-end">
 							<Button
 								color='primary'
 								size='medium'
+								icon={faTimes}
 								onClick={() => props.onClose()}
 							>
 								{t(props.closeButtonTranslationKey)}
@@ -48,6 +51,7 @@ export default function Modal(props: ModalProps): JSX.Element {
 							<Button
 								color='primary'
 								size='medium'
+								icon={faCheck}
 								onClick={() => props.onValidate()}
 							>
 								{t(props.validateButtonTranslationKey)}
