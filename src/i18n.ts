@@ -70,7 +70,7 @@ const resources = {
 				'title': 'Gamemode',
 				'description': 'Play the classic Memodraw, or a different mode !'
 			},
-			'gameModes': {
+			'gamemodes': {
 				'0': 'Classic'
 			}
 		}

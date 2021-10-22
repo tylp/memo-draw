@@ -54,15 +54,16 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
 	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
-	const speedPropertiesValues: IRadioNode[] = Object.values(SpeedProperties)
+	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
+		return Object.values(T)
 		.filter((value) => typeof value === 'number')
-		.map((value) => value as SpeedProperties)
-		.map((value) => ({value, 'content': t(`speeds.${value}`)}));
+		.map((value) => value as typeof T)
+		.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
+	}
 
-	const gameModePropertiesValues: IRadioNode[] = Object.values(GameModeProperties)
-		.filter((value) => typeof value === 'number')
-		.map((value) => value as GameModeProperties)
-		.map((value) => ({value, 'content': t(`gameModes.${value}`)}));
+	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
+
+	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperties, 'gamemodes')
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {

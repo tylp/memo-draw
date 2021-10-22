@@ -15,7 +15,7 @@ interface GameSettingSpec {
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {
 	const { t } = useTranslation()
-	const speedPropertiesValues = Object.values(props.list)
+	const gameSettingPropertyValues = Object.values(props.list)
 
 	return (
 		<div className="pt-3 pb-3 pl-3 pr-3 mr-4 h-auto w-96 bg-blue-darker-blue rounded-md flex flex-col">
@@ -27,7 +27,7 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 			<p className="leading-tight text-white-white">{t(`${props.for}.description`)}</p>
 
 			<div className="flex flex-row justify-around">
-				<RadioList list={speedPropertiesValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
+				<RadioList list={gameSettingPropertyValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
 			</div>
 		</div>
 	);
