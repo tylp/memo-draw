@@ -5,7 +5,6 @@ import { Size } from '../../../../server/types/size';
 
 interface RadioSpec {
 	className?: string,
-	name: string,
 	list: IRadioNode[],
 	size: Size,
 	color: Color,

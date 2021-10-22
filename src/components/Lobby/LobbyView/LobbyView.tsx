@@ -139,8 +139,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					}
 				</div>
 				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting title="speed" name="speeds" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
-					<GameSetting title="game" name="gameModes" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
+					<GameSetting for="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
+					<GameSetting for="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
 				</div>
 			</div>
 		</Layout >
