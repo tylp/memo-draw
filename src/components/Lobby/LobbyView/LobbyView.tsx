@@ -21,6 +21,7 @@ import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
+import Box from '../../Common/Box/Box';
 
 interface LobbyViewProps {
 	room: Room;
@@ -60,7 +61,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		return Object.values(T)
 			.filter((value) => typeof value === 'number')
 			.map((value) => value as typeof T)
-			.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
+			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
 	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
@@ -102,21 +103,27 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider />
-					<Button className='self-center' color='secondary' size='small'
-						onClick={copyLinkToClipboard}
-						icon={faLink}>
-						{t('lobbyView.inviteBtnLabel')}
-					</Button>
-					<Button className='self-center' color='secondary' size='small'
-						onClick={() => setIsEditProfileVisible(true)}
-						icon={faEdit}>
-						{t('lobbyView.editProfileBtnLabel')}
-					</Button>
-					<Button className='self-center' color='secondary' size='small'
-						onClick={leaveGame}
-						icon={faTimes}>
-						{t('lobbyView.leaveBtnLabel')}
-					</Button>
+					<Box mr={2} className="self-center">
+						<Button color='secondary' size='small'
+							onClick={copyLinkToClipboard}
+							icon={faLink}>
+							{t('lobbyView.inviteBtnLabel')}
+						</Button>
+					</Box>
+					<Box mr={2} className="self-center">
+						<Button color='secondary' size='small'
+							onClick={() => setIsEditProfileVisible(true)}
+							icon={faEdit}>
+							{t('lobbyView.editProfileBtnLabel')}
+						</Button>
+					</Box>
+					<Box className="self-center">
+						<Button color='secondary' size='small'
+							onClick={leaveGame}
+							icon={faTimes}>
+							{t('lobbyView.leaveBtnLabel')}
+						</Button>
+					</Box>
 				</div>
 				<div className="flex flex-row items-center">
 					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
@@ -133,17 +140,19 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 					{
 						props.room.hostPlayerId === playerId && (
-							<Button
-								className='self-center' color='primary' size='small' onClick={startGame}
-								icon={faPlay}>
-								{t('lobbyView.startBtnLabel')}
-							</Button>
+							<Box className="self-center" ml={2}>
+								<Button
+									color='primary' size='small' onClick={startGame}
+									icon={faPlay}>
+									{t('lobbyView.startBtnLabel')}
+								</Button>
+							</Box>
 						)
 					}
 				</div>
 				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
-					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
+					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
+					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
 				</div>
 			</div>
 		</Layout >

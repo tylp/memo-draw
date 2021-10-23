@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
+import Box from '../../components/Common/Box/Box';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -80,7 +81,9 @@ export default function Homepage(): JSX.Element {
 									<ProfileSelector
 										profile={profile}
 										setProfile={setProfile} />
-									<Button className="mt-2 w-32" color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+									<Box mt={2}>
+										<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+									</Box>
 								</div>
 							</div>
 						)

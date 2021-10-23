@@ -32,17 +32,17 @@ export default class StylingBuilder {
 		this.addSeparator()
 		return this;
 	}
-	
+
 	buildSize(): StylingBuilder {
 		switch (this.size) {
 			case 'small':
-				this.result += 'pl-4 pr-3 m-1 mr-1 h-8';
+				this.result += 'pl-4 pr-3 h-8';
 				break;
 			case 'medium':
-				this.result += 'pl-4 pr-4 pt-1 ml-1 mr-1 pb-1';
+				this.result += 'pl-4 pr-4 pt-1 pb-1';
 				break;
 			case 'large':
-				this.result += 'pt-5 pb-5 pl-4 pr-4 ml-1 mr-1 mt-4';
+				this.result += 'pt-5 pb-5 pl-4 pr-4';
 				break;
 			default:
 				throw new Error('Size not found.')
