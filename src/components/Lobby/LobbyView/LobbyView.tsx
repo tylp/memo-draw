@@ -21,6 +21,7 @@ import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
+import Carousel from '../../Common/Carousel/Carousel';
 
 interface LobbyViewProps {
 	room: Room;
@@ -60,7 +61,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		return Object.values(T)
 			.filter((value) => typeof value === 'number')
 			.map((value) => value as typeof T)
-			.map((value) => ({value, 'content': t(`${translationKey}.${value}`)}));
+			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
 	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
@@ -119,13 +120,19 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Button>
 				</div>
 				<div className="flex flex-row items-center">
-					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
-					{
-						props.room?.players.map((player: Player) => (
-							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-						))
-					}
-					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
+					<Carousel>
+						<Box pt={2}>
+							{
+								props.room?.players.map((player: Player) => (
+									<>
+										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									</>
+								))
+							}
+						</Box>
+					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
@@ -142,8 +149,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					}
 				</div>
 				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed}/>
-					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode}/>
+					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
+					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
 				</div>
 			</div>
 		</Layout >
