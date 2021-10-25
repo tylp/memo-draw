@@ -21,7 +21,7 @@ interface Margin {
 }
 
 interface BoxProps extends Padding, Margin {
-	children?: ReactNode;
+	children: ReactNode;
 	className?: string;
 }
 
