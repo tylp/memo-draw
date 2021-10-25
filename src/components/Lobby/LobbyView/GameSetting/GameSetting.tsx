@@ -4,6 +4,7 @@ import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRadioNode } from '../../../../../server/interfaces/IRadioNode';
 import { useTranslation } from 'react-i18next';
+import Box from '../../../Common/Box/Box';
 
 
 interface GameSettingSpec {
@@ -27,7 +28,9 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 				<p className="leading-tight text-white-white">{t(`${props.translationKey }.description`)}</p>
 			</div>
 			<div className="flex flex-row justify-around">
-				<RadioList list={gameSettingPropertyValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
+				<Box mt={2}>
+					<RadioList list={gameSettingPropertyValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
+				</Box>
 			</div>
 		</div>
 	);
