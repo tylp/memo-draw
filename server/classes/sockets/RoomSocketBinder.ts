@@ -65,6 +65,7 @@ export default class RoomSocketBinder extends SocketBinder {
 		})
 	}
 
+	//TODO : Refactor by using service (in another issue)
 	private static onLeaveGame(socket: Socket): void {
 		socket.on('leave-game', () => {
 			RoomFacade.quit(socket)
