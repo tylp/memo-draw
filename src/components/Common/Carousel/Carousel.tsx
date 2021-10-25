@@ -11,8 +11,22 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 	const leftArrow = useRef<HTMLDivElement>(null);
 	const rightArrow = useRef<HTMLDivElement>(null);
 	const container = useRef<HTMLDivElement>(null);
+	const [isMaxLeft, setIsMaxLeft] = useState(false);
+	const [isMaxRight, setIsMaxRight] = useState(false);
 
 	const [scrollerInterval, setScrollerInterval] = useState<NodeJS.Timer>();
+
+	const calculateMaxScroll = () => {
+		if (container.current) {
+			const maxScrollLeft = container.current.scrollWidth - container.current.clientWidth;
+			setIsMaxLeft(container.current.scrollLeft === 0);
+			setIsMaxRight(container.current.scrollLeft >= maxScrollLeft);
+		}
+	}
+
+	useEffect(() => {
+		calculateMaxScroll();
+	}, [props.children])
 
 	useEffect(() => {
 		const scrollerSpeed = 5;
@@ -20,6 +34,7 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 		const startScroll = (speed: number) => {
 			setScrollerInterval(setInterval(() => {
 				container.current.scrollLeft += speed;
+				calculateMaxScroll();
 			}, 10))
 		}
 
@@ -60,7 +75,7 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 	return (
 		<>
 			<div ref={leftArrow}>
-				<FontAwesomeIcon className="pointer-events-auto text-white-white opacity-25" size="4x" icon={faChevronLeft} />
+				<FontAwesomeIcon opacity={isMaxLeft ? 0.5 : 1} className="pointer-events-auto text-white-white" size="4x" icon={faChevronLeft} />
 			</div>
 			<div ref={container} className="overflow-x-hidden">
 				<div className="flex flex-row items-center">
@@ -70,7 +85,7 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 				</div>
 			</div>
 			<div ref={rightArrow}>
-				<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
+				<FontAwesomeIcon opacity={isMaxRight ? 0.5 : 1} className="text-white-white" size="4x" icon={faChevronRight} />
 			</div>
 		</>
 	)
