@@ -16,7 +16,7 @@ const Lobby = (): JSX.Element => {
 	const history = useHistory();
 	const { t } = useTranslation();
 
-	const [infoSnackbar, dangerSnackbar] = [useInfoSnackbar(), useDangerSnackbar()]
+	const [[infoSnackbar], [dangerSnackbar]] = [useInfoSnackbar(), useDangerSnackbar()]
 
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState<RoomType>();

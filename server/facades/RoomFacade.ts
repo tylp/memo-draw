@@ -31,4 +31,12 @@ export default class RoomFacade {
 		return updatedRoom;
 	}
 
+	public static quit(socket: Socket): Room {
+		const updatedRoom = RoomService.quit(SocketIdentifierService.getIdentifiersOf(socket))
+
+		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+
+		return updatedRoom;
+	}
+
 }

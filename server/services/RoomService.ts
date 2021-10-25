@@ -55,18 +55,23 @@ export default class RoomService {
 
 	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
 		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
+
 		if (roomOfCurrentPlayer.hostIs(playerId)) {
-			this.quit(kickedPlayerId);
+			this.quit({playerId: kickedPlayerId, sessionId: kickedSessionId});
 		}
 
 		return roomOfCurrentPlayer;
 	}
 
-	public static quit(playerId: string): Room {
-		const sessionIdOfPlayer = Application.getPlayerIdSessionIdStorage().get(playerId);
-		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionIdOfPlayer)
+	public static quit({ playerId, sessionId }: PlayerIdentifiers): Room {
+		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
 
-		Application.getPlayerRoomStorage().delete(sessionIdOfPlayer);
+		Application.getPlayerRoomStorage().delete(sessionId);
+
+		if (roomOfCurrentPlayer?.hostIs(playerId)) {
+			roomOfCurrentPlayer.assignRandomHost();
+		}
 
 		return roomOfCurrentPlayer.remove(playerId);
 	}

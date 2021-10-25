@@ -68,13 +68,7 @@ export default class RoomSocketBinder extends SocketBinder {
 	//TODO : Refactor by using service (in another issue)
 	private static onLeaveGame(socket: Socket): void {
 		socket.on('leave-game', () => {
-			const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
-			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
-			if (room?.hostIs(playerId)) {
-				room.assignRandomHost();
-			}
-			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
+			RoomFacade.quit(socket)
 		})
 	}
 
