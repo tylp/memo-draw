@@ -26,7 +26,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	}
 
 	return (
-		<div className="bg-blue-darker-blue h-40 w-32 rounded-md m-2">
+		<div className="bg-blue-darker-blue h-40 w-32 rounded-md m-2" style={{ minWidth: '8rem' }}>
 			<div className="w-full relative -top-3">
 				<div className="flex flex-row">
 					{props.player.id === props.currentPlayerId ?

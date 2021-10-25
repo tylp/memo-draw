@@ -7,9 +7,8 @@ import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
 import { Divider, Layout, SectionTitle, Button, ProfileSelector } from '../../../components/Common';
 import UserCard from './UserCard';
-import { faChevronLeft, faChevronRight, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
 import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
@@ -130,19 +129,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<Carousel>
 						{
 							props.room?.players.map((player: Player) => (
-								<>
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-								</>
+								<Box key={player.id} p={2}>
+									<UserCard player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+								</Box>
 							))
 						}
 					</Carousel>
