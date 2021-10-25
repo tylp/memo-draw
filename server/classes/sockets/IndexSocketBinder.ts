@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io';
-import RoomFactory from '../../factories/RoomFactory';
 import RoomService from '../../services/RoomService';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
