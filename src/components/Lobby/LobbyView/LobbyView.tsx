@@ -22,6 +22,7 @@ import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
 import Carousel from '../../Common/Carousel/Carousel';
 import Box from '../../Common/Box/Box';
+import { Col, Row } from 'react-grid-system';
 
 interface LobbyViewProps {
 	room: Room;
@@ -152,10 +153,16 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 						)
 					}
 				</div>
-				<div className="flex flex-row justify-start flex-wrap">
-					<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
-					<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
-				</div>
+				<Row>
+					<Col>
+						<div className="flex flex-row justify-start flex-wrap">
+							<Box mr={2}>
+								<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
+							</Box>
+							<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
+						</div>
+					</Col>
+				</Row>
 			</div>
 		</Layout >
 	)

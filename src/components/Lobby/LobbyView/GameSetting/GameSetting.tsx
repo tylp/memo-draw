@@ -8,7 +8,7 @@ import Box from '../../../Common/Box/Box';
 
 
 interface GameSettingSpec {
-	translationKey : string,
+	translationKey: string,
 	list: IRadioNode[],
 	setCurrentValue: Dispatch<SetStateAction<string | number>>,
 	currentValue: string | number
@@ -19,13 +19,13 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 	const gameSettingPropertyValues = Object.values(props.list)
 
 	return (
-		<div className="pt-3 pb-3 pl-3 pr-3 mr-4 h-auto w-96 bg-blue-darker-blue rounded-md flex flex-col self-stretch justify-between">
+		<div className="pt-3 pb-3 pl-3 pr-3 h-auto w-96 bg-blue-darker-blue rounded-md flex flex-col self-stretch justify-between">
 			<div>
 				<div className="flex flex-row justify-between">
-					<Title>{t(`${props.translationKey }.title`)}</Title>
+					<Title>{t(`${props.translationKey}.title`)}</Title>
 					<FontAwesomeIcon className="text-yellow-light-yellow text-2xl" icon={faStopwatch} />
 				</div>
-				<p className="leading-tight text-white-white">{t(`${props.translationKey }.description`)}</p>
+				<p className="leading-tight text-white-white">{t(`${props.translationKey}.description`)}</p>
 			</div>
 			<div className="flex flex-row justify-around">
 				<Box mt={2}>
