@@ -22,6 +22,7 @@ import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
 import Carousel from '../../Common/Carousel/Carousel';
+import Box from '../../Common/Box/Box';
 
 interface LobbyViewProps {
 	room: Room;
@@ -103,35 +104,47 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row justify-center align-middle">
 					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					<Divider />
-					<Button className='self-center' color='secondary' size='small'
-						onClick={copyLinkToClipboard}
-						icon={faLink}>
-						{t('lobbyView.inviteBtnLabel')}
-					</Button>
-					<Button className='self-center' color='secondary' size='small'
-						onClick={() => setIsEditProfileVisible(true)}
-						icon={faEdit}>
-						{t('lobbyView.editProfileBtnLabel')}
-					</Button>
-					<Button className='self-center' color='secondary' size='small'
-						onClick={leaveGame}
-						icon={faTimes}>
-						{t('lobbyView.leaveBtnLabel')}
-					</Button>
+					<Box mr={2} className="self-center">
+						<Button color='secondary' size='small'
+							onClick={copyLinkToClipboard}
+							icon={faLink}>
+							{t('lobbyView.inviteBtnLabel')}
+						</Button>
+					</Box>
+					<Box mr={2} className="self-center">
+						<Button color='secondary' size='small'
+							onClick={() => setIsEditProfileVisible(true)}
+							icon={faEdit}>
+							{t('lobbyView.editProfileBtnLabel')}
+						</Button>
+					</Box>
+					<Box className="self-center">
+						<Button color='secondary' size='small'
+							onClick={leaveGame}
+							icon={faTimes}>
+							{t('lobbyView.leaveBtnLabel')}
+						</Button>
+					</Box>
 				</div>
 				<div className="flex flex-row items-center">
 					<Carousel>
-						<Box pt={2}>
-							{
-								props.room?.players.map((player: Player) => (
-									<>
-										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-										<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-									</>
-								))
-							}
-						</Box>
+						{
+							props.room?.players.map((player: Player) => (
+								<>
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+								</>
+							))
+						}
 					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">
@@ -140,11 +153,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
 					{
 						props.room.hostPlayerId === playerId && (
-							<Button
-								className='self-center' color='primary' size='small' onClick={startGame}
-								icon={faPlay}>
-								{t('lobbyView.startBtnLabel')}
-							</Button>
+							<Box className="self-center" ml={2}>
+								<Button
+									color='primary' size='small' onClick={startGame}
+									icon={faPlay}>
+									{t('lobbyView.startBtnLabel')}
+								</Button>
+							</Box>
 						)
 					}
 				</div>

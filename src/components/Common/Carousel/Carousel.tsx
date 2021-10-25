@@ -10,10 +10,12 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 	return (
 		<>
 			<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
-			<div className="w-full flex flex-row items-center overflow-hidden">
-				{
-					props.children
-				}
+			<div className="overflow-x-auto">
+				<div className="flex flex-row items-center">
+					{
+						props.children
+					}
+				</div>
 			</div>
 			<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
 		</>
