@@ -4,7 +4,6 @@ import PlayerFactory from '../../factories/PlayerFactory';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
-import RoomService from '../../services/RoomService';
 import RoomFacade from '../../facades/RoomFacade';
 
 export default class RoomSocketBinder extends SocketBinder {
@@ -47,14 +46,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			}
 		})
 	}
-
-	private static onResetLinkedRoom(socket: Socket): void {
-		socket.on('reset-linked-room', () => {
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			Application.getPlayerRoomStorage().delete(sessionId);
-		})
-	}
-
+	
 	private static onDisconnection(socket: Socket): void {
 		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
@@ -66,7 +58,14 @@ export default class RoomSocketBinder extends SocketBinder {
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}
-
+	
+	private static onResetLinkedRoom(socket: Socket): void {
+		socket.on('reset-linked-room', () => {
+			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+			Application.getPlayerRoomStorage().delete(sessionId);
+		})
+	}
+	
 	private static onGameStart(socket: Socket): void {
 		socket.on('start-game', () => {
 			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));

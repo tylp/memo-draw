@@ -2,7 +2,9 @@ import { Socket } from 'socket.io';
 import Room from '../classes/Room';
 import RoomService from '../services/RoomService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
+
 export default class RoomFacade {
+
 	public static join(socket: Socket): boolean | Room {
 		const joinedRoom = RoomService.join(SocketIdentifierService.getIdentifiersOf(socket));
 
@@ -19,4 +21,5 @@ export default class RoomFacade {
 		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
 		return updatedRoom;
 	}
+
 }

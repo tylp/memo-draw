@@ -8,7 +8,7 @@ import SocketBinder from './SocketBinder';
 export default class CommonSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.ensureCorrectSessionFor(socket);
-
+		Application.getPlayerIdSessionIdStorage().set(SocketIdentifierService.getPlayerIdentifier(socket), SocketIdentifierService.getSessionIdentifier(socket));
 		this.onUpdateProfile(socket);
 	}
 
