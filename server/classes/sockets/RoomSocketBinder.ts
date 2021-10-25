@@ -12,7 +12,6 @@ export default class RoomSocketBinder extends SocketBinder {
 		this.onJoinRoom(socket);
 		this.onInvitedInRoom(socket);
 		this.onKickPlayerFromRoom(socket);
-		this.onResetLinkedRoom(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 		this.onLeaveGame(socket);
@@ -37,13 +36,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onKickPlayerFromRoom(socket: Socket): void {
 		socket.on('kick-player-from-room', (kickedPlayerId) => {
-			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
-			const currentPlayersRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
-			if (currentPlayersRoom?.hostIs(playerId)) {
-				currentPlayersRoom.remove(kickedPlayerId);
-				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('update-room', currentPlayersRoom);
-				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('kicked-player', kickedPlayerId);
-			}
+			RoomFacade.kick(socket, kickedPlayerId);
 		})
 	}
 	
@@ -56,13 +49,6 @@ export default class RoomSocketBinder extends SocketBinder {
 				room.assignRandomHost();
 			}
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
-		})
-	}
-	
-	private static onResetLinkedRoom(socket: Socket): void {
-		socket.on('reset-linked-room', () => {
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			Application.getPlayerRoomStorage().delete(sessionId);
 		})
 	}
 	

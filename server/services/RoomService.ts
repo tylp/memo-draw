@@ -9,7 +9,7 @@ interface PlayerIdentifiers {
 }
 
 export default class RoomService {
-	
+
 	public static create({ playerId, sessionId }: PlayerIdentifiers, ack: any): void {
 		const room = RoomFactory.create(playerId);
 		Application.getPlayerRoomStorage().set(sessionId, room.id)
@@ -51,5 +51,23 @@ export default class RoomService {
 		}
 
 		return updatedRoom;
+	}
+
+	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
+		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+		if (roomOfCurrentPlayer.hostIs(playerId)) {
+			this.quit(kickedPlayerId);
+		}
+
+		return roomOfCurrentPlayer;
+	}
+
+	public static quit(playerId: string): Room {
+		const sessionIdOfPlayer = Application.getPlayerIdSessionIdStorage().get(playerId);
+		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionIdOfPlayer)
+
+		Application.getPlayerRoomStorage().delete(sessionIdOfPlayer);
+
+		return roomOfCurrentPlayer.remove(playerId);
 	}
 }

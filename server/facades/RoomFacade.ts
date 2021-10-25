@@ -22,4 +22,13 @@ export default class RoomFacade {
 		return updatedRoom;
 	}
 
+	public static kick(socket: Socket, kickedPlayerId: string): Room {
+		const updatedRoom = RoomService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
+
+		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+		socket.to(Room.getRoomName(updatedRoom.id)).emit('kicked-player', kickedPlayerId);
+
+		return updatedRoom;
+	}
+
 }
