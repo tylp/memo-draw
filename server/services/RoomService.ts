@@ -10,10 +10,11 @@ interface PlayerIdentifiers {
 
 export default class RoomService {
 
-	public static create({ playerId, sessionId }: PlayerIdentifiers): void {
+	public static create({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const room = RoomFactory.create(playerId);
 		Application.getPlayerRoomStorage().set(sessionId, room.id)
 		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
+		return room;
 	}
 
 	public static join({ sessionId }: PlayerIdentifiers): Room {

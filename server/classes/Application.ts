@@ -6,18 +6,15 @@ import RoomStorage from './Storage/RoomStorage';
 import SessionStorage from './Storage/SessionStorage';
 
 export default class Application {
-	private static instance: Application;
+	protected static instance: Application;
 
-	private sessionStorage: SessionStorage;
-	private roomStorage: RoomStorage;
-	private playerRoomStorage: PlayerRoomStorage;
-	private playerIdSessionIdStorage: PlayerIdSessionIdStorage;
+	protected sessionStorage: SessionStorage = new SessionStorage();
+	protected roomStorage: RoomStorage = new RoomStorage();
+	protected playerRoomStorage: PlayerRoomStorage = new PlayerRoomStorage();
+	protected playerIdSessionIdStorage: PlayerIdSessionIdStorage = new PlayerIdSessionIdStorage();
 
-	private constructor() {
-		this.sessionStorage = new SessionStorage();
-		this.roomStorage = new RoomStorage();
-		this.playerRoomStorage = new PlayerRoomStorage();
-		this.playerIdSessionIdStorage = new PlayerIdSessionIdStorage();
+	protected constructor() {
+		//
 	}
 
 	static getInstance(): Application {
