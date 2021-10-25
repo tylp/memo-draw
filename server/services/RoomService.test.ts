@@ -20,7 +20,7 @@ describe('RoomService', () => {
 		expect(Application.getPlayerRoomStorage().get(sessionId)).toBeUndefined();
 		expect(Application.getRoomStorage().isEmpty()).toBeTruthy();
 
-		const newRoom = RoomService.create(sessionId);
+		const newRoom = RoomService.create({ playerId, sessionId });
 
 		expect(Application.getPlayerRoomStorage().get(sessionId)).toBe(newRoom.id);
 		expect(Application.getRoomStorage().isEmpty()).toBeFalsy();

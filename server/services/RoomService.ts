@@ -3,17 +3,21 @@ import Room from '../classes/Room';
 import PlayerFactory from '../factories/PlayerFactory';
 import RoomFactory from '../factories/RoomFactory';
 
+interface PlayerIdentifiers {
+	playerId: string;
+	sessionId: string;
+}
+
 export default class RoomService {
 
-	public static create(sessionId: string): Room {
-		const playerId = Application.getSessionStorage().get(sessionId).playerId;
+	public static create({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const room = RoomFactory.create(playerId);
 		Application.getPlayerRoomStorage().set(sessionId, room.id)
 		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
 		return room;
 	}
 
-	public static join(sessionId: string): Room {
+	public static join({ sessionId }: PlayerIdentifiers): Room {
 		const roomId = Application.getPlayerRoomStorage().get(sessionId);
 
 		if (this.roomExists(roomId)) {
@@ -37,10 +41,9 @@ export default class RoomService {
 		return null;
 	}
 
-	public static reassignHost(sessionId: string): Room {
+	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const session = Application.getSessionStorage().get(sessionId);
 		const roomId = Application.getPlayerRoomStorage().get(sessionId);
-		const playerId = Application.getSessionStorage().get(sessionId).playerId;
 
 		const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
 		if (!updatedRoom.hasHost()) {
@@ -50,20 +53,19 @@ export default class RoomService {
 		return updatedRoom;
 	}
 
-	public static kick(sessionId: string, kickedSessionId: string): Room {
+	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
 		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
-		const playerId = Application.getSessionStorage().get(sessionId).playerId;
+		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
 		if (roomOfCurrentPlayer.hostIs(playerId)) {
-			this.quit(kickedSessionId);
+			this.quit({playerId: kickedPlayerId, sessionId: kickedSessionId});
 		}
 
 		return roomOfCurrentPlayer;
 	}
 
-	public static quit(sessionId: string): Room {
+	public static quit({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
-		const playerId = Application.getSessionStorage().get(sessionId).playerId;
 
 		Application.getPlayerRoomStorage().delete(sessionId);
 
