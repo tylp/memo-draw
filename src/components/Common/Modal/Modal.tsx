@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
 
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Box from '../Box/Box';
 
 interface ModalProps {
 	visible: boolean;
@@ -40,14 +41,16 @@ export default function Modal(props: ModalProps): JSX.Element {
 							{props.children}
 						</div>
 						<div className="flex items-center pl-10 pr-10 pb-6 justify-end">
-							<Button
-								color='primary'
-								size='medium'
-								icon={faTimes}
-								onClick={() => props.onClose()}
-							>
-								{t(props.closeButtonTranslationKey)}
-							</Button>
+							<Box mr={2}>
+								<Button
+									color='primary'
+									size='medium'
+									icon={faTimes}
+									onClick={() => props.onClose()}
+								>
+									{t(props.closeButtonTranslationKey)}
+								</Button>
+							</Box>
 							<Button
 								color='primary'
 								size='medium'

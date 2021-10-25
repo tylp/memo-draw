@@ -6,11 +6,10 @@ import { useSocket } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 import { useHistory } from 'react-router-dom';
-
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-
 import { useTranslation } from 'react-i18next';
 import Box from '../../components/Common/Box/Box';
+import { Row, Col } from 'react-grid-system';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -73,35 +72,43 @@ export default function Homepage(): JSX.Element {
 		});
 	}
 
-	return (
-		<div>
+	return !(isLoading && isCheckingForRoom) ?
+		(
 			<Layout>
-				{
-					(isLoading && isCheckingForRoom)
-						? (
-							<LoadingFull></LoadingFull>
-						)
-						: (
-							<div className="flex md:space-x-32">
-								<div>
-									<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
-									<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
-									<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
-									<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
-								</div>
-								<div>
-									<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
-									<ProfileSelector
-										profile={profile}
-										setProfile={setProfile} />
-									<Box mt={2}>
-										<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
-									</Box>
-								</div>
-							</div>
-						)
-				}
+				<Row>
+					<Col>
+						<Row>
+							<Col offset={{ md: 1 }}>
+								<Row>
+									<Col>
+										<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
+										<Box mb={2}>
+											<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
+										</Box>
+										<Box mb={2}>
+											<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
+										</Box>
+										<Box>
+											<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
+										</Box>
+									</Col>
+								</Row>
+							</Col>
+							<Col offset={{ md: 1 }}>
+								<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
+								<ProfileSelector
+									profile={profile}
+									setProfile={setProfile} />
+								<Box mt={2}>
+									<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+								</Box>
+							</Col>
+							<Col md={1}></Col>
+						</Row>
+					</Col>
+				</Row>
 			</Layout>
-		</div>
-	);
+		) : (
+			<LoadingFull />
+		)
 }
