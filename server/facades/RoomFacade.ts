@@ -5,11 +5,11 @@ import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class RoomFacade {
 
-	public static join(socket: Socket): boolean | Room {
+	public static join(socket: Socket): Room {
 		const joinedRoom = RoomService.join(SocketIdentifierService.getIdentifiersOf(socket));
 
 		if (!joinedRoom) {
-			return false;
+			return joinedRoom;
 		}
 
 		socket.join(Room.getRoomName(joinedRoom.id));

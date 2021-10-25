@@ -26,7 +26,7 @@ const Lobby = (): JSX.Element => {
 		if (!socket) return;
 
 		socket.emit('join-room', (data) => {
-			if (data === false) {
+			if (!data) {
 				dangerSnackbar(t('alert.haventJoinedRoomYet'))
 				history.push('/')
 			} else {

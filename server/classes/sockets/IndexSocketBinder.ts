@@ -12,7 +12,8 @@ export default class IndexSocketBinder extends SocketBinder {
 
 	private static onRoomCreation(socket: Socket): void {
 		socket.on('create-room', (ack) => {
-			RoomService.create(SocketIdentifierService.getIdentifiersOf(socket), ack);
+			RoomService.create(SocketIdentifierService.getIdentifiersOf(socket));
+			ack();
 		});
 	}
 
