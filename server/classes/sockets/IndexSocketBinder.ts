@@ -7,6 +7,7 @@ import SocketBinder from './SocketBinder';
 export default class IndexSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.onRoomCreation(socket);
+		this.onCheckAlreadyInRoom(socket);
 	}
 
 	private static onRoomCreation(socket: Socket): void {
@@ -17,6 +18,16 @@ export default class IndexSocketBinder extends SocketBinder {
 			Application.getPlayerRoomStorage().set(sessionId, room.id)
 			Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
 			ack();
+		});
+	}
+
+	private static onCheckAlreadyInRoom(socket: Socket): void {
+		socket.on('check-already-in-room', (ack) => {
+			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
+			const isAlreadyInRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
+			if (isAlreadyInRoom) {
+				ack();
+			}
 		});
 	}
 }

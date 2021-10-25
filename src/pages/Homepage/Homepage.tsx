@@ -20,13 +20,23 @@ export default function Homepage(): JSX.Element {
 	const [isLoading, setIsLoading] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
+	
+	const [isStartEnabled, setIsStartEnabled] = useState(true);
+
+	useEffect(() => {
+		if (socket) {
+			socket.emit('check-already-in-room', () => {
+				history.push('/lobby');
+			})
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [socket]);
 
 	useEffect(() => {
 		if (socket) {
 			setIsLoading(false);
 			if (profileStorage) {
 				setProfile(profileStorage);
-				//TODO: Redirect to correct room
 			} else {
 				setProfile({
 					username: '',
@@ -40,8 +50,6 @@ export default function Homepage(): JSX.Element {
 			}
 		}
 	}, [socket, profileStorage]);
-
-	const [isStartEnabled, setIsStartEnabled] = useState(true);
 
 	useEffect(() => {
 		setIsStartEnabled(profile?.username?.length >= 3);
