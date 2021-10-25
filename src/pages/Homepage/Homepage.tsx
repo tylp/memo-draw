@@ -18,15 +18,20 @@ export default function Homepage(): JSX.Element {
 	const { t } = useTranslation();
 
 	const [isLoading, setIsLoading] = useState(true);
+	const [isCheckingForRoom, setIsCheckingForRoom] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
-	
+
 	const [isStartEnabled, setIsStartEnabled] = useState(true);
 
 	useEffect(() => {
 		if (socket) {
-			socket.emit('check-already-in-room', () => {
-				history.push('/lobby');
+			socket.emit('check-already-in-room', (hasLobby) => {
+				if (hasLobby) {
+					history.push('/lobby');
+				} else {
+					setIsCheckingForRoom(false);
+				}
 			})
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +77,7 @@ export default function Homepage(): JSX.Element {
 		<div>
 			<Layout>
 				{
-					isLoading
+					(isLoading && isCheckingForRoom)
 						? (
 							<LoadingFull></LoadingFull>
 						)
