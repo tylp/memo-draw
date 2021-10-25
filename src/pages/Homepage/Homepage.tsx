@@ -72,8 +72,10 @@ export default function Homepage(): JSX.Element {
 		});
 	}
 
-	return !(isLoading && isCheckingForRoom) ?
+	return (isLoading || isCheckingForRoom) ?
 		(
+			<LoadingFull />
+		) : (
 			<Layout>
 				<Row>
 					<Col>
@@ -108,7 +110,5 @@ export default function Homepage(): JSX.Element {
 					</Col>
 				</Row>
 			</Layout>
-		) : (
-			<LoadingFull />
 		)
 }

@@ -24,7 +24,7 @@ export default class IndexSocketBinder extends SocketBinder {
 	private static onCheckAlreadyInRoom(socket: Socket): void {
 		socket.on('check-already-in-room', (ack) => {
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			ack(Application.getPlayerRoomStorage().getRoomOf(sessionId))
+			ack(!!Application.getPlayerRoomStorage().getRoomOf(sessionId))
 		});
 	}
 }
