@@ -5,7 +5,7 @@ import RoomType from '../../../server/classes/Room';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
-import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar';
+import { useDangerSnackbar, useInfoSnackbar, useWarningSnackbar } from '../../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
@@ -16,7 +16,7 @@ const Lobby = (): JSX.Element => {
 	const history = useHistory();
 	const { t } = useTranslation();
 
-	const [openSnackbar] = useDangerSnackbar()
+	const [infoSnackbar, dangerSnackbar] = [useInfoSnackbar(), useDangerSnackbar()]
 
 	const socket = useSocketRoom();
 	const [room, setRoom] = useState<RoomType>();
@@ -27,7 +27,7 @@ const Lobby = (): JSX.Element => {
 
 		socket.emit('join-room', (data) => {
 			if (data === false) {
-				openSnackbar(t('alert.haventJoinedRoomYet'))
+				dangerSnackbar(t('alert.haventJoinedRoomYet'))
 				history.push('/')
 			} else {
 				setRoom(data);
@@ -41,7 +41,7 @@ const Lobby = (): JSX.Element => {
 		socket.on('kicked-player', (kickedPlayerId) => {
 			if (kickedPlayerId === playerId) {
 				socket.emit('reset-linked-room')
-				openSnackbar(t('alert.youGotKicked'))
+				infoSnackbar(t('alert.youGotKicked'))
 				history.push('/')
 			}
 		})
