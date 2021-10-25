@@ -7,9 +7,8 @@ import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
 import { Divider, Layout, SectionTitle, Button, ProfileSelector } from '../../../components/Common';
 import UserCard from './UserCard';
-import { faChevronLeft, faChevronRight, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
 import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
@@ -21,6 +20,7 @@ import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
+import Carousel from '../../Common/Carousel/Carousel';
 import Box from '../../Common/Box/Box';
 
 interface LobbyViewProps {
@@ -126,13 +126,15 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Box>
 				</div>
 				<div className="flex flex-row items-center">
-					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronLeft} />
-					{
-						props.room?.players.map((player: Player) => (
-							<UserCard key={player.id} player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
-						))
-					}
-					<FontAwesomeIcon className="text-white-white opacity-25" size="4x" icon={faChevronRight} />
+					<Carousel>
+						{
+							props.room?.players.map((player: Player) => (
+								<Box key={player.id} p={2}>
+									<UserCard player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+								</Box>
+							))
+						}
+					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
