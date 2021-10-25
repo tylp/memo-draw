@@ -5,7 +5,7 @@ import RoomType from '../../../server/classes/Room';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
-import { useDangerSnackbar, useInfoSnackbar, useWarningSnackbar } from '../../hooks/useSnackbar/useSnackbar';
+import { useDangerSnackbar, useInfoSnackbar } from '../../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
