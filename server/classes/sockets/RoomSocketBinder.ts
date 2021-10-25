@@ -4,6 +4,8 @@ import PlayerFactory from '../../factories/PlayerFactory';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
+import RoomService from '../../services/RoomService';
+import RoomFacade from '../../facades/RoomFacade';
 
 export default class RoomSocketBinder extends SocketBinder {
 
@@ -19,22 +21,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onJoinRoom(socket: Socket): void {
 		socket.on('join-room', (ack) => {
-			const { playerId, sessionId } = SocketIdentifierService.getIdentifiersOf(socket);
-			const roomId = Application.getPlayerRoomStorage().get(sessionId);
-			if (Application.getRoomStorage().containsKey(roomId)) {
-				const session = Application.getSessionStorage().get(sessionId);
-				Application.getPlayerRoomStorage().set(sessionId, roomId);
-				socket.join(Room.getRoomName(roomId))
-				const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
-				if (!updatedRoom.hasHost()) {
-					updatedRoom.assignHost(playerId);
-				}
-				socket.to(Room.getRoomName(roomId)).emit('update-room', updatedRoom);
-				ack(updatedRoom);
-			} else {
-				Application.getPlayerRoomStorage().delete(sessionId);
-				ack(false);
-			}
+			ack(RoomFacade.join(socket));
 		})
 	}
 
