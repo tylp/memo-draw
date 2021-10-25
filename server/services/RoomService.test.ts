@@ -1,5 +1,5 @@
 import Application from '../classes/Application';
-import ISession from '../interfaces/ISession';
+import IdGeneratorService from './IdGeneratorService';
 import RoomService from './RoomService';
 
 class ResetableApplication extends Application {
@@ -9,20 +9,20 @@ class ResetableApplication extends Application {
 }
 
 describe('RoomService', () => {
-	let session: ISession = Application.getSessionStorage().generate();
+	const sessionId = IdGeneratorService.generate();
+	const playerId = IdGeneratorService.generate();
 
 	beforeEach(() => {
-		session = Application.getSessionStorage().generate();
 		ResetableApplication.reset();
 	});
 
 	test('RoomService create should work', () => {
-		expect(Application.getPlayerRoomStorage().get(session.sessionId)).toBeUndefined();
+		expect(Application.getPlayerRoomStorage().get(sessionId)).toBeUndefined();
 		expect(Application.getRoomStorage().isEmpty()).toBeTruthy();
 
-		const newRoom = RoomService.create(session.sessionId);
+		const newRoom = RoomService.create(sessionId);
 
-		expect(Application.getPlayerRoomStorage().get(session.sessionId)).toBe(newRoom.id);
+		expect(Application.getPlayerRoomStorage().get(sessionId)).toBe(newRoom.id);
 		expect(Application.getRoomStorage().isEmpty()).toBeFalsy();
 	});
 });

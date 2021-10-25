@@ -6,7 +6,7 @@ import RoomFactory from '../factories/RoomFactory';
 export default class RoomService {
 
 	public static create(sessionId: string): Room {
-		const playerId = Application.getSessionStorage().get(sessionId)?.playerId;
+		const playerId = Application.getSessionStorage().get(sessionId).playerId;
 		const room = RoomFactory.create(playerId);
 		Application.getPlayerRoomStorage().set(sessionId, room.id)
 		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
