@@ -39,7 +39,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			RoomFacade.kick(socket, kickedPlayerId);
 		})
 	}
-	
+
 	private static onDisconnection(socket: Socket): void {
 		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
@@ -51,7 +51,7 @@ export default class RoomSocketBinder extends SocketBinder {
 			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
 		})
 	}
-	
+
 	private static onGameStart(socket: Socket): void {
 		socket.on('start-game', () => {
 			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
