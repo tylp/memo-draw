@@ -2,7 +2,7 @@
 import { useSnackbar } from 'react-simple-snackbar';
 
 const defaultOptions = {
-	'position': 'bottom-left'
+	'position': 'bottom-left',
 }
 
 const useDefaultUseSnackbar = (options = {}) => useSnackbar({

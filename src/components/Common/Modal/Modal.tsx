@@ -26,11 +26,11 @@ export default function Modal(props: ModalProps): JSX.Element {
 	return props.visible ? (
 		<>
 			<div
-				className="overflow-x-hidden overflow-y-auto fixed inset-0 z-40 opacity-50 bg-black-black"
+				className="overflow-x-hidden overflow-y-auto fixed inset-0 z-10 opacity-50 bg-black-black"
 			>
 			</div>
 			<div
-				className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+				className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-20 outline-none focus:outline-none"
 			>
 				<div className="relative">
 					<div className="rounded-lg shadow-lg relative flex flex-col bg-gradient-to-r from-blue-blue to-blue-light-blue">

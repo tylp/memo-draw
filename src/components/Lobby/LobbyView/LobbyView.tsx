@@ -15,7 +15,7 @@ import { SpeedProperties, GameModeProperties } from '../../../../server/enums/Ga
 
 import { useHistory } from 'react-router-dom'
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
-import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
@@ -36,6 +36,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [openSuccessSnackbar] = useSuccessSnackbar()
 	const [openInfoSnackBar] = useInfoSnackbar()
+	const [openWarningSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 	const [localStorageProfile, setLocalStorageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
@@ -43,15 +44,21 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
 	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
 
+	const MIN_LENGTH_USERNAME = 3;
+
 	useEffect(() => {
 		setProfile(localStorageProfile);
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
-		socket.emit('update-profile', profile, () => {
-			setLocalStorageProfile(profile);
-			setIsEditProfileVisible(false)
-		})
+		if(profile.username.length >= MIN_LENGTH_USERNAME) {
+			socket.emit('update-profile', profile, () => {
+				setLocalStorageProfile(profile);
+				setIsEditProfileVisible(false)
+			})
+		} else {
+			openWarningSnackBar(t('alert.lengthError'));
+		}
 	}
 
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
