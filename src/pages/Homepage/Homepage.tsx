@@ -55,10 +55,6 @@ export default function Homepage(): JSX.Element {
 		}
 	}, [socket, profileStorage]);
 
-	useEffect(() => {
-		setIsStartEnabled(profile?.username?.length >= 3);
-	}, [profile]);
-
 	const handleStart = () => {
 		socket.emit('update-profile', profile, () => {
 			setProfileStorage(profile);
@@ -100,7 +96,9 @@ export default function Homepage(): JSX.Element {
 								<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
 								<ProfileSelector
 									profile={profile}
-									setProfile={setProfile} />
+									setProfile={setProfile}
+									setIsUsernameValid={setIsStartEnabled}
+								/>
 								<Box mt={2}>
 									<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 								</Box>

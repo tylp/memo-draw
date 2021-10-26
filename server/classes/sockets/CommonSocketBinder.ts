@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import ISession from '../../interfaces/ISession';
+import ProfileValidatorService from '../../services/ProfileValidatorService';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
 import Player from '../Player';
@@ -41,15 +42,18 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
-			if (ack) {
-				ack();
-			}
-			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
-			const room = Application.getPlayerRoomStorage().getRoomOf(sessionId)
-			if (room) {
-				room.players = room.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
-				socket.to(room.getSocketRoomName()).emit('update-room', room);
+			//TODO change 3 to a constant
+			if(ProfileValidatorService.isProfileValid(profile)) {
+				const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
+				if (ack) {
+					ack();
+				}
+				Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
+				const room = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+				if (room) {
+					room.players = room.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
+					socket.to(room.getSocketRoomName()).emit('update-room', room);
+				}
 			}
 		})
 	}

@@ -44,14 +44,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
 	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
 
-	const MIN_LENGTH_USERNAME = 3;
+	const [isProfileValid, setIsProfileValid] = useState(false);
 
 	useEffect(() => {
 		setProfile(localStorageProfile);
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
-		if(profile.username.length >= MIN_LENGTH_USERNAME) {
+		if(isProfileValid) {
 			socket.emit('update-profile', profile, () => {
 				setLocalStorageProfile(profile);
 				setIsEditProfileVisible(false)
@@ -102,9 +102,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				visible={isEditProfileVisible}
 				onClose={() => setIsEditProfileVisible(false)}
 				onValidate={handleSaveProfile}
+				disabledValidate={!isProfileValid}
 			>
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<ProfileSelector profile={profile} setProfile={setProfile}></ProfileSelector>
+					<ProfileSelector profile={profile} setProfile={setProfile} setIsUsernameValid={setIsProfileValid}></ProfileSelector>
 				</p>
 			</Modal>
 			<div className="flex flex-col justify-center">
@@ -153,7 +154,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 							<Box className="self-center" ml={2}>
 								<Button
 									color='primary' size='small' onClick={startGame}
-									icon={faPlay}>
+									icon={faPlay}
+								>
 									{t('lobbyView.startBtnLabel')}
 								</Button>
 							</Box>

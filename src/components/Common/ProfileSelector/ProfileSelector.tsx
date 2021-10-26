@@ -8,10 +8,12 @@ import { useTranslation } from 'react-i18next';
 import AvatarFactory from '../../../../server/factories/AvatarFactory';
 import SelectButton from './SelectButton/SelectButton';
 import Box from '../Box/Box';
+import ProfileValidatorService from '../../../../server/services/ProfileValidatorService';
 
 interface ProfileSelectorSpec {
 	profile: IProfile;
 	setProfile: Dispatch<SetStateAction<IProfile>>;
+	setIsUsernameValid: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
@@ -28,7 +30,11 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 		});
 	}
 
-	const setUsername = (username: string) => props.setProfile({ ...props.profile, username })
+	const setUsername = (username: string) => {
+		props.setProfile({ ...props.profile, username })
+		props.setIsUsernameValid(ProfileValidatorService.isProfileValid({...props.profile, username}));
+	}
+
 	const setRubberColor = (rubberColor: RubberColor) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, rubberColor } } })
 	const setBodyColor = (bodyColor: BodyColor) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, bodyColor } } })
 	const setFaceType = (faceType: FaceType) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, faceType } } })

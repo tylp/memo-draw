@@ -13,6 +13,7 @@ interface ModalProps {
 	closeButtonTranslationKey?: string | undefined;
 	onValidate: (() => void);
 	validateButtonTranslationKey?: string | undefined;
+	disabledValidate?: boolean;
 }
 
 Modal.defaultProps = {
@@ -56,6 +57,7 @@ export default function Modal(props: ModalProps): JSX.Element {
 								size='medium'
 								icon={faCheck}
 								onClick={() => props.onValidate()}
+								disabled={props.disabledValidate}
 							>
 								{t(props.validateButtonTranslationKey)}
 							</Button>
