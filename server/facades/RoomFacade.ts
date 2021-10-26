@@ -26,10 +26,6 @@ export default class RoomFacade {
 	public static rejoin(socket: Socket): Room {
 		const joinedRoom = RoomService.join(SocketIdentifierService.getIdentifiersOf(socket));
 
-		if (!joinedRoom) {
-			return joinedRoom;
-		}
-
 		socket.join(Room.getRoomName(joinedRoom.id));
 		return this.reassignHost(socket);
 	}

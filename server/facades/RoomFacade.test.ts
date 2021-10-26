@@ -61,7 +61,7 @@ describe('RoomFacade', () => {
 		expect(mockedSocketB.rooms.length).toBe(1);
 	})
 
-	test('rejoin should work', () => {
+	test('rejoin should make socket join socket.io-room', () => {
 		throw Error('No test.');
 	})
 
