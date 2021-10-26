@@ -42,17 +42,19 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			if(ProfileValidatorService.isProfileValid(profile)) {
-				const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
-				if (ack) {
-					ack();
-				}
-				Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
-				const room = Application.getPlayerRoomStorage().getRoomOf(sessionId)
-				if (room) {
-					room.players = room.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
-					socket.to(room.getSocketRoomName()).emit('update-room', room);
-				}
+			if (!ProfileValidatorService.isProfileValid(profile)) {
+				return;
+			}
+
+			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
+			if (ack) {
+				ack();
+			}
+			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
+			const room = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+			if (room) {
+				room.players = room.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
+				socket.to(room.getSocketRoomName()).emit('update-room', room);
 			}
 		})
 	}
