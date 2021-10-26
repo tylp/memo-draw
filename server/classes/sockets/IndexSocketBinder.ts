@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import RoomService from '../../services/RoomService';
+import RoomFacade from '../../facades/RoomFacade';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
@@ -12,8 +12,7 @@ export default class IndexSocketBinder extends SocketBinder {
 
 	private static onRoomCreation(socket: Socket): void {
 		socket.on('create-room', (ack) => {
-			RoomService.create(SocketIdentifierService.getIdentifiersOf(socket));
-			ack();
+			ack(RoomFacade.create(socket));
 		});
 	}
 

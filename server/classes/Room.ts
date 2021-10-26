@@ -30,8 +30,8 @@ export default class Room {
 		return this;
 	}
 
-	isPlayerPresent(player: Player): boolean {
-		return this.players.findIndex(e => e.id === player.id) !== -1;
+	isPlayerPresent(playerId: Player['id']): boolean {
+		return this.players.findIndex(e => e.id === playerId) !== -1;
 	}
 
 	hostIs(playerId: string): boolean {

@@ -1,11 +1,29 @@
 import { Socket } from 'socket.io';
+import Application from '../classes/Application';
 import Room from '../classes/Room';
+import PlayerFactory from '../factories/PlayerFactory';
 import RoomService from '../services/RoomService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class RoomFacade {
+	public static create(socket: Socket): Room {
+		const room = RoomService.create(SocketIdentifierService.getIdentifiersOf(socket))
 
-	public static join(socket: Socket): Room {
+		return RoomFacade.join(socket, room.id);
+	}
+
+	public static join(socket: Socket, roomId: Room['id']): Room {
+		const room = Application.getRoomStorage().get(roomId);
+		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+
+		room.add(player);
+
+		socket.join(room.getSocketRoomName());
+
+		return room;
+	}
+
+	public static rejoin(socket: Socket): Room {
 		const joinedRoom = RoomService.join(SocketIdentifierService.getIdentifiersOf(socket));
 
 		if (!joinedRoom) {
