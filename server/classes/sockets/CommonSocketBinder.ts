@@ -42,7 +42,6 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			//TODO change 3 to a constant
 			if(ProfileValidatorService.isProfileValid(profile)) {
 				const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
 				if (ack) {
