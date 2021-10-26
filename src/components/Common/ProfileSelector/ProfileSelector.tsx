@@ -13,7 +13,7 @@ import ProfileValidatorService from '../../../../server/services/ProfileValidato
 interface ProfileSelectorSpec {
 	profile: IProfile;
 	setProfile: Dispatch<SetStateAction<IProfile>>;
-	setIsUsernameValid: Dispatch<SetStateAction<boolean>>;
+	setIsProfileValid: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
@@ -32,7 +32,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 
 	const setUsername = (username: string) => {
 		props.setProfile({ ...props.profile, username })
-		props.setIsUsernameValid(ProfileValidatorService.isProfileValid({...props.profile, username}));
+		props.setIsProfileValid(ProfileValidatorService.validate({...props.profile, username}));
 	}
 
 	const setRubberColor = (rubberColor: RubberColor) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, rubberColor } } })

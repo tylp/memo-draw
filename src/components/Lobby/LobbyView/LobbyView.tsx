@@ -102,10 +102,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				visible={isEditProfileVisible}
 				onClose={() => setIsEditProfileVisible(false)}
 				onValidate={handleSaveProfile}
-				disabledValidate={!isProfileValid}
+				disableValidate={!isProfileValid}
 			>
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<ProfileSelector profile={profile} setProfile={setProfile} setIsUsernameValid={setIsProfileValid}></ProfileSelector>
+					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid}></ProfileSelector>
 				</p>
 			</Modal>
 			<div className="flex flex-col justify-center">
