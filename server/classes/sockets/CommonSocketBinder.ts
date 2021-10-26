@@ -42,7 +42,7 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			if (!ProfileValidatorService.isProfileValid(profile)) {
+			if (ProfileValidatorService.validate(profile)) {
 				return;
 			}
 

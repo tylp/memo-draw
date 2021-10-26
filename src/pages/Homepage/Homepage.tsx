@@ -97,7 +97,7 @@ export default function Homepage(): JSX.Element {
 								<ProfileSelector
 									profile={profile}
 									setProfile={setProfile}
-									setIsUsernameValid={setIsStartEnabled}
+									setIsProfileValid={setIsStartEnabled}
 								/>
 								<Box mt={2}>
 									<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
