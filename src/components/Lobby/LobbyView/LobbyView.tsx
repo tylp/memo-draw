@@ -15,7 +15,7 @@ import { SpeedProperties, GameModeProperties } from '../../../../server/enums/Ga
 
 import { useHistory } from 'react-router-dom'
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
-import { useInfoSnackbar, useSuccessSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
@@ -36,6 +36,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [openSuccessSnackbar] = useSuccessSnackbar()
 	const [openInfoSnackBar] = useInfoSnackbar()
+	const [openWarningSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 	const [localStorageProfile, setLocalStorageProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
@@ -43,15 +44,21 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
 	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
 
+	const [isProfileValid, setIsProfileValid] = useState(false);
+
 	useEffect(() => {
 		setProfile(localStorageProfile);
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
-		socket.emit('update-profile', profile, () => {
-			setLocalStorageProfile(profile);
-			setIsEditProfileVisible(false)
-		})
+		if(isProfileValid) {
+			socket.emit('update-profile', profile, () => {
+				setLocalStorageProfile(profile);
+				setIsEditProfileVisible(false)
+			})
+		} else {
+			openWarningSnackBar(t('alert.lengthError'));
+		}
 	}
 
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
@@ -94,9 +101,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				visible={isEditProfileVisible}
 				onClose={() => setIsEditProfileVisible(false)}
 				onValidate={handleSaveProfile}
+				disableValidate={!isProfileValid}
 			>
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<ProfileSelector profile={profile} setProfile={setProfile}></ProfileSelector>
+					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid}></ProfileSelector>
 				</p>
 			</Modal>
 			<div className="flex flex-col justify-center">
@@ -145,7 +153,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 							<Box className="self-center" ml={2}>
 								<Button
 									color='primary' size='small' onClick={startGame}
-									icon={faPlay}>
+									icon={faPlay}
+								>
 									{t('lobbyView.startBtnLabel')}
 								</Button>
 							</Box>

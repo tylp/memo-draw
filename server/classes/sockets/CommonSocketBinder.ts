@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import ISession from '../../interfaces/ISession';
+import ProfileValidatorService from '../../services/ProfileValidatorService';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
 import Player from '../Player';
@@ -41,6 +42,10 @@ export default class CommonSocketBinder extends SocketBinder {
 
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
+			if (ProfileValidatorService.validate(profile)) {
+				return;
+			}
+
 			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
 			if (ack) {
 				ack();

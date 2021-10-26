@@ -8,6 +8,7 @@ const resources = {
 				'roomDoesNotExist': 'Room does not exist.',
 				'leavedLobby': 'You leaved the room.',
 				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+				'lengthError': 'Username\'s length should be greater than 2',
 			},
 			'modal': {
 				'close': 'Close',
