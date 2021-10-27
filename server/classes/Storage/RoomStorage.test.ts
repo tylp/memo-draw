@@ -11,7 +11,7 @@ describe('RoomStorage', () => {
 	const playerOneSession: ISession = {
 		sessionId: 'Random string',
 		playerId: 'Random string',
-		profile: ProfileFactory.create()
+		profile: ProfileFactory.create(),
 	}
 	const roomId = IdGeneratorService.generate();
 	let room = RoomFactory.create(playerOneSession.playerId);
@@ -20,7 +20,7 @@ describe('RoomStorage', () => {
 	const playerTwoSession: ISession = {
 		sessionId: 'Random string #2',
 		playerId: 'Random string #2',
-		profile: ProfileFactory.create()
+		profile: ProfileFactory.create(),
 	}
 	const playerTwo = PlayerFactory.create(playerTwoSession);
 

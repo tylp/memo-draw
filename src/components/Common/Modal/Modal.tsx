@@ -19,6 +19,7 @@ interface ModalProps {
 Modal.defaultProps = {
 	closeButtonTranslationKey: 'modal.close',
 	validateButtonTranslationKey: 'modal.validate',
+	disableValidate: false,
 }
 
 export default function Modal(props: ModalProps): JSX.Element {

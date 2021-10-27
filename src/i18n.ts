@@ -12,7 +12,7 @@ const resources = {
 			},
 			'modal': {
 				'close': 'Close',
-				'validate': 'Validate'
+				'validate': 'Validate',
 			},
 			'homepage': {
 				'start': 'Done !',
@@ -20,21 +20,21 @@ const resources = {
 					'title': 'The Game',
 					1: {
 						'title': 'Create a lobby',
-						'content': 'Customize your avatar and, when ready, click done!'
+						'content': 'Customize your avatar and, when ready, click done!',
 					},
 					2: {
 						'title': 'Invite your friends',
-						'content': 'Call your friends and send them an invite!'
+						'content': 'Call your friends and send them an invite!',
 					},
 					3: {
 						'title': 'Have fun!',
-						'content': 'Draw faster and faster, be the last one standing!'
-					}
+						'content': 'Draw faster and faster, be the last one standing!',
+					},
 				},
 				'profile': {
 					'title': 'Who are you?',
-					'subtitle': 'Hey there!'
-				}
+					'subtitle': 'Hey there!',
+				},
 			},
 			'profileSelector': {
 				'title': 'Avatar',
@@ -42,11 +42,11 @@ const resources = {
 				'color': 'Color',
 				'face': 'Face',
 				'randomize': 'Randomize',
-				'nickname': 'Nickname'
+				'nickname': 'Nickname',
 			},
 			'gameView': {
 				'playersTitle': 'Players',
-				'sendDrawing': 'Send Drawing'
+				'sendDrawing': 'Send Drawing',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',
@@ -55,26 +55,26 @@ const resources = {
 				'successfullyCopied': 'Invite link copied !',
 				'leaveBtnLabel': 'Leave room',
 				'gameTitle': 'Game',
-				'startBtnLabel': 'Start'
+				'startBtnLabel': 'Start',
 			},
 			'userCard': {
-				'badge': 'It\'s you'
+				'badge': 'It\'s you',
 			},
 			'speed': {
 				'title': 'Speed',
-				'description': 'Choose the game\'s pace ! Are you a fast drawer ? Or maybe you want to draw masterpieces...'
+				'description': 'Choose the game\'s pace ! Are you a fast drawer ? Or maybe you want to draw masterpieces...',
 			},
 			'speeds': {
 				'0': 'Normal',
 			},
 			'gamemode': {
 				'title': 'Gamemode',
-				'description': 'Play the classic Memodraw, or a different mode !'
+				'description': 'Play the classic Memodraw, or a different mode !',
 			},
 			'gamemodes': {
-				'0': 'Classic'
-			}
-		}
+				'0': 'Classic',
+			},
+		},
 	},
 };
 
@@ -84,8 +84,8 @@ i18n
 		resources,
 		lng: 'en',
 		interpolation: {
-			escapeValue: false
-		}
+			escapeValue: false,
+		},
 	});
 
 export default i18n;

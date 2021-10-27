@@ -3,7 +3,7 @@ import AvatarFactory from '../../factories/AvatarFactory';
 
 describe('SessionStorage', () => {
 	let storage = new SessionStorage();
-	
+
 	beforeEach(() => {
 		storage = new SessionStorage();
 	})
@@ -28,9 +28,10 @@ describe('SessionStorage', () => {
 		storage.update(session.sessionId, {
 			profile: {
 				username: newUsername,
-				avatar: AvatarFactory.create()
-			}});
-		
+				avatar: AvatarFactory.create(),
+			},
+		});
+
 		session = storage.get(session.sessionId);
 
 		expect(session.profile.username).toBe(newUsername);

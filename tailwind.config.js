@@ -1,7 +1,7 @@
 module.exports = {
 	purge: [
 		'./src/pages/**/*.{js,ts,jsx,tsx}',
-		'./src/components/**/*.{js,ts,jsx,tsx}'
+		'./src/components/**/*.{js,ts,jsx,tsx}',
 	],
 	darkMode: false, // or 'media' or 'class'
 	theme: {
@@ -22,7 +22,7 @@ module.exports = {
 				'lighter-blue': '#33C5F5',
 			},
 			black: {
-				'black': '#000000'
+				'black': '#000000',
 			},
 			grey: {
 				'grey': '#4D4D4D',
@@ -37,12 +37,12 @@ module.exports = {
 				'light-yellow': '#FFE500',
 			},
 			white: {
-				'white': '#FFFFFF'
-			}
+				'white': '#FFFFFF',
+			},
 		},
 		animation: {
-			'spin-bezier': 'spin 1s cubic-bezier(.20, 1, .8, .5) infinite'
-		}
+			'spin-bezier': 'spin 1s cubic-bezier(.20, 1, .8, .5) infinite',
+		},
 	},
 	variants: {
 		extend: {},

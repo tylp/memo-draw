@@ -7,7 +7,7 @@ const defaultOptions = {
 
 const useDefaultUseSnackbar = (options = {}) => useSnackbar({
 	...defaultOptions,
-	...options
+	...options,
 })
 
 export const useDangerSnackbar = () => useDefaultUseSnackbar({

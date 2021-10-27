@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { Title } from '..';
 import Button from '../Button/Button';
 import Avatar from '../Avatar/Avatar';
@@ -26,13 +26,16 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 	const randomizeAvatar = () => {
 		props.setProfile({
 			username: props.profile.username,
-			avatar: AvatarFactory.create()
+			avatar: AvatarFactory.create(),
 		});
 	}
 
+	useEffect(() => {
+		props.setIsProfileValid(ProfileValidatorService.validate({ ...props.profile }));
+	}, [props])
+
 	const setUsername = (username: string) => {
 		props.setProfile({ ...props.profile, username })
-		props.setIsProfileValid(ProfileValidatorService.validate({...props.profile, username}));
 	}
 
 	const setRubberColor = (rubberColor: RubberColor) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, rubberColor } } })

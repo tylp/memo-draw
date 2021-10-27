@@ -4,7 +4,7 @@ export default class FakeNameGeneratorService {
 		'Goofy Williams',
 		'Nauseous Goldberg',
 		'Agressive Turing',
-		'Stoic Poincare'
+		'Stoic Poincare',
 	];
 
 	static generate(): string {

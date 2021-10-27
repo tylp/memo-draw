@@ -7,7 +7,7 @@ interface LogoProps {
 }
 
 Logo.defaultProps = {
-	size: 'auto'
+	size: 'auto',
 }
 
 export default function Logo(props: LogoProps): JSX.Element {

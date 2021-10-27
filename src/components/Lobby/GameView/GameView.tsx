@@ -31,6 +31,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [props.game])
 
 	const nextDrawing = () => {
+		if (!socket) return;
 		if (playerId === currentPlayer.id) {
 			socket.emit('next-drawing')
 		}
