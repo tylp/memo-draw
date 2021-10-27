@@ -48,13 +48,13 @@ describe('RoomStorage', () => {
 		storage.addPlayer(roomId, playerOne);
 
 		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
 
 		storage.addPlayer(roomId, playerTwo);
 
 		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
-		expect(storage.get(roomId).isPlayerPresent(playerTwo)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerTwo.id)).toBeTruthy();
 	});
 
 	test('addPlayer should not crash when room is not found', () => {
