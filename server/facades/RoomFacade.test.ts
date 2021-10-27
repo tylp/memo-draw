@@ -39,6 +39,15 @@ describe('RoomFacade', () => {
 		expect(mockedSocketA.rooms[0]).toBe(room.getSocketRoomName());
 	})
 
+	test('create should link player to lobby', () => {
+		const sessionIdOfSocketA = SocketIdentifierService.getSessionIdentifier(mockedSocketA);
+		expect(Application.getPlayerRoomStorage().get(sessionIdOfSocketA)).toBeUndefined();
+
+		const room: Room = RoomFacade.create(mockedSocketA);
+
+		expect(Application.getPlayerRoomStorage().get(sessionIdOfSocketA)).toBe(room.id);
+	})
+
 	test('join should add player to room', () => {
 		const room: Room = RoomFacade.create(mockedSocketA);
 
@@ -61,7 +70,38 @@ describe('RoomFacade', () => {
 		expect(mockedSocketB.rooms.length).toBe(1);
 	})
 
+	test('join should link player to lobby', () => {
+		const sessionIdOfSocketB = SocketIdentifierService.getSessionIdentifier(mockedSocketB);
+		expect(Application.getPlayerRoomStorage().get(sessionIdOfSocketB)).toBeUndefined();
+
+		const room: Room = RoomFacade.create(mockedSocketA);
+		RoomFacade.join(mockedSocketB, room.id);
+
+		expect(Application.getPlayerRoomStorage().get(sessionIdOfSocketB)).toBe(room.id);
+	})
+
 	test('rejoin should make socket join socket.io-room', () => {
+		const room: Room = RoomFacade.create(mockedSocketA);
+		expect(mockedSocketB.rooms.length).toBe(0);
+
+		RoomFacade.join(mockedSocketB, room.id);
+
+		expect(mockedSocketB.rooms.length).toBe(1);
+
+		mockedSocketB.disconnect();
+
+		const reconnectedMockedSocketB = MockedSocketFactory.create(sessionB);
+
+		expect(reconnectedMockedSocketB.rooms.length).toBe(0);
+		expect(SocketIdentifierService.getSessionIdentifier(mockedSocketB))
+			.toBe(SocketIdentifierService.getSessionIdentifier(reconnectedMockedSocketB));
+
+		RoomFacade.rejoin(reconnectedMockedSocketB);
+
+		expect(reconnectedMockedSocketB.rooms.length).toBe(1);
+	})
+
+	test('rejoin should reassign host if no host are present', () => {
 		throw Error('No test.');
 	})
 
@@ -70,6 +110,10 @@ describe('RoomFacade', () => {
 	})
 
 	test('quit should work', () => {
+		throw Error('No test.');
+	})
+
+	test('disconnection should work', () => {
 		throw Error('No test.');
 	})
 });

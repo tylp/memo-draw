@@ -13,26 +13,34 @@ export default class RoomFacade {
 	}
 
 	public static join(socket: Socket, roomId: Room['id']): Room {
+		const sessionOfSocket = SocketIdentifierService.getSessionOf(socket);
 		const room = Application.getRoomStorage().get(roomId);
-		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+		const player = PlayerFactory.create(sessionOfSocket);
 
 		room.add(player);
-
 		socket.join(room.getSocketRoomName());
+		RoomService.linkPlayerToRoom(sessionOfSocket.sessionId, room.id);
 
 		return room;
 	}
 
 	public static rejoin(socket: Socket): Room {
-		const joinedRoom = RoomService.join(SocketIdentifierService.getIdentifiersOf(socket));
+		const joinedRoomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket))
 
-		socket.join(Room.getRoomName(joinedRoom.id));
+		if (joinedRoomId) {
+			socket.join(Room.getRoomName(joinedRoomId));
+		}
+
 		return this.reassignHost(socket);
 	}
 
 	public static reassignHost(socket: Socket): Room {
 		const updatedRoom = RoomService.reassignHost(SocketIdentifierService.getIdentifiersOf(socket));
-		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+
+		if (updatedRoom) {
+			socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+		}
+
 		return updatedRoom;
 	}
 

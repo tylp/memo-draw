@@ -2,6 +2,7 @@ import Application from '../classes/Application';
 import Room from '../classes/Room';
 import PlayerFactory from '../factories/PlayerFactory';
 import RoomFactory from '../factories/RoomFactory';
+import ISession from '../interfaces/ISession';
 
 interface PlayerIdentifiers {
 	playerId: string;
@@ -12,33 +13,13 @@ export default class RoomService {
 
 	public static create({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const room = RoomFactory.create(playerId);
-		Application.getPlayerRoomStorage().set(sessionId, room.id)
+		this.linkPlayerToRoom(sessionId, room.id);
 		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
 		return room;
 	}
 
-	public static join({ sessionId }: PlayerIdentifiers): Room {
-		const roomId = Application.getPlayerRoomStorage().get(sessionId);
-
-		if (this.roomExists(roomId)) {
-			return this.setLinkedRoom(sessionId, roomId);
-		} else {
-			return this.removeLinkedRoom(sessionId);
-		}
-	}
-
-	private static roomExists(roomId): boolean {
-		return Application.getRoomStorage().containsKey(roomId);
-	}
-
-	private static setLinkedRoom(sessionId, roomId): Room {
-		Application.getPlayerRoomStorage().set(sessionId, roomId);
-		return Application.getRoomStorage().get(roomId);
-	}
-
-	private static removeLinkedRoom(sessionId): null {
-		Application.getPlayerRoomStorage().delete(sessionId);
-		return null;
+	public static linkPlayerToRoom(sessionId: ISession['sessionId'], roomId: Room['id']): void {
+		Application.getPlayerRoomStorage().set(sessionId, roomId)
 	}
 
 	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Room {
@@ -46,7 +27,7 @@ export default class RoomService {
 		const roomId = Application.getPlayerRoomStorage().get(sessionId);
 
 		const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
-		if (!updatedRoom.hasHost()) {
+		if (updatedRoom && !updatedRoom.hasHost()) {
 			updatedRoom.assignHost(playerId);
 		}
 
