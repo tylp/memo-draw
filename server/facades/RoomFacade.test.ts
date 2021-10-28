@@ -126,17 +126,25 @@ describe('RoomFacade', () => {
 		throw Error('No test.');
 	})
 
-	test('kick should work', () => {
-		let room: Room = RoomFacade.create(mockedSocketA);
+	test('kick should work and make socket should leave socket.io-room', () => {
+		expect(mockedSocketA.rooms.size).toBe(0);
+
+		const room: Room = RoomFacade.create(mockedSocketA);
+
+		expect(mockedSocketA.rooms.size).toBe(1);
+		expect(mockedSocketA.rooms.has(room.getSocketRoomName())).toBeTruthy()
 		expect(room.players.length).toBe(1);
 		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
 		RoomFacade.join(mockedSocketB, room.id);
+
 		expect(room.players.length).toBe(2);
 		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+		expect(mockedSocketB.rooms.size).toBe(1);
+		expect(mockedSocketB.rooms.has(room.getSocketRoomName())).toBeTruthy()
 
-		room = RoomFacade.kick(mockedSocketA, sessionB.playerId);
+		RoomFacade.kick(mockedSocketA, sessionB.playerId);
 
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
