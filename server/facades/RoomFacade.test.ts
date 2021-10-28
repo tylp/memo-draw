@@ -24,6 +24,7 @@ describe('RoomFacade', () => {
 				sessionId: sessionA.sessionId,
 			},
 		}
+		Application.getPlayerIdSessionIdStorage().set(sessionA.playerId, sessionA.sessionId);
 		mockedSocketB = mocketServer.createSocket();
 		sessionB = Application.getSessionStorage().generate();
 		mockedSocketB.handshake = {
@@ -31,6 +32,7 @@ describe('RoomFacade', () => {
 				sessionId: sessionB.sessionId,
 			},
 		}
+		Application.getPlayerIdSessionIdStorage().set(sessionB.playerId, sessionB.sessionId);
 	})
 
 	test('create should create a room in application', () => {
@@ -80,6 +82,7 @@ describe('RoomFacade', () => {
 		RoomFacade.join(mockedSocketB, room.id);
 
 		expect(mockedSocketB.rooms.size).toBe(1);
+		expect(mockedSocketB.rooms.has(Room.getRoomName(room.id))).toBeTruthy()
 	})
 
 	test('join should link player to lobby', () => {
@@ -116,6 +119,7 @@ describe('RoomFacade', () => {
 		RoomFacade.rejoin(reconnectedMockedSocketB);
 
 		expect(reconnectedMockedSocketB.rooms.size).toBe(1);
+		expect(reconnectedMockedSocketB.rooms.has(room.getSocketRoomName())).toBeTruthy();
 	})
 
 	test('rejoin should reassign host if no host are present', () => {
@@ -123,7 +127,7 @@ describe('RoomFacade', () => {
 	})
 
 	test('kick should work', () => {
-		const room: Room = RoomFacade.create(mockedSocketA);
+		let room: Room = RoomFacade.create(mockedSocketA);
 		expect(room.players.length).toBe(1);
 		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
@@ -132,7 +136,8 @@ describe('RoomFacade', () => {
 		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 
-		RoomFacade.kick(mockedSocketB, sessionB.playerId);
+		room = RoomFacade.kick(mockedSocketA, sessionB.playerId);
+
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 

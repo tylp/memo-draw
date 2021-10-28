@@ -48,7 +48,8 @@ export default class RoomService {
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
 		if (roomOfCurrentPlayer.hostIs(playerId)) {
-			this.quit({ playerId: kickedPlayerId, sessionId: kickedSessionId });
+			console.log('from kick', roomOfCurrentPlayer, kickedSessionId)
+			console.log(this.quit({ playerId: kickedPlayerId, sessionId: kickedSessionId }));
 		}
 
 		return roomOfCurrentPlayer;
@@ -56,6 +57,7 @@ export default class RoomService {
 
 	public static quit({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+		console.log('aha', roomOfCurrentPlayer);
 
 		Application.getPlayerRoomStorage().delete(sessionId);
 

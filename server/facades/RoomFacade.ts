@@ -48,8 +48,8 @@ export default class RoomFacade {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 		const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 		const room = Application.getRoomStorage().get(roomId);
-		
-		if (RoomService.start(room, player))  {
+
+		if (RoomService.start(room, player)) {
 			socket.emit('game-started', room);
 			socket.to(Room.getRoomName(roomId)).emit('game-started', room);
 		}
