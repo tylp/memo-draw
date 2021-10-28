@@ -1,13 +1,14 @@
+import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Application from '../classes/Application';
 import Room from '../classes/Room';
 import ISession from '../interfaces/ISession';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
-import MockedSocketFactory from '../tests/SocketMockFactory';
 import RoomFacade from './RoomFacade';
 
 describe('RoomFacade', () => {
+	let mocketServer: MocketServer;
 	let mockedSocketA: any;
 	let sessionA: ISession;
 	let mockedSocketB: any;
@@ -15,10 +16,21 @@ describe('RoomFacade', () => {
 
 	beforeEach(() => {
 		ResetableApplication.reset();
-		mockedSocketA = MockedSocketFactory.create();
-		sessionA = SocketIdentifierService.getSessionOf(mockedSocketA);
-		mockedSocketB = MockedSocketFactory.create();
-		sessionB = SocketIdentifierService.getSessionOf(mockedSocketB);
+		mocketServer = new MocketServer();
+		mockedSocketA = mocketServer.createSocket();
+		sessionA = Application.getSessionStorage().generate();
+		mockedSocketA.handshake = {
+			auth: {
+				sessionId: sessionA.sessionId,
+			},
+		}
+		mockedSocketB = mocketServer.createSocket();
+		sessionB = Application.getSessionStorage().generate();
+		mockedSocketB.handshake = {
+			auth: {
+				sessionId: sessionB.sessionId,
+			},
+		}
 	})
 
 	test('create should create a room in application', () => {
@@ -90,7 +102,12 @@ describe('RoomFacade', () => {
 
 		mockedSocketB.disconnect();
 
-		const reconnectedMockedSocketB: any = MockedSocketFactory.create(sessionB);
+		const reconnectedMockedSocketB: any = mocketServer.createSocket();
+		reconnectedMockedSocketB.handshake = {
+			auth: {
+				sessionId: sessionB.sessionId,
+			},
+		}
 
 		expect(reconnectedMockedSocketB.rooms.size).toBe(0);
 		expect(SocketIdentifierService.getSessionIdentifier(mockedSocketB))

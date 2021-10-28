@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import SocketIdentifierService from './SocketIdentifierService';
-import SocketMockFactory from '../tests/SocketMockFactory';
 import ISession from '../interfaces/ISession';
 import Application from '../classes/Application';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
+import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
 
 describe('SocketIdentifierService', () => {
+	let mocketServer: MocketServer;
 	let socketMock: any;
 	let session: ISession;
 
 	beforeEach(() => {
 		ResetableApplication.reset();
-		socketMock = SocketMockFactory.create();
-		session = Application.getSessionStorage().toArray()[0];
+		mocketServer = new MocketServer();
+		socketMock = mocketServer.createSocket();
+		session = Application.getSessionStorage().generate();
+		socketMock.handshake = {
+			auth: {
+				sessionId: session.sessionId,
+			},
+		}
 	});
 
 	test('getSessionIdentifier should work', () => {
