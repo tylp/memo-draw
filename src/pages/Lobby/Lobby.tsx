@@ -45,9 +45,9 @@ const Lobby = (): JSX.Element => {
 			}
 		})
 
-		socket.on('game-started', (room, game) => {
+		socket.on('game-started', (room) => {
 			setRoom(room);
-			setGame(game);
+			setGame(room.game);
 		})
 
 		socket.on('update-game', (game) => {

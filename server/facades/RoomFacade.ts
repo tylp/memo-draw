@@ -44,6 +44,17 @@ export default class RoomFacade {
 		return updatedRoom;
 	}
 
+	public static startGame(socket: Socket): void {
+		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+		const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+		const room = Application.getRoomStorage().get(roomId);
+		
+		if (RoomService.start(room, player))  {
+			socket.emit('game-started', room);
+			socket.to(Room.getRoomName(roomId)).emit('game-started', room);
+		}
+	}
+
 	public static kick(socket: Socket, kickedPlayerId: string): Room {
 		const updatedRoom = RoomService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
 

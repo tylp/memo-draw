@@ -1,4 +1,5 @@
 import Application from '../classes/Application';
+import Player from '../classes/Player';
 import Room from '../classes/Room';
 import PlayerFactory from '../factories/PlayerFactory';
 import RoomFactory from '../factories/RoomFactory';
@@ -32,6 +33,14 @@ export default class RoomService {
 		}
 
 		return updatedRoom;
+	}
+
+	public static start(room: Room, player: Player): boolean {
+		if (room.hostPlayerId === player.id) {
+			room.startGame();
+			return true;
+		}
+		return false;
 	}
 
 	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
