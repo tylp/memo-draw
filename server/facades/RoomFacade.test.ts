@@ -126,7 +126,7 @@ describe('RoomFacade', () => {
 		throw Error('No test.');
 	})
 
-	test('kick should work and make socket should leave socket.io-room', () => {
+	test('kick should work and make socket leave socket.io-room', () => {
 		expect(mockedSocketA.rooms.size).toBe(0);
 
 		const room: Room = RoomFacade.create(mockedSocketA);

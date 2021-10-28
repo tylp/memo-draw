@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io';
 import Room from '../Room';
-import PlayerFactory from '../../factories/PlayerFactory';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
