@@ -54,14 +54,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onGameStart(socket: Socket): void {
 		socket.on('start-game', () => {
-			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room = Application.getRoomStorage().get(roomId);
-			if (room.hostPlayerId === player.id) {
-				room.startGame();
-				socket.emit('game-started', room, room.game);
-				socket.to(Room.getRoomName(roomId)).emit('game-started', room, room.game);
-			}
+			RoomFacade.startGame(socket);
 		})
 	}
 
