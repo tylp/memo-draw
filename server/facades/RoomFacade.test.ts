@@ -106,11 +106,31 @@ describe('RoomFacade', () => {
 	})
 
 	test('kick should work', () => {
-		throw Error('No test.');
+		const room: Room = RoomFacade.create(mockedSocketA);
+		expect(room.players.length).toBe(1);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+
+		RoomFacade.join(mockedSocketB, room.id);
+		expect(room.players.length).toBe(2);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+
+		RoomFacade.kick(mockedSocketB, sessionB.playerId);
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
 	test('quit should work', () => {
-		throw Error('No test.');
+		const room: Room = RoomFacade.create(mockedSocketA);
+		expect(room.players.length).toBe(1);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+
+		RoomFacade.join(mockedSocketB, room.id);
+		expect(room.players.length).toBe(2);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+
+		RoomFacade.quit(mockedSocketB);
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
 	test('disconnection should work', () => {
