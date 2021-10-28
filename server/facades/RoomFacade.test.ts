@@ -1,4 +1,4 @@
-import SocketMock from 'socket.io-mock';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Application from '../classes/Application';
 import Room from '../classes/Room';
 import ISession from '../interfaces/ISession';
@@ -8,9 +8,9 @@ import MockedSocketFactory from '../tests/SocketMockFactory';
 import RoomFacade from './RoomFacade';
 
 describe('RoomFacade', () => {
-	let mockedSocketA: SocketMock;
+	let mockedSocketA: any;
 	let sessionA: ISession;
-	let mockedSocketB: SocketMock;
+	let mockedSocketB: any;
 	let sessionB: ISession;
 
 	beforeEach(() => {
@@ -31,12 +31,12 @@ describe('RoomFacade', () => {
 	})
 
 	test('create should make socket join socket.io-room', () => {
-		expect(mockedSocketA.rooms.length).toBe(0);
+		expect(mockedSocketA.rooms.size).toBe(0);
 
 		const room: Room = RoomFacade.create(mockedSocketA);
 
-		expect(mockedSocketA.rooms.length).toBe(1);
-		expect(mockedSocketA.rooms[0]).toBe(room.getSocketRoomName());
+		expect(mockedSocketA.rooms.size).toBe(1);
+		expect(mockedSocketA.rooms.has(room.getSocketRoomName())).toBeTruthy();
 	})
 
 	test('create should link player to lobby', () => {
@@ -63,11 +63,11 @@ describe('RoomFacade', () => {
 
 	test('join should make socket join socket.io-room', () => {
 		const room: Room = RoomFacade.create(mockedSocketA);
-		expect(mockedSocketB.rooms.length).toBe(0);
+		expect(mockedSocketB.rooms.size).toBe(0);
 
 		RoomFacade.join(mockedSocketB, room.id);
 
-		expect(mockedSocketB.rooms.length).toBe(1);
+		expect(mockedSocketB.rooms.size).toBe(1);
 	})
 
 	test('join should link player to lobby', () => {
@@ -82,23 +82,23 @@ describe('RoomFacade', () => {
 
 	test('rejoin should make socket join socket.io-room', () => {
 		const room: Room = RoomFacade.create(mockedSocketA);
-		expect(mockedSocketB.rooms.length).toBe(0);
+		expect(mockedSocketB.rooms.size).toBe(0);
 
 		RoomFacade.join(mockedSocketB, room.id);
 
-		expect(mockedSocketB.rooms.length).toBe(1);
+		expect(mockedSocketB.rooms.size).toBe(1);
 
 		mockedSocketB.disconnect();
 
-		const reconnectedMockedSocketB = MockedSocketFactory.create(sessionB);
+		const reconnectedMockedSocketB: any = MockedSocketFactory.create(sessionB);
 
-		expect(reconnectedMockedSocketB.rooms.length).toBe(0);
+		expect(reconnectedMockedSocketB.rooms.size).toBe(0);
 		expect(SocketIdentifierService.getSessionIdentifier(mockedSocketB))
 			.toBe(SocketIdentifierService.getSessionIdentifier(reconnectedMockedSocketB));
 
 		RoomFacade.rejoin(reconnectedMockedSocketB);
 
-		expect(reconnectedMockedSocketB.rooms.length).toBe(1);
+		expect(reconnectedMockedSocketB.rooms.size).toBe(1);
 	})
 
 	test('rejoin should reassign host if no host are present', () => {

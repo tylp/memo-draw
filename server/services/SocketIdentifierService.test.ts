@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SocketIdentifierService from './SocketIdentifierService';
-import SocketMock from 'socket.io-mock';
 import SocketMockFactory from '../tests/SocketMockFactory';
 import ISession from '../interfaces/ISession';
 import Application from '../classes/Application';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
 
 describe('SocketIdentifierService', () => {
-	let socketMock: SocketMock;
+	let socketMock: any;
 	let session: ISession;
 
 	beforeEach(() => {
