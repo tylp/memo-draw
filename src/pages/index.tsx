@@ -10,7 +10,7 @@ export default function App(): JSX.Element {
 		<SnackbarProvider>
 			<Router>
 				<Switch>
-					<Route path="/join/:roomId">
+					<Route path="/join/:lobbyId">
 						<JoinLobby />
 					</Route>
 					<Route path="/lobby">

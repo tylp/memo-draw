@@ -12,9 +12,9 @@ export default class LobbyFacade {
 		return LobbyFacade.join(socket, room.id);
 	}
 
-	public static join(socket: Socket, roomId: Lobby['id']): Lobby {
+	public static join(socket: Socket, lobbyId: Lobby['id']): Lobby {
 		const sessionOfSocket = SocketIdentifierService.getSessionOf(socket);
-		const room = Application.getLobbyStorage().get(roomId);
+		const room = Application.getLobbyStorage().get(lobbyId);
 		const player = PlayerFactory.create(sessionOfSocket);
 
 		room.add(player);
@@ -38,7 +38,7 @@ export default class LobbyFacade {
 		const updatedLobby = LobbyService.reassignHost(SocketIdentifierService.getIdentifiersOf(socket));
 
 		if (updatedLobby) {
-			socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
+			socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
 		}
 
 		return updatedLobby;
@@ -46,19 +46,19 @@ export default class LobbyFacade {
 
 	public static startGame(socket: Socket): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-		const roomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-		const room = Application.getLobbyStorage().get(roomId);
+		const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+		const room = Application.getLobbyStorage().get(lobbyId);
 
 		if (LobbyService.start(room, player)) {
 			socket.emit('game-started', room);
-			socket.to(Lobby.getLobbyName(roomId)).emit('game-started', room);
+			socket.to(Lobby.getLobbyName(lobbyId)).emit('game-started', room);
 		}
 	}
 
 	public static kick(socket: Socket, kickedPlayerId: string): Lobby {
 		const updatedLobby = LobbyService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
 
-		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
+		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
 		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('kicked-player', kickedPlayerId);
 
 		return updatedLobby;
@@ -67,7 +67,7 @@ export default class LobbyFacade {
 	public static quit(socket: Socket): Lobby {
 		const updatedLobby = LobbyService.quit(SocketIdentifierService.getIdentifiersOf(socket))
 
-		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
+		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
 
 		return updatedLobby;
 	}

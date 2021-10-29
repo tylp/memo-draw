@@ -25,7 +25,7 @@ const Lobby = (): JSX.Element => {
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.emit('join-room', (data) => {
+		socket.emit('join-lobby', (data) => {
 			if (!data) {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
@@ -34,7 +34,7 @@ const Lobby = (): JSX.Element => {
 			}
 		})
 
-		socket.on('update-room', (data) => {
+		socket.on('update-lobby', (data) => {
 			setLobby(data);
 		})
 

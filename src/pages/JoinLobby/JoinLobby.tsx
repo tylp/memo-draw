@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
 
 export default function JoinLobby(): JSX.Element {
-	const { roomId } = useParams();
+	const { lobbyId } = useParams();
 	const history = useHistory();
 	const { t } = useTranslation();
 
@@ -17,7 +17,7 @@ export default function JoinLobby(): JSX.Element {
 	useEffect(() => {
 		if (!socket)
 			return;
-		socket.emit('invited-in-room', roomId, (data) => {
+		socket.emit('invited-in-lobby', lobbyId, (data) => {
 			if (data === false) {
 				openSnackbar(t('alert.lobbyDoesNotExist'))
 				history.push('/')

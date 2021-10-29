@@ -55,8 +55,8 @@ export default class Lobby {
 		return this.game;
 	}
 
-	static getLobbyName(roomId: Lobby['id']): string {
-		return `room-${roomId}`;
+	static getLobbyName(lobbyId: Lobby['id']): string {
+		return `lobby-${lobbyId}`;
 	}
 
 	getSocketLobbyName(): string {

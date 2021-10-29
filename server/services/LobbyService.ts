@@ -19,15 +19,15 @@ export default class LobbyService {
 		return room;
 	}
 
-	public static linkPlayerToLobby(sessionId: ISession['sessionId'], roomId: Lobby['id']): void {
-		Application.getPlayerLobbyStorage().set(sessionId, roomId)
+	public static linkPlayerToLobby(sessionId: ISession['sessionId'], lobbyId: Lobby['id']): void {
+		Application.getPlayerLobbyStorage().set(sessionId, lobbyId)
 	}
 
 	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Lobby {
 		const session = Application.getSessionStorage().get(sessionId);
-		const roomId = Application.getPlayerLobbyStorage().get(sessionId);
+		const lobbyId = Application.getPlayerLobbyStorage().get(sessionId);
 
-		const updatedLobby = Application.getLobbyStorage().addPlayer(roomId, PlayerFactory.create(session));
+		const updatedLobby = Application.getLobbyStorage().addPlayer(lobbyId, PlayerFactory.create(session));
 		if (updatedLobby && !updatedLobby.hasHost()) {
 			updatedLobby.assignHost(playerId);
 		}

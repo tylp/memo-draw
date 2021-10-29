@@ -3,8 +3,8 @@ import Lobby from '../Lobby';
 import Storage from './Storage';
 
 export default class LobbyStorage extends Storage<string, Lobby> {
-	isPlayerPresent(roomId: string, player: Player): boolean {
-		const foundLobby: Lobby = this.get(roomId);
+	isPlayerPresent(lobbyId: string, player: Player): boolean {
+		const foundLobby: Lobby = this.get(lobbyId);
 
 		if (foundLobby) {
 			return foundLobby.isPlayerPresent(player.id);

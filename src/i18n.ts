@@ -6,9 +6,9 @@ const resources = {
 			'alert': {
 				'youGotKicked': 'You got kicked.',
 				'lobbyDoesNotExist': 'Lobby does not exist.',
-				'leavedLobby': 'You leaved the room.',
-				'haventJoinedLobbyYet': 'You haven\'t joined a room yet.',
-				'lengthError': 'Username\'s length should be greater than 2',
+				'leavedLobby': 'You left the lobby.',
+				'haventJoinedLobbyYet': 'You haven\'t joined a lobby yet.',
+				'lengthError': 'Username\'s length should be greater than 2.',
 			},
 			'modal': {
 				'close': 'Close',
@@ -53,7 +53,7 @@ const resources = {
 				'inviteBtnLabel': 'Invite',
 				'editProfileBtnLabel': 'Edit profile',
 				'successfullyCopied': 'Invite link copied !',
-				'leaveBtnLabel': 'Leave room',
+				'leaveBtnLabel': 'Leave lobby',
 				'gameTitle': 'Game',
 				'startBtnLabel': 'Start',
 			},

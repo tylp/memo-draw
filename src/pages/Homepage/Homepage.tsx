@@ -25,7 +25,7 @@ export default function Homepage(): JSX.Element {
 
 	useEffect(() => {
 		if (socket) {
-			socket.emit('check-already-in-room', (hasLobby) => {
+			socket.emit('check-already-in-lobby', (hasLobby) => {
 				if (hasLobby) {
 					history.push('/lobby');
 				} else {
@@ -63,7 +63,7 @@ export default function Homepage(): JSX.Element {
 	}
 
 	const handleLobbyCreation = () => {
-		socket.emit('create-room', () => {
+		socket.emit('create-lobby', () => {
 			history.push('/lobby')
 		});
 	}

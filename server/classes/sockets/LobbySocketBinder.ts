@@ -17,15 +17,15 @@ export default class LobbySocketBinder extends SocketBinder {
 	}
 
 	private static onJoinLobby(socket: Socket): void {
-		socket.on('join-room', (ack) => {
+		socket.on('join-lobby', (ack) => {
 			ack(LobbyFacade.rejoin(socket));
 		})
 	}
 
 	private static onInvitedInLobby(socket: Socket): void {
-		socket.on('invited-in-room', (roomId, ack) => {
-			if (Application.getLobbyStorage().containsKey(roomId)) {
-				Application.getPlayerLobbyStorage().set(SocketIdentifierService.getSessionIdentifier(socket), roomId);
+		socket.on('invited-in-lobby', (lobbyId: Lobby['id'], ack) => {
+			if (Application.getLobbyStorage().containsKey(lobbyId)) {
+				Application.getPlayerLobbyStorage().set(SocketIdentifierService.getSessionIdentifier(socket), lobbyId);
 				ack(true);
 			} else {
 				ack(false);
@@ -34,7 +34,7 @@ export default class LobbySocketBinder extends SocketBinder {
 	}
 
 	private static onKickPlayerFromLobby(socket: Socket): void {
-		socket.on('kick-player-from-room', (kickedPlayerId) => {
+		socket.on('kick-player-from-lobby', (kickedPlayerId) => {
 			LobbyFacade.kick(socket, kickedPlayerId);
 		})
 	}
@@ -42,12 +42,12 @@ export default class LobbySocketBinder extends SocketBinder {
 	private static onDisconnection(socket: Socket): void {
 		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
-			const roomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Lobby = Application.getLobbyStorage().removePlayer(roomId, playerId);
+			const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+			const room: Lobby = Application.getLobbyStorage().removePlayer(lobbyId, playerId);
 			if (room?.hostIs(playerId)) {
 				room.assignRandomHost();
 			}
-			socket.to(Lobby.getLobbyName(roomId)).emit('update-room', room);
+			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', room);
 		})
 	}
 

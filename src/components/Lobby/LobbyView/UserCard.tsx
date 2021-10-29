@@ -22,7 +22,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	const kickPlayer = (player: Player) => {
 		if (!isCreator) return;
 
-		socket.emit('kick-player-from-room', player.id);
+		socket.emit('kick-player-from-lobby', player.id);
 	}
 
 	return (

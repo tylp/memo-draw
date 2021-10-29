@@ -11,13 +11,13 @@ export default class IndexSocketBinder extends SocketBinder {
 	}
 
 	private static onLobbyCreation(socket: Socket): void {
-		socket.on('create-room', (ack) => {
+		socket.on('create-lobby', (ack) => {
 			ack(LobbyFacade.create(socket));
 		});
 	}
 
 	private static onCheckAlreadyInLobby(socket: Socket): void {
-		socket.on('check-already-in-room', (ack) => {
+		socket.on('check-already-in-lobby', (ack) => {
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
 			ack(!!Application.getPlayerLobbyStorage().getLobbyOf(sessionId))
 		});
