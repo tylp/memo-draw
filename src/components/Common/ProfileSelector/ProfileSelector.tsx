@@ -14,6 +14,7 @@ interface ProfileSelectorSpec {
 	profile: IProfile;
 	setProfile: Dispatch<SetStateAction<IProfile>>;
 	setIsProfileValid: Dispatch<SetStateAction<boolean>>;
+	onEnter?: () => void;
 }
 
 export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element {
@@ -36,6 +37,12 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 
 	const setUsername = (username: string) => {
 		props.setProfile({ ...props.profile, username })
+	}
+
+	const handleOnKeyUp = (element) => {
+		if (element.key === 'Enter') {
+			props?.onEnter();
+		}
 	}
 
 	const setRubberColor = (rubberColor: RubberColor) => props.setProfile({ ...props.profile, ...{ avatar: { ...props.profile.avatar, rubberColor } } })
@@ -67,7 +74,13 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				<Box mt={2}>
 					<Button fullWidth color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
 					<Title>{t('profileSelector.nickname')}</Title>
-					<input className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white" type="text" value={props.profile.username} onChange={(e) => setUsername(e.target.value)} />
+					<input
+						className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"
+						type="text"
+						value={props.profile.username}
+						onChange={(e) => setUsername(e.target.value)}
+						onKeyUp={handleOnKeyUp}
+					/>
 				</Box>
 			</div>
 		</div>
