@@ -122,10 +122,6 @@ describe('RoomFacade', () => {
 		expect(reconnectedMockedSocketB.rooms.has(room.getSocketRoomName())).toBeTruthy();
 	})
 
-	test('rejoin should reassign host if no host are present', () => {
-		throw Error('No test.');
-	})
-
 	test('kick should work and make socket leave socket.io-room', () => {
 		expect(mockedSocketA.rooms.size).toBe(0);
 
@@ -163,7 +159,14 @@ describe('RoomFacade', () => {
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
-	test('disconnection should work', () => {
-		throw Error('No test.');
+	test('quit should reassign host if host left', () => {
+		const room: Room = RoomFacade.create(mockedSocketA);
+		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+
+		RoomFacade.join(mockedSocketB, room.id);
+		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+		RoomFacade.quit(mockedSocketA);
+
+		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketB));
 	})
 });

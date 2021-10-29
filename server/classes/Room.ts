@@ -26,7 +26,11 @@ export default class Room {
 		const index = this.players.findIndex(e => e.id === playerId);
 		if (index !== -1) {
 			this.players.splice(index, 1);
+			if (this.hostIs(playerId)) {
+				this.assignRandomHost();
+			}
 		}
+
 		return this;
 	}
 

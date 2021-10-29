@@ -59,10 +59,6 @@ export default class RoomService {
 
 		Application.getPlayerRoomStorage().delete(sessionId);
 
-		if (roomOfCurrentPlayer?.hostIs(playerId)) {
-			roomOfCurrentPlayer.assignRandomHost();
-		}
-
 		return roomOfCurrentPlayer?.remove(playerId);
 	}
 }
