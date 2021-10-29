@@ -9,7 +9,7 @@ import SocketBinder from './SocketBinder';
 export default class CommonSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.ensureCorrectSessionFor(socket);
-		Application.getPlayerIdSessionIdStorage().set(SocketIdentifierService.getPlayerIdentifier(socket), SocketIdentifierService.getSessionIdentifier(socket));
+		this.linkPlayerToLobby(socket);
 		this.onUpdateProfile(socket);
 	}
 
@@ -38,6 +38,10 @@ export default class CommonSocketBinder extends SocketBinder {
 	private static sendSessionToSocket(socket: Socket) {
 		const session = Application.getSessionStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 		socket.emit('update-session', session);
+	}
+
+	private static linkPlayerToLobby(socket: Socket) {
+		Application.getPlayerIdSessionIdStorage().set(SocketIdentifierService.getPlayerIdentifier(socket), SocketIdentifierService.getSessionIdentifier(socket));
 	}
 
 	private static onUpdateProfile(socket: Socket) {
