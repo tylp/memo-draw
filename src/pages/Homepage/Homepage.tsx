@@ -55,6 +55,10 @@ export default function Homepage(): JSX.Element {
 		}
 	}, [socket, profileStorage]);
 
+	const handleKeyPress = () => {
+		handleStart();
+	}
+
 	const handleStart = () => {
 		socket.emit('update-profile', profile, () => {
 			setProfileStorage(profile);
@@ -98,6 +102,7 @@ export default function Homepage(): JSX.Element {
 									profile={profile}
 									setProfile={setProfile}
 									setIsProfileValid={setIsStartEnabled}
+									onEnter={handleKeyPress}
 								/>
 								<Box mt={2}>
 									<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>

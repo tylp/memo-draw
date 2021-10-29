@@ -95,6 +95,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		socket.emit('leave-game');
 	}
 
+	const handleKeyPress = () => {
+		handleSaveProfile();
+	}
+
 	return (
 		<Layout>
 			<Modal
@@ -104,7 +108,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				disableValidate={!isProfileValid}
 			>
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid}></ProfileSelector>
+					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid} onEnter={handleKeyPress}></ProfileSelector>
 				</p>
 			</Modal>
 			<div className="flex flex-col justify-center">
