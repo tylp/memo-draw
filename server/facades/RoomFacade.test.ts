@@ -172,7 +172,7 @@ describe('RoomFacade', () => {
 		RoomFacade.quit(mockedSocketB);
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 		
-		expect(Application.getPlayerRoomStorage().getRoomOf(mockedSocketB)).toBeUndefined();
+		expect(Application.getPlayerRoomStorage().get(mockedSocketB)).toBeUndefined();
 	})
 
 	test('quit should reassign host if host left', () => {
