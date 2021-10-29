@@ -3,7 +3,7 @@ import { Game } from './Game';
 import Player from './Player';
 import { random } from 'lodash';
 
-export default class Room {
+export default class Lobby {
 	id: string;
 	hostPlayerId: string;
 	players: Array<Player>;
@@ -17,12 +17,12 @@ export default class Room {
 		this.players = [];
 	}
 
-	add(player: Player): Room {
+	add(player: Player): this {
 		this.players.push(player);
 		return this;
 	}
 
-	remove(playerId: string): Room {
+	remove(playerId: string): this {
 		const index = this.players.findIndex(e => e.id === playerId);
 		if (index !== -1) {
 			this.players.splice(index, 1);
@@ -50,17 +50,17 @@ export default class Room {
 		if (!this.game) {
 			this.hasStarted = true;
 			this.game = new Game(this);
-			Application.getRoomStorage().set(this.id, this);
+			Application.getLobbyStorage().set(this.id, this);
 		}
 		return this.game;
 	}
 
-	static getRoomName(roomId: Room['id']): string {
-		return `room-${roomId}`;
+	static getLobbyName(lobbyId: Lobby['id']): string {
+		return `lobby-${lobbyId}`;
 	}
 
-	getSocketRoomName(): string {
-		return Room.getRoomName(this.id);
+	getSocketLobbyName(): string {
+		return Lobby.getLobbyName(this.id);
 	}
 
 	assignRandomHost(): void {

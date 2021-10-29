@@ -1,5 +1,5 @@
 import Player from './Player';
-import Room from './Room';
+import Lobby from './Lobby';
 import { shuffle } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -17,10 +17,10 @@ export class Game {
 	minSeconds = MIN_SECONDS_POSSIBLE;
 	maxSeconds = MAX_SECONDS_POSSIBLE;
 
-	constructor(room: Room) {
-		this.id = room.id;
-		this.hostPlayerId = room.hostPlayerId;
-		this.players = shuffle(room.players);
+	constructor(lobby: Lobby) {
+		this.id = lobby.id;
+		this.hostPlayerId = lobby.hostPlayerId;
+		this.players = shuffle(lobby.players);
 		this.refreshLimitDate();
 	}
 

@@ -1,16 +1,16 @@
 import { Server } from 'socket.io';
 import SocketIoHandler from './sockets/SocketIoHandler';
 import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
-import PlayerRoomStorage from './Storage/PlayerRoomStorage';
-import RoomStorage from './Storage/RoomStorage';
+import PlayerLobbyStorage from './Storage/PlayerLobbyStorage';
+import LobbyStorage from './Storage/LobbyStorage';
 import SessionStorage from './Storage/SessionStorage';
 
 export default class Application {
 	protected static instance: Application;
 
 	protected sessionStorage: SessionStorage = new SessionStorage();
-	protected roomStorage: RoomStorage = new RoomStorage();
-	protected playerRoomStorage: PlayerRoomStorage = new PlayerRoomStorage();
+	protected lobbyStorage: LobbyStorage = new LobbyStorage();
+	protected playerLobbyStorage: PlayerLobbyStorage = new PlayerLobbyStorage();
 	protected playerIdSessionIdStorage: PlayerIdSessionIdStorage = new PlayerIdSessionIdStorage();
 
 	protected constructor() {
@@ -32,12 +32,12 @@ export default class Application {
 		return Application.getInstance().sessionStorage;
 	}
 
-	static getRoomStorage(): RoomStorage {
-		return Application.getInstance().roomStorage;
+	static getLobbyStorage(): LobbyStorage {
+		return Application.getInstance().lobbyStorage;
 	}
 
-	static getPlayerRoomStorage(): PlayerRoomStorage {
-		return Application.getInstance().playerRoomStorage;
+	static getPlayerLobbyStorage(): PlayerLobbyStorage {
+		return Application.getInstance().playerLobbyStorage;
 	}
 
 	static getPlayerIdSessionIdStorage(): PlayerIdSessionIdStorage {

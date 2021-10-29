@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useSocketRoom } from '../../hooks';
+import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
-import RoomType from '../../../server/classes/Room';
+import LobbyType from '../../../server/classes/Lobby';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
@@ -18,24 +18,24 @@ const Lobby = (): JSX.Element => {
 
 	const [[infoSnackbar], [dangerSnackbar]] = [useInfoSnackbar(), useDangerSnackbar()]
 
-	const socket = useSocketRoom();
-	const [room, setRoom] = useState<RoomType>();
+	const socket = useSocketLobby();
+	const [lobby, setLobby] = useState<LobbyType>();
 	const [game, setGame] = useState<Game>();
 
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.emit('join-room', (data) => {
+		socket.emit('join-lobby', (data) => {
 			if (!data) {
-				dangerSnackbar(t('alert.haventJoinedRoomYet'))
+				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
 			} else {
-				setRoom(data);
+				setLobby(data);
 			}
 		})
 
-		socket.on('update-room', (data) => {
-			setRoom(data);
+		socket.on('update-lobby', (data) => {
+			setLobby(data);
 		})
 
 		socket.on('kicked-player', (kickedPlayerId) => {
@@ -45,9 +45,9 @@ const Lobby = (): JSX.Element => {
 			}
 		})
 
-		socket.on('game-started', (room) => {
-			setRoom(room);
-			setGame(room.game);
+		socket.on('game-started', (lobby) => {
+			setLobby(lobby);
+			setGame(lobby.game);
 		})
 
 		socket.on('update-game', (game) => {
@@ -56,18 +56,18 @@ const Lobby = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
-	return room ? (
-		<RoomOrGame room={room} game={game}></RoomOrGame>
+	return lobby ? (
+		<LobbyOrGame lobby={lobby} game={game}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
 
-function RoomOrGame(props: { room: RoomType; game: Game }) {
-	return props.room?.hasStarted && props.game ? (
+function LobbyOrGame(props: { lobby: LobbyType; game: Game }) {
+	return props.lobby?.hasStarted && props.game ? (
 		<GameView game={props.game} />
 	) : (
-		<LobbyView room={props.room} />
+		<LobbyView lobby={props.lobby} />
 	)
 }

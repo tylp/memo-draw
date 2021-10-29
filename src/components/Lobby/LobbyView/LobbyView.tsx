@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Player from '../../../../server/classes/Player';
-import Room from '../../../../server/classes/Room';
-import { useSocketRoom } from '../../../hooks';
+import Lobby from '../../../../server/classes/Lobby';
+import { useSocketLobby } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
@@ -25,11 +25,11 @@ import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 
 interface LobbyViewProps {
-	room: Room;
+	lobby: Lobby;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
-	const socket = useSocketRoom();
+	const socket = useSocketLobby();
 	const { t } = useTranslation();
 
 	const history = useHistory();
@@ -51,7 +51,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
-		if(isProfileValid) {
+		if (isProfileValid) {
 			socket.emit('update-profile', profile, () => {
 				setLocalStorageProfile(profile);
 				setIsEditProfileVisible(false)
@@ -78,13 +78,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
-			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.room.id}`);
+			navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/join/${props.lobby.id}`);
 			openSuccessSnackbar(t('lobbyView.successfullyCopied'))
 		}
 	}
 
 	const startGame = () => {
-		if (props.room.hostPlayerId === playerId) {
+		if (props.lobby.hostPlayerId === playerId) {
 			socket.emit('start-game');
 		}
 	}
@@ -136,9 +136,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row items-center">
 					<Carousel>
 						{
-							props.room?.players.map((player: Player) => (
+							props.lobby?.players.map((player: Player) => (
 								<Box key={player.id} p={2}>
-									<UserCard player={player} currentPlayerId={playerId} creatorId={props.room?.hostPlayerId} />
+									<UserCard player={player} currentPlayerId={playerId} creatorId={props.lobby?.hostPlayerId} />
 								</Box>
 							))
 						}
@@ -147,9 +147,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="flex flex-row align-middle">
 					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
-					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.room?.players.length} / 10</div>
+					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
 					{
-						props.room.hostPlayerId === playerId && (
+						props.lobby.hostPlayerId === playerId && (
 							<Box className="self-center" ml={2}>
 								<Button
 									color='primary' size='small' onClick={startGame}

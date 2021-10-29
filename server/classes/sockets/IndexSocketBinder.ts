@@ -1,25 +1,25 @@
 import { Socket } from 'socket.io';
-import RoomFacade from '../../facades/RoomFacade';
+import LobbyFacade from '../../facades/LobbyFacade';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 
 export default class IndexSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
-		this.onRoomCreation(socket);
-		this.onCheckAlreadyInRoom(socket);
+		this.onLobbyCreation(socket);
+		this.onCheckAlreadyInLobby(socket);
 	}
 
-	private static onRoomCreation(socket: Socket): void {
-		socket.on('create-room', (ack) => {
-			ack(RoomFacade.create(socket));
+	private static onLobbyCreation(socket: Socket): void {
+		socket.on('create-lobby', (ack) => {
+			ack(LobbyFacade.create(socket));
 		});
 	}
 
-	private static onCheckAlreadyInRoom(socket: Socket): void {
-		socket.on('check-already-in-room', (ack) => {
+	private static onCheckAlreadyInLobby(socket: Socket): void {
+		socket.on('check-already-in-lobby', (ack) => {
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			ack(!!Application.getPlayerRoomStorage().getRoomOf(sessionId))
+			ack(!!Application.getPlayerLobbyStorage().getLobbyOf(sessionId))
 		});
 	}
 }
