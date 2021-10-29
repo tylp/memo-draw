@@ -7,21 +7,21 @@ import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class LobbyFacade {
 	public static create(socket: Socket): Lobby {
-		const room = LobbyService.create(SocketIdentifierService.getIdentifiersOf(socket))
+		const lobby = LobbyService.create(SocketIdentifierService.getIdentifiersOf(socket))
 
-		return LobbyFacade.join(socket, room.id);
+		return LobbyFacade.join(socket, lobby.id);
 	}
 
 	public static join(socket: Socket, lobbyId: Lobby['id']): Lobby {
 		const sessionOfSocket = SocketIdentifierService.getSessionOf(socket);
-		const room = Application.getLobbyStorage().get(lobbyId);
+		const lobby = Application.getLobbyStorage().get(lobbyId);
 		const player = PlayerFactory.create(sessionOfSocket);
 
-		room.add(player);
-		socket.join(room.getSocketLobbyName());
-		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, room.id);
+		lobby.add(player);
+		socket.join(lobby.getSocketLobbyName());
+		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, lobby.id);
 
-		return room;
+		return lobby;
 	}
 
 	public static rejoin(socket: Socket): Lobby {
@@ -47,11 +47,11 @@ export default class LobbyFacade {
 	public static startGame(socket: Socket): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 		const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-		const room = Application.getLobbyStorage().get(lobbyId);
+		const lobby = Application.getLobbyStorage().get(lobbyId);
 
-		if (LobbyService.start(room, player)) {
-			socket.emit('game-started', room);
-			socket.to(Lobby.getLobbyName(lobbyId)).emit('game-started', room);
+		if (LobbyService.start(lobby, player)) {
+			socket.emit('game-started', lobby);
+			socket.to(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
 		}
 	}
 

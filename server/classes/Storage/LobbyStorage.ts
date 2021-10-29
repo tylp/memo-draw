@@ -3,8 +3,8 @@ import Lobby from '../Lobby';
 import Storage from './Storage';
 
 export default class LobbyStorage extends Storage<string, Lobby> {
-	isPlayerPresent(lobbyId: string, player: Player): boolean {
-		const foundLobby: Lobby = this.get(lobbyId);
+	isPlayerPresent(id: Lobby['id'], player: Player): boolean {
+		const foundLobby: Lobby = this.get(id);
 
 		if (foundLobby) {
 			return foundLobby.isPlayerPresent(player.id);
@@ -13,23 +13,23 @@ export default class LobbyStorage extends Storage<string, Lobby> {
 		return false;
 	}
 
-	addPlayer(id: string, player: Player): Lobby {
-		const room = this.get(id);
+	addPlayer(id: Lobby['id'], player: Player): Lobby {
+		const lobby = this.get(id);
 
-		if (room && !room.isPlayerPresent(player.id)) {
-			room.add(player);
+		if (lobby && !lobby.isPlayerPresent(player.id)) {
+			lobby.add(player);
 		}
 
-		return room;
+		return lobby;
 	}
 
-	removePlayer(id: string, playerId: string): Lobby {
-		const room = this.get(id);
+	removePlayer(id: Lobby['id'], playerId: Player['id']): Lobby {
+		const lobby = this.get(id);
 
-		if (room) {
-			room.remove(playerId);
+		if (lobby) {
+			lobby.remove(playerId);
 		}
 
-		return room;
+		return lobby;
 	}
 }

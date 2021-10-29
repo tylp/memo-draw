@@ -19,7 +19,7 @@ const Lobby = (): JSX.Element => {
 	const [[infoSnackbar], [dangerSnackbar]] = [useInfoSnackbar(), useDangerSnackbar()]
 
 	const socket = useSocketLobby();
-	const [room, setLobby] = useState<LobbyType>();
+	const [lobby, setLobby] = useState<LobbyType>();
 	const [game, setGame] = useState<Game>();
 
 	useEffect(() => {
@@ -45,9 +45,9 @@ const Lobby = (): JSX.Element => {
 			}
 		})
 
-		socket.on('game-started', (room) => {
-			setLobby(room);
-			setGame(room.game);
+		socket.on('game-started', (lobby) => {
+			setLobby(lobby);
+			setGame(lobby.game);
 		})
 
 		socket.on('update-game', (game) => {
@@ -56,18 +56,18 @@ const Lobby = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
-	return room ? (
-		<LobbyOrGame room={room} game={game}></LobbyOrGame>
+	return lobby ? (
+		<LobbyOrGame lobby={lobby} game={game}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
 
-function LobbyOrGame(props: { room: LobbyType; game: Game }) {
-	return props.room?.hasStarted && props.game ? (
+function LobbyOrGame(props: { lobby: LobbyType; game: Game }) {
+	return props.lobby?.hasStarted && props.game ? (
 		<GameView game={props.game} />
 	) : (
-		<LobbyView room={props.room} />
+		<LobbyView lobby={props.lobby} />
 	)
 }

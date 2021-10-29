@@ -35,71 +35,71 @@ describe('LobbyFacade', () => {
 		Application.getPlayerIdSessionIdStorage().set(sessionB.playerId, sessionB.sessionId);
 	})
 
-	test('create should create a room in application', () => {
+	test('create should create a lobby in application', () => {
 		expect(Application.getLobbyStorage().toArray().length).toBe(0);
 
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
-		expect(Application.getLobbyStorage().get(room.id).hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+		expect(Application.getLobbyStorage().get(lobby.id).hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
 		expect(Application.getLobbyStorage().toArray().length).toBe(1);
 	})
 
 	test('create should make socket join socket.io-room', () => {
 		expect(mockedSocketA.rooms.size).toBe(0);
 
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
 		expect(mockedSocketA.rooms.size).toBe(1);
-		expect(mockedSocketA.rooms.has(room.getSocketLobbyName())).toBeTruthy();
+		expect(mockedSocketA.rooms.has(lobby.getSocketLobbyName())).toBeTruthy();
 	})
 
 	test('create should link player to lobby', () => {
 		const sessionIdOfSocketA = SocketIdentifierService.getSessionIdentifier(mockedSocketA);
 		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketA)).toBeUndefined();
 
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
-		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketA)).toBe(room.id);
+		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketA)).toBe(lobby.id);
 	})
 
-	test('join should add player to room', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+	test('join should add player to lobby', () => {
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
-		expect(room.players.length).toBe(1);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(lobby.players.length).toBe(1);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
-		LobbyFacade.join(mockedSocketB, room.id);
+		LobbyFacade.join(mockedSocketB, lobby.id);
 
-		expect(room.players.length).toBe(2);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+		expect(lobby.players.length).toBe(2);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 	})
 
 	test('join should make socket join socket.io-room', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 		expect(mockedSocketB.rooms.size).toBe(0);
 
-		LobbyFacade.join(mockedSocketB, room.id);
+		LobbyFacade.join(mockedSocketB, lobby.id);
 
 		expect(mockedSocketB.rooms.size).toBe(1);
-		expect(mockedSocketB.rooms.has(Lobby.getLobbyName(room.id))).toBeTruthy()
+		expect(mockedSocketB.rooms.has(Lobby.getLobbyName(lobby.id))).toBeTruthy()
 	})
 
 	test('join should link player to lobby', () => {
 		const sessionIdOfSocketB = SocketIdentifierService.getSessionIdentifier(mockedSocketB);
 		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketB)).toBeUndefined();
 
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
-		LobbyFacade.join(mockedSocketB, room.id);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+		LobbyFacade.join(mockedSocketB, lobby.id);
 
-		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketB)).toBe(room.id);
+		expect(Application.getPlayerLobbyStorage().get(sessionIdOfSocketB)).toBe(lobby.id);
 	})
 
 	test('rejoin should make socket join socket.io-room', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 		expect(mockedSocketB.rooms.size).toBe(0);
 
-		LobbyFacade.join(mockedSocketB, room.id);
+		LobbyFacade.join(mockedSocketB, lobby.id);
 
 		expect(mockedSocketB.rooms.size).toBe(1);
 
@@ -119,70 +119,70 @@ describe('LobbyFacade', () => {
 		LobbyFacade.rejoin(reconnectedMockedSocketB);
 
 		expect(reconnectedMockedSocketB.rooms.size).toBe(1);
-		expect(reconnectedMockedSocketB.rooms.has(room.getSocketLobbyName())).toBeTruthy();
+		expect(reconnectedMockedSocketB.rooms.has(lobby.getSocketLobbyName())).toBeTruthy();
 	})
 
 	test('kick should work and make socket leave socket.io-room', () => {
 		expect(mockedSocketA.rooms.size).toBe(0);
 
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
 		expect(mockedSocketA.rooms.size).toBe(1);
-		expect(mockedSocketA.rooms.has(room.getSocketLobbyName())).toBeTruthy()
-		expect(room.players.length).toBe(1);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(mockedSocketA.rooms.has(lobby.getSocketLobbyName())).toBeTruthy()
+		expect(lobby.players.length).toBe(1);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
-		LobbyFacade.join(mockedSocketB, room.id);
+		LobbyFacade.join(mockedSocketB, lobby.id);
 
-		expect(room.players.length).toBe(2);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+		expect(lobby.players.length).toBe(2);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 		expect(mockedSocketB.rooms.size).toBe(1);
-		expect(mockedSocketB.rooms.has(room.getSocketLobbyName())).toBeTruthy()
+		expect(mockedSocketB.rooms.has(lobby.getSocketLobbyName())).toBeTruthy()
 
 		LobbyFacade.kick(mockedSocketA, sessionB.playerId);
 
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
 	test('quit should leave player from lobby', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
-		expect(room.players.length).toBe(1);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+		expect(lobby.players.length).toBe(1);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
-		LobbyFacade.join(mockedSocketB, room.id);
-		expect(room.players.length).toBe(2);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+		LobbyFacade.join(mockedSocketB, lobby.id);
+		expect(lobby.players.length).toBe(2);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 
 		LobbyFacade.quit(mockedSocketB);
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
-	test('quit should delink player from lobby', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
-		expect(room.players.length).toBe(1);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+	test('quit should unlink player from lobby', () => {
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+		expect(lobby.players.length).toBe(1);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
-		LobbyFacade.join(mockedSocketB, room.id);
-		expect(room.players.length).toBe(2);
-		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+		LobbyFacade.join(mockedSocketB, lobby.id);
+		expect(lobby.players.length).toBe(2);
+		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 
 		LobbyFacade.quit(mockedSocketB);
-		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
+		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 
 		expect(Application.getPlayerLobbyStorage().get(mockedSocketB)).toBeUndefined();
 	})
 
 	test('quit should reassign host if host left', () => {
-		const room: Lobby = LobbyFacade.create(mockedSocketA);
-		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+		expect(lobby.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
 
-		LobbyFacade.join(mockedSocketB, room.id);
-		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+		LobbyFacade.join(mockedSocketB, lobby.id);
+		expect(lobby.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
 		LobbyFacade.quit(mockedSocketA);
 
-		expect(room.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketB));
+		expect(lobby.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketB));
 	})
 });

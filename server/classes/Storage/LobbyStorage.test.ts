@@ -7,13 +7,13 @@ import ISession from '../../interfaces/ISession';
 
 describe('LobbyStorage', () => {
 	let storage = new LobbyStorage();
-	const roomIdNotExisting = IdGeneratorService.generate();
+	const lobbyIdNotExisting = IdGeneratorService.generate();
 	const playerOneSession: ISession = {
 		sessionId: 'Random string',
 		playerId: 'Random string',
 		profile: ProfileFactory.create(),
 	}
-	const roomId = IdGeneratorService.generate();
+	const lobbyId = IdGeneratorService.generate();
 	let lobby = LobbyFactory.create(playerOneSession.playerId);
 	const playerOne = PlayerFactory.create(playerOneSession);
 
@@ -27,61 +27,61 @@ describe('LobbyStorage', () => {
 	beforeEach(() => {
 		storage = new LobbyStorage();
 		lobby = LobbyFactory.create(playerOneSession.playerId);
-		storage.set(roomId, lobby)
+		storage.set(lobbyId, lobby)
 	})
 
 	test('isPlayerPresent should work', () => {
-		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
+		expect(storage.isPlayerPresent(lobbyId, playerOne)).toBeFalsy();
 
-		storage.addPlayer(roomId, playerOne);
+		storage.addPlayer(lobbyId, playerOne);
 
-		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
+		expect(storage.isPlayerPresent(lobbyId, playerOne)).toBeTruthy();
 	});
 
-	test('isPlayerPresent should not crash when room is not found', () => {
-		expect(storage.isPlayerPresent(roomIdNotExisting, playerOne)).toBeFalsy()
+	test('isPlayerPresent should not crash when lobby is not found', () => {
+		expect(storage.isPlayerPresent(lobbyIdNotExisting, playerOne)).toBeFalsy()
 	});
 
 	test('addPlayer should work', () => {
-		expect(storage.get(roomId).isEmpty()).toBeTruthy();
+		expect(storage.get(lobbyId).isEmpty()).toBeTruthy();
 
-		storage.addPlayer(roomId, playerOne);
-
-		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
-
-		storage.addPlayer(roomId, playerTwo);
+		storage.addPlayer(lobbyId, playerOne);
 
 		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
-		expect(storage.get(roomId).isPlayerPresent(playerTwo.id)).toBeTruthy();
+		expect(storage.get(lobbyId).isPlayerPresent(playerOne.id)).toBeTruthy();
+
+		storage.addPlayer(lobbyId, playerTwo);
+
+		expect(storage.isEmpty()).toBeFalsy();
+		expect(storage.get(lobbyId).isPlayerPresent(playerOne.id)).toBeTruthy();
+		expect(storage.get(lobbyId).isPlayerPresent(playerTwo.id)).toBeTruthy();
 	});
 
-	test('addPlayer should not crash when room is not found', () => {
-		expect(storage.addPlayer(roomIdNotExisting, playerOne)).toBeFalsy()
+	test('addPlayer should not crash when lobby is not found', () => {
+		expect(storage.addPlayer(lobbyIdNotExisting, playerOne)).toBeFalsy()
 	});
 
 	test('removePlayer should work', () => {
-		expect(storage.get(roomId).isEmpty()).toBeTruthy();
+		expect(storage.get(lobbyId).isEmpty()).toBeTruthy();
 
-		storage.addPlayer(roomId, playerOne);
-		storage.addPlayer(roomId, playerTwo);
-		expect(storage.get(roomId).isEmpty()).toBeFalsy();
-		expect(storage.isPlayerPresent(roomId, playerOne)).toBeTruthy();
-		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
+		storage.addPlayer(lobbyId, playerOne);
+		storage.addPlayer(lobbyId, playerTwo);
+		expect(storage.get(lobbyId).isEmpty()).toBeFalsy();
+		expect(storage.isPlayerPresent(lobbyId, playerOne)).toBeTruthy();
+		expect(storage.isPlayerPresent(lobbyId, playerTwo)).toBeTruthy();
 
-		storage.removePlayer(roomId, playerOne.id);
-		expect(storage.get(roomId).isEmpty()).toBeFalsy();
-		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
-		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeTruthy();
+		storage.removePlayer(lobbyId, playerOne.id);
+		expect(storage.get(lobbyId).isEmpty()).toBeFalsy();
+		expect(storage.isPlayerPresent(lobbyId, playerOne)).toBeFalsy();
+		expect(storage.isPlayerPresent(lobbyId, playerTwo)).toBeTruthy();
 
-		storage.removePlayer(roomId, playerTwo.id);
-		expect(storage.get(roomId).isEmpty()).toBeTruthy();
-		expect(storage.isPlayerPresent(roomId, playerOne)).toBeFalsy();
-		expect(storage.isPlayerPresent(roomId, playerTwo)).toBeFalsy();
+		storage.removePlayer(lobbyId, playerTwo.id);
+		expect(storage.get(lobbyId).isEmpty()).toBeTruthy();
+		expect(storage.isPlayerPresent(lobbyId, playerOne)).toBeFalsy();
+		expect(storage.isPlayerPresent(lobbyId, playerTwo)).toBeFalsy();
 	});
 
-	test('removePlayer should not crash when room is not found', () => {
-		expect(storage.removePlayer(roomIdNotExisting, playerOne.id)).toBeFalsy()
+	test('removePlayer should not crash when lobby is not found', () => {
+		expect(storage.removePlayer(lobbyIdNotExisting, playerOne.id)).toBeFalsy()
 	});
 });

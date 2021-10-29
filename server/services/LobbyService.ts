@@ -13,10 +13,10 @@ interface PlayerIdentifiers {
 export default class LobbyService {
 
 	public static create({ playerId, sessionId }: PlayerIdentifiers): Lobby {
-		const room = LobbyFactory.create(playerId);
-		this.linkPlayerToLobby(sessionId, room.id);
-		Application.getSessionStorage().update(sessionId, { playerLobbyId: room.id })
-		return room;
+		const lobby = LobbyFactory.create(playerId);
+		this.linkPlayerToLobby(sessionId, lobby.id);
+		Application.getSessionStorage().update(sessionId, { playerLobbyId: lobby.id })
+		return lobby;
 	}
 
 	public static linkPlayerToLobby(sessionId: ISession['sessionId'], lobbyId: Lobby['id']): void {
@@ -35,30 +35,30 @@ export default class LobbyService {
 		return updatedLobby;
 	}
 
-	public static start(room: Lobby, player: Player): boolean {
-		if (room.hostPlayerId === player.id) {
-			room.startGame();
+	public static start(lobby: Lobby, player: Player): boolean {
+		if (lobby.hostPlayerId === player.id) {
+			lobby.startGame();
 			return true;
 		}
 		return false;
 	}
 
 	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Lobby {
-		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
+		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
-		if (roomOfCurrentPlayer.hostIs(playerId)) {
+		if (lobbyOfCurrentPlayer.hostIs(playerId)) {
 			this.quit({ playerId: kickedPlayerId, sessionId: kickedSessionId });
 		}
 
-		return roomOfCurrentPlayer;
+		return lobbyOfCurrentPlayer;
 	}
 
 	public static quit({ playerId, sessionId }: PlayerIdentifiers): Lobby {
-		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
+		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
 		Application.getPlayerLobbyStorage().delete(sessionId);
 
-		return roomOfCurrentPlayer?.remove(playerId);
+		return lobbyOfCurrentPlayer?.remove(playerId);
 	}
 }

@@ -43,11 +43,11 @@ export default class LobbySocketBinder extends SocketBinder {
 		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
 			const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Lobby = Application.getLobbyStorage().removePlayer(lobbyId, playerId);
-			if (room?.hostIs(playerId)) {
-				room.assignRandomHost();
+			const lobby: Lobby = Application.getLobbyStorage().removePlayer(lobbyId, playerId);
+			if (lobby?.hostIs(playerId)) {
+				lobby.assignRandomHost();
 			}
-			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', room);
+			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', lobby);
 		})
 	}
 
