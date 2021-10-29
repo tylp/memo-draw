@@ -9,7 +9,7 @@ export default class Application {
 	protected static instance: Application;
 
 	protected sessionStorage: SessionStorage = new SessionStorage();
-	protected roomStorage: LobbyStorage = new LobbyStorage();
+	protected lobbyStorage: LobbyStorage = new LobbyStorage();
 	protected playerLobbyStorage: PlayerLobbyStorage = new PlayerLobbyStorage();
 	protected playerIdSessionIdStorage: PlayerIdSessionIdStorage = new PlayerIdSessionIdStorage();
 
@@ -33,7 +33,7 @@ export default class Application {
 	}
 
 	static getLobbyStorage(): LobbyStorage {
-		return Application.getInstance().roomStorage;
+		return Application.getInstance().lobbyStorage;
 	}
 
 	static getPlayerLobbyStorage(): PlayerLobbyStorage {

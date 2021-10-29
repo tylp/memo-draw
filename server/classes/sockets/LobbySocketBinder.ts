@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import Room from '../Room';
+import Lobby from '../Lobby';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
@@ -9,8 +9,8 @@ export default class LobbySocketBinder extends SocketBinder {
 
 	static bindSocket(socket: Socket): void {
 		this.onJoinLobby(socket);
-		this.onInvitedInRoom(socket);
-		this.onKickPlayerFromRoom(socket);
+		this.onInvitedInLobby(socket);
+		this.onKickPlayerFromLobby(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 		this.onLeaveGame(socket);
@@ -22,7 +22,7 @@ export default class LobbySocketBinder extends SocketBinder {
 		})
 	}
 
-	private static onInvitedInRoom(socket: Socket): void {
+	private static onInvitedInLobby(socket: Socket): void {
 		socket.on('invited-in-room', (roomId, ack) => {
 			if (Application.getLobbyStorage().containsKey(roomId)) {
 				Application.getPlayerLobbyStorage().set(SocketIdentifierService.getSessionIdentifier(socket), roomId);
@@ -33,7 +33,7 @@ export default class LobbySocketBinder extends SocketBinder {
 		})
 	}
 
-	private static onKickPlayerFromRoom(socket: Socket): void {
+	private static onKickPlayerFromLobby(socket: Socket): void {
 		socket.on('kick-player-from-room', (kickedPlayerId) => {
 			LobbyFacade.kick(socket, kickedPlayerId);
 		})
@@ -43,11 +43,11 @@ export default class LobbySocketBinder extends SocketBinder {
 		const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
 		socket.on('disconnect', () => {
 			const roomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Room = Application.getLobbyStorage().removePlayer(roomId, playerId);
+			const room: Lobby = Application.getLobbyStorage().removePlayer(roomId, playerId);
 			if (room?.hostIs(playerId)) {
 				room.assignRandomHost();
 			}
-			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
+			socket.to(Lobby.getLobbyName(roomId)).emit('update-room', room);
 		})
 	}
 

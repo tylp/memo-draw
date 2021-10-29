@@ -1,6 +1,6 @@
 import Application from '../classes/Application';
 import Player from '../classes/Player';
-import Room from '../classes/Room';
+import Lobby from '../classes/Lobby';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyFactory from '../factories/LobbyFactory';
 import ISession from '../interfaces/ISession';
@@ -12,30 +12,30 @@ interface PlayerIdentifiers {
 
 export default class LobbyService {
 
-	public static create({ playerId, sessionId }: PlayerIdentifiers): Room {
+	public static create({ playerId, sessionId }: PlayerIdentifiers): Lobby {
 		const room = LobbyFactory.create(playerId);
-		this.linkPlayerToRoom(sessionId, room.id);
-		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
+		this.linkPlayerToLobby(sessionId, room.id);
+		Application.getSessionStorage().update(sessionId, { playerLobbyId: room.id })
 		return room;
 	}
 
-	public static linkPlayerToRoom(sessionId: ISession['sessionId'], roomId: Room['id']): void {
+	public static linkPlayerToLobby(sessionId: ISession['sessionId'], roomId: Lobby['id']): void {
 		Application.getPlayerLobbyStorage().set(sessionId, roomId)
 	}
 
-	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Room {
+	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Lobby {
 		const session = Application.getSessionStorage().get(sessionId);
 		const roomId = Application.getPlayerLobbyStorage().get(sessionId);
 
-		const updatedRoom = Application.getLobbyStorage().addPlayer(roomId, PlayerFactory.create(session));
-		if (updatedRoom && !updatedRoom.hasHost()) {
-			updatedRoom.assignHost(playerId);
+		const updatedLobby = Application.getLobbyStorage().addPlayer(roomId, PlayerFactory.create(session));
+		if (updatedLobby && !updatedLobby.hasHost()) {
+			updatedLobby.assignHost(playerId);
 		}
 
-		return updatedRoom;
+		return updatedLobby;
 	}
 
-	public static start(room: Room, player: Player): boolean {
+	public static start(room: Lobby, player: Player): boolean {
 		if (room.hostPlayerId === player.id) {
 			room.startGame();
 			return true;
@@ -43,8 +43,8 @@ export default class LobbyService {
 		return false;
 	}
 
-	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
-		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getRoomOf(sessionId)
+	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Lobby {
+		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
 		if (roomOfCurrentPlayer.hostIs(playerId)) {
@@ -54,8 +54,8 @@ export default class LobbyService {
 		return roomOfCurrentPlayer;
 	}
 
-	public static quit({ playerId, sessionId }: PlayerIdentifiers): Room {
-		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getRoomOf(sessionId)
+	public static quit({ playerId, sessionId }: PlayerIdentifiers): Lobby {
+		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
 		Application.getPlayerLobbyStorage().delete(sessionId);
 

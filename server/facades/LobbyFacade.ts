@@ -1,47 +1,47 @@
 import { Socket } from 'socket.io';
 import Application from '../classes/Application';
-import Room from '../classes/Room';
+import Lobby from '../classes/Lobby';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyService from '../services/LobbyService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class LobbyFacade {
-	public static create(socket: Socket): Room {
+	public static create(socket: Socket): Lobby {
 		const room = LobbyService.create(SocketIdentifierService.getIdentifiersOf(socket))
 
 		return LobbyFacade.join(socket, room.id);
 	}
 
-	public static join(socket: Socket, roomId: Room['id']): Room {
+	public static join(socket: Socket, roomId: Lobby['id']): Lobby {
 		const sessionOfSocket = SocketIdentifierService.getSessionOf(socket);
 		const room = Application.getLobbyStorage().get(roomId);
 		const player = PlayerFactory.create(sessionOfSocket);
 
 		room.add(player);
-		socket.join(room.getSocketRoomName());
-		LobbyService.linkPlayerToRoom(sessionOfSocket.sessionId, room.id);
+		socket.join(room.getSocketLobbyName());
+		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, room.id);
 
 		return room;
 	}
 
-	public static rejoin(socket: Socket): Room {
-		const joinedRoomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket))
+	public static rejoin(socket: Socket): Lobby {
+		const joinedLobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket))
 
-		if (joinedRoomId) {
-			socket.join(Room.getRoomName(joinedRoomId));
+		if (joinedLobbyId) {
+			socket.join(Lobby.getLobbyName(joinedLobbyId));
 		}
 
 		return this.reassignHost(socket);
 	}
 
-	public static reassignHost(socket: Socket): Room {
-		const updatedRoom = LobbyService.reassignHost(SocketIdentifierService.getIdentifiersOf(socket));
+	public static reassignHost(socket: Socket): Lobby {
+		const updatedLobby = LobbyService.reassignHost(SocketIdentifierService.getIdentifiersOf(socket));
 
-		if (updatedRoom) {
-			socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+		if (updatedLobby) {
+			socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
 		}
 
-		return updatedRoom;
+		return updatedLobby;
 	}
 
 	public static startGame(socket: Socket): void {
@@ -51,25 +51,25 @@ export default class LobbyFacade {
 
 		if (LobbyService.start(room, player)) {
 			socket.emit('game-started', room);
-			socket.to(Room.getRoomName(roomId)).emit('game-started', room);
+			socket.to(Lobby.getLobbyName(roomId)).emit('game-started', room);
 		}
 	}
 
-	public static kick(socket: Socket, kickedPlayerId: string): Room {
-		const updatedRoom = LobbyService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
+	public static kick(socket: Socket, kickedPlayerId: string): Lobby {
+		const updatedLobby = LobbyService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
 
-		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
-		socket.to(Room.getRoomName(updatedRoom.id)).emit('kicked-player', kickedPlayerId);
+		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
+		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('kicked-player', kickedPlayerId);
 
-		return updatedRoom;
+		return updatedLobby;
 	}
 
-	public static quit(socket: Socket): Room {
-		const updatedRoom = LobbyService.quit(SocketIdentifierService.getIdentifiersOf(socket))
+	public static quit(socket: Socket): Lobby {
+		const updatedLobby = LobbyService.quit(SocketIdentifierService.getIdentifiersOf(socket))
 
-		socket.to(Room.getRoomName(updatedRoom.id)).emit('update-room', updatedRoom);
+		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-room', updatedLobby);
 
-		return updatedRoom;
+		return updatedLobby;
 	}
 
 }

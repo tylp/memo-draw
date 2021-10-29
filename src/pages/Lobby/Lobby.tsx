@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
-import RoomType from '../../../server/classes/Room';
+import LobbyType from '../../../server/classes/Lobby';
 import { Game } from '../../../server/classes/Game';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
@@ -19,7 +19,7 @@ const Lobby = (): JSX.Element => {
 	const [[infoSnackbar], [dangerSnackbar]] = [useInfoSnackbar(), useDangerSnackbar()]
 
 	const socket = useSocketLobby();
-	const [room, setRoom] = useState<RoomType>();
+	const [room, setLobby] = useState<LobbyType>();
 	const [game, setGame] = useState<Game>();
 
 	useEffect(() => {
@@ -30,12 +30,12 @@ const Lobby = (): JSX.Element => {
 				dangerSnackbar(t('alert.haventJoinedRoomYet'))
 				history.push('/')
 			} else {
-				setRoom(data);
+				setLobby(data);
 			}
 		})
 
 		socket.on('update-room', (data) => {
-			setRoom(data);
+			setLobby(data);
 		})
 
 		socket.on('kicked-player', (kickedPlayerId) => {
@@ -46,7 +46,7 @@ const Lobby = (): JSX.Element => {
 		})
 
 		socket.on('game-started', (room) => {
-			setRoom(room);
+			setLobby(room);
 			setGame(room.game);
 		})
 
@@ -64,7 +64,7 @@ const Lobby = (): JSX.Element => {
 }
 export default Lobby;
 
-function RoomOrGame(props: { room: RoomType; game: Game }) {
+function RoomOrGame(props: { room: LobbyType; game: Game }) {
 	return props.room?.hasStarted && props.game ? (
 		<GameView game={props.game} />
 	) : (

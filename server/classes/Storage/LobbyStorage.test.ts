@@ -14,7 +14,7 @@ describe('LobbyStorage', () => {
 		profile: ProfileFactory.create(),
 	}
 	const roomId = IdGeneratorService.generate();
-	let room = LobbyFactory.create(playerOneSession.playerId);
+	let lobby = LobbyFactory.create(playerOneSession.playerId);
 	const playerOne = PlayerFactory.create(playerOneSession);
 
 	const playerTwoSession: ISession = {
@@ -26,8 +26,8 @@ describe('LobbyStorage', () => {
 
 	beforeEach(() => {
 		storage = new LobbyStorage();
-		room = LobbyFactory.create(playerOneSession.playerId);
-		storage.set(roomId, room)
+		lobby = LobbyFactory.create(playerOneSession.playerId);
+		storage.set(roomId, lobby)
 	})
 
 	test('isPlayerPresent should work', () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Player from '../../../../server/classes/Player';
-import Room from '../../../../server/classes/Room';
+import Lobby from '../../../../server/classes/Lobby';
 import { useSocketLobby } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
@@ -25,7 +25,7 @@ import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 
 interface LobbyViewProps {
-	room: Room;
+	room: Lobby;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {

@@ -1,19 +1,19 @@
 import Player from '../Player';
-import Room from '../Room';
+import Lobby from '../Lobby';
 import Storage from './Storage';
 
-export default class LobbyStorage extends Storage<string, Room> {
+export default class LobbyStorage extends Storage<string, Lobby> {
 	isPlayerPresent(roomId: string, player: Player): boolean {
-		const foundRoom: Room = this.get(roomId);
+		const foundLobby: Lobby = this.get(roomId);
 
-		if (foundRoom) {
-			return foundRoom.isPlayerPresent(player.id);
+		if (foundLobby) {
+			return foundLobby.isPlayerPresent(player.id);
 		}
 
 		return false;
 	}
 
-	addPlayer(id: string, player: Player): Room {
+	addPlayer(id: string, player: Player): Lobby {
 		const room = this.get(id);
 
 		if (room && !room.isPlayerPresent(player.id)) {
@@ -23,7 +23,7 @@ export default class LobbyStorage extends Storage<string, Room> {
 		return room;
 	}
 
-	removePlayer(id: string, playerId: string): Room {
+	removePlayer(id: string, playerId: string): Lobby {
 		const room = this.get(id);
 
 		if (room) {

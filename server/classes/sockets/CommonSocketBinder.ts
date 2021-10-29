@@ -55,10 +55,10 @@ export default class CommonSocketBinder extends SocketBinder {
 				ack();
 			}
 			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
-			const room = Application.getPlayerLobbyStorage().getRoomOf(sessionId)
+			const room = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 			if (room) {
 				room.players = room.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
-				socket.to(room.getSocketRoomName()).emit('update-room', room);
+				socket.to(room.getSocketLobbyName()).emit('update-room', room);
 			}
 		})
 	}

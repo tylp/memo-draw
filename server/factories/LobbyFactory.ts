@@ -1,10 +1,10 @@
 import Application from '../classes/Application';
-import Room from '../classes/Room';
+import Lobby from '../classes/Lobby';
 import IdGeneratorService from '../services/IdGeneratorService';
 
 export default class LobbyFactory {
-	public static create(hostPlayerId: string): Room {
+	public static create(hostPlayerId: string): Lobby {
 		const roomId = IdGeneratorService.generate()
-		return Application.getLobbyStorage().set(roomId, new Room(roomId, hostPlayerId));
+		return Application.getLobbyStorage().set(roomId, new Lobby(roomId, hostPlayerId));
 	}
 }

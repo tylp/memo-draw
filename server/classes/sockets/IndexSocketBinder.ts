@@ -6,20 +6,20 @@ import SocketBinder from './SocketBinder';
 
 export default class IndexSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
-		this.onRoomCreation(socket);
-		this.onCheckAlreadyInRoom(socket);
+		this.onLobbyCreation(socket);
+		this.onCheckAlreadyInLobby(socket);
 	}
 
-	private static onRoomCreation(socket: Socket): void {
+	private static onLobbyCreation(socket: Socket): void {
 		socket.on('create-room', (ack) => {
 			ack(LobbyFacade.create(socket));
 		});
 	}
 
-	private static onCheckAlreadyInRoom(socket: Socket): void {
+	private static onCheckAlreadyInLobby(socket: Socket): void {
 		socket.on('check-already-in-room', (ack) => {
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			ack(!!Application.getPlayerLobbyStorage().getRoomOf(sessionId))
+			ack(!!Application.getPlayerLobbyStorage().getLobbyOf(sessionId))
 		});
 	}
 }
