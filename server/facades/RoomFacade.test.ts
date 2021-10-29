@@ -1,5 +1,5 @@
-import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
 import Application from '../classes/Application';
 import Room from '../classes/Room';
 import ISession from '../interfaces/ISession';
@@ -171,7 +171,7 @@ describe('RoomFacade', () => {
 
 		RoomFacade.quit(mockedSocketB);
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
-		
+
 		expect(Application.getPlayerRoomStorage().get(mockedSocketB)).toBeUndefined();
 	})
 
