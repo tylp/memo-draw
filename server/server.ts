@@ -12,6 +12,7 @@ const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
 Application.bindServer(io);
+Application.startClearEmptyLobbies();
 
 nextApp.prepare().then(() => {
 	app.get('*', (req, res) => nextHandler(req, res));

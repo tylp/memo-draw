@@ -4,6 +4,7 @@ import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
 import PlayerLobbyStorage from './Storage/PlayerLobbyStorage';
 import LobbyStorage from './Storage/LobbyStorage';
 import SessionStorage from './Storage/SessionStorage';
+import Lobby from './Lobby';
 
 export default class Application {
 	protected static instance: Application;
@@ -22,6 +23,15 @@ export default class Application {
 			Application.instance = new Application();
 		}
 		return Application.instance;
+	}
+
+	static startClearEmptyLobbies(): void {
+		setInterval(() => {
+			const emptyLobbies = Application.getLobbyStorage().toArray().filter((e: Lobby) => e.isEmpty());
+			emptyLobbies.forEach((e: Lobby) => {
+				Application.getLobbyStorage().delete(e.id);
+			})
+		}, 900000) // 15 minutes
 	}
 
 	static bindServer(io: Server): void {
