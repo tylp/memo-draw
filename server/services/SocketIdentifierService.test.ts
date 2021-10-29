@@ -1,27 +1,36 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SocketIdentifierService from './SocketIdentifierService';
-import MockedSocket from 'socket.io-mock';
-import Application from '../classes/Application';
 import ISession from '../interfaces/ISession';
+import Application from '../classes/Application';
+import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
+import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
 
 describe('SocketIdentifierService', () => {
+	let mocketServer: MocketServer;
+	let socketMock: any;
 	let session: ISession;
-	let mockSock: MockedSocket;
 
-	beforeAll(() => {
+	beforeEach(() => {
+		ResetableApplication.reset();
+		mocketServer = new MocketServer();
+		socketMock = mocketServer.createSocket();
 		session = Application.getSessionStorage().generate();
-		mockSock = new MockedSocket();
-		mockSock.handshake = {auth: {sessionId: session.sessionId}};
+		socketMock.handshake = {
+			auth: {
+				sessionId: session.sessionId,
+			},
+		}
 	});
 
 	test('getSessionIdentifier should work', () => {
-		expect(SocketIdentifierService.getSessionIdentifier(mockSock)).toBe(session.sessionId);
+		expect(SocketIdentifierService.getSessionIdentifier(socketMock)).toBe(session.sessionId);
 	});
-	
+
 	test('getPlayerIdentifier should work', () => {
-		expect(SocketIdentifierService.getPlayerIdentifier(mockSock)).toBe(session.playerId);
+		expect(SocketIdentifierService.getPlayerIdentifier(socketMock)).toBe(session.playerId);
 	});
 
 	test('getSessionOf should work', () => {
-		expect(SocketIdentifierService.getSessionOf(mockSock).sessionId).toBe(session.sessionId);
+		expect(SocketIdentifierService.getSessionOf(socketMock).sessionId).toBe(session.sessionId);
 	});
 });

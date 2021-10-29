@@ -48,8 +48,8 @@ export default function Homepage(): JSX.Element {
 						bodyColor: BodyColor.Yellow,
 						bodyType: BodyType.Pencil,
 						faceType: FaceType.Happy,
-						rubberColor: RubberColor.Pink
-					}
+						rubberColor: RubberColor.Pink,
+					},
 				})
 			}
 		}

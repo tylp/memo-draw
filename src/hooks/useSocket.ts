@@ -27,8 +27,8 @@ export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClien
 				autoConnect: true,
 				auth: {
 					sessionId: sessionId,
-				}
-			}
+				},
+			},
 		)
 
 		newSocket.on('update-session', (data: ISession) => {
@@ -36,7 +36,7 @@ export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClien
 			setPlayerId(data.playerId)
 			const mergedProfile = {
 				...data.profile,
-				...profile
+				...profile,
 			}
 			setProfile(mergedProfile)
 		})

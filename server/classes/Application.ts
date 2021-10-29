@@ -1,20 +1,20 @@
 import { Server } from 'socket.io';
 import SocketIoHandler from './sockets/SocketIoHandler';
+import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
 import PlayerRoomStorage from './Storage/PlayerRoomStorage';
 import RoomStorage from './Storage/RoomStorage';
 import SessionStorage from './Storage/SessionStorage';
 
 export default class Application {
-	private static instance: Application;
+	protected static instance: Application;
 
-	private sessionStorage: SessionStorage;
-	private roomStorage: RoomStorage;
-	private playerRoomStorage: PlayerRoomStorage;
+	protected sessionStorage: SessionStorage = new SessionStorage();
+	protected roomStorage: RoomStorage = new RoomStorage();
+	protected playerRoomStorage: PlayerRoomStorage = new PlayerRoomStorage();
+	protected playerIdSessionIdStorage: PlayerIdSessionIdStorage = new PlayerIdSessionIdStorage();
 
-	private constructor() {
-		this.sessionStorage = new SessionStorage();
-		this.roomStorage = new RoomStorage();
-		this.playerRoomStorage = new PlayerRoomStorage();
+	protected constructor() {
+		//
 	}
 
 	static getInstance(): Application {
@@ -38,5 +38,9 @@ export default class Application {
 
 	static getPlayerRoomStorage(): PlayerRoomStorage {
 		return Application.getInstance().playerRoomStorage;
+	}
+
+	static getPlayerIdSessionIdStorage(): PlayerIdSessionIdStorage {
+		return Application.getInstance().playerIdSessionIdStorage;
 	}
 }

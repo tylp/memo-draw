@@ -11,7 +11,7 @@ describe('RoomStorage', () => {
 	const playerOneSession: ISession = {
 		sessionId: 'Random string',
 		playerId: 'Random string',
-		profile: ProfileFactory.create()
+		profile: ProfileFactory.create(),
 	}
 	const roomId = IdGeneratorService.generate();
 	let room = RoomFactory.create(playerOneSession.playerId);
@@ -20,7 +20,7 @@ describe('RoomStorage', () => {
 	const playerTwoSession: ISession = {
 		sessionId: 'Random string #2',
 		playerId: 'Random string #2',
-		profile: ProfileFactory.create()
+		profile: ProfileFactory.create(),
 	}
 	const playerTwo = PlayerFactory.create(playerTwoSession);
 
@@ -48,13 +48,13 @@ describe('RoomStorage', () => {
 		storage.addPlayer(roomId, playerOne);
 
 		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
 
 		storage.addPlayer(roomId, playerTwo);
 
 		expect(storage.isEmpty()).toBeFalsy();
-		expect(storage.get(roomId).isPlayerPresent(playerOne)).toBeTruthy();
-		expect(storage.get(roomId).isPlayerPresent(playerTwo)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerOne.id)).toBeTruthy();
+		expect(storage.get(roomId).isPlayerPresent(playerTwo.id)).toBeTruthy();
 	});
 
 	test('addPlayer should not crash when room is not found', () => {

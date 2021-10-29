@@ -6,7 +6,7 @@ export default class ProfileFactory {
 	static create(): IProfile {
 		return {
 			username: FakeNameGeneratorService.generate(),
-			avatar: AvatarFactory.create()
+			avatar: AvatarFactory.create(),
 		}
 	}
 }

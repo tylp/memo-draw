@@ -9,7 +9,7 @@ import SocketBinder from './SocketBinder';
 export default class CommonSocketBinder extends SocketBinder {
 	static bindSocket(socket: Socket): void {
 		this.ensureCorrectSessionFor(socket);
-
+		this.linkPlayerIdToSessionId(socket);
 		this.onUpdateProfile(socket);
 	}
 
@@ -40,9 +40,13 @@ export default class CommonSocketBinder extends SocketBinder {
 		socket.emit('update-session', session);
 	}
 
+	private static linkPlayerIdToSessionId(socket: Socket) {
+		Application.getPlayerIdSessionIdStorage().set(SocketIdentifierService.getPlayerIdentifier(socket), SocketIdentifierService.getSessionIdentifier(socket));
+	}
+
 	private static onUpdateProfile(socket: Socket) {
 		socket.on('update-profile', (profile, ack) => {
-			if (ProfileValidatorService.validate(profile)) {
+			if (!ProfileValidatorService.validate(profile)) {
 				return;
 			}
 

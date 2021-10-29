@@ -93,7 +93,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		openInfoSnackBar(t('alert.leavedLobby'))
 		history.push('/');
 		socket.emit('leave-game');
-		socket.emit('reset-linked-room');
 	}
 
 	return (

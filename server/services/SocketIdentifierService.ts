@@ -14,7 +14,7 @@ export default class SocketIdentifierService {
 	public static getIdentifiersOf(socket: Socket): { sessionId: string, playerId: string } {
 		return {
 			sessionId: this.getSessionIdentifier(socket),
-			playerId: this.getPlayerIdentifier(socket)
+			playerId: this.getPlayerIdentifier(socket),
 		};
 	}
 

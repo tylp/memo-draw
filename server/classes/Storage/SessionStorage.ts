@@ -10,15 +10,15 @@ export default class RoomStorage extends Storage<string, ISession> {
 		return this.set(sessionId, {
 			sessionId,
 			playerId,
-			profile: ProfileFactory.create()
+			profile: ProfileFactory.create(),
 		});
 	}
-	
+
 	update(id: string, value: ISession): ISession | undefined {
-		if(this.containsKey(id)) {
+		if (this.containsKey(id)) {
 			const newSession = {
 				...this.get(id),
-				...value
+				...value,
 			}
 			this.set(id, newSession)
 			return newSession;

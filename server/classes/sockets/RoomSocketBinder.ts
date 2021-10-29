@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 import Room from '../Room';
-import PlayerFactory from '../../factories/PlayerFactory';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
+import RoomFacade from '../../facades/RoomFacade';
 
 export default class RoomSocketBinder extends SocketBinder {
 
@@ -11,7 +11,6 @@ export default class RoomSocketBinder extends SocketBinder {
 		this.onJoinRoom(socket);
 		this.onInvitedInRoom(socket);
 		this.onKickPlayerFromRoom(socket);
-		this.onResetLinkedRoom(socket);
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 		this.onLeaveGame(socket);
@@ -19,22 +18,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onJoinRoom(socket: Socket): void {
 		socket.on('join-room', (ack) => {
-			const { playerId, sessionId } = SocketIdentifierService.getIdentifiersOf(socket);
-			const roomId = Application.getPlayerRoomStorage().get(sessionId);
-			if (Application.getRoomStorage().containsKey(roomId)) {
-				const session = Application.getSessionStorage().get(sessionId);
-				Application.getPlayerRoomStorage().set(sessionId, roomId);
-				socket.join(Room.getRoomName(roomId))
-				const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
-				if (!updatedRoom.hasHost()) {
-					updatedRoom.assignHost(playerId);
-				}
-				socket.to(Room.getRoomName(roomId)).emit('update-room', updatedRoom);
-				ack(updatedRoom);
-			} else {
-				Application.getPlayerRoomStorage().delete(sessionId);
-				ack(false);
-			}
+			ack(RoomFacade.rejoin(socket));
 		})
 	}
 
@@ -51,20 +35,7 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onKickPlayerFromRoom(socket: Socket): void {
 		socket.on('kick-player-from-room', (kickedPlayerId) => {
-			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
-			const currentPlayersRoom = Application.getPlayerRoomStorage().getRoomOf(sessionId);
-			if (currentPlayersRoom?.hostIs(playerId)) {
-				currentPlayersRoom.remove(kickedPlayerId);
-				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('update-room', currentPlayersRoom);
-				socket.to(Room.getRoomName(currentPlayersRoom.id)).emit('kicked-player', kickedPlayerId);
-			}
-		})
-	}
-
-	private static onResetLinkedRoom(socket: Socket): void {
-		socket.on('reset-linked-room', () => {
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			Application.getPlayerRoomStorage().delete(sessionId);
+			RoomFacade.kick(socket, kickedPlayerId);
 		})
 	}
 
@@ -82,27 +53,13 @@ export default class RoomSocketBinder extends SocketBinder {
 
 	private static onGameStart(socket: Socket): void {
 		socket.on('start-game', () => {
-			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room = Application.getRoomStorage().get(roomId);
-			if (room.hostPlayerId === player.id) {
-				room.startGame();
-				socket.emit('game-started', room, room.game);
-				socket.to(Room.getRoomName(roomId)).emit('game-started', room, room.game);
-			}
+			RoomFacade.startGame(socket);
 		})
 	}
 
-	//TODO : Refactor by using service (in another issue)
 	private static onLeaveGame(socket: Socket): void {
 		socket.on('leave-game', () => {
-			const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
-			const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
-			const room: Room = Application.getRoomStorage().removePlayer(roomId, playerId);
-			if (room?.hostIs(playerId)) {
-				room.assignRandomHost();
-			}
-			socket.to(Room.getRoomName(roomId)).emit('update-room', room);
+			RoomFacade.quit(socket)
 		})
 	}
 

@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import RoomFactory from '../../factories/RoomFactory';
+import RoomFacade from '../../facades/RoomFacade';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
@@ -12,12 +12,7 @@ export default class IndexSocketBinder extends SocketBinder {
 
 	private static onRoomCreation(socket: Socket): void {
 		socket.on('create-room', (ack) => {
-			const playerId = SocketIdentifierService.getPlayerIdentifier(socket);
-			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
-			const room = RoomFactory.create(playerId);
-			Application.getPlayerRoomStorage().set(sessionId, room.id)
-			Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
-			ack();
+			ack(RoomFacade.create(socket));
 		});
 	}
 
