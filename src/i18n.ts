@@ -5,9 +5,9 @@ const resources = {
 		translation: {
 			'alert': {
 				'youGotKicked': 'You got kicked.',
-				'roomDoesNotExist': 'Room does not exist.',
+				'lobbyDoesNotExist': 'Lobby does not exist.',
 				'leavedLobby': 'You leaved the room.',
-				'haventJoinedRoomYet': 'You haven\'t joined a room yet.',
+				'haventJoinedLobbyYet': 'You haven\'t joined a room yet.',
 				'lengthError': 'Username\'s length should be greater than 2',
 			},
 			'modal': {

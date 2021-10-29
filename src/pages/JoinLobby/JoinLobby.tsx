@@ -19,7 +19,7 @@ export default function JoinLobby(): JSX.Element {
 			return;
 		socket.emit('invited-in-room', roomId, (data) => {
 			if (data === false) {
-				openSnackbar(t('alert.roomDoesNotExist'))
+				openSnackbar(t('alert.lobbyDoesNotExist'))
 				history.push('/')
 			} else {
 				history.push('/lobby');

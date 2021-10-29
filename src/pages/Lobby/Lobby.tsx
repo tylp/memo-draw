@@ -27,7 +27,7 @@ const Lobby = (): JSX.Element => {
 
 		socket.emit('join-room', (data) => {
 			if (!data) {
-				dangerSnackbar(t('alert.haventJoinedRoomYet'))
+				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
 			} else {
 				setLobby(data);
@@ -57,14 +57,14 @@ const Lobby = (): JSX.Element => {
 	}, [socket, sessionId]);
 
 	return room ? (
-		<RoomOrGame room={room} game={game}></RoomOrGame>
+		<LobbyOrGame room={room} game={game}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
 
-function RoomOrGame(props: { room: LobbyType; game: Game }) {
+function LobbyOrGame(props: { room: LobbyType; game: Game }) {
 	return props.room?.hasStarted && props.game ? (
 		<GameView game={props.game} />
 	) : (

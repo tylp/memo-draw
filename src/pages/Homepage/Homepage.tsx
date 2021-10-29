@@ -17,7 +17,7 @@ export default function Homepage(): JSX.Element {
 	const { t } = useTranslation();
 
 	const [isLoading, setIsLoading] = useState(true);
-	const [isCheckingForRoom, setIsCheckingForRoom] = useState(true);
+	const [isCheckingForLobby, setIsCheckingForLobby] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
 
@@ -29,7 +29,7 @@ export default function Homepage(): JSX.Element {
 				if (hasLobby) {
 					history.push('/lobby');
 				} else {
-					setIsCheckingForRoom(false);
+					setIsCheckingForLobby(false);
 				}
 			})
 		}
@@ -58,17 +58,17 @@ export default function Homepage(): JSX.Element {
 	const handleStart = () => {
 		socket.emit('update-profile', profile, () => {
 			setProfileStorage(profile);
-			handleRoomCreation();
+			handleLobbyCreation();
 		})
 	}
 
-	const handleRoomCreation = () => {
+	const handleLobbyCreation = () => {
 		socket.emit('create-room', () => {
 			history.push('/lobby')
 		});
 	}
 
-	return (isLoading || isCheckingForRoom) ?
+	return (isLoading || isCheckingForLobby) ?
 		(
 			<LoadingFull />
 		) : (
