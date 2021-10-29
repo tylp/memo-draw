@@ -39,9 +39,9 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 		props.setProfile({ ...props.profile, username })
 	}
 
-	const handleKeyPress = (element) => {
+	const handleOnKeyUp = (element) => {
 		if (element.key === 'Enter') {
-			props.onEnter();
+			props?.onEnter();
 		}
 	}
 
@@ -74,12 +74,12 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 				<Box mt={2}>
 					<Button fullWidth color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
 					<Title>{t('profileSelector.nickname')}</Title>
-					<input 
+					<input
 						className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"
 						type="text"
 						value={props.profile.username}
 						onChange={(e) => setUsername(e.target.value)}
-						onKeyDown={handleKeyPress}
+						onKeyUp={handleOnKeyUp}
 					/>
 				</Box>
 			</div>
