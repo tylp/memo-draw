@@ -2,7 +2,7 @@ import Player from '../Player';
 import Room from '../Room';
 import Storage from './Storage';
 
-export default class RoomStorage extends Storage<string, Room> {
+export default class LobbyStorage extends Storage<string, Room> {
 	isPlayerPresent(roomId: string, player: Player): boolean {
 		const foundRoom: Room = this.get(roomId);
 

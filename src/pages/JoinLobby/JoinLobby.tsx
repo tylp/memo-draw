@@ -5,7 +5,7 @@ import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar'
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
 
-export default function JoinRoom(): JSX.Element {
+export default function JoinLobby(): JSX.Element {
 	const { roomId } = useParams();
 	const history = useHistory();
 	const { t } = useTranslation();

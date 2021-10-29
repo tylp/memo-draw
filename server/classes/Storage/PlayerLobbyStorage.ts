@@ -5,6 +5,6 @@ import Storage from './Storage';
 
 export default class PlayerLobbyStorage extends Storage<ISession['sessionId'], Room['id']> {
 	public getRoomOf(sessionId: ISession['sessionId']): Room {
-		return Application.getRoomStorage().get(this.get(sessionId));
+		return Application.getLobbyStorage().get(this.get(sessionId));
 	}
 }

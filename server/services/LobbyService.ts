@@ -2,7 +2,7 @@ import Application from '../classes/Application';
 import Player from '../classes/Player';
 import Room from '../classes/Room';
 import PlayerFactory from '../factories/PlayerFactory';
-import RoomFactory from '../factories/RoomFactory';
+import LobbyFactory from '../factories/LobbyFactory';
 import ISession from '../interfaces/ISession';
 
 interface PlayerIdentifiers {
@@ -10,10 +10,10 @@ interface PlayerIdentifiers {
 	sessionId: string;
 }
 
-export default class RoomService {
+export default class LobbyService {
 
 	public static create({ playerId, sessionId }: PlayerIdentifiers): Room {
-		const room = RoomFactory.create(playerId);
+		const room = LobbyFactory.create(playerId);
 		this.linkPlayerToRoom(sessionId, room.id);
 		Application.getSessionStorage().update(sessionId, { playerRoomId: room.id })
 		return room;
@@ -27,7 +27,7 @@ export default class RoomService {
 		const session = Application.getSessionStorage().get(sessionId);
 		const roomId = Application.getPlayerLobbyStorage().get(sessionId);
 
-		const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
+		const updatedRoom = Application.getLobbyStorage().addPlayer(roomId, PlayerFactory.create(session));
 		if (updatedRoom && !updatedRoom.hasHost()) {
 			updatedRoom.assignHost(playerId);
 		}

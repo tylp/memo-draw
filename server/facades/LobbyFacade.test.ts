@@ -36,12 +36,12 @@ describe('LobbyFacade', () => {
 	})
 
 	test('create should create a room in application', () => {
-		expect(Application.getRoomStorage().toArray().length).toBe(0);
+		expect(Application.getLobbyStorage().toArray().length).toBe(0);
 
 		const room: Room = LobbyFacade.create(mockedSocketA);
 
-		expect(Application.getRoomStorage().get(room.id).hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
-		expect(Application.getRoomStorage().toArray().length).toBe(1);
+		expect(Application.getLobbyStorage().get(room.id).hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketA));
+		expect(Application.getLobbyStorage().toArray().length).toBe(1);
 	})
 
 	test('create should make socket join socket.io-room', () => {

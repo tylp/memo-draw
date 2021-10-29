@@ -50,7 +50,7 @@ export default class Room {
 		if (!this.game) {
 			this.hasStarted = true;
 			this.game = new Game(this);
-			Application.getRoomStorage().set(this.id, this);
+			Application.getLobbyStorage().set(this.id, this);
 		}
 		return this.game;
 	}

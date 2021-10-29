@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Homepage from './Homepage/Homepage';
-import JoinRoom from './JoinRoom/JoinRoom';
+import JoinLobby from './JoinLobby/JoinLobby';
 import Lobby from './Lobby/Lobby';
 import SnackbarProvider from 'react-simple-snackbar'
 
@@ -11,7 +11,7 @@ export default function App(): JSX.Element {
 			<Router>
 				<Switch>
 					<Route path="/join/:roomId">
-						<JoinRoom />
+						<JoinLobby />
 					</Route>
 					<Route path="/lobby">
 						<Lobby />

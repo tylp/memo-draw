@@ -1,12 +1,12 @@
 import PlayerFactory from '../../factories/PlayerFactory';
 import ProfileFactory from '../../factories/ProfileFactory';
-import RoomFactory from '../../factories/RoomFactory';
-import RoomStorage from './RoomStorage';
+import LobbyFactory from '../../factories/LobbyFactory';
+import LobbyStorage from './LobbyStorage';
 import IdGeneratorService from '../../services/IdGeneratorService';
 import ISession from '../../interfaces/ISession';
 
-describe('RoomStorage', () => {
-	let storage = new RoomStorage();
+describe('LobbyStorage', () => {
+	let storage = new LobbyStorage();
 	const roomIdNotExisting = IdGeneratorService.generate();
 	const playerOneSession: ISession = {
 		sessionId: 'Random string',
@@ -14,7 +14,7 @@ describe('RoomStorage', () => {
 		profile: ProfileFactory.create(),
 	}
 	const roomId = IdGeneratorService.generate();
-	let room = RoomFactory.create(playerOneSession.playerId);
+	let room = LobbyFactory.create(playerOneSession.playerId);
 	const playerOne = PlayerFactory.create(playerOneSession);
 
 	const playerTwoSession: ISession = {
@@ -25,8 +25,8 @@ describe('RoomStorage', () => {
 	const playerTwo = PlayerFactory.create(playerTwoSession);
 
 	beforeEach(() => {
-		storage = new RoomStorage();
-		room = RoomFactory.create(playerOneSession.playerId);
+		storage = new LobbyStorage();
+		room = LobbyFactory.create(playerOneSession.playerId);
 		storage.set(roomId, room)
 	})
 
