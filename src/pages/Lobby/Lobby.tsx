@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSocketRoom } from '../../hooks';
+import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
 import RoomType from '../../../server/classes/Room';
 import { Game } from '../../../server/classes/Game';
@@ -18,7 +18,7 @@ const Lobby = (): JSX.Element => {
 
 	const [[infoSnackbar], [dangerSnackbar]] = [useInfoSnackbar(), useDangerSnackbar()]
 
-	const socket = useSocketRoom();
+	const socket = useSocketLobby();
 	const [room, setRoom] = useState<RoomType>();
 	const [game, setGame] = useState<Game>();
 

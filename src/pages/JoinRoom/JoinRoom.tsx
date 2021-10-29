@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSocketRoom } from '../../hooks';
+import { useSocketLobby } from '../../hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar'
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ export default function JoinRoom(): JSX.Element {
 
 	const [openSnackbar] = useDangerSnackbar()
 
-	const socket = useSocketRoom();
+	const socket = useSocketLobby();
 
 	useEffect(() => {
 		if (!socket)

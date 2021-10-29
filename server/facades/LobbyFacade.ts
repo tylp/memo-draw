@@ -5,11 +5,11 @@ import PlayerFactory from '../factories/PlayerFactory';
 import RoomService from '../services/RoomService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 
-export default class RoomFacade {
+export default class LobbyFacade {
 	public static create(socket: Socket): Room {
 		const room = RoomService.create(SocketIdentifierService.getIdentifiersOf(socket))
 
-		return RoomFacade.join(socket, room.id);
+		return LobbyFacade.join(socket, room.id);
 	}
 
 	public static join(socket: Socket, roomId: Room['id']): Room {
@@ -25,7 +25,7 @@ export default class RoomFacade {
 	}
 
 	public static rejoin(socket: Socket): Room {
-		const joinedRoomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket))
+		const joinedRoomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket))
 
 		if (joinedRoomId) {
 			socket.join(Room.getRoomName(joinedRoomId));
@@ -46,7 +46,7 @@ export default class RoomFacade {
 
 	public static startGame(socket: Socket): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-		const roomId = Application.getPlayerRoomStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+		const roomId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 		const room = Application.getRoomStorage().get(roomId);
 
 		if (RoomService.start(room, player)) {

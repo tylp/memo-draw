@@ -3,7 +3,7 @@ import Application from '../Application';
 import Room from '../Room';
 import Storage from './Storage';
 
-export default class PlayerRoomStorage extends Storage<ISession['sessionId'], Room['id']> {
+export default class PlayerLobbyStorage extends Storage<ISession['sessionId'], Room['id']> {
 	public getRoomOf(sessionId: ISession['sessionId']): Room {
 		return Application.getRoomStorage().get(this.get(sessionId));
 	}

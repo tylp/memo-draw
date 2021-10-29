@@ -12,9 +12,9 @@ export default class GameSocketBinder extends SocketBinder {
 	static onNextDrawing(socket: Socket): void {
 		socket.on('next-drawing', () => {
 			const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
-			const roomOfPlayer = Application.getPlayerRoomStorage().getRoomOf(SocketIdentifierService.getSessionIdentifier(socket));
+			const roomOfPlayer = Application.getPlayerLobbyStorage().getRoomOf(SocketIdentifierService.getSessionIdentifier(socket));
 			const game = roomOfPlayer.game;
-			if(game.isTurnOf(player)) {
+			if (game.isTurnOf(player)) {
 				game.nextDrawing();
 				socket.to(roomOfPlayer.getSocketRoomName()).emit('update-game', game);
 			}

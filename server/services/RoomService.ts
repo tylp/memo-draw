@@ -20,12 +20,12 @@ export default class RoomService {
 	}
 
 	public static linkPlayerToRoom(sessionId: ISession['sessionId'], roomId: Room['id']): void {
-		Application.getPlayerRoomStorage().set(sessionId, roomId)
+		Application.getPlayerLobbyStorage().set(sessionId, roomId)
 	}
 
 	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Room {
 		const session = Application.getSessionStorage().get(sessionId);
-		const roomId = Application.getPlayerRoomStorage().get(sessionId);
+		const roomId = Application.getPlayerLobbyStorage().get(sessionId);
 
 		const updatedRoom = Application.getRoomStorage().addPlayer(roomId, PlayerFactory.create(session));
 		if (updatedRoom && !updatedRoom.hasHost()) {
@@ -44,7 +44,7 @@ export default class RoomService {
 	}
 
 	public static kick({ playerId, sessionId }: PlayerIdentifiers, kickedPlayerId: string): Room {
-		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getRoomOf(sessionId)
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
 		if (roomOfCurrentPlayer.hostIs(playerId)) {
@@ -55,9 +55,9 @@ export default class RoomService {
 	}
 
 	public static quit({ playerId, sessionId }: PlayerIdentifiers): Room {
-		const roomOfCurrentPlayer = Application.getPlayerRoomStorage().getRoomOf(sessionId)
+		const roomOfCurrentPlayer = Application.getPlayerLobbyStorage().getRoomOf(sessionId)
 
-		Application.getPlayerRoomStorage().delete(sessionId);
+		Application.getPlayerLobbyStorage().delete(sessionId);
 
 		return roomOfCurrentPlayer?.remove(playerId);
 	}

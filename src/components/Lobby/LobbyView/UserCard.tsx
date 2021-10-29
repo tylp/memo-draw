@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Player from '../../../../server/classes/Player';
 import { Avatar } from '../../../components/Common';
-import { useSocketRoom } from '../../../hooks';
+import { useSocketLobby } from '../../../hooks';
 
 interface UserCardSpec {
 	player: Player;
@@ -17,7 +17,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	const [isCreator] = useState(props.creatorId === props.currentPlayerId)
 	const { t } = useTranslation();
 
-	const socket = useSocketRoom();
+	const socket = useSocketLobby();
 
 	const kickPlayer = (player: Player) => {
 		if (!isCreator) return;

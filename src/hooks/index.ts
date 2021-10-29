@@ -1,2 +1,2 @@
-export {default as useSocket} from './useSocket';
-export {default as useSocketRoom} from './useSocketRoom';
+export { default as useSocket } from './useSocket';
+export { default as useSocketLobby } from './useSocketLobby';

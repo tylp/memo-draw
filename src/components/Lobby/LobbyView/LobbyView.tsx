@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Player from '../../../../server/classes/Player';
 import Room from '../../../../server/classes/Room';
-import { useSocketRoom } from '../../../hooks';
+import { useSocketLobby } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { EnvironmentChecker } from '../../../services/EnvironmentChecker';
@@ -29,7 +29,7 @@ interface LobbyViewProps {
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
-	const socket = useSocketRoom();
+	const socket = useSocketLobby();
 	const { t } = useTranslation();
 
 	const history = useHistory();
@@ -51,7 +51,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
-		if(isProfileValid) {
+		if (isProfileValid) {
 			socket.emit('update-profile', profile, () => {
 				setLocalStorageProfile(profile);
 				setIsEditProfileVisible(false)
