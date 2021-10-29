@@ -145,7 +145,7 @@ describe('RoomFacade', () => {
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
 	})
 
-	test('quit should work', () => {
+	test('quit should leave player from lobby', () => {
 		const room: Room = RoomFacade.create(mockedSocketA);
 		expect(room.players.length).toBe(1);
 		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
@@ -157,6 +157,22 @@ describe('RoomFacade', () => {
 
 		RoomFacade.quit(mockedSocketB);
 		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
+	})
+
+	test('quit should delink player from lobby', () => {
+		const room: Room = RoomFacade.create(mockedSocketA);
+		expect(room.players.length).toBe(1);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+
+		RoomFacade.join(mockedSocketB, room.id);
+		expect(room.players.length).toBe(2);
+		expect(room.isPlayerPresent(sessionA.playerId)).toBeTruthy();
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeTruthy();
+
+		RoomFacade.quit(mockedSocketB);
+		expect(room.isPlayerPresent(sessionB.playerId)).toBeFalsy();
+		
+		expect(Application.getPlayerRoomStorage().getRoomOf(mockedSocketB)).toBeUndefined();
 	})
 
 	test('quit should reassign host if host left', () => {
