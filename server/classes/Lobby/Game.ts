@@ -1,13 +1,13 @@
-import Player from './Player';
+import Player from '../Player';
 import Lobby from './Lobby';
 import { shuffle } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
-import YesNoVote from './Votes/YesNoVote';
+import YesNoVote from '../Votes/YesNoVote';
 
 const MIN_SECONDS_POSSIBLE = 4;
 const MAX_SECONDS_POSSIBLE = 10;
 
-export class Game {
+export default class Game {
 	id: string;
 	hostPlayerId: string;
 	players: Array<Player>;
@@ -18,6 +18,7 @@ export class Game {
 	minSeconds = MIN_SECONDS_POSSIBLE;
 	maxSeconds = MAX_SECONDS_POSSIBLE;
 	currentVote?: YesNoVote | undefined;
+	contestedDrawing?: number | undefined;
 
 	constructor(lobby: Lobby) {
 		this.id = lobby.id;
@@ -61,14 +62,16 @@ export class Game {
 		return -2 * Math.log(this.currentDrawingIndex) + 10;
 	}
 
-	public startVote(): void {
+	public startVote(contestedDrawing: number): void {
 		if (!this.currentVote) {
 			const playersIds = new Set<Player['id']>(this.players.map(e => e.id));
 			this.currentVote = new YesNoVote(playersIds);
+			this.contestedDrawing = contestedDrawing;
 		}
 	}
 
 	public endVote(): void {
 		this.currentVote?.close();
+		this.contestedDrawing = undefined;
 	}
 }

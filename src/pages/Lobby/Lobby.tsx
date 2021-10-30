@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
-import LobbyType from '../../../server/classes/Lobby';
-import { Game } from '../../../server/classes/Game';
+import LobbyType from '../../../server/classes/Lobby/Lobby';
+import { Game } from '../../../server/classes';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 import { useDangerSnackbar, useInfoSnackbar } from '../../hooks/useSnackbar/useSnackbar';
@@ -25,17 +25,19 @@ const Lobby = (): JSX.Element => {
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.emit('join-lobby', (data) => {
-			if (!data) {
+		socket.emit('join-lobby', (joinedLobby: LobbyType) => {
+			if (!joinedLobby) {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
 			} else {
-				setLobby(data);
+				setLobby(joinedLobby);
+				setGame(joinedLobby?.game);
 			}
 		})
 
-		socket.on('update-lobby', (data) => {
-			setLobby(data);
+		socket.on('update-lobby', (updatedLobby: LobbyType) => {
+			setLobby(updatedLobby);
+			setGame(updatedLobby?.game);
 		})
 
 		socket.on('kicked-player', (kickedPlayerId) => {

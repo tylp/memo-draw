@@ -4,7 +4,7 @@ import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
 import PlayerLobbyStorage from './Storage/PlayerLobbyStorage';
 import LobbyStorage from './Storage/LobbyStorage';
 import SessionStorage from './Storage/SessionStorage';
-import Lobby from './Lobby';
+import { Lobby } from '.';
 
 export default class Application {
 	protected static instance: Application;

@@ -48,6 +48,7 @@ const resources = {
 				'playersTitle': 'Players',
 				'sendDrawing': 'Send Drawing',
 				'startVote': 'Start Vote',
+				'selectDrawing': 'Select a drawing',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',

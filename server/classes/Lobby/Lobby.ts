@@ -1,6 +1,5 @@
-import Application from './Application';
-import { Game } from './Game';
-import Player from './Player';
+import Application from '../Application';
+import { Game, Player } from '..';
 import { random } from 'lodash';
 
 export default class Lobby {

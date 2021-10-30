@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import Application from '../classes/Application';
-import Lobby from '../classes/Lobby';
+import Lobby from '../classes/Lobby/Lobby';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyService from '../services/LobbyService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
@@ -72,4 +72,11 @@ export default class LobbyFacade {
 		return updatedLobby;
 	}
 
+	public static startVote(socket: Socket, selectedDrawing: number): Lobby {
+		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedDrawing);
+
+		socket.to(Lobby.getLobbyName(playerLobby.id)).emit('update-lobby', playerLobby);
+
+		return playerLobby;
+	}
 }

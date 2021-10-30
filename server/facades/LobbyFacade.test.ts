@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MocketServer } from 'mockets.io';
 import Application from '../classes/Application';
-import Lobby from '../classes/Lobby';
+import Lobby from '../classes/Lobby/Lobby';
 import ISession from '../interfaces/ISession';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';

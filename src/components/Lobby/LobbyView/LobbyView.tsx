@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Player from '../../../../server/classes/Player';
-import Lobby from '../../../../server/classes/Lobby';
+import { Lobby } from '../../../../server/classes';
 import { useSocketLobby } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
@@ -46,6 +46,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
+	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
+	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+
 	useEffect(() => {
 		setProfile(localStorageProfile);
 	}, [localStorageProfile])
@@ -60,9 +63,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			openWarningSnackBar(t('alert.lengthError'));
 		}
 	}
-
-	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
-	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
@@ -102,6 +102,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				onClose={() => setIsEditProfileVisible(false)}
 				onValidate={handleSaveProfile}
 				disableValidate={!isProfileValid}
+				title={t('lobbyView.editProfileBtnLabel')}
 			>
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
 					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid} onEnter={handleSaveProfile}></ProfileSelector>

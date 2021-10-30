@@ -1,6 +1,6 @@
 import Application from '../classes/Application';
 import Player from '../classes/Player';
-import Lobby from '../classes/Lobby';
+import Lobby from '../classes/Lobby/Lobby';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyFactory from '../factories/LobbyFactory';
 import ISession from '../interfaces/ISession';
@@ -60,5 +60,15 @@ export default class LobbyService {
 		Application.getPlayerLobbyStorage().delete(sessionId);
 
 		return lobbyOfCurrentPlayer?.remove(playerId);
+	}
+
+	public static startVote({ sessionId }: PlayerIdentifiers, selectedDrawing: number): Lobby {
+		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
+
+		if (lobbyOfCurrentPlayer && lobbyOfCurrentPlayer.game) {
+			lobbyOfCurrentPlayer.game.startVote(selectedDrawing);
+		}
+
+		return lobbyOfCurrentPlayer;
 	}
 }
