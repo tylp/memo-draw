@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
+import { MocketServer } from 'mockets.io';
 import Application from '../classes/Application';
 import Lobby from '../classes/Lobby';
 import ISession from '../interfaces/ISession';
