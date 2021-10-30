@@ -3,7 +3,7 @@ import SocketIdentifierService from './SocketIdentifierService';
 import ISession from '../interfaces/ISession';
 import Application from '../classes/Application';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
-import { MocketServer } from 'mockets.io/dist/classes/Server/MocketServer';
+import { MocketServer } from 'mockets.io';
 
 describe('SocketIdentifierService', () => {
 	let mocketServer: MocketServer;
