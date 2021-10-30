@@ -37,6 +37,13 @@ export default function GameView(props: GameProps): JSX.Element {
 		}
 	}
 
+	const startVote = () => {
+		if (!socket) return;
+		if (playerId !== currentPlayer.id) {
+			// socket.emit('next-drawing')
+		}
+	}
+
 	return (
 		<Layout>
 			<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
@@ -61,6 +68,17 @@ export default function GameView(props: GameProps): JSX.Element {
 								color='primary' size='medium' icon={faArrowRight}
 								onClick={nextDrawing}>
 								{t('gameView.sendDrawing')}
+							</Button>
+						) : null
+					}
+				</div>
+				<div>
+					{
+						playerId !== currentPlayer.id ? (
+							<Button
+								color='primary' size='medium' icon={faArrowRight}
+								onClick={startVote}>
+								{t('gameView.startVote')}
 							</Button>
 						) : null
 					}

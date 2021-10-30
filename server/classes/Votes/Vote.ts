@@ -4,7 +4,8 @@ export type Option = string;
 export default class Vote {
 	protected participants: Set<Participant>;
 	protected options: Set<Option>;
-	protected votes: Map<Participant, Option>;
+	public votes: Map<Participant, Option> = new Map<Participant, Option>();
+	public isClosed = false;
 
 	constructor(participants: Set<Participant>, options: Set<Option>) {
 		this.participants = participants;
@@ -12,9 +13,13 @@ export default class Vote {
 	}
 
 	public vote(participant: Participant, option: Option): void {
-		if (this.optionExists(option) && this.participantExists(participant)) {
+		if (!this.isClosed && this.optionExists(option) && this.participantExists(participant)) {
 			this.votes.set(participant, option);
 		}
+	}
+
+	public getVoteOf(participant: Participant): Option {
+		return this.votes.get(participant);
 	}
 
 	private optionExists(option: Option): boolean {
@@ -22,10 +27,10 @@ export default class Vote {
 	}
 
 	private participantExists(participant: Participant): boolean {
-		return this.options.has(participant);
+		return this.participants.has(participant);
 	}
 
-	get results(): Map<Participant, Option> {
-		return this.votes;
+	public close(): void {
+		this.isClosed = true;
 	}
 }

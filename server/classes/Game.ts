@@ -2,6 +2,7 @@ import Player from './Player';
 import Lobby from './Lobby';
 import { shuffle } from 'lodash';
 import dayjs, { Dayjs } from 'dayjs';
+import YesNoVote from './Votes/YesNoVote';
 
 const MIN_SECONDS_POSSIBLE = 4;
 const MAX_SECONDS_POSSIBLE = 10;
@@ -16,6 +17,7 @@ export class Game {
 	limitDate: Dayjs;
 	minSeconds = MIN_SECONDS_POSSIBLE;
 	maxSeconds = MAX_SECONDS_POSSIBLE;
+	currentVote?: YesNoVote | undefined;
 
 	constructor(lobby: Lobby) {
 		this.id = lobby.id;
@@ -47,7 +49,7 @@ export class Game {
 		}
 	}
 
-	refreshLimitDate(): void {
+	protected refreshLimitDate(): void {
 		this.limitDate = dayjs().add(this.getSecondsToDraw(), 'seconds');
 	}
 
@@ -57,5 +59,16 @@ export class Game {
 		if (this.currentDrawingIndex >= 20)
 			return this.minSeconds;
 		return -2 * Math.log(this.currentDrawingIndex) + 10;
+	}
+
+	public startVote(): void {
+		if (!this.currentVote) {
+			const playersIds = new Set<Player['id']>(this.players.map(e => e.id));
+			this.currentVote = new YesNoVote(playersIds);
+		}
+	}
+
+	public endVote(): void {
+		this.currentVote?.close();
 	}
 }
