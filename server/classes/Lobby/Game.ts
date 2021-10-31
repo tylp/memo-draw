@@ -63,11 +63,16 @@ export default class Game {
 	}
 
 	public startVote(contestedDrawing: number): void {
-		if (!this.currentVote) {
+		if (this.canStartVote()) {
 			const playersIds = new Set<Player['id']>(this.players.map(e => e.id));
 			this.currentVote = new YesNoVote(playersIds);
 			this.contestedDrawing = contestedDrawing;
+			setTimeout(() => this.endVote(), 10 * 1000)
 		}
+	}
+
+	private canStartVote(): boolean {
+		return (!this.currentVote) || (this.currentVote.isClosed);
 	}
 
 	public endVote(): void {

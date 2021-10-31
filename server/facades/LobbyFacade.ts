@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import Application from '../classes/Application';
 import Lobby from '../classes/Lobby/Lobby';
+import { YesOrNo } from '../classes/Votes/YesNoVote';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyService from '../services/LobbyService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
@@ -38,10 +39,14 @@ export default class LobbyFacade {
 		const updatedLobby = LobbyService.reassignHost(SocketIdentifierService.getIdentifiersOf(socket));
 
 		if (updatedLobby) {
-			socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
+			this.updateLobby(socket, updatedLobby);
 		}
 
 		return updatedLobby;
+	}
+
+	private static updateLobby(socket: Socket, lobby: Lobby): void {
+		socket.to(Lobby.getLobbyName(lobby.id)).emit('update-lobby', lobby);
 	}
 
 	public static startGame(socket: Socket): void {
@@ -58,7 +63,7 @@ export default class LobbyFacade {
 	public static kick(socket: Socket, kickedPlayerId: string): Lobby {
 		const updatedLobby = LobbyService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
 
-		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
+		this.updateLobby(socket, updatedLobby);
 		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('kicked-player', kickedPlayerId);
 
 		return updatedLobby;
@@ -67,7 +72,7 @@ export default class LobbyFacade {
 	public static quit(socket: Socket): Lobby {
 		const updatedLobby = LobbyService.quit(SocketIdentifierService.getIdentifiersOf(socket))
 
-		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('update-lobby', updatedLobby);
+		this.updateLobby(socket, updatedLobby);
 
 		return updatedLobby;
 	}
@@ -75,7 +80,15 @@ export default class LobbyFacade {
 	public static startVote(socket: Socket, selectedDrawing: number): Lobby {
 		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedDrawing);
 
-		socket.to(Lobby.getLobbyName(playerLobby.id)).emit('update-lobby', playerLobby);
+		this.updateLobby(socket, playerLobby);
+
+		return playerLobby;
+	}
+
+	public static vote(socket: Socket, vote: YesOrNo): Lobby {
+		const playerLobby = LobbyService.vote(SocketIdentifierService.getIdentifiersOf(socket), vote);
+
+		this.updateLobby(socket, playerLobby);
 
 		return playerLobby;
 	}

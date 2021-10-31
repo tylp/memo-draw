@@ -14,6 +14,8 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import Modal from '../../Common/Modal/Modal';
 import DrawingSelector from './DrawingSelector/DrawingSelector';
+import { Col, Row } from 'react-grid-system';
+import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 
 interface GameProps {
 	game: Game;
@@ -32,7 +34,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	useEffect(() => {
 		if (props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
-			setIsCurrentVoteModalVisible(!!props.game.currentVote)
+			setIsCurrentVoteModalVisible((props.game?.currentVote && !props.game?.currentVote.isClosed))
 		}
 	}, [props.game])
 
@@ -49,6 +51,10 @@ export default function GameView(props: GameProps): JSX.Element {
 			socket.emit('start-vote', selectedDrawing);
 			setIsStartVoteModalVisible(false);
 		}
+	}
+
+	const vote = (vote: YesOrNo) => {
+		socket.emit('vote', vote);
 	}
 
 	return (
@@ -69,9 +75,16 @@ export default function GameView(props: GameProps): JSX.Element {
 				onClose={() => setIsCurrentVoteModalVisible(false)}
 				showValidate={false}
 				showCancel={false}
-				title={t('gameView.startVote')}
+				title={t('gameView.isThisDrawingValid')}
 			>
-				<p>Vote has started</p>
+				<Row>
+					<Col>
+						<Button color="primary" size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
+					</Col>
+					<Col>
+						<Button color="primary" size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
+					</Col>
+				</Row>
 			</Modal>
 			<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
 				<div>
