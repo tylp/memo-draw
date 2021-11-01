@@ -18,21 +18,17 @@ describe('LobbyFacade', () => {
 		ResetableApplication.reset();
 		mocketServer = new MocketServer();
 		Application.getInstance().bindServer(mocketServer)
-		mockedSocketA = mocketServer.of('/lobby').createSocket();
 		sessionA = Application.getSessionStorage().generate();
-		mockedSocketA.handshake = {
-			auth: {
-				sessionId: sessionA.sessionId,
-			},
-		}
+		mockedSocketA = mocketServer.of('/lobby').createSocket({
+			sessionId: sessionA.sessionId,
+		});
+		console.log('asdqsdsqdq', mockedSocketA)
 		Application.getPlayerIdSessionIdStorage().set(sessionA.playerId, sessionA.sessionId);
-		mockedSocketB = mocketServer.of('/lobby').createSocket();
 		sessionB = Application.getSessionStorage().generate();
-		mockedSocketB.handshake = {
-			auth: {
-				sessionId: sessionB.sessionId,
-			},
-		}
+		mockedSocketB = mocketServer.of('/lobby').createSocket({
+			sessionId: sessionB.sessionId,
+		});
+
 		Application.getPlayerIdSessionIdStorage().set(sessionB.playerId, sessionB.sessionId);
 	})
 
@@ -106,7 +102,7 @@ describe('LobbyFacade', () => {
 
 		mockedSocketB.disconnect();
 
-		const reconnectedMockedSocketB: any = mocketServer.createSocket();
+		const reconnectedMockedSocketB: any = mocketServer.of('/lobby').createSocket();
 		reconnectedMockedSocketB.handshake = {
 			auth: {
 				sessionId: sessionB.sessionId,
@@ -188,10 +184,9 @@ describe('LobbyFacade', () => {
 	})
 
 	test('startVote should emit start-vote event to everyone in room', () => {
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 		expect(mockedSocketA.receivedEvents.length).toBe(0);
 		expect(mockedSocketB.receivedEvents.length).toBe(0);
-
-		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
 		LobbyFacade.join(mockedSocketB, lobby.id);
 		expect(mockedSocketA.receivedEvents.length).toBe(1);

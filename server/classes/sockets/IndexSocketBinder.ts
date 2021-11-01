@@ -18,6 +18,7 @@ export default class IndexSocketBinder extends SocketBinder {
 
 	private static onCheckAlreadyInLobby(socket: Socket): void {
 		socket.on('check-already-in-lobby', (ack) => {
+			console.log(socket);
 			const sessionId = SocketIdentifierService.getSessionIdentifier(socket);
 			ack(!!Application.getPlayerLobbyStorage().getLobbyOf(sessionId))
 		});

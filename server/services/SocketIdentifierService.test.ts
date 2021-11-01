@@ -13,13 +13,10 @@ describe('SocketIdentifierService', () => {
 	beforeEach(() => {
 		ResetableApplication.reset();
 		mocketServer = new MocketServer();
-		socketMock = mocketServer.createSocket();
 		session = Application.getSessionStorage().generate();
-		socketMock.handshake = {
-			auth: {
-				sessionId: session.sessionId,
-			},
-		}
+		socketMock = mocketServer.createSocket({
+			sessionId: session.sessionId,
+		});
 	});
 
 	test('getSessionIdentifier should work', () => {
