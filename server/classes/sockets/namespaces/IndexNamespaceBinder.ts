@@ -5,8 +5,8 @@ import AbstractNamespaceBinder from './AbstractNamespaceBinder';
 export default class IndexNamespaceBinder extends AbstractNamespaceBinder {
 	protected static applyEvents(): void {
 		this.io.on('connection', (socket) => {
-			// CommonSocketBinder.bindSocket(socket);
-			// IndexSocketBinder.bindSocket(socket);
+			CommonSocketBinder.bindSocket(socket);
+			IndexSocketBinder.bindSocket(socket);
 		});
 	}
 }

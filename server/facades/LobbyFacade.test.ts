@@ -22,7 +22,6 @@ describe('LobbyFacade', () => {
 		mockedSocketA = mocketServer.of('/lobby').createSocket({
 			sessionId: sessionA.sessionId,
 		});
-		console.log('asdqsdsqdq', mockedSocketA)
 		Application.getPlayerIdSessionIdStorage().set(sessionA.playerId, sessionA.sessionId);
 		sessionB = Application.getSessionStorage().generate();
 		mockedSocketB = mocketServer.of('/lobby').createSocket({

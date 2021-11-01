@@ -6,10 +6,9 @@ import AbstractNamespaceBinder from './AbstractNamespaceBinder';
 export default class LobbyNamespaceBinder extends AbstractNamespaceBinder {
 	protected static applyEvents(): void {
 		this.io.of('/lobby').on('connection', (socket) => {
-			console.log('inside', socket);
-			// CommonSocketBinder.bindSocket(socket);
-			// LobbySocketBinder.bindSocket(socket);
-			// GameSocketBinder.bindSocket(socket);
+			CommonSocketBinder.bindSocket(socket);
+			LobbySocketBinder.bindSocket(socket);
+			GameSocketBinder.bindSocket(socket);
 		});
 	}
 }
