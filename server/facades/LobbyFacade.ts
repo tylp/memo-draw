@@ -8,9 +8,11 @@ import SocketIdentifierService from '../services/SocketIdentifierService';
 
 export default class LobbyFacade {
 	public static create(socket: Socket): Lobby {
-		const lobby = LobbyService.create(SocketIdentifierService.getIdentifiersOf(socket))
+		const lobby: Lobby = LobbyService.create(SocketIdentifierService.getIdentifiersOf(socket))
 
-		return LobbyFacade.join(socket, lobby.id);
+		LobbyFacade.join(socket, lobby.id);
+
+		return lobby;
 	}
 
 	public static join(socket: Socket, lobbyId: Lobby['id']): Lobby {
@@ -19,8 +21,9 @@ export default class LobbyFacade {
 		const player = PlayerFactory.create(sessionOfSocket);
 
 		lobby.add(player);
-		socket.join(lobby.getSocketLobbyName());
+		socket.join(lobby.getSocketRoomName());
 		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, lobby.id);
+		this.updateLobby(socket, lobby);
 
 		return lobby;
 	}
@@ -46,7 +49,8 @@ export default class LobbyFacade {
 	}
 
 	private static updateLobby(socket: Socket, lobby: Lobby): void {
-		socket.to(Lobby.getLobbyName(lobby.id)).emit('update-lobby', lobby);
+		socket.in(Lobby.getLobbyName(lobby.id)).emit('update-lobby', lobby);
+		socket.to(socket.id).emit('update-lobby', lobby);
 	}
 
 	public static startGame(socket: Socket): void {
@@ -55,8 +59,7 @@ export default class LobbyFacade {
 		const lobby = Application.getLobbyStorage().get(lobbyId);
 
 		if (LobbyService.start(lobby, player)) {
-			socket.emit('game-started', lobby);
-			socket.to(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
+			socket.in(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
 		}
 	}
 
@@ -64,7 +67,7 @@ export default class LobbyFacade {
 		const updatedLobby = LobbyService.kick(SocketIdentifierService.getIdentifiersOf(socket), kickedPlayerId);
 
 		this.updateLobby(socket, updatedLobby);
-		socket.to(Lobby.getLobbyName(updatedLobby.id)).emit('kicked-player', kickedPlayerId);
+		socket.in(Lobby.getLobbyName(updatedLobby.id)).emit('kicked-player', kickedPlayerId);
 
 		return updatedLobby;
 	}
@@ -80,7 +83,12 @@ export default class LobbyFacade {
 	public static startVote(socket: Socket, selectedDrawing: number): Lobby {
 		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedDrawing);
 
-		this.updateLobby(socket, playerLobby);
+		Application.getSocketIoInstance().to(playerLobby.getSocketRoomName()).emit('start-vote', playerLobby);
+
+		setTimeout(() => {
+			playerLobby?.game.endVote();
+			socket.in(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
+		}, 10 * 1000)
 
 		return playerLobby;
 	}

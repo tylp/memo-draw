@@ -13,6 +13,7 @@ export default class Application {
 	protected lobbyStorage: LobbyStorage = new LobbyStorage();
 	protected playerLobbyStorage: PlayerLobbyStorage = new PlayerLobbyStorage();
 	protected playerIdSessionIdStorage: PlayerIdSessionIdStorage = new PlayerIdSessionIdStorage();
+	protected io: Server;
 
 	protected constructor() {
 		//
@@ -34,8 +35,9 @@ export default class Application {
 		}, 900000) // 15 minutes
 	}
 
-	static bindServer(io: Server): void {
+	bindServer(io: Server): void {
 		SocketIoHandler.bindServer(io);
+		this.io = io;
 	}
 
 	static getSessionStorage(): SessionStorage {
@@ -52,5 +54,9 @@ export default class Application {
 
 	static getPlayerIdSessionIdStorage(): PlayerIdSessionIdStorage {
 		return Application.getInstance().playerIdSessionIdStorage;
+	}
+
+	static getSocketIoInstance(): Server {
+		return Application.getInstance().io;
 	}
 }

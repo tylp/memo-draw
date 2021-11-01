@@ -9,6 +9,7 @@ import { useDangerSnackbar, useInfoSnackbar } from '../../hooks/useSnackbar/useS
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
+import { Socket } from 'socket.io-client';
 
 const Lobby = (): JSX.Element => {
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
@@ -22,6 +23,11 @@ const Lobby = (): JSX.Element => {
 	const [lobby, setLobby] = useState<LobbyType>();
 	const [game, setGame] = useState<Game>();
 
+	const updateLobby = (lobby: LobbyType) => {
+		setLobby(lobby);
+		setGame(lobby?.game);
+	}
+
 	useEffect(() => {
 		if (!socket) return;
 
@@ -30,14 +36,12 @@ const Lobby = (): JSX.Element => {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
 			} else {
-				setLobby(joinedLobby);
-				setGame(joinedLobby?.game);
+				updateLobby(joinedLobby)
 			}
 		})
 
 		socket.on('update-lobby', (updatedLobby: LobbyType) => {
-			setLobby(updatedLobby);
-			setGame(updatedLobby?.game);
+			updateLobby(updatedLobby)
 		})
 
 		socket.on('kicked-player', (kickedPlayerId) => {
@@ -59,16 +63,22 @@ const Lobby = (): JSX.Element => {
 	}, [socket, sessionId]);
 
 	return lobby ? (
-		<LobbyOrGame lobby={lobby} game={game}></LobbyOrGame>
+		<LobbyOrGame lobby={lobby} game={game} updateLobby={updateLobby} socket={socket}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
 
-function LobbyOrGame(props: { lobby: LobbyType; game: Game }) {
+interface LobbyOrGameProps {
+	lobby: LobbyType;
+	game: Game, updateLobby: (lobby: LobbyType) => void;
+	socket: typeof Socket
+}
+
+function LobbyOrGame(props: LobbyOrGameProps) {
 	return props.lobby?.hasStarted && props.game ? (
-		<GameView game={props.game} />
+		<GameView game={props.game} updateLobby={props.updateLobby} socket={props.socket} />
 	) : (
 		<LobbyView lobby={props.lobby} />
 	)

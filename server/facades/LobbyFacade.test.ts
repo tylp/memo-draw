@@ -8,7 +8,7 @@ import ResetableApplication from '../tests/ResetableApplication/ResetableApplica
 import LobbyFacade from './LobbyFacade';
 
 describe('LobbyFacade', () => {
-	let mocketServer: MocketServer;
+	let mocketServer: any;
 	let mockedSocketA: any;
 	let sessionA: ISession;
 	let mockedSocketB: any;
@@ -17,6 +17,7 @@ describe('LobbyFacade', () => {
 	beforeEach(() => {
 		ResetableApplication.reset();
 		mocketServer = new MocketServer();
+		Application.getInstance().bindServer(mocketServer)
 		mockedSocketA = mocketServer.createSocket();
 		sessionA = Application.getSessionStorage().generate();
 		mockedSocketA.handshake = {
@@ -50,7 +51,7 @@ describe('LobbyFacade', () => {
 		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
 		expect(mockedSocketA.rooms.size).toBe(1);
-		expect(mockedSocketA.rooms.has(lobby.getSocketLobbyName())).toBeTruthy();
+		expect(mockedSocketA.rooms.has(lobby.getSocketRoomName())).toBeTruthy();
 	})
 
 	test('create should link player to lobby', () => {
@@ -119,7 +120,7 @@ describe('LobbyFacade', () => {
 		LobbyFacade.rejoin(reconnectedMockedSocketB);
 
 		expect(reconnectedMockedSocketB.rooms.size).toBe(1);
-		expect(reconnectedMockedSocketB.rooms.has(lobby.getSocketLobbyName())).toBeTruthy();
+		expect(reconnectedMockedSocketB.rooms.has(lobby.getSocketRoomName())).toBeTruthy();
 	})
 
 	test('kick should work and make socket leave socket.io-room', () => {
@@ -128,7 +129,7 @@ describe('LobbyFacade', () => {
 		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
 
 		expect(mockedSocketA.rooms.size).toBe(1);
-		expect(mockedSocketA.rooms.has(lobby.getSocketLobbyName())).toBeTruthy()
+		expect(mockedSocketA.rooms.has(lobby.getSocketRoomName())).toBeTruthy()
 		expect(lobby.players.length).toBe(1);
 		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 
@@ -138,7 +139,7 @@ describe('LobbyFacade', () => {
 		expect(lobby.isPlayerPresent(sessionA.playerId)).toBeTruthy();
 		expect(lobby.isPlayerPresent(sessionB.playerId)).toBeTruthy();
 		expect(mockedSocketB.rooms.size).toBe(1);
-		expect(mockedSocketB.rooms.has(lobby.getSocketLobbyName())).toBeTruthy()
+		expect(mockedSocketB.rooms.has(lobby.getSocketRoomName())).toBeTruthy()
 
 		LobbyFacade.kick(mockedSocketA, sessionB.playerId);
 
@@ -184,5 +185,20 @@ describe('LobbyFacade', () => {
 		LobbyFacade.quit(mockedSocketA);
 
 		expect(lobby.hostPlayerId).toBe(SocketIdentifierService.getPlayerIdentifier(mockedSocketB));
+	})
+
+	test('startVote should emit start-vote event to everyone in room', () => {
+		expect(mockedSocketA.receivedEvents.length).toBe(0);
+		expect(mockedSocketB.receivedEvents.length).toBe(0);
+
+		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+
+		LobbyFacade.join(mockedSocketB, lobby.id);
+		expect(mockedSocketA.receivedEvents.length).toBe(1);
+		expect(mockedSocketB.receivedEvents.length).toBe(0);
+
+		LobbyFacade.startVote(mockedSocketA, 3);
+		expect(mockedSocketA.receivedEvents.length).toBe(2);
+		expect(mockedSocketB.receivedEvents.length).toBe(1);
 	})
 });

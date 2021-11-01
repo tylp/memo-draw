@@ -58,7 +58,7 @@ export default class Lobby {
 		return `lobby-${lobbyId}`;
 	}
 
-	getSocketLobbyName(): string {
+	getSocketRoomName(): string {
 		return Lobby.getLobbyName(this.id);
 	}
 

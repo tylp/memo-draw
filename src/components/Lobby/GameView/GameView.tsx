@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Game } from '../../../../server/classes';
+import { Game, Lobby } from '../../../../server/classes';
 import Player from '../../../../server/classes/Player';
-import { useSocketLobby } from '../../../hooks';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { Layout, SectionTitle, Button } from '../../../components/Common';
@@ -16,13 +15,15 @@ import Modal from '../../Common/Modal/Modal';
 import DrawingSelector from './DrawingSelector/DrawingSelector';
 import { Col, Row } from 'react-grid-system';
 import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
+import { Socket } from 'socket.io-client';
 
 interface GameProps {
 	game: Game;
+	updateLobby: (lobby: Lobby) => void;
+	socket: typeof Socket;
 }
 
 export default function GameView(props: GameProps): JSX.Element {
-	const socket = useSocketLobby();
 	const { t } = useTranslation();
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
@@ -32,29 +33,42 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
 
 	useEffect(() => {
+		props.socket.on('start-vote', (lobby: Lobby) => {
+			setIsCurrentVoteModalVisible(true)
+			props.updateLobby(lobby);
+		})
+
+		props.socket.on('stop-vote', (lobby: Lobby) => {
+			setIsCurrentVoteModalVisible(false)
+			props.updateLobby(lobby);
+		})
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.socket])
+
+	useEffect(() => {
 		if (props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
-			setIsCurrentVoteModalVisible((props.game?.currentVote && !props.game?.currentVote.isClosed))
 		}
 	}, [props.game])
 
 	const nextDrawing = () => {
-		if (!socket) return;
+		if (!props.socket) return;
 		if (playerId === currentPlayer.id) {
-			socket.emit('next-drawing')
+			props.socket.emit('next-drawing')
 		}
 	}
 
 	const startVote = () => {
-		if (!socket) return;
+		if (!props.socket) return;
 		if (playerId !== currentPlayer.id && selectedDrawing) {
-			socket.emit('start-vote', selectedDrawing);
+			props.socket.emit('start-vote', selectedDrawing);
 			setIsStartVoteModalVisible(false);
 		}
 	}
 
 	const vote = (vote: YesOrNo) => {
-		socket.emit('vote', vote);
+		props.socket.emit('vote', vote);
 	}
 
 	return (
