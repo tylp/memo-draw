@@ -18,7 +18,7 @@ describe('LobbyFacade', () => {
 		ResetableApplication.reset();
 		mocketServer = new MocketServer();
 		Application.getInstance().bindServer(mocketServer)
-		mockedSocketA = mocketServer.createSocket();
+		mockedSocketA = mocketServer.of('/lobby').createSocket();
 		sessionA = Application.getSessionStorage().generate();
 		mockedSocketA.handshake = {
 			auth: {
@@ -26,7 +26,7 @@ describe('LobbyFacade', () => {
 			},
 		}
 		Application.getPlayerIdSessionIdStorage().set(sessionA.playerId, sessionA.sessionId);
-		mockedSocketB = mocketServer.createSocket();
+		mockedSocketB = mocketServer.of('/lobby').createSocket();
 		sessionB = Application.getSessionStorage().generate();
 		mockedSocketB.handshake = {
 			auth: {

@@ -56,9 +56,6 @@ const Lobby = (): JSX.Element => {
 			setGame(lobby.game);
 		})
 
-		socket.on('update-game', (game) => {
-			setGame(game);
-		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
