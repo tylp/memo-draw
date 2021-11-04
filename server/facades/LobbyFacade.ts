@@ -50,7 +50,10 @@ export default class LobbyFacade {
 
 	private static emitToLobby(ev: string, lobby: Lobby, ...params: unknown[]): void {
 		params = params || [];
-		Application.getSocketIoInstance().of('/lobby').to(lobby.getSocketRoomName()).emit(ev, ...params);
+		Application.getSocketIoInstance()
+			.of('/lobby')
+			.to(lobby.getSocketRoomName())
+			.emit(ev, ...params);
 	}
 
 	private static updateLobby(lobby: Lobby): void {
