@@ -43,6 +43,11 @@ export default function GameView(props: GameProps): JSX.Element {
 			props.updateLobby(lobby);
 		})
 
+		return () => {
+			props.socket.off('start-vote');
+			props.socket.off('stop-vote');
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.socket])
 
