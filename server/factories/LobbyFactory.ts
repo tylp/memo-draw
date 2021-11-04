@@ -1,5 +1,5 @@
 import Application from '../classes/Application';
-import Lobby from '../classes/Lobby';
+import Lobby from '../classes/Lobby/Lobby';
 import IdGeneratorService from '../services/IdGeneratorService';
 
 export default class LobbyFactory {

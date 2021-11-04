@@ -7,19 +7,25 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Box from '../Box/Box';
 
 interface ModalProps {
+	title: string;
 	visible: boolean;
 	children: ReactNode,
-	onClose: (() => void);
+	onClose?: (() => void) | undefined;
 	closeButtonTranslationKey?: string | undefined;
-	onValidate: (() => void);
+	onValidate?: (() => void) | undefined;
 	validateButtonTranslationKey?: string | undefined;
 	disableValidate?: boolean;
+	showValidate?: boolean;
+	disableCancel?: boolean;
+	showCancel?: boolean;
 }
 
 Modal.defaultProps = {
 	closeButtonTranslationKey: 'modal.close',
 	validateButtonTranslationKey: 'modal.validate',
 	disableValidate: false,
+	showValidate: true,
+	showCancel: true,
 }
 
 export default function Modal(props: ModalProps): JSX.Element {
@@ -37,31 +43,41 @@ export default function Modal(props: ModalProps): JSX.Element {
 				<div className="relative">
 					<div className="rounded-lg shadow-lg relative flex flex-col bg-gradient-to-r from-blue-blue to-blue-light-blue">
 						<div className="pl-10 pr-10 rounded-t">
-							<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.editProfileBtnLabel')}</SectionTitle>
+							<SectionTitle hintColor="text-yellow-light-yellow">{props.title}</SectionTitle>
 						</div>
 						<div className="relative pl-10 pr-10 flex-auto">
 							{props.children}
 						</div>
 						<div className="flex items-center pl-10 pr-10 pb-6 justify-end">
-							<Box mr={2}>
-								<Button
-									color='primary'
-									size='medium'
-									icon={faTimes}
-									onClick={() => props.onClose()}
-								>
-									{t(props.closeButtonTranslationKey)}
-								</Button>
-							</Box>
-							<Button
-								color='primary'
-								size='medium'
-								icon={faCheck}
-								onClick={() => props.onValidate()}
-								disabled={props.disableValidate}
-							>
-								{t(props.validateButtonTranslationKey)}
-							</Button>
+							{
+								props.showCancel && (
+
+									<Box mr={2}>
+										<Button
+											color='primary'
+											size='medium'
+											icon={faTimes}
+											onClick={() => props?.onClose()}
+											disabled={props.disableCancel}
+										>
+											{t(props.closeButtonTranslationKey)}
+										</Button>
+									</Box>
+								)
+							}
+							{
+								props.showValidate && (
+									<Button
+										color='primary'
+										size='medium'
+										icon={faCheck}
+										onClick={() => props?.onValidate()}
+										disabled={props.disableValidate}
+									>
+										{t(props.validateButtonTranslationKey)}
+									</Button>
+								)
+							}
 						</div>
 					</div>
 				</div>

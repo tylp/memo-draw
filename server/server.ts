@@ -11,7 +11,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
-Application.bindServer(io);
+Application.getInstance().bindServer(io);
 Application.startClearEmptyLobbies();
 
 nextApp.prepare().then(() => {

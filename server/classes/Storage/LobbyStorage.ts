@@ -1,5 +1,5 @@
 import Player from '../Player';
-import Lobby from '../Lobby';
+import { Lobby } from '..';
 import Storage from './Storage';
 
 export default class LobbyStorage extends Storage<string, Lobby> {

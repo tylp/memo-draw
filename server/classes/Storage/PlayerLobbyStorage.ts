@@ -1,6 +1,6 @@
 import ISession from '../../interfaces/ISession';
 import Application from '../Application';
-import Lobby from '../Lobby';
+import { Lobby } from '..';
 import Storage from './Storage';
 
 export default class PlayerLobbyStorage extends Storage<ISession['sessionId'], Lobby['id']> {

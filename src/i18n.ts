@@ -47,6 +47,11 @@ const resources = {
 			'gameView': {
 				'playersTitle': 'Players',
 				'sendDrawing': 'Send Drawing',
+				'startVote': 'Start Vote',
+				'selectDrawing': 'Select a drawing',
+				'isThisDrawingValid': 'Is this drawing valid?',
+				'yes': 'Yes',
+				'no': 'No',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',

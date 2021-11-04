@@ -15,7 +15,7 @@ export default class GameSocketBinder extends SocketBinder {
 			const lobby = Application.getPlayerLobbyStorage().getLobbyOf(SocketIdentifierService.getSessionIdentifier(socket));
 			if (lobby?.game?.isTurnOf(player)) {
 				lobby.game.nextDrawing();
-				socket.to(lobby.getSocketLobbyName()).emit('update-game', lobby.game);
+				Application.getSocketIoInstance().of('/lobby').to(lobby.getSocketRoomName()).emit('update-lobby', lobby);
 			}
 		});
 	}

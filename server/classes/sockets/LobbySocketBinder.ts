@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import Lobby from '../Lobby';
+import Lobby from '../Lobby/Lobby';
 import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
@@ -14,6 +14,8 @@ export default class LobbySocketBinder extends SocketBinder {
 		this.onDisconnection(socket);
 		this.onGameStart(socket);
 		this.onLeaveGame(socket);
+		this.onStartVote(socket);
+		this.onVote(socket);
 	}
 
 	private static onJoinLobby(socket: Socket): void {
@@ -63,4 +65,15 @@ export default class LobbySocketBinder extends SocketBinder {
 		})
 	}
 
+	private static onStartVote(socket: Socket): void {
+		socket.on('start-vote', (selectedDrawing) => {
+			LobbyFacade.startVote(socket, selectedDrawing);
+		})
+	}
+
+	private static onVote(socket: Socket): void {
+		socket.on('vote', (vote) => {
+			LobbyFacade.vote(socket, vote);
+		})
+	}
 }

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
-import LobbyType from '../../../server/classes/Lobby';
-import { Game } from '../../../server/classes/Game';
+import LobbyType from '../../../server/classes/Lobby/Lobby';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 import { useDangerSnackbar, useInfoSnackbar } from '../../hooks/useSnackbar/useSnackbar';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
+import { Socket } from 'socket.io-client';
 
 const Lobby = (): JSX.Element => {
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
@@ -20,22 +20,25 @@ const Lobby = (): JSX.Element => {
 
 	const socket = useSocketLobby();
 	const [lobby, setLobby] = useState<LobbyType>();
-	const [game, setGame] = useState<Game>();
+
+	const updateLobby = (lobby: LobbyType) => {
+		setLobby(lobby);
+	}
 
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.emit('join-lobby', (data) => {
-			if (!data) {
+		socket.emit('join-lobby', (joinedLobby: LobbyType) => {
+			if (!joinedLobby) {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
 			} else {
-				setLobby(data);
+				updateLobby(joinedLobby)
 			}
 		})
 
-		socket.on('update-lobby', (data) => {
-			setLobby(data);
+		socket.on('update-lobby', (updatedLobby: LobbyType) => {
+			updateLobby(updatedLobby)
 		})
 
 		socket.on('kicked-player', (kickedPlayerId) => {
@@ -47,26 +50,28 @@ const Lobby = (): JSX.Element => {
 
 		socket.on('game-started', (lobby) => {
 			setLobby(lobby);
-			setGame(lobby.game);
 		})
 
-		socket.on('update-game', (game) => {
-			setGame(game);
-		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
 	return lobby ? (
-		<LobbyOrGame lobby={lobby} game={game}></LobbyOrGame>
+		<LobbyOrGame lobby={lobby} updateLobby={updateLobby} socket={socket}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
 }
 export default Lobby;
 
-function LobbyOrGame(props: { lobby: LobbyType; game: Game }) {
-	return props.lobby?.hasStarted && props.game ? (
-		<GameView game={props.game} />
+interface LobbyOrGameProps {
+	lobby: LobbyType;
+	updateLobby: (lobby: LobbyType) => void;
+	socket: typeof Socket
+}
+
+function LobbyOrGame(props: LobbyOrGameProps) {
+	return props.lobby?.hasStarted && props.lobby?.game ? (
+		<GameView game={props.lobby.game} updateLobby={props.updateLobby} socket={props.socket} />
 	) : (
 		<LobbyView lobby={props.lobby} />
 	)
