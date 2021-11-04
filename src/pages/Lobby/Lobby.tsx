@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSocketLobby } from '../../hooks';
 import useLocalStorage from '../../hooks/useLocalStorage/useLocalStorage';
 import LobbyType from '../../../server/classes/Lobby/Lobby';
-import { Game } from '../../../server/classes';
 import { LobbyView, GameView } from '../../components/Lobby';
 import { LocalStorageKey } from '../../hooks/useLocalStorage/useLocalStorage.types';
 import { useDangerSnackbar, useInfoSnackbar } from '../../hooks/useSnackbar/useSnackbar';
@@ -21,11 +20,9 @@ const Lobby = (): JSX.Element => {
 
 	const socket = useSocketLobby();
 	const [lobby, setLobby] = useState<LobbyType>();
-	const [game, setGame] = useState<Game>();
 
 	const updateLobby = (lobby: LobbyType) => {
 		setLobby(lobby);
-		setGame(lobby?.game);
 	}
 
 	useEffect(() => {
@@ -53,14 +50,13 @@ const Lobby = (): JSX.Element => {
 
 		socket.on('game-started', (lobby) => {
 			setLobby(lobby);
-			setGame(lobby.game);
 		})
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
 	return lobby ? (
-		<LobbyOrGame lobby={lobby} game={game} updateLobby={updateLobby} socket={socket}></LobbyOrGame>
+		<LobbyOrGame lobby={lobby} updateLobby={updateLobby} socket={socket}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
@@ -69,13 +65,13 @@ export default Lobby;
 
 interface LobbyOrGameProps {
 	lobby: LobbyType;
-	game: Game, updateLobby: (lobby: LobbyType) => void;
+	updateLobby: (lobby: LobbyType) => void;
 	socket: typeof Socket
 }
 
 function LobbyOrGame(props: LobbyOrGameProps) {
-	return props.lobby?.hasStarted && props.game ? (
-		<GameView game={props.game} updateLobby={props.updateLobby} socket={props.socket} />
+	return props.lobby?.hasStarted && props.lobby?.game ? (
+		<GameView game={props.lobby.game} updateLobby={props.updateLobby} socket={props.socket} />
 	) : (
 		<LobbyView lobby={props.lobby} />
 	)
