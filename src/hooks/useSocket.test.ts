@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import Client from 'socket.io-client';
 import { AddressInfo } from 'net';
 
-describe('alo', () => {
+describe('useSocket', () => {
 	let io;
 	let clientSocket: SocketIOClient.Socket;
 	let serverSocket: Socket;

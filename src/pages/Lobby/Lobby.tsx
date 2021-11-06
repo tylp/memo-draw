@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoadingFull } from '../../components/Common';
 import { Socket } from 'socket.io-client';
+import SocketEventEmitter from '../../services/SocketEventEmitter';
 
 const Lobby = (): JSX.Element => {
 	const [sessionId] = useLocalStorage(LocalStorageKey.SessionId);
@@ -28,7 +29,7 @@ const Lobby = (): JSX.Element => {
 	useEffect(() => {
 		if (!socket) return;
 
-		socket.emit('join-lobby', (joinedLobby: LobbyType) => {
+		(new SocketEventEmitter(socket)).joinLobby((joinedLobby: LobbyType) => {
 			if (!joinedLobby) {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
@@ -51,6 +52,12 @@ const Lobby = (): JSX.Element => {
 		socket.on('game-started', (lobby) => {
 			setLobby(lobby);
 		})
+
+		return () => {
+			socket.off('update-lobby');
+			socket.off('kicked-player');
+			socket.off('game-started');
+		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);

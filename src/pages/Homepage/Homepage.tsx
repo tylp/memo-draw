@@ -21,9 +21,8 @@ export default function Homepage(): JSX.Element {
 	const [isCheckingForLobby, setIsCheckingForLobby] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
-	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
-
 	const [isStartEnabled, setIsStartEnabled] = useState(true);
+	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
 	useEffect(() => {
 		if (socket) {

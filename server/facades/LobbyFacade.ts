@@ -90,7 +90,7 @@ export default class LobbyFacade {
 	public static startVote(socket: Socket, selectedDrawing: number): Lobby {
 		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedDrawing);
 
-		this.emitToLobby('start-vote', playerLobby, playerLobby);
+		this.emitToLobby('vote-started', playerLobby, playerLobby);
 
 		setTimeout(() => {
 			playerLobby?.game.endVote();
