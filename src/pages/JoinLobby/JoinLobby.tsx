@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSocketLobby } from '../../hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDangerSnackbar } from '../../hooks/useSnackbar/useSnackbar'
