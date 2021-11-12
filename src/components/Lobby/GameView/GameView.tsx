@@ -16,6 +16,7 @@ import DrawingSelector from './DrawingSelector/DrawingSelector';
 import { Col, Row } from 'react-grid-system';
 import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
+import Canvas from './Canvas/Canvas';
 
 interface GameProps {
 	game: Game;
@@ -113,6 +114,9 @@ export default function GameView(props: GameProps): JSX.Element {
 							<UserProfile key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 						))
 					}
+				</div>
+				<div>
+					<Canvas />
 				</div>
 				<div>
 					Drawing Board Here
