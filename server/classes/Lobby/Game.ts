@@ -1,37 +1,41 @@
 import Player from '../Player';
 import Lobby from './Lobby';
 import { shuffle } from 'lodash';
-import dayjs, { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 import YesNoVote from '../Votes/YesNoVote';
-
-const MIN_SECONDS_POSSIBLE = 4;
-const MAX_SECONDS_POSSIBLE = 10;
+import GameMode from './GameMode/GameMode';
 
 export default class Game {
 	id: string;
 	hostPlayerId: string;
 	players: Array<Player>;
+	gameMode: GameMode;
+
 	currentDrawingIndex = 0;
 	currentNumberOfDrawings = 0;
 	currentPlayerIndex = 0;
+
 	limitDate: Dayjs;
-	minSeconds = MIN_SECONDS_POSSIBLE;
-	maxSeconds = MAX_SECONDS_POSSIBLE;
 	currentVote?: YesNoVote | undefined;
 	contestedDrawing?: number | undefined;
 
-	constructor(lobby: Lobby) {
+	constructor(lobby: Lobby, gameMode: new (game: Game) => GameMode) {
 		this.id = lobby.id;
 		this.hostPlayerId = lobby.hostPlayerId;
 		this.players = shuffle(lobby.players);
+		this.gameMode = new gameMode(this);
 		this.refreshLimitDate();
 	}
 
-	isTurnOf(player: Player): boolean {
+	protected refreshLimitDate(): void {
+		this.limitDate = this.gameMode.getNewLimitDate();
+	}
+
+	public isTurnOf(player: Player): boolean {
 		return this.players[this.currentPlayerIndex].id === player.id;
 	}
 
-	nextDrawing(): void {
+	public nextDrawing(): void {
 		this.refreshLimitDate();
 		if (this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;
@@ -41,25 +45,13 @@ export default class Game {
 		}
 	}
 
-	nextPlayer(): void {
+	public nextPlayer(): void {
 		this.currentDrawingIndex = 0;
 		if (this.currentPlayerIndex === this.players.length - 1) {
 			this.currentPlayerIndex = 0;
 		} else {
 			this.currentPlayerIndex++;
 		}
-	}
-
-	protected refreshLimitDate(): void {
-		this.limitDate = dayjs().add(this.getSecondsToDraw(), 'seconds');
-	}
-
-	getSecondsToDraw(): number {
-		if (this.currentDrawingIndex === 0)
-			return this.maxSeconds;
-		if (this.currentDrawingIndex >= 20)
-			return this.minSeconds;
-		return -2 * Math.log(this.currentDrawingIndex) + 10;
 	}
 
 	public startVote(contestedDrawing: number): void {
