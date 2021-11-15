@@ -10,6 +10,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import Box from '../../components/Common/Box/Box';
 import { Row, Col } from 'react-grid-system';
+import SocketEventEmitter from '../../services/SocketEventEmitter';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -20,21 +21,27 @@ export default function Homepage(): JSX.Element {
 	const [isCheckingForLobby, setIsCheckingForLobby] = useState(true);
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
-
 	const [isStartEnabled, setIsStartEnabled] = useState(true);
+	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
 	useEffect(() => {
 		if (socket) {
-			socket.emit('check-already-in-lobby', (hasLobby) => {
-				if (hasLobby) {
-					history.push('/lobby');
-				} else {
-					setIsCheckingForLobby(false);
-				}
-			})
+			setSocketEventEmitter(new SocketEventEmitter(socket));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket]);
+
+	useEffect(() => {
+		if (!socketEventEmitter) return;
+		socketEventEmitter.checkAlreadyInLobby((hasLobby: boolean) => {
+			if (hasLobby) {
+				history.push('/lobby');
+			} else {
+				setIsCheckingForLobby(false);
+			}
+		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [socketEventEmitter])
 
 	useEffect(() => {
 		if (socket) {
@@ -56,14 +63,14 @@ export default function Homepage(): JSX.Element {
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {
-		socket.emit('update-profile', profile, () => {
+		socketEventEmitter.updateProfile(profile, () => {
 			setProfileStorage(profile);
 			handleLobbyCreation();
-		})
+		});
 	}
 
 	const handleLobbyCreation = () => {
-		socket.emit('create-lobby', () => {
+		socketEventEmitter.createLobby(() => {
 			history.push('/lobby')
 		});
 	}

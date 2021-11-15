@@ -51,11 +51,13 @@ export default class CommonSocketBinder extends SocketBinder {
 			}
 
 			const { sessionId, playerId } = SocketIdentifierService.getIdentifiersOf(socket);
-			if (ack) {
-				ack();
-			}
+
 			Application.getSessionStorage().update(SocketIdentifierService.getSessionIdentifier(socket), { profile });
+
+			ack();
+
 			const lobby = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
+
 			if (lobby) {
 				lobby.players = lobby.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
 				socket.in(lobby.getSocketRoomName()).emit('update-lobby', lobby);

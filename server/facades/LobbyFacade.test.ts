@@ -184,15 +184,16 @@ describe('LobbyFacade', () => {
 
 	test('startVote should emit start-vote event to everyone in room', () => {
 		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
-		expect(mockedSocketA.receivedEvents.length).toBe(0);
-		expect(mockedSocketB.receivedEvents.length).toBe(0);
+		console.log(mockedSocketA.receivedEvents);
+		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
+		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 
 		LobbyFacade.join(mockedSocketB, lobby.id);
-		expect(mockedSocketA.receivedEvents.length).toBe(1);
-		expect(mockedSocketB.receivedEvents.length).toBe(0);
+		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(1);
+		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 
 		LobbyFacade.startVote(mockedSocketA, 3);
-		expect(mockedSocketA.receivedEvents.length).toBe(2);
-		expect(mockedSocketB.receivedEvents.length).toBe(1);
+		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby' || e.name === 'vote-started').length).toBe(2);
+		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby' || e.name === 'vote-started').length).toBe(1);
 	})
 });

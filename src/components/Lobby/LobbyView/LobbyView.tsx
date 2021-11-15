@@ -23,6 +23,7 @@ import ProfileFactory from '../../../../server/factories/ProfileFactory';
 import Carousel from '../../Common/Carousel/Carousel';
 import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
+import SocketEventEmitter from '../../../services/SocketEventEmitter';
 
 interface LobbyViewProps {
 	lobby: Lobby;
@@ -48,6 +49,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
 	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
+
+	useEffect(() => {
+		if (socket) {
+			setSocketEventEmitter(new SocketEventEmitter(socket));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [socket]);
 
 	useEffect(() => {
 		setProfile(localStorageProfile);
@@ -55,7 +64,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const handleSaveProfile = () => {
 		if (isProfileValid) {
-			socket.emit('update-profile', profile, () => {
+			socketEventEmitter.updateProfile(profile, () => {
 				setLocalStorageProfile(profile);
 				setIsEditProfileVisible(false)
 			})
@@ -85,14 +94,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
-			socket.emit('start-game');
+			socketEventEmitter.startGame();
 		}
 	}
 
 	const leaveGame = () => {
 		openInfoSnackBar(t('alert.leavedLobby'))
+		socketEventEmitter.leaveLobby();
 		history.push('/');
-		socket.emit('leave-game');
 	}
 
 	return (

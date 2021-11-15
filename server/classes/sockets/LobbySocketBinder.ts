@@ -60,7 +60,7 @@ export default class LobbySocketBinder extends SocketBinder {
 	}
 
 	private static onLeaveGame(socket: Socket): void {
-		socket.on('leave-game', () => {
+		socket.on('leave-lobby', () => {
 			LobbyFacade.quit(socket)
 		})
 	}
