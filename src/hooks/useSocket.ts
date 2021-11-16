@@ -5,6 +5,7 @@ import ISession from '../../server/interfaces/ISession';
 import IProfile from '../../server/interfaces/IProfile';
 import { EnvironmentChecker } from '../services/EnvironmentChecker';
 import { LocalStorageKey } from './useLocalStorage/useLocalStorage.types';
+import SocketEventEmitter from '../services/SocketEventEmitter';
 
 interface IUseSocket {
 	namespace?: string,
@@ -53,7 +54,9 @@ export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClien
 
 	useEffect(() => {
 		if (!activeSocket) return;
-		activeSocket.emit('update-profile', profile);
+		(new SocketEventEmitter(activeSocket)).updateProfile(profile, () => {
+			//
+		})
 	}, [profile, activeSocket])
 
 	return activeSocket;

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Player from '../../../../server/classes/Player';
 import { Avatar } from '../../../components/Common';
 import { useSocketLobby } from '../../../hooks';
+import SocketEventEmitter from '../../../services/SocketEventEmitter';
 
 interface UserCardSpec {
 	player: Player;
@@ -22,7 +23,7 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	const kickPlayer = (player: Player) => {
 		if (!isCreator) return;
 
-		socket.emit('kick-player-from-lobby', player.id);
+		(new SocketEventEmitter(socket)).kickPlayerFromLobby(player.id);
 	}
 
 	return (

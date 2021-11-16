@@ -17,6 +17,7 @@ import { Col, Row } from 'react-grid-system';
 import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
 import Canvas from './Canvas/Canvas';
+import SocketEventEmitter from '../../../services/SocketEventEmitter';
 
 interface GameProps {
 	game: Game;
@@ -32,9 +33,17 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
 	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
+	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
 	useEffect(() => {
-		props.socket.on('start-vote', (lobby: Lobby) => {
+		if (props.socket) {
+			setSocketEventEmitter(new SocketEventEmitter(props.socket));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.socket]);
+
+	useEffect(() => {
+		props.socket.on('vote-started', (lobby: Lobby) => {
 			setIsCurrentVoteModalVisible(true)
 			props.updateLobby(lobby);
 		})
@@ -45,7 +54,7 @@ export default function GameView(props: GameProps): JSX.Element {
 		})
 
 		return () => {
-			props.socket.off('start-vote');
+			props.socket.off('vote-started');
 			props.socket.off('stop-vote');
 		}
 
@@ -61,20 +70,20 @@ export default function GameView(props: GameProps): JSX.Element {
 	const nextDrawing = () => {
 		if (!props.socket) return;
 		if (playerId === currentPlayer.id) {
-			props.socket.emit('next-drawing')
+			socketEventEmitter.nextDrawing();
 		}
 	}
 
 	const startVote = () => {
 		if (!props.socket) return;
 		if (playerId !== currentPlayer.id && selectedDrawing) {
-			props.socket.emit('start-vote', selectedDrawing);
+			socketEventEmitter.startVote(selectedDrawing);
 			setIsStartVoteModalVisible(false);
 		}
 	}
 
 	const vote = (vote: YesOrNo) => {
-		props.socket.emit('vote', vote);
+		socketEventEmitter.vote(vote);
 	}
 
 	return (
