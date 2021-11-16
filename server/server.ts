@@ -1,11 +1,14 @@
-const app = require('express')();
-const server = require('http').createServer(app);
-const { Server } = require('socket.io');
-const io = new Server(server);
+import express from 'express';
+import http from 'http';
+import socketio from 'socket.io';
+import next from 'next';
 
 import Application from './classes/Application';
 
-const next = require('next');
+const app = express();
+const server = http.createServer(app);
+const io = new socketio.Server(server);
+
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
@@ -17,8 +20,7 @@ Application.startClearEmptyLobbies();
 nextApp.prepare().then(() => {
 	app.get('*', (req, res) => nextHandler(req, res));
 
-	server.listen(port, (err) => {
-		if (err) throw err;
+	server.listen(port,  () => {
 		console.log(`> Ready on http://localhost:${port}`);
 	});
 });

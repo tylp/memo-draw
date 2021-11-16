@@ -1,7 +1,7 @@
-const cryptoRand = require('crypto');
+import { randomBytes } from 'crypto';
 
 export default class IdGeneratorService {
 	static generate(): string {
-		return cryptoRand.randomBytes(8).toString('hex');
+		return randomBytes(8).toString('hex');
 	}
 }
