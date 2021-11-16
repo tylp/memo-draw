@@ -1,18 +1,15 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { Engine } from 'memo-draw-engine';
+import { Engine, drawState, ShapeType } from 'memo-draw-engine';
 
 export default function Canvas(): JSX.Element {
 	const [backgroundStyle, setBackgroundStyle] = useState<CSSProperties>();
 	const canvasRef = useRef<HTMLCanvasElement>();
-	const [, setEngine] = useState<Engine>();
 
 	useEffect(() => {
 		const engine = new Engine(canvasRef.current);
-		// engine.eventManager.registerDefaultCanvasAndDocumentEvents();
-		setEngine(engine);
-		// 	drawState.shapeType = ShapeType.Pencil;
-		// 	drawState.thickness = 5;
-		// 	drawState.drawPermission = DrawPermission.Master;
+		engine.eventManager.registerDefaultCanvasAndDocumentEvents();
+		drawState.shapeType = ShapeType.Pencil;
+		drawState.thickness = 5;
 		initBackgroundStyle();
 	}, []);
 
@@ -20,7 +17,7 @@ export default function Canvas(): JSX.Element {
 		setBackgroundStyle({
 			position: 'absolute',
 			backgroundColor: 'white',
-			zIndex: 1,
+			zIndex: -2,
 			width: `${canvasRef.current.width}px`,
 			height: `${canvasRef.current.height}px`,
 		});
