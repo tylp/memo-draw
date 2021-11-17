@@ -19,16 +19,16 @@ export default class Game {
 	currentVote?: YesNoVote | undefined;
 	contestedDrawing?: number | undefined;
 
-	constructor(lobby: Lobby, gameMode: new (game: Game) => GameMode) {
+	constructor(lobby: Lobby, gameMode: new () => GameMode) {
 		this.id = lobby.id;
 		this.hostPlayerId = lobby.hostPlayerId;
 		this.players = shuffle(lobby.players);
-		this.gameMode = new gameMode(this);
+		this.gameMode = new gameMode();
 		this.refreshLimitDate();
 	}
 
 	protected refreshLimitDate(): void {
-		this.limitDate = this.gameMode.getNewLimitDate();
+		this.limitDate = this.gameMode.getNewLimitDate(this);
 	}
 
 	public isTurnOf(player: Player): boolean {

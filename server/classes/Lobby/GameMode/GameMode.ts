@@ -1,12 +1,6 @@
 import { Dayjs } from 'dayjs';
-import Game from '../Game';
+import type Game from '../Game';
 
 export default abstract class GameMode {
-	protected game: Game;
-
-	constructor(game: Game) {
-		this.game = game;
-	}
-
-	public abstract getNewLimitDate(): Dayjs;
+	public abstract getNewLimitDate(game: Game): Dayjs;
 }
