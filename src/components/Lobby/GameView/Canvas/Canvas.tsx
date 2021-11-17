@@ -17,7 +17,7 @@ export default function Canvas(): JSX.Element {
 		setBackgroundStyle({
 			position: 'absolute',
 			backgroundColor: 'white',
-			zIndex: -2,
+			zIndex: 0,
 			width: `${canvasRef.current.width}px`,
 			height: `${canvasRef.current.height}px`,
 		});
@@ -26,7 +26,7 @@ export default function Canvas(): JSX.Element {
 	return (
 		<div>
 			<div style={backgroundStyle}></div>
-			<canvas width="800" height="600" ref={canvasRef}></canvas>
+			<canvas style={{ zIndex: 2, position: 'relative' }} width="800" height="600" ref={canvasRef}></canvas>
 		</div>
 	);
 }
