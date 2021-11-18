@@ -21,9 +21,9 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	const socket = useSocketLobby();
 
 	const kickPlayer = (player: Player) => {
-		if (!isCreator) return;
+		if (!isCreator || !socket) return;
 
-		(new SocketEventEmitter(socket)).kickPlayerFromLobby(player.id);
+		SocketEventEmitter.kickPlayerFromLobby(socket, player.id);
 	}
 
 	return (
