@@ -1,3 +1,4 @@
+import { GameModeProperty } from './../enums/GameProperties';
 import { Socket } from 'socket.io';
 import Application from '../classes/Application';
 import Lobby from '../classes/Lobby/Lobby';
@@ -60,12 +61,12 @@ export default class LobbyFacade {
 		LobbyFacade.emitToLobby('update-lobby', lobby, lobby);
 	}
 
-	public static startGame(socket: Socket): void {
+	public static startGame(socket: Socket, gameModeProperty: GameModeProperty): void {
 		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
 		const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 		const lobby = Application.getLobbyStorage().get(lobbyId);
 
-		if (LobbyService.start(lobby, player)) {
+		if (LobbyService.start(lobby, player, gameModeProperty)) {
 			socket.in(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
 		}
 	}

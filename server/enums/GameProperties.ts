@@ -1,7 +1,4 @@
-export enum SpeedProperties {
-	Normal,
-}
-
-export enum GameModeProperties {
+export enum GameModeProperty {
 	Classic,
+	Anarchy
 }

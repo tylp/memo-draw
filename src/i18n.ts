@@ -65,19 +65,15 @@ const resources = {
 			'userCard': {
 				'badge': 'It\'s you',
 			},
-			'speed': {
-				'title': 'Speed',
-				'description': 'Choose the game\'s pace ! Are you a fast drawer ? Or maybe you want to draw masterpieces...',
-			},
-			'speeds': {
-				'0': 'Normal',
-			},
-			'gamemode': {
-				'title': 'Gamemode',
-				'description': 'Play the classic Memodraw, or a different mode !',
-			},
 			'gamemodes': {
-				'0': 'Classic',
+				'0': {
+					'title': 'Classic',
+					'description': 'Classic mode, for a classic play.',
+				},
+				'1': {
+					'title': 'Anarchy',
+					'description': 'Faster drawings!',
+				},
 			},
 		},
 	},

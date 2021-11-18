@@ -1,37 +1,54 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { RadioList, Title } from '../../../Common';
-import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
+import { Button, Title } from '../../../Common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IRadioNode } from '../../../../../server/interfaces/IRadioNode';
-import { useTranslation } from 'react-i18next';
 import Box from '../../../Common/Box/Box';
-
+import { Col, Row } from 'react-grid-system';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface GameSettingSpec {
-	translationKey: string,
-	list: IRadioNode[],
+	title: string,
+	description: string,
+	icon: IconProp,
 	setCurrentValue: Dispatch<SetStateAction<string | number>>,
 	currentValue: string | number
+	value: string | number
 }
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {
-	const { t } = useTranslation()
-	const gameSettingPropertyValues = Object.values(props.list)
-
 	return (
-		<div className="pt-3 pb-3 pl-3 pr-3 h-auto w-96 bg-blue-darker-blue rounded-md flex flex-col self-stretch justify-between">
-			<div>
-				<div className="flex flex-row justify-between">
-					<Title>{t(`${props.translationKey}.title`)}</Title>
-					<FontAwesomeIcon className="text-yellow-light-yellow text-2xl" icon={faStopwatch} />
+		<Row>
+			<Col>
+				<div className="pt-3 pb-3 pl-3 pr-3 h-auto w-full bg-blue-darker-blue rounded-md">
+					<Row>
+						<Col>
+							<div className="flex flex-row justify-between">
+								<Title>{props.title}</Title>
+								<FontAwesomeIcon className="text-yellow-light-yellow text-2xl" icon={props.icon} />
+							</div>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<p className="leading-tight text-white-white">{props.description}</p>
+						</Col>
+					</Row>
+					<Row>
+						<Col>
+							<Box mt={2}>
+								<Button
+									size="large"
+									color="light-secondary"
+									fullWidth
+									selected={props.currentValue === props.value}
+									onClick={() => props.setCurrentValue(props.value)}
+								>
+									{props.title}
+								</Button>
+							</Box>
+						</Col>
+					</Row>
 				</div>
-				<p className="leading-tight text-white-white">{t(`${props.translationKey}.description`)}</p>
-			</div>
-			<div className="flex flex-row justify-around">
-				<Box mt={2}>
-					<RadioList list={gameSettingPropertyValues} currentValue={props.currentValue} setCurrentValue={props.setCurrentValue} color='light-secondary' size='large' />
-				</Box>
-			</div>
-		</div>
+			</Col>
+		</Row>
 	);
 }

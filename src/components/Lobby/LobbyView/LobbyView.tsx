@@ -11,10 +11,11 @@ import { faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
-import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
+import { GameModeProperty } from '../../../../server/enums/GameProperties';
+
+import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 
 import { useHistory } from 'react-router-dom'
-import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 import Modal from '../../Common/Modal/Modal';
@@ -47,8 +48,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
-	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
-	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
 		setProfile(localStorageProfile);
@@ -66,16 +66,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
+	const enumToArray = (T: any): typeof T[] => {
 		return Object.values(T)
 			.filter((value) => typeof value === 'number')
 			.map((value) => value as typeof T)
-			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
-	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
-
-	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperties, 'gamemodes')
+	const gameModePropertiesValues: GameModeProperty[] = enumToArray(GameModeProperty)
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
@@ -86,7 +83,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
-			SocketEventEmitter.startGame(socket);
+			SocketEventEmitter.startGame(socket, gameMode);
 		}
 	}
 
@@ -164,14 +161,19 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					}
 				</div>
 				<Row>
-					<Col>
-						<div className="flex flex-row justify-start flex-wrap">
-							<Box mr={2}>
-								<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
-							</Box>
-							<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
-						</div>
-					</Col>
+					{
+						gameModePropertiesValues.map(gameModeProperty =>
+							<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
+								<GameSetting
+									title={t(`gamemodes.${gameModeProperty}.title`)}
+									description={t(`gamemodes.${gameModeProperty}.description`)}
+									currentValue={gameMode}
+									value={gameModeProperty}
+									icon={faStopwatch}
+									setCurrentValue={setGameMode} />
+							</Col>,
+						)
+					}
 				</Row>
 			</div>
 		</Layout >
