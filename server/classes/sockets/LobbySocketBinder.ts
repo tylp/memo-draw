@@ -1,3 +1,4 @@
+import { GameModeProperties } from './../../enums/GameProperties';
 import { Socket } from 'socket.io';
 import Lobby from '../Lobby/Lobby';
 import Application from '../Application';
@@ -54,8 +55,8 @@ export default class LobbySocketBinder extends SocketBinder {
 	}
 
 	private static onGameStart(socket: Socket): void {
-		socket.on('start-game', () => {
-			LobbyFacade.startGame(socket);
+		socket.on('start-game', (gameMode: GameModeProperties) => {
+			LobbyFacade.startGame(socket, gameMode);
 		})
 	}
 

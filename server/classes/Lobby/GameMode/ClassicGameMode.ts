@@ -5,7 +5,7 @@ import GameMode from './GameMode';
 const MIN_SECONDS_POSSIBLE = 4;
 const MAX_SECONDS_POSSIBLE = 10;
 
-export default class NormalGameMode extends GameMode {
+export default class ClassicGameMode extends GameMode {
 	public getNewLimitDate(game: Game): Dayjs {
 		return dayjs().add(this.getSecondsToDraw(game), 'seconds');
 	}

@@ -19,11 +19,11 @@ export default class Game {
 	currentVote?: YesNoVote | undefined;
 	contestedDrawing?: number | undefined;
 
-	constructor(lobby: Lobby, gameMode: new () => GameMode) {
+	constructor(lobby: Lobby, gameMode: GameMode) {
 		this.id = lobby.id;
 		this.hostPlayerId = lobby.hostPlayerId;
 		this.players = shuffle(lobby.players);
-		this.gameMode = new gameMode();
+		this.gameMode = gameMode;
 		this.refreshLimitDate();
 	}
 

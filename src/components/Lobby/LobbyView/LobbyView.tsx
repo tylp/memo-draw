@@ -11,7 +11,7 @@ import { faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
-import { SpeedProperties, GameModeProperties } from '../../../../server/enums/GameProperties';
+import { GameModeProperties } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
@@ -47,7 +47,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
-	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
 	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
@@ -81,8 +80,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
-	const speedPropertiesValues: IRadioNode[] = enumToArray(SpeedProperties, 'speeds');
-
 	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperties, 'gamemodes')
 
 	const copyLinkToClipboard = () => {
@@ -94,7 +91,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
-			socketEventEmitter.startGame();
+			socketEventEmitter.startGame(gameMode);
 		}
 	}
 
@@ -174,9 +171,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<Row>
 					<Col>
 						<div className="flex flex-row justify-start flex-wrap">
-							<Box mr={2}>
-								<GameSetting translationKey="speed" list={speedPropertiesValues} currentValue={gameSpeed} setCurrentValue={setGameSpeed} />
-							</Box>
 							<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
 						</div>
 					</Col>
