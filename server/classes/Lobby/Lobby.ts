@@ -1,4 +1,4 @@
-import { GameModeProperties } from './../../enums/GameProperties';
+import { GameModeProperty } from './../../enums/GameProperties';
 import Application from '../Application';
 import { Game, Player } from '..';
 import { random } from 'lodash';
@@ -47,10 +47,10 @@ export default class Lobby {
 		return this.players.length === 0;
 	}
 
-	startGame(gameMode: GameModeProperties): Game {
+	startGame(gameModeProperty: GameModeProperty): Game {
 		if (!this.game) {
 			this.hasStarted = true;
-			this.game = new Game(this, GameModeFactory.create(gameMode));
+			this.game = new Game(this, GameModeFactory.create(gameModeProperty));
 			Application.getLobbyStorage().set(this.id, this);
 		}
 		return this.game;

@@ -1,4 +1,4 @@
-import { GameModeProperties } from './../../server/enums/GameProperties';
+import { GameModeProperty } from './../../server/enums/GameProperties';
 import { Socket } from 'socket.io-client';
 import { Lobby, Player } from '../../server/classes';
 import { YesOrNo } from '../../server/classes/Votes/YesNoVote';
@@ -23,8 +23,8 @@ export default class SocketEventEmitter {
 		this.socket.emit('check-already-in-lobby', ack);
 	}
 
-	public startGame(gameMode: GameModeProperties): void {
-		this.socket.emit('start-game', gameMode);
+	public startGame(gameModeProperty: GameModeProperty): void {
+		this.socket.emit('start-game', gameModeProperty);
 	}
 
 	public leaveLobby(): void {

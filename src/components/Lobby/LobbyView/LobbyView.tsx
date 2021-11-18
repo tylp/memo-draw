@@ -11,7 +11,7 @@ import { faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faLink, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
-import { GameModeProperties } from '../../../../server/enums/GameProperties';
+import { GameModeProperty } from '../../../../server/enums/GameProperties';
 
 import { useHistory } from 'react-router-dom'
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
@@ -47,7 +47,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
-	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
 	useEffect(() => {
@@ -80,7 +80,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
-	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperties, 'gamemodes')
+	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperty, 'gamemodes')
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {

@@ -1,4 +1,4 @@
-import { GameModeProperties } from './../enums/GameProperties';
+import { GameModeProperty } from './../enums/GameProperties';
 import Application from '../classes/Application';
 import Player from '../classes/Player';
 import Lobby from '../classes/Lobby/Lobby';
@@ -37,9 +37,9 @@ export default class LobbyService {
 		return updatedLobby;
 	}
 
-	public static start(lobby: Lobby, player: Player, gameMode: GameModeProperties): boolean {
+	public static start(lobby: Lobby, player: Player, gameModeProperty: GameModeProperty): boolean {
 		if (lobby.hostPlayerId === player.id) {
-			lobby.startGame(gameMode);
+			lobby.startGame(gameModeProperty);
 			return true;
 		}
 		return false;

@@ -1,4 +1,4 @@
-export enum GameModeProperties {
+export enum GameModeProperty {
 	Classic,
 	Anarchy
 }
