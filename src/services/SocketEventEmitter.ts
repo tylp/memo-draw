@@ -18,7 +18,7 @@ export default class SocketEventEmitter {
 	}
 
 	public static startGame(socket: typeof Socket, gameModeProperty: GameModeProperty): void {
-		socket.emit('start-game');
+		socket.emit('start-game', gameModeProperty);
 	}
 
 	public static leaveLobby(socket: typeof Socket): void {
