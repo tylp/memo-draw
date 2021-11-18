@@ -29,7 +29,7 @@ const Lobby = (): JSX.Element => {
 	useEffect(() => {
 		if (!socket) return;
 
-		(new SocketEventEmitter(socket)).joinLobby((joinedLobby: LobbyType) => {
+		SocketEventEmitter.joinLobby(socket, (joinedLobby: LobbyType) => {
 			if (!joinedLobby) {
 				dangerSnackbar(t('alert.haventJoinedLobbyYet'))
 				history.push('/')
@@ -77,7 +77,7 @@ interface LobbyOrGameProps {
 }
 
 function LobbyOrGame(props: LobbyOrGameProps) {
-	return props.lobby?.hasStarted && props.lobby?.game ? (
+	return (props.lobby?.hasStarted && props.lobby?.game && props.socket) ? (
 		<GameView game={props.lobby.game} updateLobby={props.updateLobby} socket={props.socket} />
 	) : (
 		<LobbyView lobby={props.lobby} />

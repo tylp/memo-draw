@@ -54,7 +54,7 @@ export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClien
 
 	useEffect(() => {
 		if (!activeSocket) return;
-		(new SocketEventEmitter(activeSocket)).updateProfile(profile, () => {
+		SocketEventEmitter.updateProfile(activeSocket, profile, () => {
 			//
 		})
 	}, [profile, activeSocket])

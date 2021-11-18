@@ -2,14 +2,14 @@
   "name": "memo-draw",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server/server.ts",
   "scripts": {
     "build": "next build",
     "dev": "nodemon server/server.ts",
     "test": "jest",
     "test server": "npm run test ./server",
     "test client": "npm run test ./src",
-    "start": "cross-env NODE_ENV=production node server/server.ts",
+    "start": "cross-env NODE_ENV=production node-ts server/server.ts",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "dayjs": "^1.10.7",
     "express": "^4.17.1",
     "i18next": "^21.3.0",
+    "memo-draw-engine": "^0.1.9",
     "mockets.io": "^0.1.5",
     "nanoevents": "^6.0.0",
     "next": "^11.1.1",

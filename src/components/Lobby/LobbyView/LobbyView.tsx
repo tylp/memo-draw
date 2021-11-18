@@ -48,15 +48,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
-	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
-	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
-
-	useEffect(() => {
-		if (socket) {
-			setSocketEventEmitter(new SocketEventEmitter(socket));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socket]);
+	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
+	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
 
 	useEffect(() => {
 		setProfile(localStorageProfile);
@@ -64,7 +57,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const handleSaveProfile = () => {
 		if (isProfileValid) {
-			socketEventEmitter.updateProfile(profile, () => {
+			SocketEventEmitter.updateProfile(socket, profile, () => {
 				setLocalStorageProfile(profile);
 				setIsEditProfileVisible(false)
 			})
@@ -91,13 +84,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
-			socketEventEmitter.startGame(gameMode);
+			SocketEventEmitter.startGame(socket, gameMode);
 		}
 	}
 
 	const leaveGame = () => {
 		openInfoSnackBar(t('alert.leavedLobby'))
-		socketEventEmitter.leaveLobby();
+		SocketEventEmitter.leaveLobby(socket);
 		history.push('/');
 	}
 
