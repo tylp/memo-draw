@@ -48,8 +48,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
-	const [gameSpeed, setGameSpeed] = useState(SpeedProperties.Normal);
-	const [gameMode, setGameMode] = useState(GameModeProperties.Classic);
+	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
 		setProfile(localStorageProfile);
