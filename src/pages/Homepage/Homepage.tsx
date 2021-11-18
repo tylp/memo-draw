@@ -22,18 +22,10 @@ export default function Homepage(): JSX.Element {
 	const [profileStorage, setProfileStorage] = useLocalStorage<IProfile>(LocalStorageKey.Profile)
 	const [profile, setProfile] = useState<IProfile>();
 	const [isStartEnabled, setIsStartEnabled] = useState(true);
-	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
 
 	useEffect(() => {
-		if (socket) {
-			setSocketEventEmitter(new SocketEventEmitter(socket));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socket]);
-
-	useEffect(() => {
-		if (!socketEventEmitter) return;
-		socketEventEmitter.checkAlreadyInLobby((hasLobby: boolean) => {
+		if (!socket) return;
+		SocketEventEmitter.checkAlreadyInLobby(socket, (hasLobby: boolean) => {
 			if (hasLobby) {
 				history.push('/lobby');
 			} else {
@@ -41,7 +33,7 @@ export default function Homepage(): JSX.Element {
 			}
 		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socketEventEmitter])
+	}, [socket])
 
 	useEffect(() => {
 		if (socket) {
@@ -63,14 +55,14 @@ export default function Homepage(): JSX.Element {
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {
-		socketEventEmitter.updateProfile(profile, () => {
+		SocketEventEmitter.updateProfile(socket, profile, () => {
 			setProfileStorage(profile);
 			handleLobbyCreation();
 		});
 	}
 
 	const handleLobbyCreation = () => {
-		socketEventEmitter.createLobby(() => {
+		SocketEventEmitter.createLobby(socket, () => {
 			history.push('/lobby')
 		});
 	}

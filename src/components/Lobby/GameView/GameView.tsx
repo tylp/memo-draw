@@ -33,14 +33,6 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
 	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
-	const [socketEventEmitter, setSocketEventEmitter] = useState<SocketEventEmitter>();
-
-	useEffect(() => {
-		if (props.socket) {
-			setSocketEventEmitter(new SocketEventEmitter(props.socket));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.socket]);
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
@@ -68,22 +60,20 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [props.game])
 
 	const nextDrawing = () => {
-		if (!props.socket) return;
 		if (playerId === currentPlayer.id) {
-			socketEventEmitter.nextDrawing();
+			SocketEventEmitter.nextDrawing(props.socket);
 		}
 	}
 
 	const startVote = () => {
-		if (!props.socket) return;
 		if (playerId !== currentPlayer.id && selectedDrawing) {
-			socketEventEmitter.startVote(selectedDrawing);
+			SocketEventEmitter.startVote(props.socket, selectedDrawing);
 			setIsStartVoteModalVisible(false);
 		}
 	}
 
 	const vote = (vote: YesOrNo) => {
-		socketEventEmitter.vote(vote);
+		SocketEventEmitter.vote(props.socket, vote);
 	}
 
 	return (
