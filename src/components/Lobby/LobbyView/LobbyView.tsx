@@ -13,8 +13,9 @@ import { useTranslation } from 'react-i18next';
 import { GameSetting } from './GameSetting/GameSetting';
 import { GameModeProperty } from '../../../../server/enums/GameProperties';
 
+import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
+
 import { useHistory } from 'react-router-dom'
-import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 import Modal from '../../Common/Modal/Modal';
@@ -73,14 +74,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const enumToArray = (T: any, translationKey: string): IRadioNode[] => {
+	const enumToArray = (T: any): typeof T[] => {
 		return Object.values(T)
 			.filter((value) => typeof value === 'number')
 			.map((value) => value as typeof T)
-			.map((value) => ({ value, 'content': t(`${translationKey}.${value}`) }));
 	}
 
-	const gameModePropertiesValues: IRadioNode[] = enumToArray(GameModeProperty, 'gamemodes')
+	const gameModePropertiesValues: GameModeProperty[] = enumToArray(GameModeProperty)
 
 	const copyLinkToClipboard = () => {
 		if (EnvironmentChecker.isClientSide()) {
@@ -169,11 +169,19 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					}
 				</div>
 				<Row>
-					<Col>
-						<div className="flex flex-row justify-start flex-wrap">
-							<GameSetting translationKey="gamemode" list={gameModePropertiesValues} currentValue={gameMode} setCurrentValue={setGameMode} />
-						</div>
-					</Col>
+					{
+						gameModePropertiesValues.map(gameModeProperty =>
+							<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
+								<GameSetting
+									title={t(`gamemodes.${gameModeProperty}.title`)}
+									description={t(`gamemodes.${gameModeProperty}.description`)}
+									currentValue={gameMode}
+									value={gameModeProperty}
+									icon={faStopwatch}
+									setCurrentValue={setGameMode} />
+							</Col>,
+						)
+					}
 				</Row>
 			</div>
 		</Layout >

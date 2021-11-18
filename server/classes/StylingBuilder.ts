@@ -5,6 +5,7 @@ export default class StylingBuilder {
 
 	private color: Color | 'disabled';
 	private size: Size;
+	private isSelected = false;
 	private result = '';
 
 	constructor(color: Color | 'disabled', size: Size) {
@@ -15,25 +16,34 @@ export default class StylingBuilder {
 	buildColor(): StylingBuilder {
 		switch (this.color) {
 			case 'disabled':
-				this.result += 'bg-grey-light-grey text-grey-grey cursor-default';
+				this.result += 'bg-grey-light-grey text-grey-grey cursor-default ring-yellow-light-yellow';
 				break;
 			case 'primary':
-				this.result += 'bg-pink-dark-pink hover:bg-pink-light-pink text-white-white';
+				this.result += 'bg-pink-dark-pink hover:bg-pink-light-pink text-white-white ring-yellow-light-yellow';
 				break;
 			case 'secondary':
-				this.result += 'bg-blue-darker-blue hover:bg-blue-blue text-yellow-light-yellow';
+				this.result += 'bg-blue-darker-blue hover:bg-blue-blue text-yellow-light-yellow ring-yellow-light-yellow';
 				break;
 			case 'light-secondary':
-				this.result += 'bg-grey-light-grey hover:bg-blue-blue text-white-white';
+				this.result += 'bg-grey-light-grey hover:bg-blue-blue text-white-white ring-yellow-light-yellow';
 				break;
 			default:
 				throw new Error('Color not found.')
 		}
 		this.addSeparator()
+		this.buildSelected();
 		return this;
 	}
 
-	buildSize(): StylingBuilder {
+	buildSelected(): this {
+		if (this.isSelected) {
+			this.result += 'ring-2';
+			this.addSeparator()
+		}
+		return this;
+	}
+
+	buildSize(): this {
 		switch (this.size) {
 			case 'small':
 				this.result += 'pl-4 pr-3 h-8';
@@ -56,7 +66,11 @@ export default class StylingBuilder {
 	}
 
 	getResult(): string {
-		return this.result;
+		return this.result.trim();
 	}
 
+	setIsSelected(value: boolean): this {
+		this.isSelected = value;
+		return this;
+	}
 }
