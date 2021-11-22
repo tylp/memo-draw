@@ -1,5 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Engine } from 'memo-draw-engine';
+import NetworkManager from '../../../../services/NetworkManager/NetworkManager';
 
 // Util function used to trigger when a component is fully painted
 // Sources:
@@ -23,7 +24,7 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 	useEffect(() => {
 		if (!setEngine) return;
 
-		const engine = new Engine(canvasRef.current);
+		const engine = new Engine(canvasRef.current, new NetworkManager());
 		setEngine(engine);
 	}, [setEngine]);
 

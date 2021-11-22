@@ -23,7 +23,7 @@ import { DrawPermission, drawState, Engine, ShapeType } from 'memo-draw-engine';
 interface GameProps {
 	game: Game;
 	updateLobby: (lobby: Lobby) => void;
-	socket: typeof Socket;
+	socket: Socket;
 }
 
 export default function GameView(props: GameProps): JSX.Element {
