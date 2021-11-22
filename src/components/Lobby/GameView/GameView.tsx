@@ -36,6 +36,8 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
 	const [engine, setEngine] = useState<Engine>();
+	const [hasLost, setHasLost] = useState<boolean>();
+	const [, setHasGameEnded] = useState<boolean>();
 
 	useEffect(() => {
 		if (!engine) return;
@@ -90,7 +92,10 @@ export default function GameView(props: GameProps): JSX.Element {
 	useEffect(() => {
 		if (props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
+			setHasLost(props.game.losers.map(e => e.id).includes(playerId as string));
+			setHasGameEnded(props.game.hasEnded)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.game])
 
 	const nextDrawing = () => {
@@ -108,6 +113,18 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	const vote = (vote: YesOrNo) => {
 		SocketEventEmitter.vote(props.socket, vote);
+	}
+
+	const getPillTitle = (player: Player): undefined | string => {
+		if (currentPlayer.id === player.id) {
+			return t('gameView.currentlyDrawing');
+		}
+
+		return undefined;
+	}
+
+	const hasPlayerLost = (player: Player): boolean => {
+		return props.game.losers.map(e => e.id).includes(player.id)
 	}
 
 	return (
@@ -144,7 +161,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
+							<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
 						))
 					}
 				</div>
@@ -161,7 +178,10 @@ export default function GameView(props: GameProps): JSX.Element {
 					{
 						playerId === currentPlayer.id ? (
 							<Button
-								color='primary' size='medium' icon={faArrowRight}
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={hasLost}
 								onClick={nextDrawing}>
 								{t('gameView.sendDrawing')}
 							</Button>
@@ -170,9 +190,12 @@ export default function GameView(props: GameProps): JSX.Element {
 				</div>
 				<div>
 					{
-						playerId !== currentPlayer.id ? (
+						(playerId !== currentPlayer.id) ? (
 							<Button
-								color='primary' size='medium' icon={faArrowRight}
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={hasLost}
 								onClick={() => setIsStartVoteModalVisible(true)}>
 								{t('gameView.startVote')}
 							</Button>
