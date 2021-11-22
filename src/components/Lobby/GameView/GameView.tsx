@@ -18,6 +18,7 @@ import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
 import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
+import { drawState, Engine, ShapeType } from 'memo-draw-engine';
 
 interface GameProps {
 	game: Game;
@@ -33,6 +34,15 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
 	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
+	const [engine, setEngine] = useState<Engine>();
+
+	useEffect(() => {
+		if (!engine) return;
+
+		engine.eventManager.registerDefaultCanvasAndDocumentEvents();
+		drawState.shapeType = ShapeType.Pencil;
+		drawState.thickness = 5;
+	}, [engine])
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
@@ -115,7 +125,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					}
 				</div>
 				<div>
-					<Canvas />
+					<Canvas engine={engine} setEngine={setEngine} />
 				</div>
 				<div>
 					Drawing Board Here
