@@ -25,6 +25,7 @@ import Box from '../../Common/Box/Box';
 interface GameProps {
 	game: Game;
 	updateLobby: (lobby: Lobby) => void;
+	leaveGame: () => void;
 	socket: Socket;
 }
 
@@ -199,6 +200,20 @@ export default function GameView(props: GameProps): JSX.Element {
 								disabled={hasLost}
 								onClick={() => setIsStartVoteModalVisible(true)}>
 								{t('gameView.startVote')}
+							</Button>
+						) : null
+					}
+				</div>
+				<div>
+					{
+						(hasLost) ? (
+							<Button
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={!hasLost}
+								onClick={props.leaveGame}>
+								{t('lobbyView.leaveBtnLabel')}
 							</Button>
 						) : null
 					}
