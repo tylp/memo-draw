@@ -13,7 +13,7 @@ export default function App(): JSX.Element {
 					<Route path="/join/:lobbyId">
 						<JoinLobby />
 					</Route>
-					<Route path="/lobby">
+					<Route path="/game">
 						<Lobby />
 					</Route>
 					<Route path="/">

@@ -52,7 +52,7 @@ export default class LobbyFacade {
 	private static emitToLobby(ev: string, lobby: Lobby, ...params: unknown[]): void {
 		params = params || [];
 		Application.getSocketIoInstance()
-			.of('/lobby')
+			.of('/game')
 			.to(lobby.getSocketRoomName())
 			.emit(ev, ...params);
 	}
@@ -95,7 +95,7 @@ export default class LobbyFacade {
 
 		setTimeout(() => {
 			playerLobby?.game.endVote();
-			Application.getSocketIoInstance().of('/lobby').to(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
+			Application.getSocketIoInstance().of('/game').to(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
 		}, 10 * 1000)
 
 		return playerLobby;

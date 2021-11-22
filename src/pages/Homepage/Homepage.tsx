@@ -27,7 +27,7 @@ export default function Homepage(): JSX.Element {
 		if (!socket) return;
 		SocketEventEmitter.checkAlreadyInLobby(socket, (hasLobby: boolean) => {
 			if (hasLobby) {
-				history.push('/lobby');
+				history.push('/game');
 			} else {
 				setIsCheckingForLobby(false);
 			}
@@ -63,7 +63,7 @@ export default function Homepage(): JSX.Element {
 
 	const handleLobbyCreation = () => {
 		SocketEventEmitter.createLobby(socket, () => {
-			history.push('/lobby')
+			history.push('/game')
 		});
 	}
 
