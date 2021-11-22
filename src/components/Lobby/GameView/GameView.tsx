@@ -3,7 +3,7 @@ import { Game, Lobby } from '../../../../server/classes';
 import Player from '../../../../server/classes/Player';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
-import { Layout, SectionTitle, Button, Avatar } from '../../../components/Common';
+import { Layout, SectionTitle, Button } from '../../../components/Common';
 import UserEtiquette from './UserEtiquette/UserEtiquette';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
@@ -202,13 +202,20 @@ export default function GameView(props: GameProps): JSX.Element {
 				</div>
 				<div className='flex flex-col justify-between flex-1 w-52'>
 
-					<div className='flex flex-row items-center bg-blue-darker-blue rounded-md p-3 h-12'>
-						<div className='w-8'>
-							<Avatar avatar={currentPlayer.profile.avatar} />
-						</div>
-						<div className='font-semibold text-white-white truncate m-4'>
-							{currentPlayer.profile.username} has to draw !
-						</div>
+					<div className='h-12'>
+						{
+							(hasLost) ? (
+								<Button
+									color='primary'
+									size='medium'
+									fullWidth
+									icon={faArrowRight}
+									disabled={!hasLost}
+									onClick={props.leaveGame}>
+									{t('lobbyView.leaveBtnLabel')}
+								</Button>
+							) : null
+						}
 					</div>
 
 					<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
@@ -247,20 +254,6 @@ export default function GameView(props: GameProps): JSX.Element {
 							}
 						</div>
 					</div>
-				</div>
-				<div>
-					{
-						(hasLost) ? (
-							<Button
-								color='primary'
-								size='medium'
-								icon={faArrowRight}
-								disabled={!hasLost}
-								onClick={props.leaveGame}>
-								{t('lobbyView.leaveBtnLabel')}
-							</Button>
-						) : null
-					}
 				</div>
 			</div>
 		</Layout >
