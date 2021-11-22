@@ -10,9 +10,24 @@ interface UserEtiquetteSpec {
 
 export default function UserProfile(props: UserEtiquetteSpec): JSX.Element {
 	return (
-		<p className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white">
-			<Avatar avatar={props.player.profile.avatar} />
-			{props.player.profile.username} {props.currentPlayer.id === props.player.id ? 'Current' : ''}
-		</p>
+		<div
+			className="relative mb-2 flex flex-row items-center bg-blue-darker-blue w-full h-20 pl-2 text-white-white"
+			style={{
+				borderTopLeftRadius: '3em',
+				borderBottomLeftRadius: '3em',
+				borderTopRightRadius: '0.5em',
+				borderBottomRightRadius: '0.5em',
+			}}
+		>
+			<div className="w-14 ml-1">
+				<Avatar avatar={props.player.profile.avatar} />
+			</div>
+			<div className="text-lg ml-4 font-semibold text-white-white">
+				{props.player.profile.username}
+			</div>
+			<div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">
+				{props.currentPlayer.id === props.player.id ? 'Drawing' : ''}
+			</div>
+		</div>
 	)
 }
