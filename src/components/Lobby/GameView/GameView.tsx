@@ -18,12 +18,13 @@ import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
 import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
-import { DrawPermission, drawState, Engine, ShapeType } from 'memo-draw-engine';
+import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
+import NetworkManager from '../../../services/NetworkManager/NetworkManager';
 
 interface GameProps {
 	game: Game;
 	updateLobby: (lobby: Lobby) => void;
-	socket: typeof Socket;
+	socket: Socket;
 }
 
 export default function GameView(props: GameProps): JSX.Element {
@@ -43,9 +44,20 @@ export default function GameView(props: GameProps): JSX.Element {
 		drawState.shapeType = ShapeType.Pencil;
 		drawState.drawPermission = DrawPermission.Slave;
 		drawState.thickness = 5;
+
 		updateDrawingPermission();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [engine])
+
+	useEffect(() => {
+		if (!engine || !props.socket) return;
+
+		engine.registerNetworkManager(new NetworkManager(props.socket));
+
+		props.socket.on('network-manager-update', (elem: IAction) => {
+			engine.networkManager.notify(elem);
+		})
+	}, [engine, props.socket])
 
 	const updateDrawingPermission = () => {
 		drawState.drawPermission = currentPlayer.id === playerId ? DrawPermission.Master : DrawPermission.Slave;

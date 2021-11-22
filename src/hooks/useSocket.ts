@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage/useLocalStorage';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import ISession from '../../server/interfaces/ISession';
 import IProfile from '../../server/interfaces/IProfile';
 import { EnvironmentChecker } from '../services/EnvironmentChecker';
@@ -11,11 +11,11 @@ interface IUseSocket {
 	namespace?: string,
 }
 
-export default function useSocket({ namespace }: IUseSocket = {}): SocketIOClient.Socket {
+export default function useSocket({ namespace }: IUseSocket = {}): Socket {
 	const [sessionId, setSessionId] = useLocalStorage<string>(LocalStorageKey.SessionId);
 	const [, setPlayerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 	const [profile, setProfile] = useLocalStorage<IProfile>(LocalStorageKey.Profile);
-	const [activeSocket, setActiveSocket] = useState<SocketIOClient.Socket>();
+	const [activeSocket, setActiveSocket] = useState<Socket>();
 
 	useEffect(() => {
 		if (EnvironmentChecker.isServerSide()) return;

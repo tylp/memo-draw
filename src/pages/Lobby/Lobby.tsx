@@ -73,7 +73,7 @@ export default Lobby;
 interface LobbyOrGameProps {
 	lobby: LobbyType;
 	updateLobby: (lobby: LobbyType) => void;
-	socket: typeof Socket
+	socket: Socket
 }
 
 function LobbyOrGame(props: LobbyOrGameProps) {
