@@ -62,8 +62,14 @@ const Lobby = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, sessionId]);
 
+	const leaveGame = () => {
+		infoSnackbar(t('alert.leavedLobby'))
+		SocketEventEmitter.leaveLobby(socket);
+		history.push('/');
+	}
+
 	return lobby ? (
-		<LobbyOrGame lobby={lobby} updateLobby={updateLobby} socket={socket}></LobbyOrGame>
+		<LobbyOrGame lobby={lobby} updateLobby={updateLobby} leaveGame={leaveGame} socket={socket}></LobbyOrGame>
 	) : (
 		<LoadingFull></LoadingFull>
 	)
@@ -73,13 +79,14 @@ export default Lobby;
 interface LobbyOrGameProps {
 	lobby: LobbyType;
 	updateLobby: (lobby: LobbyType) => void;
+	leaveGame: () => void;
 	socket: Socket
 }
 
 function LobbyOrGame(props: LobbyOrGameProps) {
 	return (props.lobby?.hasStarted && props.lobby?.game && props.socket) ? (
-		<GameView game={props.lobby.game} updateLobby={props.updateLobby} socket={props.socket} />
+		<GameView game={props.lobby.game} updateLobby={props.updateLobby} leaveGame={props.leaveGame} socket={props.socket} />
 	) : (
-		<LobbyView lobby={props.lobby} />
+		<LobbyView lobby={props.lobby} leaveGame={props.leaveGame} />
 	)
 }
