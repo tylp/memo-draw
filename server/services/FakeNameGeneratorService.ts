@@ -1,8 +1,8 @@
 export default class FakeNameGeneratorService {
 	static NAMES = [
-		'Suspicious Roentgen',
+		'Ritzy Roentgen',
 		'Goofy Williams',
-		'Nauseous Goldberg',
+		'Busy Goldberg',
 		'Agressive Turing',
 		'Stoic Poincare',
 	];

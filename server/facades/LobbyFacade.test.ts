@@ -184,7 +184,6 @@ describe('LobbyFacade', () => {
 
 	test('startVote should emit start-vote event to everyone in room', () => {
 		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
-		console.log(mockedSocketA.receivedEvents);
 		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 
