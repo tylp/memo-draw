@@ -1,13 +1,14 @@
+import { WinType } from './../../Votes/YesNoVote';
 import { Player } from '../..';
 import YesNoVote from '../../Votes/YesNoVote';
 
-export default class WrongDrawingVoteManager {
+export default class PlayerErrorVoteManager {
 	currentVote?: YesNoVote | undefined;
 	selectedPlayer?: Player | undefined;
 
 	public startVote(selectedPlayer: Player, playersIds: Set<Player['id']>): void {
 		if (this.canStartVote()) {
-			this.currentVote = new YesNoVote(playersIds);
+			this.currentVote = new YesNoVote(playersIds, WinType.NoWinsOnDraw);
 			this.selectedPlayer = selectedPlayer;
 		}
 	}
