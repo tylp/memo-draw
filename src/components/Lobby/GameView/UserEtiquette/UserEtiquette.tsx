@@ -28,7 +28,7 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 			<div className="flex-1 text-lg m-4 font-semibold text-white-white truncate">
 				{props.player.profile.username}
 			</div>
-			{props.currentPlayer.id === props.player.id && (<div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{t('gameView.currentlyDrawing')}</div>)}
+			{props.currentPlayer.id === props.player.id && (<div className="absolute -right-4 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{t('gameView.currentlyDrawing')}</div>)}
 		</div>
 	)
 }

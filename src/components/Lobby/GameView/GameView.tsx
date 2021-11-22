@@ -3,7 +3,7 @@ import { Game, Lobby } from '../../../../server/classes';
 import Player from '../../../../server/classes/Player';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
-import { Layout, SectionTitle, Button } from '../../../components/Common';
+import { Layout, SectionTitle, Button, Avatar } from '../../../components/Common';
 import UserEtiquette from './UserEtiquette/UserEtiquette';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
@@ -139,81 +139,76 @@ export default function GameView(props: GameProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
-			<div>
-				<Row>
-					<Col md={3}>
-						<Row>
-							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-						</Row>
-					</Col>
-					<Col md={6}>
-						<div className="w-full flex flex-row justify-between">
-							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
-							<div>
-								<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24">
-									<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
-								</div>
-							</div>
-						</div>
-					</Col>
-					<Col md={3}>
-
-					</Col>
-				</Row>
-				<Row>
-					<Col md={3}>
+			<div className='flex flex-row'>
+				<div className='flex flex-col flex-initial w-52'>
+					<div className='h-16'>
+						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+					</div>
+					<div className=''>
 						{
 							props.game?.players.map((player: Player) => (
 								<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 							))
 						}
-					</Col>
-					<Col md={6}>
-						<div>
-							<Canvas engine={engine} setEngine={setEngine} />
+					</div>
+				</div>
+				<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
+					<div className='flex flex-row justify-between'>
+						<div className='h-16'>
+							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 						</div>
-					</Col>
-					<Col md={3}>
-						<div>
-								Color palette selection
+
+						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24">
+							<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
 						</div>
-					</Col>
-				</Row>
-				<Row>
-					<Col md={3}>
-					</Col>
-					<Col md={6}>
-						<div>
-							Tool selection
+					</div>
+					<div>
+						<Canvas engine={engine} setEngine={setEngine} />
+					</div>
+					<div className='bg-blue-darker-blue rounded-md mt-4 h-20 text-lg font-semibold text-white-white text-center'>
+						Tool selection
+					</div>
+				</div>
+				<div className='flex flex-col justify-between flex-initial w-52'>
+
+					<div className='flex flex-row items-center bg-blue-darker-blue rounded-md p-3 h-12'>
+						<div className='w-10'>
+							<Avatar avatar={currentPlayer.profile.avatar} />
 						</div>
-					</Col>
-					<Col md={3}>
-						<div>
-							<div>
-								{
-									playerId === currentPlayer.id ? (
-										<Button
-											color='primary' size='medium' icon={faArrowRight}
-											onClick={nextDrawing}>
-											{t('gameView.sendDrawing')}
-										</Button>
-									) : null
-								}
-							</div>
-							<div>
-								{
-									playerId !== currentPlayer.id ? (
-										<Button
-											color='primary' size='medium' icon={faArrowRight}
-											onClick={() => setIsStartVoteModalVisible(true)}>
-											{t('gameView.startVote')}
-										</Button>
-									) : null
-								}
-							</div>
+						<div className='font-semibold text-white-white truncate m-4'>
+							{currentPlayer.profile.username} turn !
 						</div>
-					</Col>
-				</Row>
+					</div>
+
+					<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
+						Color palette selection
+					</div>
+
+					<div>
+						<div>
+							{
+								playerId === currentPlayer.id ? (
+									<Button
+										color='primary' size='medium' icon={faArrowRight}
+										onClick={nextDrawing}>
+										{t('gameView.sendDrawing')}
+									</Button>
+								) : null
+							}
+						</div>
+						<div>
+							{
+								playerId !== currentPlayer.id ? (
+									<Button
+										color='primary' size='medium' icon={faArrowRight}
+										onClick={() => setIsStartVoteModalVisible(true)}>
+										{t('gameView.startVote')}
+									</Button>
+								) : null
+							}
+						</div>
+					</div>
+				</div>
 			</div>
 		</Layout >
 	)
