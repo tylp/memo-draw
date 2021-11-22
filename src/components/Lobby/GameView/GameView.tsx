@@ -204,10 +204,11 @@ export default function GameView(props: GameProps): JSX.Element {
 
 					<div className='h-12'>
 						{
-							(hasLost) ? (
+							(!hasLost) ? (
 								<Button
 									color='primary'
 									size='medium'
+									fullHeigth
 									fullWidth
 									icon={faArrowRight}
 									disabled={!hasLost}
@@ -222,37 +223,35 @@ export default function GameView(props: GameProps): JSX.Element {
 						Color palette selection
 					</div>
 
-					<div>
-						<div>
-							{
-								playerId === currentPlayer.id ? (
-									<Button
-										color='primary'
-										size='large'
-										fullWidth
-										icon={faArrowRight}
-										disabled={hasLost}
-										onClick={nextDrawing}>
-										{t('gameView.sendDrawing')}
-									</Button>
-								) : null
-							}
-						</div>
-						<div>
-							{
-								playerId !== currentPlayer.id ? (
-									<Button
-										color='primary'
-										size='large'
-										fullWidth
-										icon={faArrowRight}
-										disabled={hasLost}
-										onClick={() => setIsStartVoteModalVisible(true)}>
-										{t('gameView.startVote')}
-									</Button>
-								) : null
-							}
-						</div>
+					<div className='h-20'>
+						{
+							playerId === currentPlayer.id ? (
+								<Button
+									color='primary'
+									size='medium'
+									fullHeigth
+									fullWidth
+									icon={faArrowRight}
+									disabled={hasLost}
+									onClick={nextDrawing}>
+									{t('gameView.sendDrawing')}
+								</Button>
+							) : null
+						}
+						{
+							playerId !== currentPlayer.id ? (
+								<Button
+									color='primary'
+									size='medium'
+									fullHeigth
+									fullWidth
+									icon={faArrowRight}
+									disabled={hasLost}
+									onClick={() => setIsStartVoteModalVisible(true)}>
+									{t('gameView.startVote')}
+								</Button>
+							) : null
+						}
 					</div>
 				</div>
 			</div>

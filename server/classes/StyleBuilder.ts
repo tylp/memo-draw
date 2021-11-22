@@ -72,7 +72,7 @@ export default abstract class StyleBuilder {
 				this.result += 'pl-4 pr-4 pt-1 pb-1';
 				break;
 			case 'large':
-				this.result += 'pt-5 pb-5 pl-4 pr-4 h-20';
+				this.result += 'pt-5 pb-5 pl-4 pr-4';
 				break;
 			default:
 				throw new Error('Size not found.')

@@ -9,6 +9,7 @@ interface ButtonSpec {
 	children: ReactNode,
 	onClick?: React.MouseEventHandler<HTMLButtonElement>,
 	disabled?: boolean,
+	fullHeigth?: boolean,
 	fullWidth?: boolean,
 	selected?: boolean,
 	size: Size,
@@ -25,11 +26,12 @@ export default function Button(props: ButtonSpec): JSX.Element {
 						rounded-md
 						whitespace-nowrap
 						${props.fullWidth ? 'w-full' : ''}
+						${props.fullHeigth ? 'h-full' : ''}
 						${(new ButtonStyleBuilder(props.disabled ? 'disabled' : props.color, props.size)).setIsSelected(!!props.selected).buildColor().buildSize().buildHover().getResult()}
 						transition duration-300
 						font-rubik-bold uppercase
 					`);
-	}, [props.disabled, props.size, props.color, props.fullWidth, props.selected])
+	}, [props.disabled, props.size, props.color, props.fullWidth, props.fullHeigth, props.selected])
 
 	return (
 		<button
