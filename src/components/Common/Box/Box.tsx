@@ -23,6 +23,13 @@ interface Margin {
 interface BoxProps extends Padding, Margin {
 	children: ReactNode;
 	className?: string;
+	onClick?: () => void
+}
+
+Box.defaultProps = {
+	onClick: () => {
+		//
+	},
 }
 
 export default function Box(props: BoxProps): JSX.Element {
@@ -42,6 +49,7 @@ export default function Box(props: BoxProps): JSX.Element {
 			].map(e => props[e] ? `${e}-${props[e]}` : '').join(' ');
 			buffer += getBufferedMap('m') + ' ' + getBufferedMap('p') + ' ';
 			buffer += props.className || '';
+			buffer += props.onClick ? 'cursor-pointer' : '';
 			return buffer;
 		}
 
@@ -49,7 +57,7 @@ export default function Box(props: BoxProps): JSX.Element {
 	}, [props])
 
 	return (
-		<div className={className}>
+		<div className={className} onClick={props.onClick}>
 			{props.children}
 		</div>
 	)

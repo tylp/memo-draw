@@ -12,7 +12,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
 import Modal from '../../Common/Modal/Modal';
-import DrawingSelector from './DrawingSelector/DrawingSelector';
+import PlayerSelector from './PlayerSelector/PlayerSelector';
 import { Col, Row } from 'react-grid-system';
 import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
@@ -20,10 +20,12 @@ import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
+import Box from '../../Common/Box/Box';
 
 interface GameProps {
 	game: Game;
 	updateLobby: (lobby: Lobby) => void;
+	leaveGame: () => void;
 	socket: Socket;
 }
 
@@ -33,9 +35,12 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
-	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
+	const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>();
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
 	const [engine, setEngine] = useState<Engine>();
+	const [hasLost, setHasLost] = useState<boolean>();
+	const [, setHasGameEnded] = useState<boolean>();
+	const [currentVote, setCurrentVote] = useState<YesOrNo>();
 
 	useEffect(() => {
 		if (!engine) return;
@@ -70,12 +75,13 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
-			setIsCurrentVoteModalVisible(true)
+			setIsCurrentVoteModalVisible(lobby.game.playerErrorVoteManager.selectedPlayer.id !== playerId);
 			props.updateLobby(lobby);
 		})
 
 		props.socket.on('stop-vote', (lobby: Lobby) => {
 			setIsCurrentVoteModalVisible(false)
+			setCurrentVote(undefined);
 			props.updateLobby(lobby);
 		})
 
@@ -90,7 +96,10 @@ export default function GameView(props: GameProps): JSX.Element {
 	useEffect(() => {
 		if (props.game) {
 			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
+			setHasLost(props.game.losers.map(e => e.id).includes(playerId as string));
+			setHasGameEnded(props.game.hasEnded)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.game])
 
 	const nextDrawing = () => {
@@ -100,14 +109,27 @@ export default function GameView(props: GameProps): JSX.Element {
 	}
 
 	const startVote = () => {
-		if (playerId !== currentPlayer.id && selectedDrawing) {
-			SocketEventEmitter.startVote(props.socket, selectedDrawing);
+		if (playerId !== currentPlayer.id && selectedPlayer) {
+			SocketEventEmitter.startVote(props.socket, selectedPlayer);
 			setIsStartVoteModalVisible(false);
 		}
 	}
 
 	const vote = (vote: YesOrNo) => {
+		setCurrentVote(vote);
 		SocketEventEmitter.vote(props.socket, vote);
+	}
+
+	const getPillTitle = (player: Player): undefined | string => {
+		if (currentPlayer.id === player.id) {
+			return t('gameView.currentlyDrawing');
+		}
+
+		return undefined;
+	}
+
+	const hasPlayerLost = (player: Player): boolean => {
+		return props.game.losers.map(e => e.id).includes(player.id)
 	}
 
 	return (
@@ -116,26 +138,35 @@ export default function GameView(props: GameProps): JSX.Element {
 				visible={isStartVoteModalVisible}
 				onClose={() => setIsStartVoteModalVisible(false)}
 				onValidate={startVote}
-				disableValidate={!selectedDrawing}
+				disableValidate={!selectedPlayer}
 				title={t('gameView.startVote')}
 			>
-				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<DrawingSelector list={[1, 2, 3]} selected={selectedDrawing} setSelected={setSelectedDrawing} />
-				</p>
+				<Box className={'w-full'}>
+					<PlayerSelector list={props.game.players} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+				</Box>
 			</Modal>
 			<Modal
 				visible={isCurrentVoteModalVisible}
 				onClose={() => setIsCurrentVoteModalVisible(false)}
 				showValidate={false}
 				showCancel={false}
-				title={t('gameView.isThisDrawingValid')}
+				title={t('gameView.hasThisPlayerMadeAnError')}
 			>
 				<Row>
 					<Col>
-						<Button color="primary" size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
+						{
+							props?.game?.playerErrorVoteManager?.selectedPlayer && (
+								<UserEtiquette player={props.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
+							)
+						}
+					</Col>
+				</Row>
+				<Row>
+					<Col>
+						<Button color="primary" selected={currentVote === 'yes'} size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
 					</Col>
 					<Col>
-						<Button color="primary" size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
+						<Button color="primary" selected={currentVote === 'no'} size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
 					</Col>
 				</Row>
 			</Modal>
@@ -147,7 +178,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div className=''>
 						{
 							props.game?.players.map((player: Player) => (
-								<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
+								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
 							))
 						}
 					</div>
@@ -189,7 +220,11 @@ export default function GameView(props: GameProps): JSX.Element {
 							{
 								playerId === currentPlayer.id ? (
 									<Button
-										color='primary' size='large' fullWidth icon={faArrowRight}
+										color='primary'
+										size='large'
+										fullWidth
+										icon={faArrowRight}
+										disabled={hasLost}
 										onClick={nextDrawing}>
 										{t('gameView.sendDrawing')}
 									</Button>
@@ -200,7 +235,11 @@ export default function GameView(props: GameProps): JSX.Element {
 							{
 								playerId !== currentPlayer.id ? (
 									<Button
-										color='primary' size='large' fullWidth icon={faArrowRight}
+										color='primary'
+										size='large'
+										fullWidth
+										icon={faArrowRight}
+										disabled={hasLost}
 										onClick={() => setIsStartVoteModalVisible(true)}>
 										{t('gameView.startVote')}
 									</Button>
@@ -208,6 +247,20 @@ export default function GameView(props: GameProps): JSX.Element {
 							}
 						</div>
 					</div>
+				</div>
+				<div>
+					{
+						(hasLost) ? (
+							<Button
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={!hasLost}
+								onClick={props.leaveGame}>
+								{t('lobbyView.leaveBtnLabel')}
+							</Button>
+						) : null
+					}
 				</div>
 			</div>
 		</Layout >

@@ -15,9 +15,6 @@ import { GameModeProperty } from '../../../../server/enums/GameProperties';
 
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 
-import { useHistory } from 'react-router-dom'
-import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
-
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
@@ -25,19 +22,18 @@ import Carousel from '../../Common/Carousel/Carousel';
 import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
+import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 interface LobbyViewProps {
 	lobby: Lobby;
+	leaveGame: () => void;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketLobby();
 	const { t } = useTranslation();
 
-	const history = useHistory();
-
 	const [openSuccessSnackbar] = useSuccessSnackbar()
-	const [openInfoSnackBar] = useInfoSnackbar()
 	const [openWarningSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
@@ -87,12 +83,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 	}
 
-	const leaveGame = () => {
-		openInfoSnackBar(t('alert.leavedLobby'))
-		SocketEventEmitter.leaveLobby(socket);
-		history.push('/');
-	}
-
 	return (
 		<Layout>
 			<Modal
@@ -128,7 +118,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Box>
 					<Box className="self-center">
 						<Button color='secondary' size='small'
-							onClick={leaveGame}
+							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
 						</Button>

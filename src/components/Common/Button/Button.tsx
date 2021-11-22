@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { Size } from '../../../../server/types/Size';
 import { Color } from '../../../../server/types/Color';
-import StylingBuilder from '../../../../server/classes/StylingBuilder';
+import ButtonStyleBuilder from './ButtonStyleBuilder';
 
 interface ButtonSpec {
 	children: ReactNode,
@@ -25,7 +25,7 @@ export default function Button(props: ButtonSpec): JSX.Element {
 						rounded-md
 						whitespace-nowrap
 						${props.fullWidth ? 'w-full' : ''}
-						${(new StylingBuilder(props.disabled ? 'disabled' : props.color, props.size)).setIsSelected(!!props.selected).buildColor().buildSize().getResult()}
+						${(new ButtonStyleBuilder(props.disabled ? 'disabled' : props.color, props.size)).setIsSelected(!!props.selected).buildColor().buildSize().buildHover().getResult()}
 						transition duration-300
 						font-rubik-bold uppercase
 					`);

@@ -64,11 +64,11 @@ export default class LobbyService {
 		return lobbyOfCurrentPlayer?.remove(playerId);
 	}
 
-	public static startVote({ sessionId }: PlayerIdentifiers, selectedDrawing: number): Lobby {
+	public static startVote({ sessionId }: PlayerIdentifiers, selectedPlayer: Player): Lobby {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
 		if (lobbyOfCurrentPlayer && lobbyOfCurrentPlayer.game) {
-			lobbyOfCurrentPlayer.game.startVote(selectedDrawing);
+			lobbyOfCurrentPlayer.game.startVote(selectedPlayer);
 		}
 
 		return lobbyOfCurrentPlayer;
@@ -77,7 +77,7 @@ export default class LobbyService {
 	public static vote({ playerId, sessionId }: PlayerIdentifiers, vote: YesOrNo): Lobby {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
-		lobbyOfCurrentPlayer?.game.currentVote.vote(playerId, vote);
+		lobbyOfCurrentPlayer?.game.playerErrorVoteManager.currentVote.vote(playerId, vote);
 
 		return lobbyOfCurrentPlayer;
 	}
