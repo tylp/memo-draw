@@ -49,7 +49,7 @@ export default function Box(props: BoxProps): JSX.Element {
 			].map(e => props[e] ? `${e}-${props[e]}` : '').join(' ');
 			buffer += getBufferedMap('m') + ' ' + getBufferedMap('p') + ' ';
 			buffer += props.className || '';
-			buffer += props.onClick ? 'cursor-pointer' : '';
+			buffer += props.onClick ? ' cursor-pointer' : '';
 			return buffer;
 		}
 

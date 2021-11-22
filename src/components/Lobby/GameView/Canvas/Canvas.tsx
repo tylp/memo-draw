@@ -43,6 +43,8 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 		setBackgroundStyle({
 			position: 'absolute',
 			backgroundColor: 'white',
+			backgroundPosition: 'center',
+			borderRadius: '0.5em',
 			zIndex: 0,
 			width: `${canvasRef.current.width}px`,
 			height: `${canvasRef.current.height}px`,

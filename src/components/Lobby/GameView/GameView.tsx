@@ -170,65 +170,82 @@ export default function GameView(props: GameProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
-			<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
-				<div>
-					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-					{
-						props.game?.players.map((player: Player) => (
-							<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
-						))
-					}
+			<div className='flex flex-row justify-center'>
+				<div className='flex flex-col flex-1 w-52'>
+					<div className='h-16'>
+						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+					</div>
+					<div className=''>
+						{
+							props.game?.players.map((player: Player) => (
+								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
+							))
+						}
+					</div>
 				</div>
-				<div>
-					<Canvas engine={engine} setEngine={setEngine} />
+				<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
+					<div className='flex flex-row justify-between'>
+						<div className='h-16'>
+							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
+						</div>
+						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
+							<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
+						</div>
+					</div>
+					<div>
+						<Canvas engine={engine} setEngine={setEngine} />
+					</div>
+					<div className='bg-blue-darker-blue rounded-md mt-4 h-20 text-lg font-semibold text-white-white text-center'>
+						Tool selection
+					</div>
 				</div>
-				<div>
-					Drawing Board Here
-					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
-					Current Player: {props.game.currentPlayerIndex}
-				</div>
-				<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
-				<div>
-					{
-						playerId === currentPlayer.id ? (
-							<Button
-								color='primary'
-								size='medium'
-								icon={faArrowRight}
-								disabled={hasLost}
-								onClick={nextDrawing}>
-								{t('gameView.sendDrawing')}
-							</Button>
-						) : null
-					}
-				</div>
-				<div>
-					{
-						(playerId !== currentPlayer.id) ? (
-							<Button
-								color='primary'
-								size='medium'
-								icon={faArrowRight}
-								disabled={hasLost}
-								onClick={() => setIsStartVoteModalVisible(true)}>
-								{t('gameView.startVote')}
-							</Button>
-						) : null
-					}
-				</div>
-				<div>
-					{
-						(hasLost) ? (
-							<Button
-								color='primary'
-								size='medium'
-								icon={faArrowRight}
-								disabled={!hasLost}
-								onClick={props.leaveGame}>
-								{t('lobbyView.leaveBtnLabel')}
-							</Button>
-						) : null
-					}
+				<div className='flex flex-col justify-between flex-1 w-52'>
+					<div className='h-12'>
+						{
+							(!hasLost) ? (
+								<Button
+									color='primary'
+									size='medium'
+									fullHeight
+									fullWidth
+									icon={faArrowRight}
+									disabled={!hasLost}
+									onClick={props.leaveGame}>
+									{t('lobbyView.leaveBtnLabel')}
+								</Button>
+							) : null
+						}
+					</div>
+					<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
+						Color palette selection
+					</div>
+					<div className='h-20'>
+						{
+							playerId === currentPlayer.id ? (
+								<Button
+									color='primary'
+									size='medium'
+									fullHeight
+									fullWidth
+									icon={faArrowRight}
+									disabled={hasLost}
+									onClick={nextDrawing}>
+									{t('gameView.sendDrawing')}
+								</Button>
+							) : (
+								<Button
+									color='primary'
+									size='medium'
+									fullHeight
+									fullWidth
+									icon={faArrowRight}
+									disabled={hasLost}
+									onClick={() => setIsStartVoteModalVisible(true)}>
+									{t('gameView.startVote')}
+								</Button>
+							)
+						}
+					</div>
 				</div>
 			</div>
 		</Layout >

@@ -98,7 +98,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			</Modal>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-row justify-center align-middle">
-					<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
+					<Box mt={6} mb={6}>
+						<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
+					</Box>
 					<Divider />
 					<Box mr={2} className="self-center">
 						<Button color='secondary' size='small'
@@ -134,7 +136,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">
-					<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
+					<Box mt={6} mb={6}>
+						<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
+					</Box>
 					<Divider />
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
 					{
