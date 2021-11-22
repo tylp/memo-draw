@@ -188,7 +188,6 @@ export default function GameView(props: GameProps): JSX.Element {
 						<div className='h-16'>
 							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 						</div>
-
 						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
 							<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
 						</div>
@@ -201,14 +200,13 @@ export default function GameView(props: GameProps): JSX.Element {
 					</div>
 				</div>
 				<div className='flex flex-col justify-between flex-1 w-52'>
-
 					<div className='h-12'>
 						{
 							(!hasLost) ? (
 								<Button
 									color='primary'
 									size='medium'
-									fullHeigth
+									fullHeight
 									fullWidth
 									icon={faArrowRight}
 									disabled={!hasLost}
@@ -218,18 +216,16 @@ export default function GameView(props: GameProps): JSX.Element {
 							) : null
 						}
 					</div>
-
 					<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
 						Color palette selection
 					</div>
-
 					<div className='h-20'>
 						{
 							playerId === currentPlayer.id ? (
 								<Button
 									color='primary'
 									size='medium'
-									fullHeigth
+									fullHeight
 									fullWidth
 									icon={faArrowRight}
 									disabled={hasLost}
@@ -243,7 +239,7 @@ export default function GameView(props: GameProps): JSX.Element {
 								<Button
 									color='primary'
 									size='medium'
-									fullHeigth
+									fullHeight
 									fullWidth
 									icon={faArrowRight}
 									disabled={hasLost}
