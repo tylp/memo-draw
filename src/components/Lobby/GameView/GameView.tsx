@@ -103,6 +103,18 @@ export default function GameView(props: GameProps): JSX.Element {
 		SocketEventEmitter.vote(props.socket, vote);
 	}
 
+	const getPillTitle = (player: Player): undefined | string => {
+		if (currentPlayer.id === player.id) {
+			return t('gameView.currentlyDrawing');
+		}
+
+		return undefined;
+	}
+
+	const hasPlayerLost = (player: Player): boolean => {
+		return props.game.losers.map(e => e.id).includes(player.id)
+	}
+
 	return (
 		<Layout>
 			<Modal
@@ -137,7 +149,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserEtiquette key={player.id} player={player} currentPlayer={currentPlayer} losers={props.game.losers} />
+							<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
 						))
 					}
 				</div>

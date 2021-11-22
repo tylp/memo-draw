@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import StylingBuilder from '../../../../server/classes/StylingBuilder';
+import StyleBuilder from '../../../../server/classes/StyleBuilder';
 import { IRadioNode } from '../../../../server/interfaces/IRadioNode';
 import { Color } from '../../../../server/types/Color';
 import { Size } from '../../../../server/types/Size';
@@ -19,7 +19,7 @@ export default function RadioList(props: RadioSpec): JSX.Element {
 	useEffect(() => {
 
 		setClassName(`
-			${(new StylingBuilder(props.color, props.size)).buildColor().buildSize().getResult()}
+			${(new StyleBuilder(props.color, props.size)).buildColor().buildSize().getResult()}
 			text-center
 			w-32
 			rounded-md

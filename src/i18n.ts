@@ -51,7 +51,6 @@ const resources = {
 				'selectDrawing': 'Select a drawing',
 				'isThisDrawingValid': 'Is this drawing valid?',
 				'currentlyDrawing': 'Drawing',
-				'lost': 'Lost',
 				'yes': 'Yes',
 				'no': 'No',
 			},

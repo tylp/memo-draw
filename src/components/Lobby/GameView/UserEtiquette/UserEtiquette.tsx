@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import Player from '../../../../../server/classes/Player';
+import { Color } from '../../../../../server/types/Color';
 import { Avatar } from '../../../Common';
-import { useTranslation } from 'react-i18next';
+import UserEtiquetteStyleBuilder from './UserEtiquetteStyleBuilder';
 
 interface UserEtiquetteSpec {
 	player: Player;
-	currentPlayer: Player;
-	losers: Player[];
+	pillTitle?: string | undefined;
+	color: Color;
+	disabled?: boolean | undefined;
+}
+
+UserEtiquette.defaultProps = {
+	disabled: false,
 }
 
 export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
-	const { t } = useTranslation();
 
-	const [pillTitle, setPillTitle] = useState<string>();
+	const [className, setClassName] = useState((new UserEtiquetteStyleBuilder()).buildColor().getResult());
 
 	useEffect(() => {
-		if (props.losers.map(e => e.id).includes(props.player.id)) {
-			setPillTitle(t('gameView.lost'));
-		} else if (props.currentPlayer.id === props.player.id) {
-			setPillTitle(t('gameView.currentlyDrawing'));
-		} else {
-			setPillTitle(undefined);
-		}
-	}, [props, t]);
+		const styleBuilder = new UserEtiquetteStyleBuilder(props.disabled ? 'disabled' : props.color);
+		const defaultStyle = 'relative mb-2 flex flex-row items-center w-full h-16 pl-2';
+
+		setClassName(defaultStyle + ' ' + styleBuilder.buildColor().getResult());
+	}, [props.color, props.disabled])
 
 	return (
 		<div
-			className="relative mb-2 flex flex-row items-center bg-blue-darker-blue w-full h-16 pl-2 text-white-white"
+			className={className}
 			style={{
 				borderTopLeftRadius: '3em',
 				borderBottomLeftRadius: '3em',
@@ -41,7 +43,7 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 				{props.player.profile.username}
 			</div>
 			{
-				pillTitle && <Pill title={pillTitle} />
+				props.pillTitle && <Pill title={props.pillTitle} />
 			}
 		</div>
 	)
