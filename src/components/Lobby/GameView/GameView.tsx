@@ -20,7 +20,6 @@ import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
-import Box from '../../Common/Box/Box';
 
 interface GameProps {
 	game: Game;
@@ -131,85 +130,86 @@ export default function GameView(props: GameProps): JSX.Element {
 				showCancel={false}
 				title={t('gameView.isThisDrawingValid')}
 			>
-				<Row className="border-2 border-black">
-					<Col className="border-2 border-yellow-light-yellow">
+				<Row>
+					<Col>
 						<Button color="primary" size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
 					</Col>
-					<Col className="border-2 border-yellow-light-yellow">
+					<Col>
 						<Button color="primary" size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
 					</Col>
 				</Row>
 			</Modal>
 			<div>
-				<Row className="border-2 border-black">
-					<Col className="border-2 border-yellow-light-yellow">
-						<Row className="border-2 border-black">
-							<Box mt={6} mb={6}>
-								<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-							</Box>
-						</Row>
-						<Row className="border-2 border-black">
-							{
-								props.game?.players.map((player: Player) => (
-									<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
-								))
-							}
+				<Row>
+					<Col md={3}>
+						<Row>
+							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 						</Row>
 					</Col>
-					<Col className="border-2 border-yellow-light-yellow">
-						<Row className="border-2 border-black">
-							<Col className="border-2 border-yellow-light-yellow">
-								<Row className="border-2 border-black">
-									<div className="w-full flex flex-row justify-between">
-										<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
-										<div>
-											<div>
-												Drawing Board Here
-												Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
-												Current Player: {props.game.currentPlayerIndex}
-											</div>
-										</div>
-									</div>
-								</Row>
-							</Col>
-							<Col className="border-2 border-yellow-light-yellow">
-								<div>
-									<Canvas engine={engine} setEngine={setEngine} />
-								</div>
-							</Col>
-							<Col className="border-2 border-yellow-light-yellow">
-								Tool selection
-							</Col>
-						</Row>
-					</Col>
-					<Col className="border-2 border-yellow-light-yellow">
-						<div className="h-full flex flex-col justify-between">
+					<Col md={6}>
+						<div className="w-full flex flex-row justify-between">
+							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 							<div>
-								Palette selection
+								<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24">
+									<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
+								</div>
+							</div>
+						</div>
+					</Col>
+					<Col md={3}>
+
+					</Col>
+				</Row>
+				<Row>
+					<Col md={3}>
+						{
+							props.game?.players.map((player: Player) => (
+								<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
+							))
+						}
+					</Col>
+					<Col md={6}>
+						<div>
+							<Canvas engine={engine} setEngine={setEngine} />
+						</div>
+					</Col>
+					<Col md={3}>
+						<div>
+								Color palette selection
+						</div>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={3}>
+					</Col>
+					<Col md={6}>
+						<div>
+							Tool selection
+						</div>
+					</Col>
+					<Col md={3}>
+						<div>
+							<div>
+								{
+									playerId === currentPlayer.id ? (
+										<Button
+											color='primary' size='medium' icon={faArrowRight}
+											onClick={nextDrawing}>
+											{t('gameView.sendDrawing')}
+										</Button>
+									) : null
+								}
 							</div>
 							<div>
-								<div>
-									{
-										playerId === currentPlayer.id ? (
-											<Button
-												color='primary' size='medium' icon={faArrowRight}
-												onClick={nextDrawing}>
-												{t('gameView.sendDrawing')}
-											</Button>
-										) : null
-									}
-								</div>
-								<div>
-									{
-										playerId !== currentPlayer.id ? (
-											<Button
-												color='primary' size='medium' icon={faArrowRight}
-												onClick={() => setIsStartVoteModalVisible(true)}>
-												{t('gameView.startVote')}
-											</Button>
-										) : null
-									}
-								</div>
+								{
+									playerId !== currentPlayer.id ? (
+										<Button
+											color='primary' size='medium' icon={faArrowRight}
+											onClick={() => setIsStartVoteModalVisible(true)}>
+											{t('gameView.startVote')}
+										</Button>
+									) : null
+								}
 							</div>
 						</div>
 					</Col>

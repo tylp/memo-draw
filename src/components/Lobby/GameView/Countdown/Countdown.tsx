@@ -1,5 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CountdownProps {
 	limitDate: Dayjs;
@@ -45,10 +47,11 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	}, [timeLeft, currentInterval])
 
 	return (
-		<div className="max-w-sm bg-blue-darker-blue rounded-md p-3 h-16 w-16">
+		<div className='flex flex-row items-center justify-between bg-blue-darker-blue rounded-md h-12 p-4 w-24'>
+			<FontAwesomeIcon icon={faClock} className='text-yellow-light-yellow'/>
 			{
 				props.limitDate ? (
-					<div className="text-lg font-semibold text-white-white">{Math.floor(timeLeft / 1000)} s</div>
+					<div className='ml-2 text-lg font-semibold text-white-white'>{Math.floor(timeLeft / 1000)} s</div>
 				) : null
 			}
 		</div>
