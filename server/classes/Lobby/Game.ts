@@ -3,7 +3,7 @@ import Lobby from './Lobby';
 import { shuffle } from 'lodash';
 import type { Dayjs } from 'dayjs';
 import GameMode from './GameMode/GameMode';
-import WrongDrawingVoteManager from './WrongDrawingVoteManager/WrongDrawingVoteManager';
+import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteManager';
 
 export default class Game {
 	id: string;
@@ -19,7 +19,7 @@ export default class Game {
 	currentPlayerIndex = 0;
 
 	limitDate: Dayjs;
-	wrongDrawingVoteManager = new WrongDrawingVoteManager();
+	playerErrorVoteManager = new PlayerErrorVoteManager();
 
 	constructor(lobby: Lobby, gameMode: GameMode) {
 		this.id = lobby.id;
@@ -69,19 +69,19 @@ export default class Game {
 	}
 
 	public startVote(selectedPlayer: Player): void {
-		if (this.wrongDrawingVoteManager.canStartVote()) {
+		if (this.playerErrorVoteManager.canStartVote()) {
 			const playersIds = new Set<Player['id']>(this.players.map(e => e.id));
-			this.wrongDrawingVoteManager.startVote(selectedPlayer, playersIds);
+			this.playerErrorVoteManager.startVote(selectedPlayer, playersIds);
 		}
 	}
 
 	public endVote(): void {
-		this.wrongDrawingVoteManager.endVote();
+		this.playerErrorVoteManager.endVote();
 
-		const doesPlayerStay = this.wrongDrawingVoteManager.currentVote.getBooleanWinner()
+		const playerHasMadeAnError = this.playerErrorVoteManager.currentVote.getBooleanWinner()
 
-		if (!doesPlayerStay) {
-			this.playerLost(this.wrongDrawingVoteManager.selectedPlayer);
+		if (playerHasMadeAnError) {
+			this.playerLost(this.playerErrorVoteManager.selectedPlayer);
 		}
 	}
 
@@ -97,7 +97,7 @@ export default class Game {
 	}
 
 	protected skipPlayerIfNecessary(): void {
-		if (this.wrongDrawingVoteManager.selectedPlayer.id === this.getCurrentPlayer().id) {
+		if (this.playerErrorVoteManager.selectedPlayer.id === this.getCurrentPlayer().id) {
 			this.nextPlayer();
 		}
 	}

@@ -49,7 +49,7 @@ const resources = {
 				'sendDrawing': 'Send Drawing',
 				'startVote': 'Start Vote',
 				'selectDrawing': 'Select a drawing',
-				'isThisDrawingValid': 'Is this drawing valid?',
+				'hasThisPlayerMadeAnError': 'Has this player made an error?',
 				'currentlyDrawing': 'Drawing',
 				'yes': 'Yes',
 				'no': 'No',
