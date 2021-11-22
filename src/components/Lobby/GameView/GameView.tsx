@@ -139,46 +139,78 @@ export default function GameView(props: GameProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
-			<div className="flex flex-wrap flex-auto justify-center md:space-x-32">
-				<div>
-					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-					{
-						props.game?.players.map((player: Player) => (
-							<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
-						))
-					}
-				</div>
-				<div>
-					<Canvas engine={engine} setEngine={setEngine} />
-				</div>
-				<div>
-					Drawing Board Here
-					Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
-					Current Player: {props.game.currentPlayerIndex}
-				</div>
-				<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
-				<div>
-					{
-						playerId === currentPlayer.id ? (
-							<Button
-								color='primary' size='medium' icon={faArrowRight}
-								onClick={nextDrawing}>
-								{t('gameView.sendDrawing')}
-							</Button>
-						) : null
-					}
-				</div>
-				<div>
-					{
-						playerId !== currentPlayer.id ? (
-							<Button
-								color='primary' size='medium' icon={faArrowRight}
-								onClick={() => setIsStartVoteModalVisible(true)}>
-								{t('gameView.startVote')}
-							</Button>
-						) : null
-					}
-				</div>
+			<div>
+				<Row>
+					<Col>
+						<div>
+							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+							{
+								props.game?.players.map((player: Player) => (
+									<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
+								))
+							}
+						</div>
+					</Col>
+					<Col>
+						<Row>
+							<Col>
+								<Row>
+									<div className="w-full flex flex-row justify-between">
+										<div>
+											<div>
+												Drawing Board Here
+												Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
+												Current Player: {props.game.currentPlayerIndex}
+											</div>
+										</div>
+										<div>
+											<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
+										</div>
+									</div>
+								</Row>
+							</Col>
+							<Col>
+								<div>
+									<Canvas engine={engine} setEngine={setEngine} />
+								</div>
+							</Col>
+							<Col>
+								Tool selection
+							</Col>
+						</Row>
+					</Col>
+					<Col>
+						<div className="h-full flex flex-col justify-between">
+							<div>
+								Palette selection
+							</div>
+							<div>
+								<div>
+									{
+										playerId === currentPlayer.id ? (
+											<Button
+												color='primary' size='medium' icon={faArrowRight}
+												onClick={nextDrawing}>
+												{t('gameView.sendDrawing')}
+											</Button>
+										) : null
+									}
+								</div>
+								<div>
+									{
+										playerId !== currentPlayer.id ? (
+											<Button
+												color='primary' size='medium' icon={faArrowRight}
+												onClick={() => setIsStartVoteModalVisible(true)}>
+												{t('gameView.startVote')}
+											</Button>
+										) : null
+									}
+								</div>
+							</div>
+						</div>
+					</Col>
+				</Row>
 			</div>
 		</Layout >
 	)
