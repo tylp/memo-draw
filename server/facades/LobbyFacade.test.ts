@@ -19,12 +19,12 @@ describe('LobbyFacade', () => {
 		mocketServer = new MocketServer();
 		Application.getInstance().bindServer(mocketServer)
 		sessionA = Application.getSessionStorage().generate();
-		mockedSocketA = mocketServer.of('/lobby').createSocket({
+		mockedSocketA = mocketServer.of('/game').createSocket({
 			sessionId: sessionA.sessionId,
 		});
 		Application.getPlayerIdSessionIdStorage().set(sessionA.playerId, sessionA.sessionId);
 		sessionB = Application.getSessionStorage().generate();
-		mockedSocketB = mocketServer.of('/lobby').createSocket({
+		mockedSocketB = mocketServer.of('/game').createSocket({
 			sessionId: sessionB.sessionId,
 		});
 
@@ -101,7 +101,7 @@ describe('LobbyFacade', () => {
 
 		mockedSocketB.disconnect();
 
-		const reconnectedMockedSocketB: any = mocketServer.of('/lobby').createSocket();
+		const reconnectedMockedSocketB: any = mocketServer.of('/game').createSocket();
 		reconnectedMockedSocketB.handshake = {
 			auth: {
 				sessionId: sessionB.sessionId,

@@ -24,7 +24,7 @@ export default function JoinLobby(): JSX.Element {
 				openSnackbar(t('alert.lobbyDoesNotExist'))
 				history.push('/')
 			} else {
-				history.push('/lobby');
+				history.push('/game');
 			}
 		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps

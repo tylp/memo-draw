@@ -5,7 +5,7 @@ import AbstractNamespaceBinder from './AbstractNamespaceBinder';
 
 export default class LobbyNamespaceBinder extends AbstractNamespaceBinder {
 	protected static applyEvents(): void {
-		this.io.of('/lobby').on('connection', (socket) => {
+		this.io.of('/game').on('connection', (socket) => {
 			CommonSocketBinder.bindSocket(socket);
 			LobbySocketBinder.bindSocket(socket);
 			GameSocketBinder.bindSocket(socket);
