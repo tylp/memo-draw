@@ -4,7 +4,7 @@ import Player from '../../../../server/classes/Player';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { Layout, SectionTitle, Button } from '../../../components/Common';
-import UserProfile from './UserProfile/UserProfile';
+import UserEtiquette from './UserEtiquette/UserEtiquette';
 import Countdown from './Countdown/Countdown';
 import dayjs from 'dayjs';
 
@@ -132,7 +132,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					{
 						props.game?.players.map((player: Player) => (
-							<UserProfile key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
+							<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 						))
 					}
 				</div>
