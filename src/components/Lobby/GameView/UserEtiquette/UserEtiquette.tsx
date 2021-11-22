@@ -8,7 +8,7 @@ interface UserEtiquetteSpec {
 	currentPlayer: Player;
 }
 
-export default function UserProfile(props: UserEtiquetteSpec): JSX.Element {
+export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 	return (
 		<div
 			className="relative mb-2 flex flex-row items-center bg-blue-darker-blue w-full h-20 pl-2 text-white-white"
