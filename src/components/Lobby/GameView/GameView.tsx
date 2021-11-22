@@ -142,7 +142,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				title={t('gameView.startVote')}
 			>
 				<Box className={'w-full'}>
-					<PlayerSelector list={props.game.players} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+					<PlayerSelector list={props.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
 			<Modal
