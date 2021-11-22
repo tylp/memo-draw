@@ -41,8 +41,8 @@ export default class SocketEventEmitter {
 		socket.emit('next-drawing')
 	}
 
-	public static startVote(socket: Socket, selectedDrawing: number): void {
-		socket.emit('start-vote', selectedDrawing);
+	public static startVote(socket: Socket, selectedPlayer: Player): void {
+		socket.emit('start-vote', selectedPlayer);
 	}
 
 	public static vote(socket: Socket, vote: YesOrNo): void {

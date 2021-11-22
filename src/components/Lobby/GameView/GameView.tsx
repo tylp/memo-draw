@@ -12,7 +12,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import { useTranslation } from 'react-i18next';
 import Modal from '../../Common/Modal/Modal';
-import DrawingSelector from './DrawingSelector/DrawingSelector';
+import PlayerSelector from './PlayerSelector/PlayerSelector';
 import { Col, Row } from 'react-grid-system';
 import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
@@ -20,6 +20,7 @@ import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
+import Box from '../../Common/Box/Box';
 
 interface GameProps {
 	game: Game;
@@ -33,7 +34,7 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
-	const [selectedDrawing, setSelectedDrawing] = useState<number | undefined>(1);
+	const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>();
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
 	const [engine, setEngine] = useState<Engine>();
 	const [hasLost, setHasLost] = useState<boolean>();
@@ -105,8 +106,8 @@ export default function GameView(props: GameProps): JSX.Element {
 	}
 
 	const startVote = () => {
-		if (playerId !== currentPlayer.id && selectedDrawing) {
-			SocketEventEmitter.startVote(props.socket, selectedDrawing);
+		if (playerId !== currentPlayer.id && selectedPlayer) {
+			SocketEventEmitter.startVote(props.socket, selectedPlayer);
 			setIsStartVoteModalVisible(false);
 		}
 	}
@@ -133,12 +134,12 @@ export default function GameView(props: GameProps): JSX.Element {
 				visible={isStartVoteModalVisible}
 				onClose={() => setIsStartVoteModalVisible(false)}
 				onValidate={startVote}
-				disableValidate={!selectedDrawing}
+				disableValidate={!selectedPlayer}
 				title={t('gameView.startVote')}
 			>
-				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-					<DrawingSelector list={[1, 2, 3]} selected={selectedDrawing} setSelected={setSelectedDrawing} />
-				</p>
+				<Box className={'w-full'}>
+					<PlayerSelector list={props.game.players} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+				</Box>
 			</Modal>
 			<Modal
 				visible={isCurrentVoteModalVisible}

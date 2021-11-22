@@ -55,29 +55,33 @@ export default class Game {
 			this.currentPlayerIndex++;
 		}
 
-		if (this.losers.includes(this.getCurrentPlayer())) {
+		if (this.hasLost(this.getCurrentPlayer())) {
 			this.nextPlayer();
 		}
+	}
+
+	public hasLost(player: Player): boolean {
+		return this.losers.map(e => e.id).includes(player.id);
 	}
 
 	protected getCurrentPlayer(): Player {
 		return this.players[this.currentPlayerIndex];
 	}
 
-	public startVote(contestedDrawing: number): void {
+	public startVote(selectedPlayer: Player): void {
 		if (this.wrongDrawingVoteManager.canStartVote()) {
 			const playersIds = new Set<Player['id']>(this.players.map(e => e.id));
-			this.wrongDrawingVoteManager.startVote(contestedDrawing, playersIds);
+			this.wrongDrawingVoteManager.startVote(selectedPlayer, playersIds);
 		}
 	}
 
 	public endVote(): void {
 		this.wrongDrawingVoteManager.endVote();
 
-		const isDrawingValid = this.wrongDrawingVoteManager.currentVote.getBooleanWinner()
+		const doesPlayerStay = this.wrongDrawingVoteManager.currentVote.getBooleanWinner()
 
-		if (!isDrawingValid) {
-			this.playerLost(this.players[this.currentPlayerIndex]);
+		if (!doesPlayerStay) {
+			this.playerLost(this.wrongDrawingVoteManager.selectedPlayer);
 		}
 	}
 
@@ -85,10 +89,16 @@ export default class Game {
 		this.losers.push(player);
 
 		if (this.enoughPlayersRemainToPlay()) {
-			this.nextPlayer();
+			this.skipPlayerIfNecessary();
 			this.refreshLimitDate();
 		} else {
 			this.endGame();
+		}
+	}
+
+	protected skipPlayerIfNecessary(): void {
+		if (this.wrongDrawingVoteManager.selectedPlayer.id === this.getCurrentPlayer().id) {
+			this.nextPlayer();
 		}
 	}
 

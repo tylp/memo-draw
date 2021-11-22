@@ -3,12 +3,12 @@ import YesNoVote from '../../Votes/YesNoVote';
 
 export default class WrongDrawingVoteManager {
 	currentVote?: YesNoVote | undefined;
-	contestedDrawing?: number | undefined;
+	selectedPlayer?: Player | undefined;
 
-	public startVote(contestedDrawing: number, playersIds: Set<Player['id']>): void {
+	public startVote(selectedPlayer: Player, playersIds: Set<Player['id']>): void {
 		if (this.canStartVote()) {
 			this.currentVote = new YesNoVote(playersIds);
-			this.contestedDrawing = contestedDrawing;
+			this.selectedPlayer = selectedPlayer;
 		}
 	}
 
@@ -18,6 +18,5 @@ export default class WrongDrawingVoteManager {
 
 	public endVote(): void {
 		this.currentVote?.close();
-		this.contestedDrawing = undefined;
 	}
 }
