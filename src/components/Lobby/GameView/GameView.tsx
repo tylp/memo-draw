@@ -20,6 +20,7 @@ import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
+import Box from '../../Common/Box/Box';
 
 interface GameProps {
 	game: Game;
@@ -130,35 +131,37 @@ export default function GameView(props: GameProps): JSX.Element {
 				showCancel={false}
 				title={t('gameView.isThisDrawingValid')}
 			>
-				<Row>
-					<Col>
+				<Row className="border-2 border-black">
+					<Col className="border-2 border-yellow-light-yellow">
 						<Button color="primary" size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
 					</Col>
-					<Col>
+					<Col className="border-2 border-yellow-light-yellow">
 						<Button color="primary" size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
 					</Col>
 				</Row>
 			</Modal>
 			<div>
-				<Row>
-					<Col>
-						<div>
-							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+				<Row className="border-2 border-black">
+					<Col className="border-2 border-yellow-light-yellow">
+						<Row className="border-2 border-black">
+							<Box mt={6} mb={6}>
+								<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+							</Box>
+						</Row>
+						<Row className="border-2 border-black">
 							{
 								props.game?.players.map((player: Player) => (
 									<UserEtiquette key={player.id} player={player} creatorId={props.game.hostPlayerId} currentPlayer={currentPlayer} />
 								))
 							}
-						</div>
+						</Row>
 					</Col>
-					<Col>
-						<Row>
-							<Col>
-								<Row>
+					<Col className="border-2 border-yellow-light-yellow">
+						<Row className="border-2 border-black">
+							<Col className="border-2 border-yellow-light-yellow">
+								<Row className="border-2 border-black">
 									<div className="w-full flex flex-row justify-between">
-										<div>
-											<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
-										</div>
+										<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 										<div>
 											<div>
 												Drawing Board Here
@@ -169,17 +172,17 @@ export default function GameView(props: GameProps): JSX.Element {
 									</div>
 								</Row>
 							</Col>
-							<Col>
+							<Col className="border-2 border-yellow-light-yellow">
 								<div>
 									<Canvas engine={engine} setEngine={setEngine} />
 								</div>
 							</Col>
-							<Col>
+							<Col className="border-2 border-yellow-light-yellow">
 								Tool selection
 							</Col>
 						</Row>
 					</Col>
-					<Col>
+					<Col className="border-2 border-yellow-light-yellow">
 						<div className="h-full flex flex-col justify-between">
 							<div>
 								Palette selection

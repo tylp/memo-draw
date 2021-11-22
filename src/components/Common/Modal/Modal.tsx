@@ -43,7 +43,9 @@ export default function Modal(props: ModalProps): JSX.Element {
 				<div className="relative">
 					<div className="rounded-lg shadow-lg relative flex flex-col bg-gradient-to-r from-blue-blue to-blue-light-blue">
 						<div className="pl-10 pr-10 rounded-t">
-							<SectionTitle hintColor="text-yellow-light-yellow">{props.title}</SectionTitle>
+							<Box mt={6} mb={6}>
+								<SectionTitle hintColor="text-yellow-light-yellow">{props.title}</SectionTitle>
+							</Box>
 						</div>
 						<div className="relative pl-10 pr-10 flex-auto">
 							{props.children}
