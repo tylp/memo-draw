@@ -232,10 +232,7 @@ export default function GameView(props: GameProps): JSX.Element {
 									onClick={nextDrawing}>
 									{t('gameView.sendDrawing')}
 								</Button>
-							) : null
-						}
-						{
-							playerId !== currentPlayer.id ? (
+							) : (
 								<Button
 									color='primary'
 									size='medium'
@@ -246,7 +243,7 @@ export default function GameView(props: GameProps): JSX.Element {
 									onClick={() => setIsStartVoteModalVisible(true)}>
 									{t('gameView.startVote')}
 								</Button>
-							) : null
+							)
 						}
 					</div>
 				</div>
