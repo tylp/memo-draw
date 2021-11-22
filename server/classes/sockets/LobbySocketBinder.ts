@@ -5,6 +5,7 @@ import Application from '../Application';
 import SocketBinder from './SocketBinder';
 import SocketIdentifierService from '../../services/SocketIdentifierService';
 import LobbyFacade from '../../facades/LobbyFacade';
+import { Player } from '..';
 
 export default class LobbySocketBinder extends SocketBinder {
 
@@ -67,8 +68,8 @@ export default class LobbySocketBinder extends SocketBinder {
 	}
 
 	private static onStartVote(socket: Socket): void {
-		socket.on('start-vote', (selectedDrawing) => {
-			LobbyFacade.startVote(socket, selectedDrawing);
+		socket.on('start-vote', (selectedPlayer: Player) => {
+			LobbyFacade.startVote(socket, selectedPlayer);
 		})
 	}
 
