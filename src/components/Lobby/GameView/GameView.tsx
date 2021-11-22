@@ -18,7 +18,7 @@ import { YesOrNo } from '../../../../server/classes/Votes/YesNoVote';
 import { Socket } from 'socket.io-client';
 import Canvas from './Canvas/Canvas';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
-import { drawState, Engine, ShapeType } from 'memo-draw-engine';
+import { DrawPermission, drawState, Engine, ShapeType } from 'memo-draw-engine';
 
 interface GameProps {
 	game: Game;
@@ -41,8 +41,20 @@ export default function GameView(props: GameProps): JSX.Element {
 
 		engine.eventManager.registerDefaultCanvasAndDocumentEvents();
 		drawState.shapeType = ShapeType.Pencil;
+		drawState.drawPermission = DrawPermission.Slave;
 		drawState.thickness = 5;
+		updateDrawingPermission();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [engine])
+
+	const updateDrawingPermission = () => {
+		drawState.drawPermission = currentPlayer.id === playerId ? DrawPermission.Master : DrawPermission.Slave;
+	}
+
+	useEffect(() => {
+		updateDrawingPermission();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentPlayer])
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
