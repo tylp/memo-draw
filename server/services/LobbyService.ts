@@ -77,7 +77,7 @@ export default class LobbyService {
 	public static vote({ playerId, sessionId }: PlayerIdentifiers, vote: YesOrNo): Lobby {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
-		lobbyOfCurrentPlayer?.game.currentVote.vote(playerId, vote);
+		lobbyOfCurrentPlayer?.game.wrongDrawingVoteManager.currentVote.vote(playerId, vote);
 
 		return lobbyOfCurrentPlayer;
 	}

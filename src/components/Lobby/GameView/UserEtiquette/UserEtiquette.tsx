@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Player from '../../../../../server/classes/Player';
 import { Avatar } from '../../../Common';
 import { useTranslation } from 'react-i18next';
 
 interface UserEtiquetteSpec {
 	player: Player;
-	creatorId: string;
 	currentPlayer: Player;
+	losers: Player[];
 }
 
 export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 	const { t } = useTranslation();
+
+	const [pillTitle, setPillTitle] = useState<string>();
+
+	useEffect(() => {
+		if (props.losers.map(e => e.id).includes(props.player.id)) {
+			setPillTitle(t('gameView.lost'));
+		} else if (props.currentPlayer.id === props.player.id) {
+			setPillTitle(t('gameView.currentlyDrawing'));
+		} else {
+			setPillTitle(undefined);
+		}
+	}, [props, t]);
 
 	return (
 		<div
@@ -28,7 +40,15 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 			<div className="flex-1 text-lg m-4 font-semibold text-white-white truncate">
 				{props.player.profile.username}
 			</div>
-			{props.currentPlayer.id === props.player.id && (<div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{t('gameView.currentlyDrawing')}</div>)}
+			{
+				pillTitle && <Pill title={pillTitle} />
+			}
 		</div>
+	)
+}
+
+function Pill(props: { title: string }): JSX.Element {
+	return (
+		<div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.title}</div>
 	)
 }
