@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { Engine, drawState, ShapeType } from 'memo-draw-engine';
+import { Engine } from 'memo-draw-engine';
 
 // Util function used to trigger when a component is fully painted
 // Sources:
@@ -11,21 +11,33 @@ function onPainted(callback) {
 	});
 }
 
-export default function Canvas(): JSX.Element {
+interface CanvasProps {
+	engine: Engine;
+	setEngine: React.Dispatch<React.SetStateAction<Engine>>
+}
+
+export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element {
 	const [backgroundStyle, setBackgroundStyle] = useState<CSSProperties>();
 	const canvasRef = useRef<HTMLCanvasElement>();
 
 	useEffect(() => {
+		if (!setEngine) return;
+
 		const engine = new Engine(canvasRef.current);
-		engine.eventManager.registerDefaultCanvasAndDocumentEvents();
-		drawState.shapeType = ShapeType.Pencil;
-		drawState.thickness = 5;
-		initBackgroundStyle();
+		setEngine(engine);
+	}, [setEngine]);
+
+	useEffect(() => {
+		if (!engine) return;
 
 		// Manually update bounds when component is painted
 		// Needed to correctly handle mouse position on canvas
 		onPainted(() => { engine.canvasManager.updateBounds(); });
-	}, []);
+	}, [engine])
+
+	useEffect(() => {
+		initBackgroundStyle();
+	}, [canvasRef])
 
 	const initBackgroundStyle = (): void => {
 		setBackgroundStyle({
