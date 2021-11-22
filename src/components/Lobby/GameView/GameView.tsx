@@ -84,6 +84,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	const nextDrawing = () => {
 		if (playerId === currentPlayer.id) {
 			SocketEventEmitter.nextDrawing(props.socket);
+			engine.canvasManager.backgroundCanvas.clearCanvas();
 		}
 	}
 
