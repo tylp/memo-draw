@@ -74,7 +74,7 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
-			setIsCurrentVoteModalVisible(true)
+			setIsCurrentVoteModalVisible(lobby.game.playerErrorVoteManager.selectedPlayer.id !== playerId);
 			props.updateLobby(lobby);
 		})
 
