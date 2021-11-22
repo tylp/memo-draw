@@ -154,7 +154,10 @@ export default function GameView(props: GameProps): JSX.Element {
 					{
 						playerId === currentPlayer.id ? (
 							<Button
-								color='primary' size='medium' icon={faArrowRight}
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={hasLost}
 								onClick={nextDrawing}>
 								{t('gameView.sendDrawing')}
 							</Button>
@@ -163,9 +166,12 @@ export default function GameView(props: GameProps): JSX.Element {
 				</div>
 				<div>
 					{
-						(!hasLost) && (playerId !== currentPlayer.id) ? (
+						(playerId !== currentPlayer.id) ? (
 							<Button
-								color='primary' size='medium' icon={faArrowRight}
+								color='primary'
+								size='medium'
+								icon={faArrowRight}
+								disabled={hasLost}
 								onClick={() => setIsStartVoteModalVisible(true)}>
 								{t('gameView.startVote')}
 							</Button>
