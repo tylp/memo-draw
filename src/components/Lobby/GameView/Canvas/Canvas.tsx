@@ -1,6 +1,5 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Engine } from 'memo-draw-engine';
-import { url } from 'node:inspector';
 
 // Util function used to trigger when a component is fully painted
 // Sources:
