@@ -50,6 +50,7 @@ const resources = {
 				'startVote': 'Start Vote',
 				'selectDrawing': 'Select a drawing',
 				'isThisDrawingValid': 'Is this drawing valid?',
+				'currentlyDrawing': 'Drawing',
 				'yes': 'Yes',
 				'no': 'No',
 			},

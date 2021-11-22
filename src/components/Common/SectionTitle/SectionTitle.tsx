@@ -4,12 +4,11 @@ interface SectionTitleSpec {
 	children: ReactNode;
 	subtitle?: string;
 	hintColor?: string;
-	width?: string;
 }
 export default function SectionTitle(props: SectionTitleSpec): JSX.Element {
 
 	return (
-		<div className={'flex flex-col mt-6 mb-6 relative uppercase ' + props.width} >
+		<div className={'flex flex-col mt-6 mb-6 relative uppercase'}>
 			{props.subtitle ?
 				<div className="z-10 absolute -top-4 -left-14 p-0.5 pl-2 pr-2 rounded-lg transform -rotate-12 bg-pink-dark-pink font-bold text-white-white">{props.subtitle}</div>
 				: ''}
