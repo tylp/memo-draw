@@ -139,8 +139,8 @@ export default function GameView(props: GameProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
-			<div className='flex flex-row'>
-				<div className='flex flex-col flex-initial w-52'>
+			<div className='flex flex-row justify-center'>
+				<div className='flex flex-col flex-1 w-52'>
 					<div className='h-16'>
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					</div>
@@ -158,7 +158,7 @@ export default function GameView(props: GameProps): JSX.Element {
 							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 						</div>
 
-						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24">
+						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
 							<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
 						</div>
 					</div>
@@ -169,14 +169,14 @@ export default function GameView(props: GameProps): JSX.Element {
 						Tool selection
 					</div>
 				</div>
-				<div className='flex flex-col justify-between flex-initial w-52'>
+				<div className='flex flex-col justify-between flex-1 w-52'>
 
 					<div className='flex flex-row items-center bg-blue-darker-blue rounded-md p-3 h-12'>
-						<div className='w-10'>
+						<div className='w-8'>
 							<Avatar avatar={currentPlayer.profile.avatar} />
 						</div>
 						<div className='font-semibold text-white-white truncate m-4'>
-							{currentPlayer.profile.username} turn !
+							{currentPlayer.profile.username} has to draw !
 						</div>
 					</div>
 
@@ -189,7 +189,7 @@ export default function GameView(props: GameProps): JSX.Element {
 							{
 								playerId === currentPlayer.id ? (
 									<Button
-										color='primary' size='medium' icon={faArrowRight}
+										color='primary' size='large' fullWidth icon={faArrowRight}
 										onClick={nextDrawing}>
 										{t('gameView.sendDrawing')}
 									</Button>
@@ -200,7 +200,7 @@ export default function GameView(props: GameProps): JSX.Element {
 							{
 								playerId !== currentPlayer.id ? (
 									<Button
-										color='primary' size='medium' icon={faArrowRight}
+										color='primary' size='large' fullWidth icon={faArrowRight}
 										onClick={() => setIsStartVoteModalVisible(true)}>
 										{t('gameView.startVote')}
 									</Button>

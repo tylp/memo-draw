@@ -1,5 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Engine } from 'memo-draw-engine';
+import { url } from 'node:inspector';
 
 // Util function used to trigger when a component is fully painted
 // Sources:
@@ -43,6 +44,7 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 		setBackgroundStyle({
 			position: 'absolute',
 			backgroundColor: 'white',
+			backgroundPosition: 'center',
 			borderRadius: '0.5em',
 			zIndex: 0,
 			width: `${canvasRef.current.width}px`,
