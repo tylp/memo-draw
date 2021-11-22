@@ -157,14 +157,14 @@ export default function GameView(props: GameProps): JSX.Element {
 								<Row>
 									<div className="w-full flex flex-row justify-between">
 										<div>
+											<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
+										</div>
+										<div>
 											<div>
 												Drawing Board Here
 												Current Drawing: {props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}
 												Current Player: {props.game.currentPlayerIndex}
 											</div>
-										</div>
-										<div>
-											<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
 										</div>
 									</div>
 								</Row>
