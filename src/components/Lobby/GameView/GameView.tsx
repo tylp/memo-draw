@@ -42,6 +42,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [hasLost, setHasLost] = useState<boolean>();
 	const [, setHasGameEnded] = useState<boolean>();
 	const [currentVote, setCurrentVote] = useState<YesOrNo>();
+	const [spectators, setSpectators] = useState<Player[]>([]);
 
 	useEffect(() => {
 		if (!engine) return;
@@ -133,12 +134,12 @@ export default function GameView(props: GameProps): JSX.Element {
 		return props.lobby.game.losers.map(e => e.id).includes(player.id)
 	}
 
-	const getSpectators = (): Player[] => {
+	useEffect(() => {
 		const idsNotInGame = _.difference(props.lobby.players.map(e => e.id), props.lobby?.game?.players.map(e => e.id));
-		return props.lobby.players.filter((player: Player) => {
+		setSpectators(props.lobby.players.filter((player: Player) => {
 			return idsNotInGame.includes(player.id)
-		});
-	}
+		}));
+	}, [props.lobby.players, props.lobby?.game?.players]);
 
 	return (
 		<Layout>
@@ -190,16 +191,22 @@ export default function GameView(props: GameProps): JSX.Element {
 							))
 						}
 					</div>
-					<div className='h-16'>
-						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
-					</div>
-					<div>
-						{
-							getSpectators().map((player: Player) => (
-								<UserEtiquette key={player.id} player={player} color='light-secondary' />
-							))
-						}
-					</div>
+					{
+						spectators.length > 0 && (
+							<>
+								<div className='h-16'>
+									<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
+								</div>
+								<div>
+									{
+										spectators.map((player: Player) => (
+											<UserEtiquette key={player.id} player={player} color='light-secondary' />
+										))
+									}
+								</div>
+							</>
+						)
+					}
 				</div>
 				<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
 					<div className='flex flex-row justify-between'>
@@ -227,7 +234,7 @@ export default function GameView(props: GameProps): JSX.Element {
 									fullHeight
 									fullWidth
 									icon={faArrowRight}
-									disabled={!(hasLost || getSpectators().map(e => e.id).includes(playerId as string))}
+									disabled={!(hasLost || spectators.map(e => e.id).includes(playerId as string))}
 									onClick={props.leaveGame}>
 									{t('lobbyView.leaveBtnLabel')}
 								</Button>
