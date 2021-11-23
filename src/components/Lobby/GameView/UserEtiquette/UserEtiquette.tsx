@@ -6,7 +6,8 @@ import UserEtiquetteStyleBuilder from './UserEtiquetteStyleBuilder';
 
 interface UserEtiquetteSpec {
 	player: Player;
-	pillTitle?: string | undefined;
+	rPillTitle?: string | undefined;
+	brPillTitle?: string | undefined;
 	color: Color;
 	disabled?: boolean | undefined;
 }
@@ -43,14 +44,20 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 				{props.player.profile.username}
 			</div>
 			{
-				props.pillTitle && <Pill title={props.pillTitle} />
+				props.rPillTitle && <Pill position={'r'} title={props.rPillTitle} />
+			}
+			{
+				props.brPillTitle && <Pill position={'br'} title={props.brPillTitle} />
 			}
 		</div>
 	)
 }
 
-function Pill(props: { title: string }): JSX.Element {
+function Pill(props: { title: string, position: string }): JSX.Element {
 	return (
-		<div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.title}</div>
+		<>
+			{props.position === 'r' && <div className="absolute -right-6 top-4 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-yellow-dark-yellow text-sm font-rubik-bold text-white-white">{props.title}</div>}
+			{props.position === 'br' && <div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.title}</div>}
+		</>
 	)
 }

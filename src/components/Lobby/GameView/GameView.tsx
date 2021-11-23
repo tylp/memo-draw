@@ -128,6 +128,14 @@ export default function GameView(props: GameProps): JSX.Element {
 		return undefined;
 	}
 
+	const getPillTitleItsYou = (player: Player): undefined | string => {
+		if (player.id === playerId) {
+			return t('gameView.itsYouLabel');
+		}
+
+		return undefined;
+	}
+
 	const hasPlayerLost = (player: Player): boolean => {
 		return props.game.losers.map(e => e.id).includes(player.id)
 	}
@@ -175,10 +183,10 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div className='h-16'>
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					</div>
-					<div className=''>
+					<div>
 						{
 							props.game?.players.map((player: Player) => (
-								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
+								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitle(player)} />
 							))
 						}
 					</div>
@@ -202,7 +210,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				<div className='flex flex-col justify-between flex-1 w-52'>
 					<div className='h-12'>
 						{
-							(!hasLost) ? (
+							(hasLost) ? (
 								<Button
 									color='primary'
 									size='medium'
