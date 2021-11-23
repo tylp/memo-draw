@@ -85,7 +85,7 @@ interface LobbyOrGameProps {
 
 function LobbyOrGame(props: LobbyOrGameProps) {
 	return (props.lobby?.hasStarted && props.lobby?.game && props.socket) ? (
-		<GameView game={props.lobby.game} updateLobby={props.updateLobby} leaveGame={props.leaveGame} socket={props.socket} />
+		<GameView lobby={props.lobby} updateLobby={props.updateLobby} leaveGame={props.leaveGame} socket={props.socket} />
 	) : (
 		<LobbyView lobby={props.lobby} leaveGame={props.leaveGame} />
 	)

@@ -23,13 +23,7 @@ interface Margin {
 interface BoxProps extends Padding, Margin {
 	children: ReactNode;
 	className?: string;
-	onClick?: () => void
-}
-
-Box.defaultProps = {
-	onClick: () => {
-		//
-	},
+	onClick?: undefined | (() => void);
 }
 
 export default function Box(props: BoxProps): JSX.Element {
