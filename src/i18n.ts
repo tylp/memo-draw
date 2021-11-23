@@ -46,6 +46,7 @@ const resources = {
 			},
 			'gameView': {
 				'playersTitle': 'Players',
+				'spectatorsTitle': 'Spectators',
 				'sendDrawing': 'Send Drawing',
 				'startVote': 'Start Vote',
 				'selectDrawing': 'Select a drawing',
