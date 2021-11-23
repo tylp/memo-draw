@@ -136,6 +136,12 @@ export default function GameView(props: GameProps): JSX.Element {
 		return props.lobby.game.losers.map(e => e.id).includes(player.id)
 	}
 
+	const playAgain = () => {
+		if (props.lobby?.game?.hasEnded) {
+			SocketEventEmitter.playAgain(props.socket);
+		}
+	}
+
 	useEffect(() => {
 		const idsNotInGame = _.difference(props.lobby.players.map(e => e.id), props.lobby?.game?.players.map(e => e.id));
 		setSpectators(props.lobby.players.filter((player: Player) => {
@@ -144,7 +150,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [props.lobby.players, props.lobby?.game?.players]);
 
 	return (props.lobby?.game?.hasEnded) ? (
-		<EndGameScreen lobby={props.lobby} />
+		<EndGameScreen playAgain={playAgain} leaveLobby={props.leaveGame} lobby={props.lobby} />
 	) : (
 		<Layout>
 			<Modal
@@ -154,7 +160,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				disableValidate={!selectedPlayer}
 				title={t('gameView.startVote')}
 			>
-				<Box className={'w-full'}>
+				<Box mb={2} className={'w-full'}>
 					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal >
@@ -167,11 +173,13 @@ export default function GameView(props: GameProps): JSX.Element {
 			>
 				<Row>
 					<Col>
-						{
-							props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
-								<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
-							)
-						}
+						<Box mb={2}>
+							{
+								props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
+									<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
+								)
+							}
+						</Box>
 					</Col>
 				</Row>
 				<Row>
@@ -191,7 +199,9 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div>
 						{
 							props.lobby.game?.players.map((player: Player) => (
-								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+								<Box mb={2} key={player.id} >
+									<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+								</Box>
 							))
 						}
 					</div>
@@ -306,7 +316,9 @@ function Spectators(props: SpectatorsProps): JSX.Element {
 			<div>
 				{
 					props.spectators.map((player: Player) => (
-						<UserEtiquette key={player.id} player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
+						<Box mb={2} key={player.id} >
+							<UserEtiquette player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
+						</Box>
 					))
 				}
 			</div>

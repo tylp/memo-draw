@@ -48,4 +48,8 @@ export default class SocketEventEmitter {
 	public static vote(socket: Socket, vote: YesOrNo): void {
 		socket.emit('vote', vote);
 	}
+
+	public static playAgain(socket: Socket): void {
+		socket.emit('play-again');
+	}
 }

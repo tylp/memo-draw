@@ -109,4 +109,10 @@ export default class LobbyFacade {
 
 		return playerLobby;
 	}
+
+	public static playAgain(socket: Socket): void {
+		const lobby = LobbyService.playAgain(SocketIdentifierService.getIdentifiersOf(socket));
+
+		this.updateLobby(lobby);
+	}
 }
