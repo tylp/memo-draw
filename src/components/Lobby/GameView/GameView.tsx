@@ -122,12 +122,12 @@ export default function GameView(props: GameProps): JSX.Element {
 		SocketEventEmitter.vote(props.socket, vote);
 	}
 
-	const getPillTitle = (player: Player): undefined | string => {
-		if (currentPlayer.id === player.id) {
-			return t('gameView.currentlyDrawing');
-		}
+	const getPillTitleDrawing = (player: Player): undefined | string => {
+		return (player.id === currentPlayer.id) ? t('gameView.currentlyDrawing') : undefined;
+	}
 
-		return undefined;
+	const getPillTitleItsYou = (player: Player): undefined | string => {
+		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
 	}
 
 	const hasPlayerLost = (player: Player): boolean => {
@@ -187,7 +187,7 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div>
 						{
 							props.lobby.game?.players.map((player: Player) => (
-								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
+								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
 							))
 						}
 					</div>
@@ -200,7 +200,7 @@ export default function GameView(props: GameProps): JSX.Element {
 								<div>
 									{
 										spectators.map((player: Player) => (
-											<UserEtiquette key={player.id} player={player} color='light-secondary' />
+											<UserEtiquette key={player.id} player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
 										))
 									}
 								</div>
@@ -227,7 +227,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				<div className='flex flex-col justify-between flex-1 w-52'>
 					<div className='h-12'>
 						{
-							(!hasLost) ? (
+							(hasLost) ? (
 								<Button
 									color='primary'
 									size='medium'
