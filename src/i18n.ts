@@ -52,7 +52,7 @@ const resources = {
 				'selectDrawing': 'Select a drawing',
 				'hasThisPlayerMadeAnError': 'Has this player made an error?',
 				'currentlyDrawing': 'Drawing',
-				'itsYouLabel': 'it\'s You',
+				'itsYouLabel': 'It\'s You',
 				'yes': 'Yes',
 				'no': 'No',
 			},

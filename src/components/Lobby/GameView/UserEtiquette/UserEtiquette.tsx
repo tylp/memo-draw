@@ -44,20 +44,43 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 				{props.player.profile.username}
 			</div>
 			{
-				props.rPillTitle && <Pill position={'r'} title={props.rPillTitle} />
+				props.rPillTitle && <Pill position="r" title={props.rPillTitle} />
 			}
 			{
-				props.brPillTitle && <Pill position={'br'} title={props.brPillTitle} />
+				props.brPillTitle && <Pill position="br" title={props.brPillTitle} />
 			}
 		</div>
 	)
 }
 
-function Pill(props: { title: string, position: string }): JSX.Element {
-	return (
-		<>
-			{props.position === 'r' && <div className="absolute -right-6 top-4 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-yellow-dark-yellow text-sm font-rubik-bold text-white-white">{props.title}</div>}
-			{props.position === 'br' && <div className="absolute -right-8 bottom-0 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{props.title}</div>}
-		</>
-	)
+type Position = 'br' | 'r';
+
+interface PillProps {
+	title: string;
+	position: Position;
+}
+
+function Pill(props: PillProps): JSX.Element {
+	const [className, setClassName] = useState('');
+
+	const getClassFrom = (position: Position): string => {
+		let className = 'absolute m-0 h-5 rounded-lg transform -rotate-12 text-sm font-rubik-bold text-white-white'
+
+		switch (position) {
+			case 'r':
+				className += ' -right-6 top-4 pl-1 pr-1 bg-yellow-dark-yellow';
+				break;
+			case 'br':
+				className += ' -right-8 bottom-0 pl-1 pr-1 bg-pink-dark-pink';
+				break;
+		}
+
+		return className;
+	}
+
+	useEffect(() => {
+		setClassName(getClassFrom(props.position));
+	}, [props.position])
+
+	return <div className={className}>{props.title}</div>
 }
