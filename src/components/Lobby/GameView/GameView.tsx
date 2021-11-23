@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Game, Lobby } from '../../../../server/classes';
+import { Lobby } from '../../../../server/classes';
 import Player from '../../../../server/classes/Player';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
@@ -21,9 +21,10 @@ import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
 import Box from '../../Common/Box/Box';
+import _ from 'lodash';
 
 interface GameProps {
-	game: Game;
+	lobby: Lobby;
 	updateLobby: (lobby: Lobby) => void;
 	leaveGame: () => void;
 	socket: Socket;
@@ -33,7 +34,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	const { t } = useTranslation();
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
 
-	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.game.players[props.game.currentPlayerIndex])
+	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
 	const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>();
 	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
@@ -94,13 +95,13 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [props.socket])
 
 	useEffect(() => {
-		if (props.game) {
-			setCurrentPlayer(props.game.players[props.game.currentPlayerIndex])
-			setHasLost(props.game.losers.map(e => e.id).includes(playerId as string));
-			setHasGameEnded(props.game.hasEnded)
+		if (props.lobby.game) {
+			setCurrentPlayer(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
+			setHasLost(props.lobby.game.losers.map(e => e.id).includes(playerId as string));
+			setHasGameEnded(props.lobby.game.hasEnded)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.game])
+	}, [props.lobby.game])
 
 	const nextDrawing = () => {
 		if (playerId === currentPlayer.id) {
@@ -129,7 +130,14 @@ export default function GameView(props: GameProps): JSX.Element {
 	}
 
 	const hasPlayerLost = (player: Player): boolean => {
-		return props.game.losers.map(e => e.id).includes(player.id)
+		return props.lobby.game.losers.map(e => e.id).includes(player.id)
+	}
+
+	const getSpectators = (): Player[] => {
+		const idsNotInGame = _.difference(props.lobby.players.map(e => e.id), props.lobby?.game?.players.map(e => e.id));
+		return props.lobby.players.filter((player: Player) => {
+			return idsNotInGame.includes(player.id)
+		});
 	}
 
 	return (
@@ -142,7 +150,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				title={t('gameView.startVote')}
 			>
 				<Box className={'w-full'}>
-					<PlayerSelector list={props.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
 			<Modal
@@ -155,8 +163,8 @@ export default function GameView(props: GameProps): JSX.Element {
 				<Row>
 					<Col>
 						{
-							props?.game?.playerErrorVoteManager?.selectedPlayer && (
-								<UserEtiquette player={props.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
+							props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
+								<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
 							)
 						}
 					</Col>
@@ -175,10 +183,20 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div className='h-16'>
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 					</div>
-					<div className=''>
+					<div>
 						{
-							props.game?.players.map((player: Player) => (
+							props.lobby.game?.players.map((player: Player) => (
 								<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} pillTitle={getPillTitle(player)} />
+							))
+						}
+					</div>
+					<div className='h-16'>
+						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
+					</div>
+					<div>
+						{
+							getSpectators().map((player: Player) => (
+								<UserEtiquette key={player.id} player={player} color='light-secondary' />
 							))
 						}
 					</div>
@@ -186,10 +204,10 @@ export default function GameView(props: GameProps): JSX.Element {
 				<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
 					<div className='flex flex-row justify-between'>
 						<div className='h-16'>
-							<Countdown limitDate={dayjs(props.game.limitDate)} onFinish={nextDrawing} />
+							<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
 						</div>
 						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
-							<span className="text-lg font-semibold text-white-white">{props.game.currentDrawingIndex}/{props.game.currentNumberOfDrawings}</span>
+							<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
 						</div>
 					</div>
 					<div>
@@ -209,7 +227,7 @@ export default function GameView(props: GameProps): JSX.Element {
 									fullHeight
 									fullWidth
 									icon={faArrowRight}
-									disabled={!hasLost}
+									disabled={!(hasLost || getSpectators().map(e => e.id).includes(playerId as string))}
 									onClick={props.leaveGame}>
 									{t('lobbyView.leaveBtnLabel')}
 								</Button>
@@ -239,7 +257,7 @@ export default function GameView(props: GameProps): JSX.Element {
 									fullHeight
 									fullWidth
 									icon={faArrowRight}
-									disabled={hasLost}
+									disabled={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId as string)}
 									onClick={() => setIsStartVoteModalVisible(true)}>
 									{t('gameView.startVote')}
 								</Button>
