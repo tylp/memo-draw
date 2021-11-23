@@ -82,7 +82,7 @@ export default class LobbyService {
 		return lobbyOfCurrentPlayer;
 	}
 
-	public static playAgain({ playerId, sessionId }: PlayerIdentifiers): Lobby {
+	public static playAgain({ sessionId }: PlayerIdentifiers): Lobby {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
 		lobbyOfCurrentPlayer.endGame();
