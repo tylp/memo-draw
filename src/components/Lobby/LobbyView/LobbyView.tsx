@@ -15,9 +15,6 @@ import { GameModeProperty } from '../../../../server/enums/GameProperties';
 
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 
-import { useHistory } from 'react-router-dom'
-import { useInfoSnackbar, useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
-
 import Modal from '../../Common/Modal/Modal';
 import IProfile from '../../../../server/interfaces/IProfile';
 import ProfileFactory from '../../../../server/factories/ProfileFactory';
@@ -25,19 +22,18 @@ import Carousel from '../../Common/Carousel/Carousel';
 import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
+import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 
 interface LobbyViewProps {
 	lobby: Lobby;
+	leaveGame: () => void;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const socket = useSocketLobby();
 	const { t } = useTranslation();
 
-	const history = useHistory();
-
 	const [openSuccessSnackbar] = useSuccessSnackbar()
-	const [openInfoSnackBar] = useInfoSnackbar()
 	const [openWarningSnackBar] = useWarningSnackbar()
 
 	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
@@ -87,12 +83,6 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 	}
 
-	const leaveGame = () => {
-		openInfoSnackBar(t('alert.leavedLobby'))
-		SocketEventEmitter.leaveLobby(socket);
-		history.push('/');
-	}
-
 	return (
 		<Layout>
 			<Modal
@@ -108,7 +98,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			</Modal>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-row justify-center align-middle">
-					<SectionTitle width='w-36' hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
+					<Box mt={6} mb={6}>
+						<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
+					</Box>
 					<Divider />
 					<Box mr={2} className="self-center">
 						<Button color='secondary' size='small'
@@ -126,7 +118,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Box>
 					<Box className="self-center">
 						<Button color='secondary' size='small'
-							onClick={leaveGame}
+							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
 						</Button>
@@ -144,7 +136,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">
-					<SectionTitle width='w-36' hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
+					<Box mt={6} mb={6}>
+						<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
+					</Box>
 					<Divider />
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
 					{

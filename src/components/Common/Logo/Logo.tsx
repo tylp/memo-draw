@@ -34,6 +34,7 @@ export default function Logo(props: LogoProps): JSX.Element {
 		<img
 			src='/img/logo.svg'
 			className={className}
+			draggable={false}
 		/>
 	)
 }

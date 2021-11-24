@@ -78,7 +78,9 @@ export default function Homepage(): JSX.Element {
 							<Col offset={{ md: 1 }}>
 								<Row>
 									<Col>
-										<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
+										<Box mt={6} mb={6}>
+											<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
+										</Box>
 										<Box mb={2}>
 											<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
 										</Box>
@@ -92,7 +94,9 @@ export default function Homepage(): JSX.Element {
 								</Row>
 							</Col>
 							<Col offset={{ md: 1 }}>
-								<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
+								<Box mt={6} mb={6}>
+									<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
+								</Box>
 								<ProfileSelector
 									profile={profile}
 									setProfile={setProfile}

@@ -1,31 +1,30 @@
 import { Color } from '../types/Color';
 import { Size } from '../types/Size';
 
-export default class StylingBuilder {
-
+export default abstract class StyleBuilder {
 	private color: Color | 'disabled';
 	private size: Size;
 	private isSelected = false;
 	private result = '';
 
-	constructor(color: Color | 'disabled', size: Size) {
+	constructor(color: Color | 'disabled' = 'primary', size: Size = 'medium') {
 		this.color = color;
 		this.size = size;
 	}
 
-	buildColor(): StylingBuilder {
+	buildColor(): this {
 		switch (this.color) {
 			case 'disabled':
-				this.result += 'bg-grey-light-grey text-grey-grey cursor-default ring-yellow-light-yellow';
+				this.result += 'bg-grey-light-grey text-grey-grey';
 				break;
 			case 'primary':
-				this.result += 'bg-pink-dark-pink hover:bg-pink-light-pink text-white-white ring-yellow-light-yellow';
+				this.result += 'bg-pink-dark-pink text-white-white';
 				break;
 			case 'secondary':
-				this.result += 'bg-blue-darker-blue hover:bg-blue-blue text-yellow-light-yellow ring-yellow-light-yellow';
+				this.result += 'bg-blue-darker-blue text-yellow-light-yellow';
 				break;
 			case 'light-secondary':
-				this.result += 'bg-grey-light-grey hover:bg-blue-blue text-white-white ring-yellow-light-yellow';
+				this.result += 'bg-grey-light-grey text-white-white';
 				break;
 			default:
 				throw new Error('Color not found.')
@@ -37,9 +36,30 @@ export default class StylingBuilder {
 
 	buildSelected(): this {
 		if (this.isSelected) {
-			this.result += 'ring-2';
+			this.result += ' ring-yellow-light-yellow ring-2';
 			this.addSeparator()
 		}
+		return this;
+	}
+
+	buildHover(): this {
+		switch (this.color) {
+			case 'disabled':
+				this.result += 'cursor-default';
+				break;
+			case 'primary':
+				this.result += 'hover:bg-pink-light-pink';
+				break;
+			case 'secondary':
+				this.result += 'hover:bg-blue-blue';
+				break;
+			case 'light-secondary':
+				this.result += 'hover:bg-blue-blue';
+				break;
+			default:
+				throw new Error('Color not found.')
+		}
+
 		return this;
 	}
 

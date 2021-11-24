@@ -6,6 +6,7 @@ import { YesOrNo } from '../classes/Votes/YesNoVote';
 import PlayerFactory from '../factories/PlayerFactory';
 import LobbyService from '../services/LobbyService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
+import { Player } from '../classes';
 
 export default class LobbyFacade {
 	public static create(socket: Socket): Lobby {
@@ -88,8 +89,8 @@ export default class LobbyFacade {
 		return updatedLobby;
 	}
 
-	public static startVote(socket: Socket, selectedDrawing: number): Lobby {
-		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedDrawing);
+	public static startVote(socket: Socket, selectedPlayer: Player): Lobby {
+		const playerLobby = LobbyService.startVote(SocketIdentifierService.getIdentifiersOf(socket), selectedPlayer);
 
 		this.emitToLobby('vote-started', playerLobby, playerLobby);
 
@@ -107,5 +108,11 @@ export default class LobbyFacade {
 		this.updateLobby(playerLobby);
 
 		return playerLobby;
+	}
+
+	public static playAgain(socket: Socket): void {
+		const lobby = LobbyService.playAgain(SocketIdentifierService.getIdentifiersOf(socket));
+
+		this.updateLobby(lobby);
 	}
 }
