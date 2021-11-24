@@ -60,9 +60,15 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 	const debounceResizeWithRatio = useDebounce((nextRatio) => setDimensionRatio(nextRatio), 100);
 
 	function handleResize() {
-		let nextRatio = getCurrentWindowDimensions().width / firstWindowDimensions.width;
-		if (nextRatio > MAX_RATIO)
-			nextRatio = MAX_RATIO
+		let widthRatio = getCurrentWindowDimensions().width / firstWindowDimensions.width;
+		let heightRatio = getCurrentWindowDimensions().height / firstWindowDimensions.height;
+		let nextRatio = 1
+
+		widthRatio = (widthRatio > MAX_RATIO ? MAX_RATIO : widthRatio)
+		heightRatio = (heightRatio > MAX_RATIO ? MAX_RATIO : heightRatio)
+
+		nextRatio = (widthRatio > heightRatio ? heightRatio : widthRatio)
+
 		debounceResizeWithRatio(nextRatio)
 	}
 
