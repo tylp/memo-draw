@@ -56,6 +56,12 @@ export default class Lobby {
 		return this.game;
 	}
 
+	endGame(): this {
+		this.game = undefined;
+
+		return this;
+	}
+
 	static getLobbyName(lobbyId: Lobby['id']): string {
 		return `lobby-${lobbyId}`;
 	}

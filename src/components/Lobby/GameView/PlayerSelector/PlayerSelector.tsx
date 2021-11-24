@@ -17,7 +17,7 @@ export default function PlayerSelector(props: PlayerSelectorProps): JSX.Element 
 				{
 					props.list.map(
 						(player: Player) => (
-							<Box key={player.id} onClick={() => props.setSelected(player)}>
+							<Box mb={2} key={player.id} onClick={() => props.setSelected(player)}>
 								<UserEtiquette color={props.selected === player ? 'light-secondary' : 'secondary'} player={player} />
 							</Box>
 						),

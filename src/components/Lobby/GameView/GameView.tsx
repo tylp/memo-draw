@@ -22,6 +22,7 @@ import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
 import Box from '../../Common/Box/Box';
 import _ from 'lodash';
+import EndGameScreen from './EndGameScreen/EndGameScreen';
 import { EngineContextProvider } from './Toolbox/EngineContext';
 import BottomToolBox from './Toolbox/BottomToolBox';
 import RightToolBox from './Toolbox/RightToolBox';
@@ -35,7 +36,8 @@ interface GameProps {
 
 export default function GameView(props: GameProps): JSX.Element {
 	const { t } = useTranslation();
-	const [playerId] = useLocalStorage(LocalStorageKey.PlayerId);
+
+	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
 	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
@@ -101,7 +103,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	useEffect(() => {
 		if (props.lobby.game) {
 			setCurrentPlayer(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
-			setHasLost(props.lobby.game.losers.map(e => e.id).includes(playerId as string));
+			setHasLost(props.lobby.game.losers.map(e => e.id).includes(playerId));
 			setHasGameEnded(props.lobby.game.hasEnded)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,6 +139,12 @@ export default function GameView(props: GameProps): JSX.Element {
 		return props.lobby.game.losers.map(e => e.id).includes(player.id)
 	}
 
+	const playAgain = () => {
+		if (props.lobby?.game?.hasEnded) {
+			SocketEventEmitter.playAgain(props.socket);
+		}
+	}
+
 	useEffect(() => {
 		const idsNotInGame = _.difference(props.lobby.players.map(e => e.id), props.lobby?.game?.players.map(e => e.id));
 		setSpectators(props.lobby.players.filter((player: Player) => {
@@ -144,7 +152,9 @@ export default function GameView(props: GameProps): JSX.Element {
 		}));
 	}, [props.lobby.players, props.lobby?.game?.players]);
 
-	return (
+	return (props.lobby?.game?.hasEnded) ? (
+		<EndGameScreen playAgain={playAgain} leaveLobby={props.leaveGame} lobby={props.lobby} />
+	) : (
 		<Layout>
 			<Modal
 				visible={isStartVoteModalVisible}
@@ -153,7 +163,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				disableValidate={!selectedPlayer}
 				title={t('gameView.startVote')}
 			>
-				<Box className={'w-full'}>
+				<Box mb={2} className={'w-full'}>
 					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
@@ -166,11 +176,13 @@ export default function GameView(props: GameProps): JSX.Element {
 			>
 				<Row>
 					<Col>
-						{
-							props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
-								<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
-							)
-						}
+						<Box mb={2}>
+							{
+								props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
+									<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
+								)
+							}
+						</Box>
 					</Col>
 				</Row>
 				<Row>
@@ -191,25 +203,14 @@ export default function GameView(props: GameProps): JSX.Element {
 						<div>
 							{
 								props.lobby.game?.players.map((player: Player) => (
-									<UserEtiquette key={player.id} player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+									<Box mb={2} key={player.id} >
+										<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+									</Box>
 								))
 							}
 						</div>
 						{
-							spectators.length > 0 && (
-								<>
-									<div className='h-16'>
-										<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
-									</div>
-									<div>
-										{
-											spectators.map((player: Player) => (
-												<UserEtiquette key={player.id} player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
-											))
-										}
-									</div>
-								</>
-							)
+							spectators.length > 0 && <Spectators spectators={spectators} playerId={playerId} />
 						}
 					</div>
 					<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
@@ -231,53 +232,101 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div className='flex flex-col justify-between flex-1 w-52'>
 						<div className='h-12'>
 							{
-								(hasLost) ? (
+								(hasLost) && (
 									<Button
 										color='primary'
 										size='medium'
 										fullHeight
 										fullWidth
 										icon={faArrowRight}
-										disabled={!(hasLost || spectators.map(e => e.id).includes(playerId as string))}
+										disabled={!(hasLost || spectators.map(e => e.id).includes(playerId))}
 										onClick={props.leaveGame}>
 										{t('lobbyView.leaveBtnLabel')}
 									</Button>
-								) : null
+								)
 							}
 						</div>
 						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
 							<RightToolBox />
 						</div>
 						<div className='h-20'>
-							{
-								playerId === currentPlayer.id ? (
-									<Button
-										color='primary'
-										size='medium'
-										fullHeight
-										fullWidth
-										icon={faArrowRight}
-										disabled={hasLost}
-										onClick={nextDrawing}>
-										{t('gameView.sendDrawing')}
-									</Button>
-								) : (
-									<Button
-										color='primary'
-										size='medium'
-										fullHeight
-										fullWidth
-										icon={faArrowRight}
-										disabled={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId as string)}
-										onClick={() => setIsStartVoteModalVisible(true)}>
-										{t('gameView.startVote')}
-									</Button>
-								)
-							}
+							<StartVoteOrSendDrawing
+								showDrawingButton={playerId === currentPlayer.id}
+								disableDrawingButton={hasLost}
+								onClickDrawingButton={nextDrawing}
+								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
+								onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
+							/>
 						</div>
 					</div>
 				</div>
 			</EngineContextProvider>
 		</Layout >
+	)
+}
+
+interface StartVoteOrSendDrawingProps {
+	showDrawingButton: boolean;
+	disableDrawingButton: boolean;
+	onClickDrawingButton: () => void;
+	disableStartVoteButton: boolean;
+	onClickStartVoteButton: () => void;
+}
+
+function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element {
+	const { t } = useTranslation();
+
+	return props.showDrawingButton ? (
+		<Button
+			color='primary'
+			size='medium'
+			fullHeight
+			fullWidth
+			icon={faArrowRight}
+			disabled={props.disableDrawingButton}
+			onClick={props.onClickDrawingButton}>
+			{t('gameView.sendDrawing')}
+		</Button>
+	) : (
+		<Button
+			color='primary'
+			size='medium'
+			fullHeight
+			fullWidth
+			icon={faArrowRight}
+			disabled={props.disableStartVoteButton}
+			onClick={props.onClickStartVoteButton}>
+			{t('gameView.startVote')}
+		</Button>
+	)
+}
+
+interface SpectatorsProps {
+	spectators: Player[];
+	playerId: string;
+}
+
+function Spectators(props: SpectatorsProps): JSX.Element {
+	const { t } = useTranslation();
+
+	const getPillTitleItsYou = (player: Player): undefined | string => {
+		return (player.id === props.playerId) ? t('gameView.itsYouLabel') : undefined;
+	}
+
+	return (
+		<>
+			<div className='h-16'>
+				<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
+			</div>
+			<div>
+				{
+					props.spectators.map((player: Player) => (
+						<Box mb={2} key={player.id} >
+							<UserEtiquette player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
+						</Box>
+					))
+				}
+			</div>
+		</>
 	)
 }

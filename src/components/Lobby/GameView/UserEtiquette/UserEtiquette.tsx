@@ -22,7 +22,7 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 
 	useEffect(() => {
 		const styleBuilder = new UserEtiquetteStyleBuilder(props.disabled ? 'disabled' : props.color);
-		const defaultStyle = 'relative mb-2 flex flex-row items-center w-full h-16 pl-2';
+		const defaultStyle = 'relative flex flex-row items-center w-full h-16 pl-2 z-10';
 
 		setClassName(defaultStyle + ' ' + styleBuilder.buildColor().getResult());
 	}, [props.color, props.disabled])

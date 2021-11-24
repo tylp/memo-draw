@@ -49,6 +49,7 @@ const resources = {
 				'spectatorsTitle': 'Spectators',
 				'sendDrawing': 'Send Drawing',
 				'startVote': 'Start Vote',
+				'playAgain': 'Play again',
 				'selectDrawing': 'Select a drawing',
 				'hasThisPlayerMadeAnError': 'Has this player made an error?',
 				'currentlyDrawing': 'Drawing',
