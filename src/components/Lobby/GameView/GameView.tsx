@@ -23,6 +23,9 @@ import NetworkManager from '../../../services/NetworkManager/NetworkManager';
 import Box from '../../Common/Box/Box';
 import _ from 'lodash';
 import EndGameScreen from './EndGameScreen/EndGameScreen';
+import { EngineContextProvider } from './Toolbox/EngineContext';
+import BottomToolBox from './Toolbox/BottomToolBox';
+import RightToolBox from './Toolbox/RightToolBox';
 
 interface GameProps {
 	lobby: Lobby;
@@ -191,42 +194,25 @@ export default function GameView(props: GameProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
-			<div className='flex flex-row justify-center'>
-				<div className='flex flex-col flex-1 w-52'>
-					<div className='h-16'>
-						<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-					</div>
-					<div>
-						{
-							props.lobby.game?.players.map((player: Player) => (
-								<Box mb={2} key={player.id} >
-									<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
-								</Box>
-							))
-						}
-					</div>
-					{
-						spectators.length > 0 && <Spectators spectators={spectators} playerId={playerId} />
-					}
-				</div>
-				<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
-					<div className='flex flex-row justify-between'>
+			<EngineContextProvider engine={engine}>
+				<div className='flex flex-row justify-center'>
+					<div className='flex flex-col flex-1 w-52'>
 						<div className='h-16'>
-							<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
+							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 						</div>
-						<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
-							<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
+						<div>
+              {
+                props.lobby.game?.players.map((player: Player) => (
+                  <Box mb={2} key={player.id} >
+                    <UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+                  </Box>
+                ))
+              }
+            </div>
+            {
+              spectators.length > 0 && <Spectators spectators={spectators} playerId={playerId} />
+            }
 						</div>
-					</div>
-					<div>
-						<Canvas engine={engine} setEngine={setEngine} />
-					</div>
-					<div className='bg-blue-darker-blue rounded-md mt-4 h-20 text-lg font-semibold text-white-white text-center'>
-						Tool selection
-					</div>
-				</div>
-				<div className='flex flex-col justify-between flex-1 w-52'>
-					<div className='h-12'>
 						{
 							(hasLost) && (
 								<Button
@@ -242,10 +228,43 @@ export default function GameView(props: GameProps): JSX.Element {
 							)
 						}
 					</div>
-					<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
-						Color palette selection
+					<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
+						<div className='flex flex-row justify-between'>
+							<div className='h-16'>
+								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
+							</div>
+							<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
+								<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
+							</div>
+						</div>
+						<div>
+							<Canvas engine={engine} setEngine={setEngine} />
+						</div>
+						<div className='bg-blue-darker-blue rounded-md mt-4 text-lg font-semibold text-white-white text-center'>
+							<BottomToolBox />
+						</div>
 					</div>
-					<div className='h-20'>
+					<div className='flex flex-col justify-between flex-1 w-52'>
+						<div className='h-12'>
+							{
+								(hasLost) ? (
+									<Button
+										color='primary'
+										size='medium'
+										fullHeight
+										fullWidth
+										icon={faArrowRight}
+										disabled={!(hasLost || spectators.map(e => e.id).includes(playerId as string))}
+										onClick={props.leaveGame}>
+										{t('lobbyView.leaveBtnLabel')}
+									</Button>
+								) : null
+							}
+						</div>
+						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
+							<RightToolBox />
+						</div>
+						<div className='h-20'>
 						<StartVoteOrSendDrawing
 							showDrawingButton={playerId === currentPlayer.id}
 							disableDrawingButton={hasLost}
@@ -253,9 +272,10 @@ export default function GameView(props: GameProps): JSX.Element {
 							disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
 							onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
 						/>
+						</div>
 					</div>
 				</div>
-			</div>
+			</EngineContextProvider>
 		</Layout >
 	)
 }
