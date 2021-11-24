@@ -5,7 +5,7 @@ import '../i18n';
 
 function MemoDraw({ Component, pageProps }: AppProps): JSX.Element {
 	return (
-		<div suppressHydrationWarning>
+		<div className="bg-gradient-to-r from-blue-blue to-blue-light-blue" suppressHydrationWarning >
 			{typeof window === 'undefined' ? null : <Component {...pageProps} />}
 		</div>
 	)

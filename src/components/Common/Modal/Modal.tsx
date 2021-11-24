@@ -34,7 +34,7 @@ export default function Modal(props: ModalProps): JSX.Element {
 	return props.visible ? (
 		<>
 			<div
-				className="overflow-x-hidden overflow-y-auto fixed inset-0 z-10 opacity-50 bg-black-black"
+				className="overflow-x-hidden overflow-y-auto fixed inset-0 z-20 opacity-50 bg-black-black rounded-lg"
 			>
 			</div>
 			<div
