@@ -62,7 +62,7 @@ export default function GameView(props: GameProps): JSX.Element {
 		engine.registerNetworkManager(new NetworkManager(props.socket));
 
 		props.socket.on('network-manager-update', (elem: IAction) => {
-			engine.networkManager.notify(elem);
+			engine.networkManager.on(elem);
 		})
 	}, [engine, props.socket])
 
