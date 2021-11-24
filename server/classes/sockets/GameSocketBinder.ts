@@ -27,7 +27,7 @@ export default class GameSocketBinder extends SocketBinder {
 	static onNetworkManagerUpdate(socket: Socket): void {
 		socket.on('network-manager-update', (elem: IAction) => {
 			const lobby = Application.getPlayerLobbyStorage().getLobbyOf(SocketIdentifierService.getSessionIdentifier(socket));
-			Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('network-manager-update', elem);
+			socket.to(lobby.getSocketRoomName()).emit('network-manager-update', elem);
 		})
 	}
 
