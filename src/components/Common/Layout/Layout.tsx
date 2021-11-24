@@ -49,7 +49,6 @@ interface LayoutSpec {
 
 
 export default function Layout({ children }: LayoutSpec): JSX.Element {
-	const MAX_RATIO = 1;
 	const MAX_DIMENSION = {width: 1920, height: 1080}
 
 	const [dimensionRatio, setDimensionRatio] = useState(getCurrentWindowDimensions().width / MAX_DIMENSION.width);
@@ -57,12 +56,9 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 	const debounceResizeWithRatio = useDebounce((nextRatio) => setDimensionRatio(nextRatio), 100);
 
 	function handleResize() {
-		let widthRatio = getCurrentWindowDimensions().width / MAX_DIMENSION.width;
-		let heightRatio = getCurrentWindowDimensions().height / MAX_DIMENSION.height;
+		const widthRatio = getCurrentWindowDimensions().width / MAX_DIMENSION.width;
+		const heightRatio = getCurrentWindowDimensions().height / MAX_DIMENSION.height;
 		let nextRatio = 1
-
-		widthRatio = (widthRatio > MAX_RATIO ? MAX_RATIO : widthRatio)
-		heightRatio = (heightRatio > MAX_RATIO ? MAX_RATIO : heightRatio)
 
 		nextRatio = (widthRatio > heightRatio ? heightRatio : widthRatio)
 
