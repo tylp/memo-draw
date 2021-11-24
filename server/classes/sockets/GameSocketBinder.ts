@@ -1,4 +1,4 @@
-import { IAction } from 'memo-draw-engine';
+import { ActionType, IAction } from 'memo-draw-engine';
 import { Socket } from 'socket.io';
 import LobbyFacade from '../../facades/LobbyFacade';
 import PlayerFactory from '../../factories/PlayerFactory';
@@ -20,6 +20,10 @@ export default class GameSocketBinder extends SocketBinder {
 			if (lobby?.game?.isTurnOf(player)) {
 				lobby.game.nextDrawing();
 				Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby);
+				Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('network-manager-update', {
+					type: ActionType.Reset,
+					parameters: undefined,
+				});
 			}
 		});
 	}
