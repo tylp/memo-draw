@@ -23,18 +23,16 @@ function getCurrentWindowDimensions(): {width: number; height: number} {
 
 function WhiteBorder(props: WhiteBorderProps): JSX.Element {
 	return (
-		<div className='relative  w-full border-l-8 border-b-8 border-r-8 border-white-white border-opacity-10 rounded-xl'>
-			<div className='absolute border-t-8 border-white-white border-opacity-10'
+		<div className='relative w-full border-l-8 border-b-8 border-r-8 border-white-white border-opacity-10 rounded-xl'>
+			<div className='absolute border-t-8 left-0 border-white-white border-opacity-10'
 				style={{
 					borderTopLeftRadius: '9999px',
-					left: '0em',
 					width: '30em',
 				}}>
 			</div>
-			<div className='absolute border-t-8 border-white-white border-opacity-10'
+			<div className='absolute border-t-8 right-0 border-white-white border-opacity-10'
 				style={{
 					borderTopRightRadius: '9999px',
-					right: '0em',
 					width: '30em',
 				}}>
 			</div>
