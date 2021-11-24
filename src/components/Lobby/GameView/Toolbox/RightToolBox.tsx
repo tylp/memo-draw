@@ -76,7 +76,7 @@ function ColorSelection(): JSX.Element {
 }
 
 function ThicknessSlider(): JSX.Element {
-	const [range, setRange] = useState<number>() ;
+	const [range, setRange] = useState<number>(100);
 	const { customDrawState, updateDrawState } = useContext(EngineContext);
 
 	useEffect(() => {
@@ -99,7 +99,7 @@ function ThicknessSlider(): JSX.Element {
 }
 
 function OpacitySlider(): JSX.Element {
-	const [range, setRange] = useState<number>() ;
+	const [range, setRange] = useState<number>(255);
 	const { customDrawState, updateDrawState } = useContext(EngineContext);
 
 	useEffect(() => {
@@ -110,7 +110,7 @@ function OpacitySlider(): JSX.Element {
 	const setOpacity = (event: ChangeEvent<HTMLInputElement>): void => {
 		const value = Number(event.currentTarget.value);
 		setRange(value);
-		updateDrawState({ opacity: value });
+		updateDrawState({ opacity: value / 255 });
 	};
 
 	return (
