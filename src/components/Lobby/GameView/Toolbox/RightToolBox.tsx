@@ -27,7 +27,7 @@ function SelectionSummary(): JSX.Element {
 		customDrawState.color.red,
 		customDrawState.color.green,
 		customDrawState.color.blue,
-		customDrawState.opacity,
+		customDrawState.opacity * 255,
 	);
 
 	return (
