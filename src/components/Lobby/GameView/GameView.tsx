@@ -166,7 +166,7 @@ export default function GameView(props: GameProps): JSX.Element {
 				<Box mb={2} className={'w-full'}>
 					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
-			</Modal >
+			</Modal>
 			<Modal
 				visible={isCurrentVoteModalVisible}
 				onClose={() => setIsCurrentVoteModalVisible(false)}
@@ -201,31 +201,16 @@ export default function GameView(props: GameProps): JSX.Element {
 							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
 						</div>
 						<div>
-              {
-                props.lobby.game?.players.map((player: Player) => (
-                  <Box mb={2} key={player.id} >
-                    <UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
-                  </Box>
-                ))
-              }
-            </div>
-            {
-              spectators.length > 0 && <Spectators spectators={spectators} playerId={playerId} />
-            }
+							{
+								props.lobby.game?.players.map((player: Player) => (
+									<Box mb={2} key={player.id} >
+										<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+									</Box>
+								))
+							}
 						</div>
 						{
-							(hasLost) && (
-								<Button
-									color='primary'
-									size='medium'
-									fullHeight
-									fullWidth
-									icon={faArrowRight}
-									disabled={!(hasLost || spectators.map(e => e.id).includes(playerId))}
-									onClick={props.leaveGame}>
-									{t('lobbyView.leaveBtnLabel')}
-								</Button>
-							)
+							spectators.length > 0 && <Spectators spectators={spectators} playerId={playerId} />
 						}
 					</div>
 					<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
@@ -247,31 +232,31 @@ export default function GameView(props: GameProps): JSX.Element {
 					<div className='flex flex-col justify-between flex-1 w-52'>
 						<div className='h-12'>
 							{
-								(hasLost) ? (
+								(hasLost) && (
 									<Button
 										color='primary'
 										size='medium'
 										fullHeight
 										fullWidth
 										icon={faArrowRight}
-										disabled={!(hasLost || spectators.map(e => e.id).includes(playerId as string))}
+										disabled={!(hasLost || spectators.map(e => e.id).includes(playerId))}
 										onClick={props.leaveGame}>
 										{t('lobbyView.leaveBtnLabel')}
 									</Button>
-								) : null
+								)
 							}
 						</div>
 						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
 							<RightToolBox />
 						</div>
 						<div className='h-20'>
-						<StartVoteOrSendDrawing
-							showDrawingButton={playerId === currentPlayer.id}
-							disableDrawingButton={hasLost}
-							onClickDrawingButton={nextDrawing}
-							disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
-							onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
-						/>
+							<StartVoteOrSendDrawing
+								showDrawingButton={playerId === currentPlayer.id}
+								disableDrawingButton={hasLost}
+								onClickDrawingButton={nextDrawing}
+								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
+								onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
+							/>
 						</div>
 					</div>
 				</div>
