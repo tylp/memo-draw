@@ -23,22 +23,22 @@ function getCurrentWindowDimensions(): {width: number; height: number} {
 
 function WhiteBorder(props: WhiteBorderProps): JSX.Element {
 	return (
-		<div className='w-full border-l-8 border-b-8 border-r-8 border-white-white border-opacity-10 rounded-xl'>
+		<div className='relative  w-full border-l-8 border-b-8 border-r-8 border-white-white border-opacity-10 rounded-xl'>
 			<div className='absolute border-t-8 border-white-white border-opacity-10'
 				style={{
 					borderTopLeftRadius: '9999px',
-					left: '0.50em',
+					left: '0em',
 					width: '30em',
 				}}>
 			</div>
 			<div className='absolute border-t-8 border-white-white border-opacity-10'
 				style={{
 					borderTopRightRadius: '9999px',
-					right: '0.50em',
+					right: '0em',
 					width: '30em',
 				}}>
 			</div>
-			<div className="relative -top-16">
+			<div className="relative">
 				{props.children}
 			</div>
 		</div>
@@ -51,10 +51,11 @@ interface LayoutSpec {
 
 
 export default function Layout({ children }: LayoutSpec): JSX.Element {
-	const MAX_RATIO = 0.95;
+	const MAX_RATIO = 1;
+	const MAX_WIDTH = 1920;
 
 	const firstWindowDimensions = getCurrentWindowDimensions();
-	const [dimensionRatio, setDimensionRatio] = useState(MAX_RATIO);
+	const [dimensionRatio, setDimensionRatio] = useState(getCurrentWindowDimensions().width / MAX_WIDTH);
 
 	const debounceResizeWithRatio = useDebounce((nextRatio) => setDimensionRatio(nextRatio), 100);
 
@@ -82,17 +83,21 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 					}}>
 
 					<Box py={4}>
-						<div className='flex flex-col'
+						<div className='relative'
 							style={{
 								width: '80rem',
 							}}>
 							<WhiteBorder>
-								<Box py={2} className="relative flex flex-col justify-center items-center">
-									<Logo size='medium' />
-								</Box>
-								<Box p={2}>
-									{children}
-								</Box>
+								<div className='flex flex-col items-center'>
+									<Box py={2} className="absolute -top-16 flex flex-col justify-center items-center">
+										<Logo size='medium' />
+									</Box>
+								</div>
+								<div>
+									<Box pt={24} pb={8} pl={8} pr={8}>
+										{children}
+									</Box>
+								</div>
 							</WhiteBorder>
 						</div>
 					</Box>
