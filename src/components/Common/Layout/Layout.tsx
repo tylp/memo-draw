@@ -50,16 +50,15 @@ interface LayoutSpec {
 
 export default function Layout({ children }: LayoutSpec): JSX.Element {
 	const MAX_RATIO = 1;
-	const MAX_WIDTH = 1920;
+	const MAX_DIMENSION = {width: 1920, height: 1080}
 
-	const firstWindowDimensions = getCurrentWindowDimensions();
-	const [dimensionRatio, setDimensionRatio] = useState(getCurrentWindowDimensions().width / MAX_WIDTH);
+	const [dimensionRatio, setDimensionRatio] = useState(getCurrentWindowDimensions().width / MAX_DIMENSION.width);
 
 	const debounceResizeWithRatio = useDebounce((nextRatio) => setDimensionRatio(nextRatio), 100);
 
 	function handleResize() {
-		let widthRatio = getCurrentWindowDimensions().width / firstWindowDimensions.width;
-		let heightRatio = getCurrentWindowDimensions().height / firstWindowDimensions.height;
+		let widthRatio = getCurrentWindowDimensions().width / MAX_DIMENSION.width;
+		let heightRatio = getCurrentWindowDimensions().height / MAX_DIMENSION.height;
 		let nextRatio = 1
 
 		widthRatio = (widthRatio > MAX_RATIO ? MAX_RATIO : widthRatio)
@@ -71,6 +70,7 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 	}
 
 	useEffect(() => {
+		handleResize();
 		window.addEventListener('resize', handleResize);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
