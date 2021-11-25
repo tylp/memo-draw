@@ -99,24 +99,24 @@ function ThicknessSlider(): JSX.Element {
 }
 
 function OpacitySlider(): JSX.Element {
-	const [range, setRange] = useState<number>(255);
+	const [range, setRange] = useState<number>(100);
 	const { customDrawState, updateDrawState } = useContext(EngineContext);
 
 	useEffect(() => {
-		setRange(customDrawState.opacity);
+		setRange(customDrawState.opacity * 100);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const setOpacity = (event: ChangeEvent<HTMLInputElement>): void => {
 		const value = Number(event.currentTarget.value);
 		setRange(value);
-		updateDrawState({ opacity: value / 255 });
+		updateDrawState({ opacity: value / 100});
 	};
 
 	return (
 		<div>
 			<h5>Opacity</h5>
-			<input value={range} min="10" max="255" onChange={setOpacity} type="range"></input>
+			<input value={range} min="10" max="100" onChange={setOpacity} type="range"></input>
 		</div>
 	);
 }
