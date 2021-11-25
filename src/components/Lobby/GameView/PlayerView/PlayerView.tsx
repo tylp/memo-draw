@@ -52,7 +52,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
-			setCurrentVote(undefined);
 			setIsCurrentVoteModalVisible(lobby.game.playerErrorVoteManager.selectedPlayer.id !== playerId);
 			props.updateLobby(lobby);
 		})
@@ -183,7 +182,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
 								onClickStartVoteButton={() => {
 									setSelectedPlayer(undefined);
-									setIsStartVoteModalVisible(true)
+									setCurrentVote('yes');
+									setIsStartVoteModalVisible(true);
 								}}
 							/>
 						</div>
