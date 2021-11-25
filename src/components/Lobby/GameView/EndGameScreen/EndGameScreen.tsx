@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { useTranslation } from 'react-i18next';
+import { Socket } from 'socket.io-client';
 import { Lobby, Player } from '../../../../../server/classes';
 import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
+import SocketEventEmitter from '../../../../services/SocketEventEmitter';
 import { Button, Layout } from '../../../Common';
 import Box from '../../../Common/Box/Box';
-import UserEtiquette from '../UserEtiquette/UserEtiquette';
+import UserEtiquette from '../../UserEtiquette/UserEtiquette';
 
 interface EndGameScreenProps {
 	lobby: Lobby;
-	playAgain: () => void;
-	leaveLobby: () => void;
+	socket: Socket;
+	leaveGame: () => void;
 }
 
 export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 	const { t } = useTranslation();
 
 	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
+
+	const playAgain = () => {
+		if (props.lobby?.game?.hasEnded) {
+			SocketEventEmitter.playAgain(props.socket);
+		}
+	}
 
 	return (
 		<Layout>
@@ -28,9 +36,9 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 							<Box mb={2}>
 								{
 									props.lobby?.hostPlayerId === playerId ? (
-										<Button onClick={props.playAgain} size="medium" fullWidth color="primary">{t('gameView.playAgain')}</Button>
+										<Button onClick={playAgain} size="medium" fullWidth color="primary">{t('gameView.playAgain')}</Button>
 									) : (
-										<Button onClick={props.leaveLobby} size="medium" fullWidth color="primary">{t('lobbyView.leaveBtnLabel')}</Button>
+										<Button onClick={props.leaveGame} size="medium" fullWidth color="primary">{t('lobbyView.leaveBtnLabel')}</Button>
 									)
 								}
 							</Box>
