@@ -1,25 +1,43 @@
 import { ShapeType } from 'memo-draw-engine';
-import React, { CSSProperties, useContext } from 'react';
+import React, { useContext } from 'react';
 import { CustomShapeType, EngineContext } from './EngineContext';
 
 
-import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faGripLines, faEraser } from '@fortawesome/free-solid-svg-icons';
+import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Box from '../../../Common/Box/Box';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface ShapeInfo {
 	name: string,
-	icon: any,
+	icon: IconProp,
 	select: () => void,
 }
 
-const buttonStyle: CSSProperties = {
-	margin: '0 4px',
-	border: '1px solid rgba(255, 255, 255, .15)',
-	padding: '4px 6px',
-	borderRadius: '4px',
-};
+interface btnToolBoxProps {
+	key?: string,
+	onClick?: () => void,
+	icon: IconProp,
+	color: 'blue' | 'yellow',
+}
+
+function BtnToolBox(props: btnToolBoxProps): JSX.Element {
+
+	let color = '';
+
+	color = props.color == 'blue' ? 'blue-light-blue ' : props.color == 'yellow' ? 'yellow-light-yellow ' : '';
+
+	return (
+		<button className={`rounded-lg border-2 border-${color} hover:bg-${color}`} key={props.key} onClick={props.onClick}>
+			<Box ml={3.5} mr={3.5} mt={2} mb={2}>
+				<span className={`text-2xl text-${color}`}>
+					<FontAwesomeIcon icon={props.icon} />
+				</span>
+			</Box>
+		</button>
+	)
+}
 
 function ShapesSelection(): JSX.Element {
 	const { updateDrawState } = useContext(EngineContext);
@@ -43,11 +61,7 @@ function ShapesSelection(): JSX.Element {
 		<>
 			{shapes.map((shape) => {
 				return (
-					<button style={buttonStyle} key={shape.name} onClick={shape.select}	>
-						<Box pl={1} pr={1}>
-							<FontAwesomeIcon icon={shape.icon} />
-						</Box>
-					</button>
+					<BtnToolBox color='yellow' icon={shape.icon} key={shape.name} onClick={shape.select} />
 				);
 			})}
 		</>
@@ -66,18 +80,10 @@ function UndoRedoSelection(): JSX.Element {
 	};
 
 	return (
-		<div className="flex flex-row justify-around">
-			<button style={buttonStyle} onClick={() => undo()}>
-				<Box pl={1} pr={1}>
-					<FontAwesomeIcon icon={faUndoAlt} />
-				</Box>
-			</button>
-			<button style={buttonStyle} onClick={() => redo()}>
-				<Box pl={1} pr={1}>
-					<FontAwesomeIcon icon={faRedoAlt} />
-				</Box>
-			</button>
-		</div>
+		<>
+			<BtnToolBox icon={faUndoAlt} color='blue' onClick={() => undo()} />
+			<BtnToolBox icon={faRedoAlt} color='blue' onClick={() => redo()} />
+		</>
 	);
 }
 
@@ -94,7 +100,7 @@ function VerticalDivider(): JSX.Element {
 
 export default function BottomToolBox(): JSX.Element {
 	return (
-		<div style={{ display: 'flex', alignItems: 'center', padding: '10px' }}>
+		<div className='flex flex-row justify-around items-center m-2'>
 			<UndoRedoSelection />
 			<VerticalDivider />
 			<ShapesSelection />
