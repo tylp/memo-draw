@@ -56,10 +56,9 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 			props.updateLobby(lobby);
 		})
 
-		props.socket.on('stop-vote', (lobby: Lobby) => {
+		props.socket.on('stop-vote', () => {
 			setIsCurrentVoteModalVisible(false)
 			setCurrentVote(undefined);
-			props.updateLobby(lobby);
 		})
 
 		return () => {

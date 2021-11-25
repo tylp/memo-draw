@@ -24,7 +24,6 @@ export default function GameView(props: GameProps): JSX.Element {
 	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
 	const [engine, setEngine] = useState<Engine>();
 	const [spectators, setSpectators] = useState<Player[]>([]);
-	const [isSpectator, setIsSpectator] = useState<boolean>();
 
 	useEffect(() => {
 		if (!engine || !props.socket) return;
@@ -71,9 +70,17 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [props.lobby.players, props.lobby?.game?.players]);
 
 	useEffect(() => {
-		if (spectators && playerId)
-			setIsSpectator(spectators.map(e => e.id).includes(playerId));
-	}, [spectators, playerId])
+		if (!props.socket) return;
+
+		props.socket.on('stop-vote', (lobby: Lobby) => {
+			props.updateLobby(lobby);
+		})
+
+		return () => {
+			props.socket.off('stop-vote');
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [props.socket])
 
 	return (props.lobby?.game?.hasEnded) ? (
 		<EndGameScreen
@@ -83,7 +90,6 @@ export default function GameView(props: GameProps): JSX.Element {
 		/>
 	) : (
 		<PlayerViewOrSpectatorView
-			isSpectator={isSpectator}
 			lobby={props.lobby}
 			socket={props.socket}
 			currentPlayer={currentPlayer}
@@ -97,7 +103,6 @@ export default function GameView(props: GameProps): JSX.Element {
 }
 
 interface PlayerViewOrSpectatorViewProps {
-	isSpectator: boolean;
 	lobby: Lobby;
 	socket: Socket;
 	currentPlayer: Player;
@@ -109,7 +114,16 @@ interface PlayerViewOrSpectatorViewProps {
 }
 
 function PlayerViewOrSpectatorView(props: PlayerViewOrSpectatorViewProps): JSX.Element {
-	return props.isSpectator ? (
+	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
+
+	const [isSpectator, setIsSpectator] = useState<boolean>();
+
+	useEffect(() => {
+		if (props.spectators && playerId)
+			setIsSpectator(props.spectators.map(e => e.id).includes(playerId));
+	}, [playerId, props.spectators])
+
+	return isSpectator ? (
 		<SpectatorView
 			lobby={props.lobby}
 			spectators={props.spectators}
