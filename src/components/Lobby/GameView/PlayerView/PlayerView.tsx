@@ -1,5 +1,6 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 import { Engine } from 'memo-draw-engine';
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-grid-system';
@@ -87,6 +88,18 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		SocketEventEmitter.vote(props.socket, vote);
 	}
 
+	const getVoteTargets = (): Player[] => {
+		let voteTargets = props.lobby.game.players;
+
+		const removeSelf = (players: Player[]) => players.filter((player: Player) => player.id !== playerId);
+		voteTargets = removeSelf(voteTargets);
+
+		const idsOfLosers = _.difference<Player['id']>(voteTargets.map(e => e.id), props.lobby.game.losers.map(e => e.id));
+		const removeLosers = (players: Player[]) => players.filter(e => idsOfLosers.includes(e.id));
+
+		return removeLosers(voteTargets)
+	}
+
 	return (
 		<Layout>
 			<Modal
@@ -97,7 +110,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				title={t('gameView.startVote')}
 			>
 				<Box mb={2} className={'w-full'}>
-					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+					<PlayerSelector list={getVoteTargets()} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
 			<Modal
