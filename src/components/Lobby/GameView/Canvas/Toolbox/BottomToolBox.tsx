@@ -1,8 +1,6 @@
 import { ShapeType } from 'memo-draw-engine';
 import React, { useContext, useEffect, useState } from 'react';
 import { CustomShapeType, EngineContext } from './EngineContext';
-
-
 import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
