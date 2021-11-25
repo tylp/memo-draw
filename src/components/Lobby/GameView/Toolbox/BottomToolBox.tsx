@@ -2,8 +2,14 @@ import { ShapeType } from 'memo-draw-engine';
 import React, { CSSProperties, useContext } from 'react';
 import { CustomShapeType, EngineContext } from './EngineContext';
 
+
+import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare, faStop, faCircle, faCircleNotch, faGripLines, faEraser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Box from '../../../Common/Box/Box';
+
 interface ShapeInfo {
 	name: string,
+	icon: any,
 	select: () => void,
 }
 
@@ -22,14 +28,14 @@ function ShapesSelection(): JSX.Element {
 	};
 
 	const shapes: Array<ShapeInfo> = [
-		{ name: 'Pencil', select: () => setShape(ShapeType.Pencil) },
-		{ name: 'Fill', select: () => setShape(ShapeType.Fill) },
-		{ name: 'Rectangle S', select: () => setShape(ShapeType.RectangleStroke) },
-		{ name: 'Rectangle F', select: () => setShape(ShapeType.RectangleFull) },
-		{ name: 'Ellipse F', select: () => setShape(ShapeType.EllipseFull) },
-		{ name: 'Ellipse S', select: () => setShape(ShapeType.EllipseStroke) },
-		{ name: 'Line', select: () => setShape(ShapeType.Line) },
-		{ name: 'Eraser', select: () => setShape('Eraser') },
+		{ name: 'Pencil', icon: faPen, select: () => setShape(ShapeType.Pencil) },
+		{ name: 'Fill', icon: faFill, select: () => setShape(ShapeType.Fill) },
+		{ name: 'Rectangle S', icon: faSquare, select: () => setShape(ShapeType.RectangleStroke) },
+		{ name: 'Rectangle F', icon: faStop, select: () => setShape(ShapeType.RectangleFull) },
+		{ name: 'Ellipse F', icon: faCircle, select: () => setShape(ShapeType.EllipseFull) },
+		{ name: 'Ellipse S', icon: faCircleNotch, select: () => setShape(ShapeType.EllipseStroke) },
+		{ name: 'Line', icon: faGripLines, select: () => setShape(ShapeType.Line) },
+		{ name: 'Eraser', icon: faEraser, select: () => setShape('Eraser') },
 	]
 
 	return (
@@ -37,7 +43,9 @@ function ShapesSelection(): JSX.Element {
 			{shapes.map((shape) => {
 				return (
 					<button style={buttonStyle} key={shape.name} onClick={shape.select}	>
-						{shape.name}
+						<Box pl={1} pr={1}>
+							<FontAwesomeIcon icon={shape.icon} />
+						</Box>
 					</button>
 				);
 			})}
@@ -57,9 +65,17 @@ function UndoRedoSelection(): JSX.Element {
 	};
 
 	return (
-		<div>
-			<button style={buttonStyle} onClick={() => undo()}>Undo</button>
-			<button style={buttonStyle} onClick={() => redo()}>Redo</button>
+		<div className="flex flex-row justify-around">
+			<button style={buttonStyle} onClick={() => undo()}>
+				<Box pl={1} pr={1}>
+					<FontAwesomeIcon icon={faUndoAlt} />
+				</Box>
+			</button>
+			<button style={buttonStyle} onClick={() => redo()}>
+				<Box pl={1} pr={1}>
+					<FontAwesomeIcon icon={faRedoAlt} />
+				</Box>
+			</button>
 		</div>
 	);
 }
