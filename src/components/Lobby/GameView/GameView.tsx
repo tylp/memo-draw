@@ -121,6 +121,13 @@ function PlayerViewOrSpectatorView(props: PlayerViewOrSpectatorViewProps): JSX.E
 			setEngine={props.setEngine}
 		/>
 	) : (
-		<SpectatorView />
+		<SpectatorView
+			lobby={props.lobby}
+			spectators={props.spectators}
+			currentPlayer={props.currentPlayer}
+			leaveGame={props.leaveGame}
+			engine={props.engine}
+			setEngine={props.setEngine}
+		/>
 	)
 }

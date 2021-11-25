@@ -10,12 +10,13 @@ import { YesOrNo } from '../../../../../server/classes/Votes/YesNoVote';
 import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
 import SocketEventEmitter from '../../../../services/SocketEventEmitter';
-import { Box, Button, Layout, Modal, SectionTitle } from '../../../Common'
+import { Box, Button, Layout, Modal } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
-import Canvas from './Canvas/Canvas';
-import BottomToolBox from './Canvas/Toolbox/BottomToolBox';
-import { EngineContextProvider } from './Canvas/Toolbox/EngineContext';
-import RightToolBox from './Canvas/Toolbox/RightToolBox';
+import Canvas from '../Canvas/Canvas';
+import BottomToolBox from '../Canvas/Toolbox/BottomToolBox';
+import { EngineContextProvider } from '../Canvas/Toolbox/EngineContext';
+import RightToolBox from '../Canvas/Toolbox/RightToolBox';
+import PlayersAndSpectators from '../PlayersAndSpectators/PlayersAndSpectators';
 import Countdown from './Countdown/Countdown';
 import PlayerSelector from './PlayerSelector/PlayerSelector'
 
@@ -87,18 +88,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		SocketEventEmitter.vote(props.socket, vote);
 	}
 
-	const getPillTitleDrawing = (player: Player): undefined | string => {
-		return (player.id === props.currentPlayer.id) ? t('gameView.currentlyDrawing') : undefined;
-	}
-
-	const getPillTitleItsYou = (player: Player): undefined | string => {
-		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
-	}
-
-	const hasPlayerLost = (player: Player): boolean => {
-		return props.lobby.game.losers.map(e => e.id).includes(player.id)
-	}
-
 	return (
 		<Layout>
 			<Modal
@@ -142,21 +131,13 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 			<EngineContextProvider engine={props.engine}>
 				<div className='flex flex-row justify-center'>
 					<div className='flex flex-col flex-1 w-52'>
-						<div className='h-16'>
-							<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
-						</div>
-						<div>
-							{
-								props.lobby.game?.players.map((player: Player) => (
-									<Box mb={2} key={player.id} >
-										<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
-									</Box>
-								))
-							}
-						</div>
-						{
-							props.spectators.length > 0 && <Spectators spectators={props.spectators} playerId={playerId} />
-						}
+						<PlayersAndSpectators
+							players={props.lobby.game?.players}
+							spectators={props.spectators}
+							losers={props.lobby.game.losers}
+							playerId={playerId}
+							currentPlayer={props.currentPlayer}
+						/>
 					</div>
 					<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
 						<div className='flex flex-row justify-between'>
@@ -243,36 +224,5 @@ function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element
 			onClick={props.onClickStartVoteButton}>
 			{t('gameView.startVote')}
 		</Button>
-	)
-}
-
-
-interface SpectatorsProps {
-	spectators: Player[];
-	playerId: string;
-}
-
-function Spectators(props: SpectatorsProps): JSX.Element {
-	const { t } = useTranslation();
-
-	const getPillTitleItsYou = (player: Player): undefined | string => {
-		return (player.id === props.playerId) ? t('gameView.itsYouLabel') : undefined;
-	}
-
-	return (
-		<>
-			<div className='h-16'>
-				<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
-			</div>
-			<div>
-				{
-					props.spectators.map((player: Player) => (
-						<Box mb={2} key={player.id} >
-							<UserEtiquette player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
-						</Box>
-					))
-				}
-			</div>
-		</>
 	)
 }
