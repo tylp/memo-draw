@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Row } from 'react-grid-system';
-import { Player } from '../../../../../server/classes';
-import Box from '../../../Common/Box/Box';
-import UserEtiquette from '../UserEtiquette/UserEtiquette';
+import { Player } from '../../../../../../server/classes';
+import Box from '../../../../Common/Box/Box';
+import UserEtiquette from '../../../UserEtiquette/UserEtiquette';
 
 interface PlayerSelectorProps {
 	list: Array<Player>;
