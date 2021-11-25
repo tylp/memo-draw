@@ -4,7 +4,8 @@ import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CountdownProps {
-	limitDate: Dayjs;
+	limitDate: undefined | Dayjs;
+	timeoutText?: undefined | string;
 	onFinish?: undefined | (() => void);
 }
 
@@ -14,6 +15,8 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	const [currentInterval, setCurrentInterval] = useState<NodeJS.Timer>();
 
 	const updateTimeLeft = () => {
+		if (!props.limitDate) return;
+
 		const timeBetweenNowAndLimitDate = props.limitDate.diff(dayjs(), 'milliseconds');
 		setTimeLeft(Math.max(0, timeBetweenNowAndLimitDate));
 	}
@@ -36,6 +39,8 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	}, [props.limitDate])
 
 	useEffect(() => {
+		if (!props.limitDate) return;
+
 		if (dayjs().isAfter(props.limitDate)) {
 			clearIntervalIfExist();
 
@@ -45,12 +50,14 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	}, [timeLeft, currentInterval])
 
 	return (
-		<div className='flex flex-row items-center justify-between bg-blue-darker-blue rounded-md h-12 p-4 w-24'>
+		<div className='flex flex-row items-center justify-between bg-blue-darker-blue rounded-md h-full p-4 w-24'>
 			<FontAwesomeIcon icon={faClock} className='text-yellow-light-yellow' />
 			{
 				props.limitDate ? (
 					<div className='ml-2 text-lg font-semibold text-white-white'>{Math.floor(timeLeft / 1000)} s</div>
-				) : null
+				) : (
+					<div className='ml-2 text-lg font-semibold text-white-white'>{props.timeoutText || ''}</div>
+				)
 			}
 		</div>
 	)

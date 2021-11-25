@@ -7,6 +7,7 @@ import PlayerFactory from '../factories/PlayerFactory';
 import LobbyService from '../services/LobbyService';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 import { Player } from '../classes';
+import dayjs from 'dayjs';
 
 export default class LobbyFacade {
 	public static create(socket: Socket): Lobby {
@@ -20,6 +21,8 @@ export default class LobbyFacade {
 	public static join(socket: Socket, lobbyId: Lobby['id']): Lobby {
 		const sessionOfSocket = SocketIdentifierService.getSessionOf(socket);
 		const lobby = Application.getLobbyStorage().get(lobbyId);
+		if (!lobby) return;
+
 		const player = PlayerFactory.create(sessionOfSocket);
 
 		lobby.add(player);
@@ -97,7 +100,7 @@ export default class LobbyFacade {
 		setTimeout(() => {
 			playerLobby?.game.endVote();
 			Application.getSocketIoInstance().of('/game').to(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
-		}, 10 * 1000)
+		}, playerLobby?.game?.playerErrorVoteManager.getVoteEndDate().diff(dayjs(), 'milliseconds'));
 
 		return playerLobby;
 	}
