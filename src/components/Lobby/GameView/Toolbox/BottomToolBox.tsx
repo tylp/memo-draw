@@ -1,5 +1,5 @@
 import { ShapeType } from 'memo-draw-engine';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { CustomShapeType, EngineContext } from './EngineContext';
 
 
@@ -12,10 +12,11 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 interface ShapeInfo {
 	name: string,
 	icon: IconProp,
-	select: () => void,
+	type: CustomShapeType,
 }
 
 interface btnToolBoxProps {
+	selected?: boolean,
 	key?: string,
 	onClick?: () => void,
 	icon: IconProp,
@@ -24,12 +25,18 @@ interface btnToolBoxProps {
 
 function BtnToolBox(props: btnToolBoxProps): JSX.Element {
 
-	let color = '';
-
-	color = props.color == 'blue' ? 'blue-light-blue ' : props.color == 'yellow' ? 'yellow-light-yellow ' : '';
+	const [color, setColor] = useState('');
+	
+	useEffect(() => {
+		if (props.selected) {
+			setColor('white-white bg-blue-200');
+		} else {
+			setColor(props.color == 'blue' ? 'blue-light-blue ' : props.color == 'yellow' ? 'yellow-light-yellow ' : '');
+		}
+	}, [props.color, props.selected]);
 
 	return (
-		<button className={`rounded-lg border-2 border-${color} hover:bg-${color}`} key={props.key} onClick={props.onClick}>
+		<button className={`rounded-lg border-2 border-${color}`} key={props.key} onClick={props.onClick}>
 			<Box ml={3.5} mr={3.5} mt={2} mb={2}>
 				<span className={`text-2xl text-${color}`}>
 					<FontAwesomeIcon icon={props.icon} />
@@ -40,28 +47,31 @@ function BtnToolBox(props: btnToolBoxProps): JSX.Element {
 }
 
 function ShapesSelection(): JSX.Element {
+	const [toolNameSelected, setToolNameSelected] = useState<CustomShapeType>(ShapeType.Pencil);
+
 	const { updateDrawState } = useContext(EngineContext);
 
 	const setShape = (shapeType: CustomShapeType) => {
+		setToolNameSelected(shapeType)
 		updateDrawState({ selectedShape: shapeType });
 	};
 
 	const shapes: Array<ShapeInfo> = [
-		{ name: 'Pencil', icon: faPen, select: () => setShape(ShapeType.Pencil) },
-		{ name: 'Fill', icon: faFill, select: () => setShape(ShapeType.Fill) },
-		{ name: 'Rectangle S', icon: faSquare, select: () => setShape(ShapeType.RectangleStroke) },
-		{ name: 'Rectangle F', icon: faSquareFill, select: () => setShape(ShapeType.RectangleFull) },
-		{ name: 'Ellipse S', icon: faCircle, select: () => setShape(ShapeType.EllipseStroke) },
-		{ name: 'Ellipse F', icon: faCircleFill, select: () => setShape(ShapeType.EllipseFull) },
-		{ name: 'Line', icon: faWindowMinimize, select: () => setShape(ShapeType.Line) },
-		{ name: 'Eraser', icon: faEraser, select: () => setShape('Eraser') },
+		{ name: 'Pencil', icon: faPen, type : ShapeType.Pencil },
+		{ name: 'Fill', icon: faFill, type : ShapeType.Fill },
+		{ name: 'Rectangle S', icon: faSquare, type : ShapeType.RectangleStroke },
+		{ name: 'Rectangle F', icon: faSquareFill, type : ShapeType.RectangleFull },
+		{ name: 'Ellipse S', icon: faCircle, type : ShapeType.EllipseStroke },
+		{ name: 'Ellipse F', icon: faCircleFill, type : ShapeType.EllipseFull },
+		{ name: 'Line', icon: faWindowMinimize, type : ShapeType.Line },
+		{ name: 'Eraser', icon: faEraser, type : 'Eraser' },
 	]
 
 	return (
 		<>
 			{shapes.map((shape) => {
 				return (
-					<BtnToolBox color='yellow' icon={shape.icon} key={shape.name} onClick={shape.select} />
+					<BtnToolBox selected={shape.type == toolNameSelected} color='yellow' icon={shape.icon} key={shape.name} onClick={() => {setShape(shape.type)}} />
 				);
 			})}
 		</>
@@ -99,6 +109,7 @@ function VerticalDivider(): JSX.Element {
 }
 
 export default function BottomToolBox(): JSX.Element {
+	
 	return (
 		<div className='flex flex-row justify-around items-center m-2'>
 			<UndoRedoSelection />
