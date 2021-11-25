@@ -3,7 +3,8 @@ import React, { CSSProperties, useContext } from 'react';
 import { CustomShapeType, EngineContext } from './EngineContext';
 
 
-import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare, faStop, faCircle, faCircleNotch, faGripLines, faEraser } from '@fortawesome/free-solid-svg-icons';
+import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faGripLines, faEraser } from '@fortawesome/free-solid-svg-icons';
+import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Box from '../../../Common/Box/Box';
 
@@ -31,10 +32,10 @@ function ShapesSelection(): JSX.Element {
 		{ name: 'Pencil', icon: faPen, select: () => setShape(ShapeType.Pencil) },
 		{ name: 'Fill', icon: faFill, select: () => setShape(ShapeType.Fill) },
 		{ name: 'Rectangle S', icon: faSquare, select: () => setShape(ShapeType.RectangleStroke) },
-		{ name: 'Rectangle F', icon: faStop, select: () => setShape(ShapeType.RectangleFull) },
-		{ name: 'Ellipse F', icon: faCircle, select: () => setShape(ShapeType.EllipseFull) },
-		{ name: 'Ellipse S', icon: faCircleNotch, select: () => setShape(ShapeType.EllipseStroke) },
-		{ name: 'Line', icon: faGripLines, select: () => setShape(ShapeType.Line) },
+		{ name: 'Rectangle F', icon: faSquareFill, select: () => setShape(ShapeType.RectangleFull) },
+		{ name: 'Ellipse S', icon: faCircle, select: () => setShape(ShapeType.EllipseStroke) },
+		{ name: 'Ellipse F', icon: faCircleFill, select: () => setShape(ShapeType.EllipseFull) },
+		{ name: 'Line', icon: faWindowMinimize, select: () => setShape(ShapeType.Line) },
 		{ name: 'Eraser', icon: faEraser, select: () => setShape('Eraser') },
 	]
 
