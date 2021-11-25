@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CountdownProps {
 	limitDate: Dayjs;
-	onFinish: () => void;
+	onFinish?: undefined | (() => void);
 }
 
 export default function Countdown(props: CountdownProps): JSX.Element {
@@ -39,16 +39,14 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 		if (dayjs().isAfter(props.limitDate)) {
 			clearIntervalIfExist();
 
-			if (props.onFinish) {
-				props.onFinish();
-			}
+			props.onFinish?.();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [timeLeft, currentInterval])
 
 	return (
 		<div className='flex flex-row items-center justify-between bg-blue-darker-blue rounded-md h-12 p-4 w-24'>
-			<FontAwesomeIcon icon={faClock} className='text-yellow-light-yellow'/>
+			<FontAwesomeIcon icon={faClock} className='text-yellow-light-yellow' />
 			{
 				props.limitDate ? (
 					<div className='ml-2 text-lg font-semibold text-white-white'>{Math.floor(timeLeft / 1000)} s</div>
