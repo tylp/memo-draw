@@ -6,8 +6,8 @@ import { CustomShapeType, EngineContext } from './EngineContext';
 import { faUndoAlt, faRedoAlt, faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Box from '../../../Common/Box/Box';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Box } from '../../../../Common';
 
 interface ShapeInfo {
 	name: string,
@@ -26,7 +26,7 @@ interface btnToolBoxProps {
 function BtnToolBox(props: btnToolBoxProps): JSX.Element {
 
 	const [color, setColor] = useState('');
-	
+
 	useEffect(() => {
 		if (props.selected) {
 			setColor('white-white bg-blue-200');
@@ -57,21 +57,21 @@ function ShapesSelection(): JSX.Element {
 	};
 
 	const shapes: Array<ShapeInfo> = [
-		{ name: 'Pencil', icon: faPen, type : ShapeType.Pencil },
-		{ name: 'Fill', icon: faFill, type : ShapeType.Fill },
-		{ name: 'Rectangle S', icon: faSquare, type : ShapeType.RectangleStroke },
-		{ name: 'Rectangle F', icon: faSquareFill, type : ShapeType.RectangleFull },
-		{ name: 'Ellipse S', icon: faCircle, type : ShapeType.EllipseStroke },
-		{ name: 'Ellipse F', icon: faCircleFill, type : ShapeType.EllipseFull },
-		{ name: 'Line', icon: faWindowMinimize, type : ShapeType.Line },
-		{ name: 'Eraser', icon: faEraser, type : 'Eraser' },
+		{ name: 'Pencil', icon: faPen, type: ShapeType.Pencil },
+		{ name: 'Fill', icon: faFill, type: ShapeType.Fill },
+		{ name: 'Rectangle S', icon: faSquare, type: ShapeType.RectangleStroke },
+		{ name: 'Rectangle F', icon: faSquareFill, type: ShapeType.RectangleFull },
+		{ name: 'Ellipse S', icon: faCircle, type: ShapeType.EllipseStroke },
+		{ name: 'Ellipse F', icon: faCircleFill, type: ShapeType.EllipseFull },
+		{ name: 'Line', icon: faWindowMinimize, type: ShapeType.Line },
+		{ name: 'Eraser', icon: faEraser, type: 'Eraser' },
 	]
 
 	return (
 		<>
 			{shapes.map((shape) => {
 				return (
-					<BtnToolBox selected={shape.type == toolNameSelected} color='yellow' icon={shape.icon} key={shape.name} onClick={() => {setShape(shape.type)}} />
+					<BtnToolBox selected={shape.type == toolNameSelected} color='yellow' icon={shape.icon} key={shape.name} onClick={() => { setShape(shape.type) }} />
 				);
 			})}
 		</>
@@ -109,7 +109,7 @@ function VerticalDivider(): JSX.Element {
 }
 
 export default function BottomToolBox(): JSX.Element {
-	
+
 	return (
 		<div className='flex flex-row justify-around items-center m-2'>
 			<UndoRedoSelection />
