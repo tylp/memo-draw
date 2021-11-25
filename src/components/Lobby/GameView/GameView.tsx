@@ -82,6 +82,7 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
+			setCurrentVote(undefined);
 			setIsCurrentVoteModalVisible(lobby.game.playerErrorVoteManager.selectedPlayer.id !== playerId);
 			props.updateLobby(lobby);
 		})
@@ -187,10 +188,10 @@ export default function GameView(props: GameProps): JSX.Element {
 				</Row>
 				<Row>
 					<Col>
-						<Button color="primary" selected={currentVote === 'yes'} size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
+						<Button color={currentVote !== 'no' ? 'primary' : 'light-secondary'} selected={currentVote === 'yes'} size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
 					</Col>
 					<Col>
-						<Button color="primary" selected={currentVote === 'no'} size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
+						<Button color={currentVote !== 'yes' ? 'primary' : 'light-secondary'} selected={currentVote === 'no'} size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
 					</Col>
 				</Row>
 			</Modal>
@@ -255,7 +256,10 @@ export default function GameView(props: GameProps): JSX.Element {
 								disableDrawingButton={hasLost}
 								onClickDrawingButton={nextDrawing}
 								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
-								onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
+								onClickStartVoteButton={() => {
+									setSelectedPlayer(undefined);
+									setIsStartVoteModalVisible(true)
+								}}
 							/>
 						</div>
 					</div>
