@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { useTranslation } from 'react-i18next';
+import { Socket } from 'socket.io-client';
 import { Lobby, Player } from '../../../../../server/classes';
 import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
+import SocketEventEmitter from '../../../../services/SocketEventEmitter';
 import { Button, Layout } from '../../../Common';
 import Box from '../../../Common/Box/Box';
-import UserEtiquette from '../UserEtiquette/UserEtiquette';
+import UserEtiquette from '../../UserEtiquette/UserEtiquette';
 
 interface EndGameScreenProps {
 	lobby: Lobby;
-	playAgain: () => void;
-	leaveLobby: () => void;
+	socket: Socket;
+	leaveGame: () => void;
 }
 
 export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
@@ -19,8 +21,10 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 
 	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 
-	const getPillTitleItsYou = (player: Player): undefined | string => {
-		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
+	const playAgain = () => {
+		if (props.lobby?.game?.hasEnded) {
+			SocketEventEmitter.playAgain(props.socket);
+		}
 	}
 
 	return (
@@ -32,9 +36,9 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 							<Box mb={2}>
 								{
 									props.lobby?.hostPlayerId === playerId ? (
-										<Button onClick={props.playAgain} size="medium" fullWidth color="primary">{t('gameView.playAgain')}</Button>
+										<Button onClick={playAgain} size="medium" fullWidth color="primary">{t('gameView.playAgain')}</Button>
 									) : (
-										<Button onClick={props.leaveLobby} size="medium" fullWidth color="primary">{t('lobbyView.leaveBtnLabel')}</Button>
+										<Button onClick={props.leaveGame} size="medium" fullWidth color="primary">{t('lobbyView.leaveBtnLabel')}</Button>
 									)
 								}
 							</Box>
@@ -42,26 +46,7 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 					</Row>
 					<Row gutterWidth={8}>
 						<Col>
-							{
-								props.lobby.game?.players.map((player: Player, index: number) => (
-									<Box mb={2} key={player.id}>
-										<div className="flex">
-											<div className="flex-1 pr-2">
-												<UserEtiquette
-													player={player}
-													color='secondary'
-													disabled={index > 0}
-													rPillTitle={getPillTitleItsYou(player)} />
-											</div>
-											<div className="flex h-full">
-												<div className="m-auto">
-													<NumberPill n={index + 1} />
-												</div>
-											</div>
-										</div>
-									</Box>
-								))
-							}
+							<Players players={props?.lobby?.game?.losers} winner={props?.lobby?.game?.winner} />
 						</Col>
 					</Row>
 				</Col>
@@ -84,6 +69,47 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 				</Col>
 			</Row>
 		</Layout>
+	)
+}
+
+function Players(props: { players: Player[], winner: Player }): JSX.Element {
+	const { t } = useTranslation();
+
+	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
+
+	const [playersList, setPlayersList] = useState<Player[]>([]);
+
+	const getPillTitleItsYou = (player: Player): undefined | string => {
+		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
+	}
+
+	useEffect(() => {
+		setPlayersList([props.winner, ...props.players]);
+	}, [props.players, props.winner])
+
+	return (
+		<>
+			{
+				playersList.map((player: Player, index: number) => (
+					<Box mb={2} key={player.id}>
+						<div className="flex">
+							<div className="flex-1 pr-2">
+								<UserEtiquette
+									player={player}
+									color='secondary'
+									disabled={index > 0}
+									rPillTitle={getPillTitleItsYou(player)} />
+							</div>
+							<div className="flex h-full">
+								<div className="m-auto">
+									<NumberPill n={index + 1} />
+								</div>
+							</div>
+						</div>
+					</Box>
+				))
+			}
+		</>
 	)
 }
 

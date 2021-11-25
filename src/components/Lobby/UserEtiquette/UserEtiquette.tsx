@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Player from '../../../../../server/classes/Player';
-import { Color } from '../../../../../server/types/Color';
-import { Avatar } from '../../../Common';
+import Player from '../../../../server/classes/Player';
+import { Color } from '../../../../server/types/Color';
+import { Avatar } from '../../Common';
 import UserEtiquetteStyleBuilder from './UserEtiquetteStyleBuilder';
 
 interface UserEtiquetteSpec {
