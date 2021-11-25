@@ -1,6 +1,6 @@
 import Player from '../Player';
 import Lobby from './Lobby';
-import { shuffle } from 'lodash';
+import _, { shuffle } from 'lodash';
 import type { Dayjs } from 'dayjs';
 import GameMode from './GameMode/GameMode';
 import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteManager';
@@ -108,6 +108,14 @@ export default class Game {
 
 	protected endGame(): void {
 		this.hasEnded = true;
-		this.winner = this.players[0];
+		this.winner = this.getWinner();
+	}
+
+	protected getWinner(): Player {
+		return this.getStillPlaying()[0];
+	}
+
+	protected getStillPlaying(): Player[] {
+		return this.players.filter(e => _.difference<Player['id']>(this.players.map(e => e.id), this.losers.map(e => e.id)).includes(e.id));
 	}
 }

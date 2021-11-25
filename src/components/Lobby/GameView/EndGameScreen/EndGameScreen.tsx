@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { useTranslation } from 'react-i18next';
 import { Lobby, Player } from '../../../../../server/classes';
@@ -19,10 +19,6 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 
 	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 
-	const getPillTitleItsYou = (player: Player): undefined | string => {
-		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
-	}
-
 	return (
 		<Layout>
 			<Row gutterWidth={8}>
@@ -42,26 +38,7 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 					</Row>
 					<Row gutterWidth={8}>
 						<Col>
-							{
-								props.lobby.game?.players.map((player: Player, index: number) => (
-									<Box mb={2} key={player.id}>
-										<div className="flex">
-											<div className="flex-1 pr-2">
-												<UserEtiquette
-													player={player}
-													color='secondary'
-													disabled={index > 0}
-													rPillTitle={getPillTitleItsYou(player)} />
-											</div>
-											<div className="flex h-full">
-												<div className="m-auto">
-													<NumberPill n={index + 1} />
-												</div>
-											</div>
-										</div>
-									</Box>
-								))
-							}
+							<Players players={props?.lobby?.game?.losers} winner={props?.lobby?.game?.winner} />
 						</Col>
 					</Row>
 				</Col>
@@ -84,6 +61,47 @@ export default function EndGameScreen(props: EndGameScreenProps): JSX.Element {
 				</Col>
 			</Row>
 		</Layout>
+	)
+}
+
+function Players(props: { players: Player[], winner: Player }): JSX.Element {
+	const { t } = useTranslation();
+
+	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
+
+	const [playersList, setPlayersList] = useState<Player[]>([]);
+
+	const getPillTitleItsYou = (player: Player): undefined | string => {
+		return (player.id === playerId) ? t('gameView.itsYouLabel') : undefined;
+	}
+
+	useEffect(() => {
+		setPlayersList([props.winner, ...props.players]);
+	}, [props.players, props.winner])
+
+	return (
+		<>
+			{
+				playersList.map((player: Player, index: number) => (
+					<Box mb={2} key={player.id}>
+						<div className="flex">
+							<div className="flex-1 pr-2">
+								<UserEtiquette
+									player={player}
+									color='secondary'
+									disabled={index > 0}
+									rPillTitle={getPillTitleItsYou(player)} />
+							</div>
+							<div className="flex h-full">
+								<div className="m-auto">
+									<NumberPill n={index + 1} />
+								</div>
+							</div>
+						</div>
+					</Box>
+				))
+			}
+		</>
 	)
 }
 
