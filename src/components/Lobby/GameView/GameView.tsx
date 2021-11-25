@@ -110,6 +110,15 @@ interface PlayerViewOrSpectatorViewProps {
 
 function PlayerViewOrSpectatorView(props: PlayerViewOrSpectatorViewProps): JSX.Element {
 	return props.isSpectator ? (
+		<SpectatorView
+			lobby={props.lobby}
+			spectators={props.spectators}
+			currentPlayer={props.currentPlayer}
+			leaveGame={props.leaveGame}
+			engine={props.engine}
+			setEngine={props.setEngine}
+		/>
+	) : (
 		<PlayerView
 			lobby={props.lobby}
 			socket={props.socket}
@@ -117,15 +126,6 @@ function PlayerViewOrSpectatorView(props: PlayerViewOrSpectatorViewProps): JSX.E
 			updateLobby={props.updateLobby}
 			leaveGame={props.leaveGame}
 			spectators={props.spectators}
-			engine={props.engine}
-			setEngine={props.setEngine}
-		/>
-	) : (
-		<SpectatorView
-			lobby={props.lobby}
-			spectators={props.spectators}
-			currentPlayer={props.currentPlayer}
-			leaveGame={props.leaveGame}
 			engine={props.engine}
 			setEngine={props.setEngine}
 		/>

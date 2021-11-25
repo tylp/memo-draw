@@ -43,29 +43,29 @@ export default function SpectatorView(props: SpectatorViewProps): JSX.Element {
 								/>
 							</div>
 							<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
-								<div className='flex flex-row justify-between'>
-									<div className='h-16'>
+								<div className='flex flex-row justify-between mb-4'>
+									<div className='h-12'>
 										<Countdown limitDate={dayjs(props.lobby.game.limitDate)} />
 									</div>
-									<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
-										<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
+									<div className='flex flex-row'>
+										<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center mr-2">
+											<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
+										</div>
+										<div className='h-12'>
+											<Button
+												color='primary'
+												size='medium'
+												fullHeight
+												fullWidth
+												icon={faArrowRight}
+												onClick={props.leaveGame}>
+												{t('lobbyView.leaveBtnLabel')}
+											</Button>
+										</div>
 									</div>
 								</div>
 								<div>
 									<Canvas engine={props.engine} setEngine={props.setEngine} />
-								</div>
-							</div>
-							<div className='flex flex-col justify-between flex-1 w-52'>
-								<div className='h-12'>
-									<Button
-										color='primary'
-										size='medium'
-										fullHeight
-										fullWidth
-										icon={faArrowRight}
-										onClick={props.leaveGame}>
-										{t('lobbyView.leaveBtnLabel')}
-									</Button>
 								</div>
 							</div>
 						</div>
