@@ -7,6 +7,8 @@ import AvatarFactory from '../../../../server/factories/AvatarFactory';
 import SelectButton from './SelectButton/SelectButton';
 import Box from '../Box/Box';
 import ProfileValidatorService from '../../../../server/services/ProfileValidatorService';
+import { faRandom } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ProfileSelectorSpec {
 	profile: IProfile;
@@ -58,7 +60,21 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 						<SelectButton<FaceType> direction="left" name={t('profileSelector.face')} value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)} />
 					</div>
 
-					<div style={{ maxHeight: '180px', maxWidth: '180px' }} className="flex flex-grow mx-auto px-4">
+					<div style={{ maxHeight: '180px', maxWidth: '180px' }} className="flex flex-grow mx-auto px-4 relative">
+						<div style={{ position: 'absolute', right: 20, bottom: 0, zIndex: 1 }}>
+							<button
+								onClick={randomizeAvatar}
+								style={{
+									border: 'none',
+									height: '40px',
+									width: '40px',
+									borderRadius: '50%',
+									color: 'white',
+								}}
+								className="bg-pink-dark-pink">
+								<FontAwesomeIcon icon={faRandom} />
+							</button>
+						</div>
 						<Avatar avatar={props.profile.avatar} />
 					</div>
 
