@@ -1,24 +1,9 @@
-import React, { ReactNode, useEffect, useState, useCallback } from 'react';
-import { debounce } from 'lodash';
+import React, { ReactNode } from 'react';
 import Logo from '../Logo/Logo';
 import Box from '../Box/Box';
 
 interface WhiteBorderProps {
 	children: ReactNode;
-}
-
-function useDebounce(callback, delay) {
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const debouncedFn = useCallback(
-		debounce((...args) => callback(...args), delay),
-		[delay],
-	);
-	return debouncedFn;
-}
-
-function getCurrentWindowDimensions(): {width: number; height: number} {
-	const {innerWidth: width, innerHeight: height} = window;
-	return {width, height}
 }
 
 function WhiteBorder(props: WhiteBorderProps): JSX.Element {
@@ -49,27 +34,6 @@ interface LayoutSpec {
 
 
 export default function Layout({ children }: LayoutSpec): JSX.Element {
-	const MAX_DIMENSION = {width: 1920, height: 1080}
-
-	const [dimensionRatio, setDimensionRatio] = useState(getCurrentWindowDimensions().width / MAX_DIMENSION.width);
-
-	const debounceResizeWithRatio = useDebounce((nextRatio) => setDimensionRatio(nextRatio), 100);
-
-	function handleResize() {
-		const widthRatio = getCurrentWindowDimensions().width / MAX_DIMENSION.width;
-		const heightRatio = getCurrentWindowDimensions().height / MAX_DIMENSION.height;
-		let nextRatio = 1
-
-		nextRatio = (widthRatio > heightRatio ? heightRatio : widthRatio)
-
-		debounceResizeWithRatio(nextRatio)
-	}
-
-	useEffect(() => {
-		handleResize();
-		window.addEventListener('resize', handleResize);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	return (
 		<>
@@ -77,11 +41,7 @@ export default function Layout({ children }: LayoutSpec): JSX.Element {
 				<p>Working on a mobile version</p>
 			</div>
 			<div className="flex flex-col justify-center items-center w-screen h-screen min-h-screen min-w-full">
-				<div className=""
-					style={{
-						transform: `scale(${dimensionRatio})`,
-					}}>
-
+				<div>
 					<Box py={4}>
 						<div className='relative'
 							style={{
