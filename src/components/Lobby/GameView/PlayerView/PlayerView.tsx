@@ -89,7 +89,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}
 
 	const getVoteTargets = (): Player[] => {
-		console.log((new VoteTargets(props.lobby, props.currentPlayer)).get())
 		return (new VoteTargets(props.lobby, props.currentPlayer)).get();
 	}
 
