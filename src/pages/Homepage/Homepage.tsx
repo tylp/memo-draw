@@ -36,22 +36,21 @@ export default function Homepage(): JSX.Element {
 	}, [socket])
 
 	useEffect(() => {
-		if (socket) {
-			setIsLoading(false);
-			if (profileStorage) {
-				setProfile(profileStorage);
-			} else {
-				setProfile({
-					username: '',
-					avatar: {
-						bodyColor: BodyColor.Yellow,
-						bodyType: BodyType.Pencil,
-						faceType: FaceType.Happy,
-						rubberColor: RubberColor.Pink,
-					},
-				})
-			}
+		if (!socket) return;
+		setIsLoading(false);
+		if (profileStorage) {
+			setProfile(profileStorage);
+			return;
 		}
+		setProfile({
+			username: '',
+			avatar: {
+				bodyColor: BodyColor.Yellow,
+				bodyType: BodyType.Pencil,
+				faceType: FaceType.Happy,
+				rubberColor: RubberColor.Pink,
+			},
+		})
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {
