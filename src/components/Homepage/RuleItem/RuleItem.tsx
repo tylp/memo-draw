@@ -1,5 +1,4 @@
-import React from 'react'
-import { Col, Row } from 'react-grid-system';
+import React, { CSSProperties } from 'react'
 
 interface RuleItemSpec {
 	id: number,
@@ -7,21 +6,31 @@ interface RuleItemSpec {
 	content?: string,
 }
 
+const roudNumberStyle: CSSProperties = {
+	width: '3rem',
+	height: '3rem',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	background: 'white',
+	borderRadius: '50%',
+	lineHeight: 0,
+	fontSize: '32px',
+}
+
 const RuleItem = (props: RuleItemSpec): JSX.Element => {
 	return (
-		<Row>
-			<Col>
-				<div className="w-full flex">
-					<div className="items-center text-center bg-white-white rounded-full h-12 w-12">
-						<div className="text-blue-blue font-black text-4xl">{props.id}</div>
-					</div>
-					<div className="w-full bg-blue-darker-blue rounded-md p-3 ml-4">
-						<div className="text-lg font-semibold text-white-white mb-1">{props.title}</div>
-						<div className="text-sm text-white-white">{props.content}</div>
-					</div>
+		<div className="w-full flex">
+			<div>
+				<div style={roudNumberStyle} className="text-blue-blue font-black">
+					{props.id}
 				</div>
-			</Col>
-		</Row>
+			</div>
+			<div className="w-full bg-blue-darker-blue rounded-md p-3 ml-4">
+				<div className="text-lg font-semibold text-white-white mb-1">{props.title}</div>
+				<div className="text-sm text-white-white">{props.content}</div>
+			</div>
+		</div>
 	)
 }
 
