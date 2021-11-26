@@ -2,13 +2,13 @@ import { Lobby, Player } from '../../../server/classes';
 
 export default class VoteTargets {
 	protected losers: Player[];
-	protected self: Player;
+	protected selfId: Player['id'];
 	protected voteTargets: Player[];
 
-	constructor(lobby: Lobby, self: Player) {
-		this.voteTargets = lobby?.game?.players;
+	constructor(lobby: Lobby, selfId: Player['id']) {
+		this.voteTargets = [...lobby?.game?.players];
 		this.losers = lobby?.game?.losers;
-		this.self = self;
+		this.selfId = selfId;
 		this.calculateVoteTargets();
 	}
 
@@ -17,7 +17,7 @@ export default class VoteTargets {
 	}
 
 	protected calculateVoteTargets(): void {
-		if (this.self) {
+		if (this.selfId) {
 			this.removeSelfFromTargets();
 		}
 
@@ -30,7 +30,7 @@ export default class VoteTargets {
 	}
 
 	protected getIndexOfSelf(): number | undefined {
-		return this.voteTargets.findIndex((p: Player) => p.id === this.self.id);
+		return this.voteTargets.findIndex((p: Player) => p.id === this.selfId);
 	}
 
 	protected removeLosersFromTargets(): void {
