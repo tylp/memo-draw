@@ -6,7 +6,7 @@ export default class VoteTargets {
 	protected voteTargets: Player[];
 
 	constructor(lobby: Lobby, self: Player) {
-		this.voteTargets = lobby?.game?.players;
+		this.voteTargets = [...lobby?.game?.players];
 		this.losers = lobby?.game?.losers;
 		this.self = self;
 		this.calculateVoteTargets();
