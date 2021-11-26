@@ -15,7 +15,6 @@ interface ShapeInfo {
 
 interface btnToolBoxProps {
 	selected?: boolean,
-	key?: string,
 	onClick?: () => void,
 	icon: IconProp,
 	color: 'blue' | 'yellow',
@@ -34,7 +33,7 @@ function BtnToolBox(props: btnToolBoxProps): JSX.Element {
 	}, [props.color, props.selected]);
 
 	return (
-		<button className={`rounded-lg border-2 border-${color}`} key={props.key} onClick={props.onClick}>
+		<button className={`rounded-lg border-2 border-${color}`} onClick={props.onClick}>
 			<Box ml={3.5} mr={3.5} mt={2} mb={2}>
 				<span className={`text-2xl text-${color}`}>
 					<FontAwesomeIcon icon={props.icon} />
@@ -67,11 +66,13 @@ function ShapesSelection(): JSX.Element {
 
 	return (
 		<>
-			{shapes.map((shape) => {
-				return (
-					<BtnToolBox selected={shape.type == toolNameSelected} color='yellow' icon={shape.icon} key={shape.name} onClick={() => { setShape(shape.type) }} />
-				);
-			})}
+			{
+				shapes.map((shape) => {
+					return (
+						<BtnToolBox selected={shape.type == toolNameSelected} color='yellow' icon={shape.icon} key={shape.name} onClick={() => { setShape(shape.type) }} />
+					);
+				})
+			}
 		</>
 	);
 }

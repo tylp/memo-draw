@@ -48,7 +48,7 @@ export default function GameView(props: GameProps): JSX.Element {
 	}, [engine])
 
 	const updateDrawingPermission = () => {
-		drawState.drawPermission = currentPlayer.id === playerId ? DrawPermission.Master : DrawPermission.Slave;
+		drawState.drawPermission = currentPlayer?.id === playerId ? DrawPermission.Master : DrawPermission.Slave;
 	}
 
 	useEffect(() => {

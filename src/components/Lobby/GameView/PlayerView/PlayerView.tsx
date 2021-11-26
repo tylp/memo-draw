@@ -89,7 +89,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}
 
 	const getVoteTargets = (): Player[] => {
-		return (new VoteTargets(props.lobby, playerId)).get();
+		return (new VoteTargets(props.lobby, props.currentPlayer.id)).get();
 	}
 
 	return (
