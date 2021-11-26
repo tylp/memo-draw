@@ -10,6 +10,7 @@ import { YesOrNo } from '../../../../../server/classes/Votes/YesNoVote';
 import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
 import SocketEventEmitter from '../../../../services/SocketEventEmitter';
+import VoteTargets from '../../../../services/VoteTargets/VoteTargets';
 import { Box, Button, Layout, Modal } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
 import Canvas from '../Canvas/Canvas';
@@ -70,13 +71,13 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}, [props.socket])
 
 	const nextDrawing = () => {
-		if (playerId === props.currentPlayer.id) {
+		if (playerId === props.currentPlayer?.id) {
 			SocketEventEmitter.nextDrawing(props.socket);
 		}
 	}
 
 	const startVote = () => {
-		if (playerId !== props.currentPlayer.id && selectedPlayer) {
+		if (playerId !== props.currentPlayer?.id && selectedPlayer) {
 			SocketEventEmitter.startVote(props.socket, selectedPlayer);
 			setIsStartVoteModalVisible(false);
 		}
@@ -85,6 +86,11 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	const vote = (vote: YesOrNo) => {
 		setCurrentVote(vote);
 		SocketEventEmitter.vote(props.socket, vote);
+	}
+
+	const getVoteTargets = (): Player[] => {
+		console.log((new VoteTargets(props.lobby, props.currentPlayer)).get())
+		return (new VoteTargets(props.lobby, props.currentPlayer)).get();
 	}
 
 	return (
@@ -97,7 +103,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				title={t('gameView.startVote')}
 			>
 				<Box mb={2} className={'w-full'}>
-					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+					<PlayerSelector list={getVoteTargets()} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
 			<Modal
@@ -181,7 +187,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						</div>
 						<div className='h-20'>
 							<StartVoteOrSendDrawing
-								showDrawingButton={playerId === props.currentPlayer.id}
+								showDrawingButton={playerId === props.currentPlayer?.id}
 								disableDrawingButton={hasLost}
 								onClickDrawingButton={nextDrawing}
 								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}

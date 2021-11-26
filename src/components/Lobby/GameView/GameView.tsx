@@ -119,8 +119,9 @@ function PlayerViewOrSpectatorView(props: PlayerViewOrSpectatorViewProps): JSX.E
 	const [isSpectator, setIsSpectator] = useState<boolean>();
 
 	useEffect(() => {
-		if (props.spectators && playerId)
+		if (props.spectators && playerId) {
 			setIsSpectator(props.spectators.map(e => e.id).includes(playerId));
+		}
 	}, [playerId, props.spectators])
 
 	return isSpectator ? (
