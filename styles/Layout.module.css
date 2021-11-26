@@ -1,0 +1,42 @@
+.main {
+  padding: 70px 40px 20px 40px;
+}
+
+.container {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  width: 850px;
+  min-height: 75vh;
+  border: 5px solid rgba(255,255,255, 0.2);
+  border-radius: 6px;
+}
+
+.logo {
+  top: -65px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: absolute;
+  width: 220px;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    width: 95vw;
+    min-height: 80vh;
+  }
+  
+  .logo {
+    width: 175px;
+  }
+
+  .main {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
