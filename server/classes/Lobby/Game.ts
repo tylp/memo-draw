@@ -116,6 +116,13 @@ export default class Game {
 	}
 
 	protected getStillPlaying(): Player[] {
-		return this.players.filter(e => _.difference<Player['id']>(this.players.map(e => e.id), this.losers.map(e => e.id)).includes(e.id));
+		const idsOfPlayersStillPlaying = this.getIdsOfPlayersStillPlaying();
+		return this.players.filter(e => idsOfPlayersStillPlaying.includes(e.id));
+	}
+
+	protected getIdsOfPlayersStillPlaying(): Player['id'][] {
+		const idsOfPlayers = this.players.map(e => e.id);
+		const idsOfLosers = this.losers.map(e => e.id);
+		return _.difference<Player['id']>(idsOfPlayers, idsOfLosers)
 	}
 }
