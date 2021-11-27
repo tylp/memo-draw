@@ -108,7 +108,7 @@ export default class Game {
 		return this.getStillPlaying()[0];
 	}
 
-	protected getStillPlaying(): Player[] {
+	public getStillPlaying(): Player[] {
 		const idsOfPlayersStillPlaying = this.getIdsOfPlayersStillPlaying();
 		return this.players.filter(e => idsOfPlayersStillPlaying.includes(e.id));
 	}

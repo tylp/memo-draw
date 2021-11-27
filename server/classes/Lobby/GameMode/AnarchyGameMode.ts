@@ -14,7 +14,7 @@ export default class AnarchyGameMode extends GameMode {
 	}
 
 	protected getRandomPlayer(game: Game): Player {
-		const randomIndex = random(game.players.length - 1);
-		return game.players[randomIndex];
+		const randomIndex = random(game.getStillPlaying().length - 1);
+		return game.getStillPlaying()[randomIndex];
 	}
 }
