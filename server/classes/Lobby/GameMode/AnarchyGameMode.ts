@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
+import { random } from 'lodash';
 import type { Player } from '../..';
 import type Game from '../Game';
 import GameMode from './GameMode';
@@ -9,6 +10,11 @@ export default class AnarchyGameMode extends GameMode {
 	}
 
 	public getNextPlayer(game: Game): Player {
-		return game.players[0];
+		return this.getRandomPlayer(game);
+	}
+
+	protected getRandomPlayer(game: Game): Player {
+		const randomIndex = random(game.players.length - 1);
+		return game.players[randomIndex];
 	}
 }

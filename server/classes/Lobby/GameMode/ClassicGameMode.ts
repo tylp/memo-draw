@@ -29,12 +29,6 @@ export default class ClassicGameMode extends GameMode {
 			this.currentPlayerIndex++;
 		}
 
-		let currentPlayer = game.players[this.currentPlayerIndex];
-
-		if (game.hasLost(currentPlayer)) {
-			currentPlayer = this.getNextPlayer(game);
-		}
-
-		return currentPlayer;
+		return game.players[this.currentPlayerIndex];
 	}
 }

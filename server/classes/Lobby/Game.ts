@@ -49,7 +49,12 @@ export default class Game {
 	}
 
 	public nextPlayer(): void {
-		this.currentPlayer = this.gameMode.getNextPlayer(this);
+		this.currentDrawingIndex = 0;
+		let newCurrentPlayer = this.gameMode.getNextPlayer(this);
+		if (this.hasLost(newCurrentPlayer)) {
+			newCurrentPlayer = this.gameMode.getNextPlayer(this);
+		}
+		this.currentPlayer = newCurrentPlayer
 	}
 
 	public hasLost(player: Player): boolean {
