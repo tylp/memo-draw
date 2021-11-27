@@ -84,6 +84,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}
 
 	const vote = (vote: YesOrNo) => {
+		if (currentVote === vote) return;
+
 		setCurrentVote(vote);
 		SocketEventEmitter.vote(props.socket, vote);
 	}
