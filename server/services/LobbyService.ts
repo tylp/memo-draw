@@ -64,11 +64,12 @@ export default class LobbyService {
 		return lobbyOfCurrentPlayer?.remove(playerId);
 	}
 
-	public static startVote({ sessionId }: PlayerIdentifiers, selectedPlayer: Player): Lobby {
+	public static startVote({ playerId, sessionId }: PlayerIdentifiers, selectedPlayer: Player): Lobby {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 
 		if (lobbyOfCurrentPlayer && lobbyOfCurrentPlayer.game) {
 			lobbyOfCurrentPlayer.game.startVote(selectedPlayer);
+			lobbyOfCurrentPlayer.game.playerErrorVoteManager.currentVote.vote(playerId, 'yes');
 		}
 
 		return lobbyOfCurrentPlayer;
