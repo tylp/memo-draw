@@ -11,8 +11,6 @@ import { useTranslation } from 'react-i18next';
 import Box from '../../components/Common/Box/Box';
 import { Row, Col } from 'react-grid-system';
 import SocketEventEmitter from '../../services/SocketEventEmitter';
-import EnvVar from '../../services/EnvVar/EnvVar';
-import EnvVarName from '../../services/EnvVar/EnvVarName';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
