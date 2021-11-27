@@ -41,7 +41,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
 	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
-
+	const [isCantStartGameAloneModalVisible, setIsCantStartGameAloneModalVisible] = useState(false);
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
@@ -77,6 +77,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 	}
 
+	const tryToStartGame = () => {
+		if (props.lobby.players.length > 1 || process.env.NODE_ENV === 'development') {
+			startGame();
+		} else {
+			setIsCantStartGameAloneModalVisible(true);
+		}
+	}
+
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
 			SocketEventEmitter.startGame(socket, gameMode);
@@ -95,6 +103,13 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<p className="my-4 text-blueGray-500 text-lg leading-relaxed">
 					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid} onEnter={handleSaveProfile}></ProfileSelector>
 				</p>
+			</Modal>
+			<Modal
+				visible={isCantStartGameAloneModalVisible}
+				onValidate={() => setIsCantStartGameAloneModalVisible(false)}
+				showCancel={false}
+				title={t('lobbyView.cantStartGameAlone')}
+			>
 			</Modal>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-row justify-center align-middle">
@@ -145,7 +160,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 						props.lobby.hostPlayerId === playerId && (
 							<Box className="self-center" ml={2}>
 								<Button
-									color='primary' size='small' onClick={startGame}
+									color='primary' size='small' onClick={tryToStartGame}
 									icon={faPlay}
 								>
 									{t('lobbyView.startBtnLabel')}

@@ -65,6 +65,7 @@ const resources = {
 				'leaveBtnLabel': 'Leave lobby',
 				'gameTitle': 'Game',
 				'startBtnLabel': 'Start',
+				'cantStartGameAlone': 'You can\'t start the game by yourself!',
 			},
 			'userCard': {
 				'badge': 'It\'s you',
