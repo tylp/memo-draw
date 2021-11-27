@@ -9,6 +9,7 @@ export default class Game {
 	id: string;
 	hostPlayerId: string;
 	players: Array<Player>;
+	currentPlayer: Player;
 	losers: Array<Player> = [];
 	gameMode: GameMode;
 	hasEnded = false;
@@ -16,7 +17,6 @@ export default class Game {
 
 	currentDrawingIndex = 0;
 	currentNumberOfDrawings = 0;
-	currentPlayerIndex = 0;
 
 	limitDate: Dayjs;
 	playerErrorVoteManager = new PlayerErrorVoteManager();
@@ -26,6 +26,7 @@ export default class Game {
 		this.hostPlayerId = lobby.hostPlayerId;
 		this.players = shuffle(lobby.players);
 		this.gameMode = gameMode;
+		this.currentPlayer = this.players[0];
 		this.refreshLimitDate();
 	}
 
@@ -34,7 +35,7 @@ export default class Game {
 	}
 
 	public isTurnOf(player: Player): boolean {
-		return this.players[this.currentPlayerIndex].id === player.id;
+		return this.currentPlayer?.id === player.id;
 	}
 
 	public nextDrawing(): void {
@@ -48,24 +49,11 @@ export default class Game {
 	}
 
 	public nextPlayer(): void {
-		this.currentDrawingIndex = 0;
-		if (this.currentPlayerIndex >= this.players.length - 1) {
-			this.currentPlayerIndex = 0;
-		} else {
-			this.currentPlayerIndex++;
-		}
-
-		if (this.hasLost(this.getCurrentPlayer())) {
-			this.nextPlayer();
-		}
+		this.currentPlayer = this.gameMode.getNextPlayer(this);
 	}
 
 	public hasLost(player: Player): boolean {
 		return this.losers.map(e => e.id).includes(player.id);
-	}
-
-	protected getCurrentPlayer(): Player {
-		return this.players[this.currentPlayerIndex];
 	}
 
 	public startVote(selectedPlayer: Player): void {
@@ -97,7 +85,7 @@ export default class Game {
 	}
 
 	protected skipPlayerIfNecessary(): void {
-		if (this.playerErrorVoteManager.selectedPlayer.id === this.getCurrentPlayer().id) {
+		if (this.playerErrorVoteManager.selectedPlayer.id === this.currentPlayer.id) {
 			this.nextPlayer();
 		}
 	}
