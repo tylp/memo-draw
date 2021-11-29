@@ -39,18 +39,6 @@ function SelectionSummary(): JSX.Element {
 			borderRadius: '6rem',
 			marginBottom: '45px',
 		}}>
-			<div style={{
-				backgroundColor: 'black',
-				position: 'absolute',
-				width: '4rem',
-				height: '4rem',
-				borderRadius: '4rem',
-				border: '3px solid rgba(255, 255, 255, .5',
-				bottom: -15,
-				right: -15,
-			}}>
-				{customDrawState.selectedShape}
-			</div>
 		</div>
 	)
 }
