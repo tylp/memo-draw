@@ -105,10 +105,10 @@ export default class Game {
 	}
 
 	protected getWinner(): Player {
-		return this.getStillPlaying()[0];
+		return this.getPlayersStillPlaying()[0];
 	}
 
-	public getStillPlaying(): Player[] {
+	public getPlayersStillPlaying(): Player[] {
 		const idsOfPlayersStillPlaying = this.getIdsOfPlayersStillPlaying();
 		return this.players.filter(e => idsOfPlayersStillPlaying.includes(e.id));
 	}
