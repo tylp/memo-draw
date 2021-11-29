@@ -21,7 +21,7 @@ interface GameProps {
 export default function GameView(props: GameProps): JSX.Element {
 	const [playerId] = useLocalStorage<string>(LocalStorageKey.PlayerId);
 
-	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
+	const [currentPlayer, setCurrentPlayer] = useState<Player>(props.lobby.game.currentPlayer)
 	const [engine, setEngine] = useState<Engine>();
 	const [spectators, setSpectators] = useState<Player[]>([]);
 
@@ -58,7 +58,7 @@ export default function GameView(props: GameProps): JSX.Element {
 
 	useEffect(() => {
 		if (props.lobby.game) {
-			setCurrentPlayer(props.lobby.game.players[props.lobby.game.currentPlayerIndex])
+			setCurrentPlayer(props.lobby.game.currentPlayer)
 		}
 	}, [props.lobby.game])
 
