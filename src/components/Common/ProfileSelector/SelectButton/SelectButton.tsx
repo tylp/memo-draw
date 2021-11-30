@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 interface SelectButtonSpec<T> {
 	name?: string,
@@ -37,7 +37,13 @@ export default function SelectButton<T>(props: SelectButtonSpec<T>): JSX.Element
 		props.setValue(getPreviousValue());
 	}
 
-	const arrowStyle = props.direction === 'left' ? 'fill-current text-white-white' : 'transform rotate-180 fill-current text-white-white';
+	const arrowStyle = useMemo(
+		() => (
+			props.direction === 'left'
+				? 'fill-current text-white-white'
+				: 'transform rotate-180 fill-current text-white-white'
+		), [props.direction],
+	);
 
 	return (
 		<div className="flex flex-col items-center">
@@ -46,10 +52,10 @@ export default function SelectButton<T>(props: SelectButtonSpec<T>): JSX.Element
 				onClick={onClick}
 				className="bg-blue-200 hover:bg-yellow-dark-yellow text-gray-800 font-bold py-1 px-1 rounded-full inline-flex items-center transition duration-300"
 			>
-				<svg 
-				  width="24px"
+				<svg
+					width="24px"
 					height="24px"
-				  viewBox="0 0 32 32"
+					viewBox="0 0 32 32"
 					className={arrowStyle}
 					aria-hidden="true"
 				>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../../server/interfaces/IProfile';
+import IProfile from '../../../server/interfaces/IProfile';
 import { Layout, LoadingFull, SectionTitle, Button, ProfileSelector } from '../../components/Common';
 import { RuleItem } from '../../components/Homepage';
 import { useSocket } from '../../hooks';
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Box from '../../components/Common/Box/Box';
 import { Row, Col } from 'react-grid-system';
 import SocketEventEmitter from '../../services/SocketEventEmitter';
+import ProfileFactory from '../../../server/factories/ProfileFactory';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -42,15 +43,7 @@ export default function Homepage(): JSX.Element {
 			setProfile(profileStorage);
 			return;
 		}
-		setProfile({
-			username: '',
-			avatar: {
-				bodyColor: BodyColor.Yellow,
-				bodyType: BodyType.Pencil,
-				faceType: FaceType.Happy,
-				rubberColor: RubberColor.Pink,
-			},
-		})
+		setProfile(ProfileFactory.create())
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {

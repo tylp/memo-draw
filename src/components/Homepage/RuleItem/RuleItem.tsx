@@ -6,7 +6,7 @@ interface RuleItemSpec {
 	content?: string,
 }
 
-const roudNumberStyle: CSSProperties = {
+const roundNumberStyle: CSSProperties = {
 	width: '3rem',
 	height: '3rem',
 	display: 'flex',
@@ -22,7 +22,7 @@ const RuleItem = (props: RuleItemSpec): JSX.Element => {
 	return (
 		<div className="w-full flex">
 			<div>
-				<div style={roudNumberStyle} className="text-blue-blue font-black">
+				<div style={roundNumberStyle} className="text-blue-blue font-black">
 					{props.id}
 				</div>
 			</div>
