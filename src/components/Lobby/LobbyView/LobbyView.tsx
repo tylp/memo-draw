@@ -97,32 +97,32 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				</p>
 			</Modal>
 			<div className="flex flex-col justify-center">
-				<div className="flex flex-row justify-center align-middle">
-					<Box mt={6} mb={6}>
+				<div className="my-6 flex flex-col md:flex-row justify-center md:items-center  items:start flex-wrap">
+					<div className="mb-4 md:mb-0">
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
-					</Box>
+					</div>
 					<Divider />
-					<Box mr={2} className="self-center">
-						<Button color='secondary' size='small'
+					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
+						<Button fullWidth color='secondary' size='small'
 							onClick={copyLinkToClipboard}
 							icon={faLink}>
 							{t('lobbyView.inviteBtnLabel')}
 						</Button>
-					</Box>
-					<Box mr={2} className="self-center">
-						<Button color='secondary' size='small'
+					</div>
+					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
+						<Button fullWidth color='secondary' size='small'
 							onClick={() => setIsEditProfileVisible(true)}
 							icon={faEdit}>
 							{t('lobbyView.editProfileBtnLabel')}
 						</Button>
-					</Box>
-					<Box className="self-center">
-						<Button color='secondary' size='small'
+					</div>
+					<div className="w-full md:w-auto">
+						<Button fullWidth color='secondary' size='small'
 							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
 						</Button>
-					</Box>
+					</div>
 				</div>
 				<div className="flex flex-row items-center">
 					<Carousel>
@@ -133,10 +133,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 						))}
 					</Carousel>
 				</div>
-				<div className="flex flex-row align-middle">
-					<Box mt={6} mb={6}>
-						<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
-					</Box>
+				<div className="mt-6 mb-8 flex flex-row align-middle justify-between">
+					<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
 					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
 					{
