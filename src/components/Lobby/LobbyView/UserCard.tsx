@@ -27,34 +27,38 @@ export default function UserCard(props: UserCardSpec): JSX.Element {
 	}
 
 	return (
-		<div className="bg-blue-darker-blue h-40 w-32 rounded-md m-2">
-			<div className="w-full relative -top-3">
-				<div className="flex flex-row">
-					{props.player.id === props.currentPlayerId ?
-						<div className="absolute -left-4 pl-1 pr-1 m-0 h-5 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">{t('userCard.badge')}</div>
-						:
-						''
-					}
-					{props.creatorId === props.player.id ?
-						<div className="absolute left-1/2 transform -translate-x-1/2  left-px-20 top-3 rounded-full w-6 h-6 text-yellow-light-yellow text-center">
+		<div className="bg-blue-darker-blue h-40 w-40 rounded-md m-2">
+			<div className="relative">
+				{props.player.id === props.currentPlayerId &&
+					<div style={{ top: '-10px', left: -15 }} className="absolute px-2 rounded-lg transform -rotate-12 bg-pink-dark-pink text-sm font-rubik-bold text-white-white">
+						{t('userCard.badge')}
+					</div>
+				}
+				{(isCreator && props.player.id !== props.creatorId) &&
+					<div
+						style={{ top: '-10px', right: 10 }}
+						onClick={() => kickPlayer(props.player)}
+						className="absolute cursor-pointer rounded-full w-6 h-6 bg-pink-dark-pink hover:bg-pink-light-pink font-bold text-white-white text-center"
+					>
+						<FontAwesomeIcon icon={faTrash} />
+					</div>
+				}
+			</div>
+			<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+				<div style={{ position: 'relative' }}>
+					{props.creatorId === props.player.id &&
+						<div style={{ left: 0, right: 0, textAlign: 'center', top: '-20px' }} className="absolute text-yellow-light-yellow">
 							<FontAwesomeIcon icon={faCrown} />
 						</div>
-						:
-						''
 					}
-					{(isCreator && props.player.id !== props.creatorId) ?
-						<div onClick={() => kickPlayer(props.player)} className="absolute cursor-pointer right-2 rounded-full w-6 h-6 bg-pink-dark-pink hover:bg-pink-light-pink font-bold text-white-white text-center">
-							<FontAwesomeIcon icon={faTrash} />
-						</div>
-						:
-						''
-					}
+					<div className="w-20 mx-auto mb-4">
+						<Avatar avatar={props.player.profile.avatar} />
+					</div>
+					<div className="text-center text-white-white font-bold text-sm text-start leading-4 pt-0 font-rubik-bold">
+						{props.player.profile.username}
+					</div>
 				</div>
 			</div>
-			<div className="w-full pl-5 pr-5 pt-4 pb-1">
-				<Avatar avatar={props.player.profile.avatar} />
-			</div>
-			<div className="text-center text-white-white font-bold text-sm text-start leading-4 pt-0 font-rubik-bold">{props.player.profile.username}</div>
 		</div>
 	)
 }

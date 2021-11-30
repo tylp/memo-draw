@@ -18,7 +18,7 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 	return (
 		<Row>
 			<Col>
-				<div className="pt-3 pb-3 pl-3 pr-3 h-auto w-full bg-blue-darker-blue rounded-md">
+				<div className="p-5 w-full bg-blue-darker-blue rounded-md">
 					<Row>
 						<Col>
 							<div className="flex flex-row justify-between">
@@ -27,7 +27,7 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 							</div>
 						</Col>
 					</Row>
-					<Row>
+					<Row style={{ marginBottom: '10px' }}>
 						<Col>
 							<p className="leading-tight text-white-white">{props.description}</p>
 						</Col>

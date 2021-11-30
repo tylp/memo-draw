@@ -126,13 +126,11 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				</div>
 				<div className="flex flex-row items-center">
 					<Carousel>
-						{
-							props.lobby?.players.map((player: Player) => (
-								<Box key={player.id} p={2}>
-									<UserCard player={player} currentPlayerId={playerId} creatorId={props.lobby?.hostPlayerId} />
-								</Box>
-							))
-						}
+						{props.lobby?.players.map((player: Player) => (
+							<Box key={player.id}>
+								<UserCard player={player} currentPlayerId={playerId} creatorId={props.lobby?.hostPlayerId} />
+							</Box>
+						))}
 					</Carousel>
 				</div>
 				<div className="flex flex-row align-middle">

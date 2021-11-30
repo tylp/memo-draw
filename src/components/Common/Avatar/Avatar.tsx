@@ -41,7 +41,7 @@ export default function Avatar(props: AvatarSpecs): JSX.Element {
 	}, [props.avatar.bodyColor]);
 
 	return (
-		<div className="w-full rounded-full ring-4 ring-yellow-light-yellow bg-blue-200 relative">
+		<div className="w-full rounded-full p-1 ring-4 ring-yellow-light-yellow bg-blue-200 relative">
 			<AvatarBody playerId={avatarId} type={props.avatar.bodyType} color={props.avatar.bodyColor} />
 			<AvatarFace type={props.avatar.faceType} />
 		</div>
