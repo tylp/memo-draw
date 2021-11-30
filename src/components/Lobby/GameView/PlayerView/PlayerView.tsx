@@ -183,7 +183,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								)
 							}
 						</div>
-						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
+						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center w-36 mt-4 mb-4'>
 							<RightToolBox />
 						</div>
 						<div className='h-20'>
