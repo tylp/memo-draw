@@ -54,9 +54,13 @@ function ColorSelection(): JSX.Element {
 		<div style={{ marginBottom: '15px' }}>
 			{colors.map((color) => (
 				<button onClick={() => setColor(color)} style={{ margin: '5px' }} key={color.toRgb()}>
-					<svg width="35" height="35">
-						<rect fill={color.toRgb()} x="0" y="0" width="35" height="35" />
-					</svg>
+					<div className='' style={{
+						width: '35px',
+						height: '35px',
+						borderRadius: '10px',
+						backgroundColor: color.toRgb(),
+					}}>
+					</div>
 				</button >
 			))}
 		</div>
@@ -81,7 +85,7 @@ function ThicknessSlider(): JSX.Element {
 	return (
 		<div style={{ marginBottom: '15px' }}>
 			<h5>Thickness</h5>
-			<input value={range} min="10" max="100" onChange={setThickness} type="range"></input>
+			<input value={range} min="10" max="100" step="30" onChange={setThickness} type="range"></input>
 		</div>
 	);
 }
@@ -104,7 +108,7 @@ function OpacitySlider(): JSX.Element {
 	return (
 		<div>
 			<h5>Opacity</h5>
-			<input value={range} min="10" max="100" onChange={setOpacity} type="range"></input>
+			<input value={range} min="10" max="100" step="30" onChange={setOpacity} type="range"></input>
 		</div>
 	);
 }
