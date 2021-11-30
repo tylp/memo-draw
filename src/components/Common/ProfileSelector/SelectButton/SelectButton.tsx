@@ -46,7 +46,7 @@ export default function SelectButton<T>(props: SelectButtonSpec<T>): JSX.Element
 	);
 
 	return (
-		<div className="flex flex-col items-center">
+		<div className="flex flex-col items-center mb-2">
 			<p className="text-md text-white-white">{props.name}</p>
 			<button
 				onClick={onClick}

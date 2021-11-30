@@ -53,14 +53,14 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 		<div>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2">
 				<Title>{t('profileSelector.title')}</Title>
-				<div className=" flex items-center">
+				<div className=" flex items-center mb-7">
 					<div className="flex flex-col justify-between">
 						<SelectButton<RubberColor> direction="left" name={t('profileSelector.eraser')} value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)} />
 						<SelectButton<BodyColor> direction="left" name={t('profileSelector.color')} value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)} />
 						<SelectButton<FaceType> direction="left" name={t('profileSelector.face')} value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)} />
 					</div>
 
-					<div style={{ maxHeight: '180px', maxWidth: '180px' }} className="flex flex-grow mx-auto px-4 relative">
+					<div style={{ maxHeight: '190px', maxWidth: '190px' }} className="flex flex-grow mx-auto px-4 relative">
 						<div style={{ position: 'absolute', right: 20, bottom: 0, zIndex: 1 }}>
 							<button
 								onClick={randomizeAvatar}

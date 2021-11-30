@@ -64,23 +64,23 @@ export default function Homepage(): JSX.Element {
 			<LoadingFull />
 		) : (
 			<Layout>
-				<Row>
+				<Row className="mt-4 md:mt-12" gutterWidth={80}>
 					<Col md={6}>
-						<Box mt={6} mb={6}>
+						<Box mb={6}>
 							<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
 						</Box>
-						<Box mb={4}>
+						<Box mb={5}>
 							<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
 						</Box>
-						<Box mb={4}>
+						<Box mb={5}>
 							<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
 						</Box>
 						<Box>
 							<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
 						</Box>
 					</Col>
-					<Col md={6}>
-						<Box mt={6} mb={6}>
+					<Col md={6} className='mt-12 md:mt-0'>
+						<Box mb={6}>
 							<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
 						</Box>
 						<ProfileSelector
@@ -89,9 +89,9 @@ export default function Homepage(): JSX.Element {
 							setIsProfileValid={setIsStartEnabled}
 							onEnter={handleStart}
 						/>
-						<Box mt={2}>
+						<div style={{ width: '250px' }} className="mt-6 mx-auto">
 							<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
-						</Box>
+						</div>
 					</Col>
 				</Row>
 			</Layout>
