@@ -7,8 +7,11 @@
   margin-bottom: 80px;
   width: 850px;
   min-height: 75vh;
-  border: 5px solid rgba(255,255,255, 0.2);
+  border-bottom: 6px solid rgba(255,255,255, 0.15);
+  border-right: 6px solid rgba(255,255,255, 0.15);
+  border-left: 6px solid rgba(255,255,255, 0.15);
   border-radius: 6px;
+  position: relative;
 }
 
 .logo {
@@ -19,9 +22,29 @@
   width: 220px;
 }
 
+.border-top-left, .border-top-right  {
+  position: absolute;
+  border-bottom: 6px solid rgba(255,255,255, 0.15);
+  width: 30%;
+  border-radius: 6px;
+}
+
+.border-top-left {
+  border-radius: 0 6px 6px 0;
+}
+
+.border-top-right {
+  right: 0;
+  border-radius: 6px 0 0 6px;
+}
+
 @media screen and (max-width: 1200px) {
   .container {
     width: 80vw;
+  }
+
+  .border-top-left, .border-top-right  {
+    width: 25%;
   }
 }
 
@@ -38,5 +61,9 @@
   .main {
     padding-left: 15px;
     padding-right: 15px;
+  }
+
+  .border-top-left, .border-top-right  {
+    width: 20%;
   }
 }
