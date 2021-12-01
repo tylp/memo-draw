@@ -1,6 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AlphaColor, Color } from 'memo-draw-engine';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
-import { EngineContext } from './EngineContext';
+import { customShapesInfo, EngineContext } from './EngineContext';
 
 export const colors: Array<Color> = [
 	new Color(0, 0, 0),
@@ -30,26 +31,33 @@ function SelectionSummary(): JSX.Element {
 		customDrawState.opacity * 255,
 	);
 
+	const selectedShapeInfo = customShapesInfo.find(
+		(shapeInfo) => shapeInfo.type === customDrawState.selectedShape,
+	);
+
 	return (
-		<div style={{
+		<div className="hidden lg:block" style={{
 			position: 'relative',
 			background: alphaColor.toRgba(),
-			width: '6rem',
-			height: '6rem',
-			borderRadius: '6rem',
-			marginBottom: '45px',
+			width: '7rem',
+			height: '7rem',
+			borderRadius: '50%',
+			marginBottom: '35px',
+			marginTop: '15px',
 		}}>
-			<div style={{
+			<div className="text-yellow-light-yellow" style={{
 				backgroundColor: 'black',
 				position: 'absolute',
 				width: '4rem',
 				height: '4rem',
 				borderRadius: '4rem',
-				border: '3px solid rgba(255, 255, 255, .5',
 				bottom: -15,
 				right: -15,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
 			}}>
-				{customDrawState.selectedShape}
+				<FontAwesomeIcon size="2x" icon={selectedShapeInfo.icon} />
 			</div>
 		</div>
 	)
@@ -63,15 +71,24 @@ function ColorSelection(): JSX.Element {
 	};
 
 	return (
-		<div style={{ marginBottom: '15px' }}>
+		<div style={{ flexGrow: 1, overflowY: 'auto', display: 'flex', flexWrap: 'wrap', marginBottom: '15px' }}>
 			{colors.map((color) => (
-				<button onClick={() => setColor(color)} style={{ margin: '5px' }} key={color.toRgb()}>
-					<svg width="35" height="35">
-						<rect fill={color.toRgb()} x="0" y="0" width="35" height="35" />
-					</svg>
-				</button >
-			))}
-		</div>
+				<button
+					onClick={() => setColor(color)}
+					className='hover:opacity-70 duration-200'
+					style={{
+						minHeight: '25px',
+						minWidth: '25px',
+						margin: '5px',
+						background: color.toRgb(),
+						flex: '1 1 20%',
+						borderRadius: '2px',
+					}}
+					key={color.toRgb()}
+				/>
+			))
+			}
+		</div >
 	);
 }
 
@@ -91,9 +108,12 @@ function ThicknessSlider(): JSX.Element {
 	};
 
 	return (
-		<div style={{ marginBottom: '15px' }}>
-			<h5>Thickness</h5>
-			<input value={range} min="10" max="100" onChange={setThickness} type="range"></input>
+		<div className="px-2 w-full mb-3">
+			<h5 className="font-semibold text-white-white">Thickness</h5>
+			<input
+				style={{ width: '100%' }}
+				value={range} min="10" max="100"
+				onChange={setThickness} type="range" />
 		</div>
 	);
 }
@@ -110,27 +130,23 @@ function OpacitySlider(): JSX.Element {
 	const setOpacity = (event: ChangeEvent<HTMLInputElement>): void => {
 		const value = Number(event.currentTarget.value);
 		setRange(value);
-		updateDrawState({ opacity: value / 100});
+		updateDrawState({ opacity: value / 100 });
 	};
 
 	return (
-		<div>
-			<h5>Opacity</h5>
-			<input value={range} min="10" max="100" onChange={setOpacity} type="range"></input>
+		<div className="px-2 w-full mb-3">
+			<h5 className="font-semibold text-white-white">Opacity</h5>
+			<input
+				style={{ width: '100%' }}
+				value={range} min="10" max="100"
+				onChange={setOpacity} type="range" />
 		</div>
 	);
 }
 
 export default function RightToolBox(): JSX.Element {
 	return (
-		<div
-			style={{
-				display: 'flex',
-				alignItems: 'center',
-				flexDirection: 'column',
-				padding: '20px 10px',
-			}}
-		>
+		<div className="flex-grow flex flex-col items-center p-3 bg-blue-darker-blue rounded-md">
 			<SelectionSummary />
 			<ColorSelection />
 			<ThicknessSlider />

@@ -32,7 +32,7 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 
 		// Manually update bounds when component is painted
 		// Needed to correctly handle mouse position on canvas
-		onPainted(() => { engine.canvasManager.updateBounds(); });
+		onPainted(() => { 	engine.canvasManager.updateBounds(); });
 	}, [engine])
 
 	useEffect(() => {
@@ -46,15 +46,15 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 			backgroundPosition: 'center',
 			borderRadius: '0.5em',
 			zIndex: 0,
-			width: `${canvasRef.current.width}px`,
-			height: `${canvasRef.current.height}px`,
+			width: '100%',
+			height: '100%',
 		});
 	};
 
 	return (
-		<div>
+		<div style={{width: '100%', aspectRatio: '8/6',  position: 'relative' }}>
 			<div style={backgroundStyle}></div>
-			<canvas style={{ zIndex: 2, position: 'relative' }} width="800" height="600" ref={canvasRef}></canvas>
+			<canvas style={{ zIndex: 2, width: '100%', height: '100%', position: 'absolute' }} ref={canvasRef} />
 		</div>
 	);
 }

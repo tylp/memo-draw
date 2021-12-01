@@ -20,6 +20,8 @@ import PlayersAndSpectators from '../PlayersAndSpectators/PlayersAndSpectators';
 import Countdown from './Countdown/Countdown';
 import PlayerSelector from './PlayerSelector/PlayerSelector'
 
+import styles from '../../../../../styles/GameView.module.css';
+
 interface PlayerViewProps {
 	lobby: Lobby;
 	socket: Socket;
@@ -65,7 +67,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 			props.socket.off('vote-started');
 			props.socket.off('stop-vote');
 		}
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.socket])
 
@@ -88,7 +89,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}
 
 	return (
-		<Layout>
+		<Layout size="large">
 			<Modal
 				visible={isStartVoteModalVisible}
 				onClose={() => setIsStartVoteModalVisible(false)}
@@ -111,11 +112,12 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 					<Col>
 						<div className="flex h-16 mb-2">
 							<Box mr={2} className="flex-1">
-								{
-									props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
-										<UserEtiquette player={props.lobby.game.playerErrorVoteManager.selectedPlayer} color="secondary"></UserEtiquette>
-									)
-								}
+								{props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
+									<UserEtiquette
+										player={props.lobby.game.playerErrorVoteManager.selectedPlayer}
+										color="secondary"
+									/>
+								)}
 							</Box>
 							<div>
 								<Countdown limitDate={dayjs(props.lobby.game.playerErrorVoteManager.voteEndDate)} />
@@ -125,16 +127,31 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				</Row>
 				<Row>
 					<Col>
-						<Button color="primary" selected={currentVote === 'yes'} size="small" fullWidth onClick={() => vote('yes')}>{t('gameView.yes')}</Button>
+						<Button
+							color="primary" size="small"
+							selected={currentVote === 'yes'}
+							fullWidth
+							onClick={() => vote('yes')}
+						>
+							{t('gameView.yes')}
+						</Button>
 					</Col>
 					<Col>
-						<Button color="primary" selected={currentVote === 'no'} size="small" fullWidth onClick={() => vote('no')}>{t('gameView.no')}</Button>
+						<Button
+							color="primary"
+							selected={currentVote === 'no'}
+							size="small"
+							fullWidth
+							onClick={() => vote('no')}
+						>
+							{t('gameView.no')}
+						</Button>
 					</Col>
 				</Row>
 			</Modal>
 			<EngineContextProvider engine={props.engine}>
-				<div className='flex flex-row justify-center'>
-					<div className='flex flex-col flex-1 w-52'>
+				<div style={{ userSelect: 'none' }} className={`mt-6 ${styles['grid-3']}`}>
+					<div className={`${styles['col-gap']} ${styles['player-overflow']}`}>
 						<PlayersAndSpectators
 							players={props.lobby.game?.players}
 							spectators={props.spectators}
@@ -143,43 +160,37 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							currentPlayer={props.currentPlayer}
 						/>
 					</div>
-					<div className='flex flex-col flex-shrink-0 ml-8 mr-8'>
-						<div className='flex flex-row justify-between mb-4'>
-							<div className='h-12'>
+					<div className={styles['col-gap']}>
+						<div className="relative">
+							<div className="absolute top-0 md:-top-11">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
 							</div>
-							<div className="bg-pink-dark-pink rounded-md p-3 h-12 w-24 text-center">
-								<span className="text-lg font-semibold text-white-white">{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}</span>
+							<div style={{ right: '0' }} className="absolute top-0 md:-top-11">
+								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center">
+									<span className="text-lg font-semibold text-white-white">
+										{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}
+									</span>
+								</div>
 							</div>
 						</div>
-						<div>
-							<Canvas engine={props.engine} setEngine={props.setEngine} />
-						</div>
-						<div className='bg-blue-darker-blue rounded-md mt-4 text-lg font-semibold text-white-white text-center'>
-							<BottomToolBox />
-						</div>
+						<Canvas engine={props.engine} setEngine={props.setEngine} />
+						<BottomToolBox />
 					</div>
-					<div className='flex flex-col justify-between flex-1 w-52'>
-						<div className='h-12'>
-							{
-								(hasLost) && (
+					<div className="h-full flex flex-col">
+						<RightToolBox />
+						<div style={{ height: '88px' }} className="flex flex-col">
+							{hasLost && (
+								<div style={{ height: '100%', paddingTop: '12px' }}>
 									<Button
-										color='primary'
-										size='medium'
-										fullHeight
-										fullWidth
+										color='primary' size='medium'
+										fullHeight fullWidth
 										icon={faArrowRight}
 										disabled={!(hasLost || props.spectators.map(e => e.id).includes(playerId))}
 										onClick={props.leaveGame}>
 										{t('lobbyView.leaveBtnLabel')}
 									</Button>
-								)
-							}
-						</div>
-						<div className='bg-blue-darker-blue rounded-md flex-grow text-lg font-semibold text-white-white text-center mt-4 mb-4'>
-							<RightToolBox />
-						</div>
-						<div className='h-20'>
+								</div>
+							)}
 							<StartVoteOrSendDrawing
 								showDrawingButton={playerId === props.currentPlayer.id}
 								disableDrawingButton={hasLost}
@@ -206,27 +217,31 @@ interface StartVoteOrSendDrawingProps {
 function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element {
 	const { t } = useTranslation();
 
-	return props.showDrawingButton ? (
-		<Button
-			color='primary'
-			size='medium'
-			fullHeight
-			fullWidth
-			icon={faArrowRight}
-			disabled={props.disableDrawingButton}
-			onClick={props.onClickDrawingButton}>
-			{t('gameView.sendDrawing')}
-		</Button>
-	) : (
-		<Button
-			color='primary'
-			size='medium'
-			fullHeight
-			fullWidth
-			icon={faArrowRight}
-			disabled={props.disableStartVoteButton}
-			onClick={props.onClickStartVoteButton}>
-			{t('gameView.startVote')}
-		</Button>
+	return (
+		<div style={{ height: '100%', paddingTop: '12px' }}>
+			{(props.showDrawingButton ? (
+				<Button
+					color='primary'
+					size='medium'
+					fullHeight
+					fullWidth
+					icon={faArrowRight}
+					disabled={props.disableDrawingButton}
+					onClick={props.onClickDrawingButton}>
+					{t('gameView.sendDrawing')}
+				</Button>
+			) : (
+				<Button
+					color='primary'
+					size='medium'
+					fullHeight
+					fullWidth
+					icon={faArrowRight}
+					disabled={props.disableStartVoteButton}
+					onClick={props.onClickStartVoteButton}>
+					{t('gameView.startVote')}
+				</Button>
+			))}
+		</div>
 	)
 }
