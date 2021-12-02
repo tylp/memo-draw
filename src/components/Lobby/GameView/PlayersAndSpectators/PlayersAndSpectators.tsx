@@ -16,7 +16,7 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 	const { t } = useTranslation();
 
 	const getPillTitleDrawing = (player: Player): undefined | string => {
-		return (player.id === props.currentPlayer.id) ? t('gameView.currentlyDrawing') : undefined;
+		return (player.id === props.currentPlayer?.id) ? t('gameView.currentlyDrawing') : undefined;
 	}
 
 	const getPillTitleItsYou = (player: Player): undefined | string => {

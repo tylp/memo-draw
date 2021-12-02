@@ -41,7 +41,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 
 	const [profile, setProfile] = useState<IProfile>(ProfileFactory.create());
 	const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
-
+	const [isCantStartGameAloneModalVisible, setIsCantStartGameAloneModalVisible] = useState(false);
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
@@ -77,6 +77,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 	}
 
+	const tryToStartGame = () => {
+		if (props.lobby.players.length > 1 || process.env.NODE_ENV === 'development') {
+			startGame();
+		} else {
+			setIsCantStartGameAloneModalVisible(true);
+		}
+	}
+
 	const startGame = () => {
 		if (props.lobby.hostPlayerId === playerId) {
 			SocketEventEmitter.startGame(socket, gameMode);
@@ -96,8 +104,15 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					<ProfileSelector profile={profile} setProfile={setProfile} setIsProfileValid={setIsProfileValid} onEnter={handleSaveProfile}></ProfileSelector>
 				</p>
 			</Modal>
+			<Modal
+				visible={isCantStartGameAloneModalVisible}
+				onValidate={() => setIsCantStartGameAloneModalVisible(false)}
+				showCancel={false}
+				title={t('lobbyView.cantStartGameAlone')}
+			>
+			</Modal>
 			<div className="flex flex-col justify-center">
-				<div className="my-6 flex flex-col md:flex-row justify-center md:items-center  items:start flex-wrap">
+				<div className="my-6 flex flex-col md:flex-row justify-center md:items-center items:start flex-wrap">
 					<div className="mb-4 md:mb-0">
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
 					</div>
@@ -136,34 +151,29 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 				<div className="mt-6 mb-8 flex flex-row align-middle justify-between">
 					<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
-					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
-					{
-						props.lobby.hostPlayerId === playerId && (
-							<Box className="self-center" ml={2}>
-								<Button
-									color='primary' size='small' onClick={startGame}
-									icon={faPlay}
-								>
-									{t('lobbyView.startBtnLabel')}
-								</Button>
-							</Box>
-						)
-					}
+					<div className="self-center px-3 py-2 leading-none rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">
+						{props.lobby?.players.length} / 10
+					</div>
+					{props.lobby.hostPlayerId === playerId && (
+						<Box className="self-center" ml={2}>
+							<Button color='primary' size='small' onClick={tryToStartGame} icon={faPlay}>
+								{t('lobbyView.startBtnLabel')}
+							</Button>
+						</Box>
+					)}
 				</div>
 				<Row>
-					{
-						gameModePropertiesValues.map(gameModeProperty =>
-							<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
-								<GameSetting
-									title={t(`gamemodes.${gameModeProperty}.title`)}
-									description={t(`gamemodes.${gameModeProperty}.description`)}
-									currentValue={gameMode}
-									value={gameModeProperty}
-									icon={faStopwatch}
-									setCurrentValue={setGameMode} />
-							</Col>,
-						)
-					}
+					{gameModePropertiesValues.map(gameModeProperty =>
+						<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
+							<GameSetting
+								title={t(`gamemodes.${gameModeProperty}.title`)}
+								description={t(`gamemodes.${gameModeProperty}.description`)}
+								currentValue={gameMode}
+								value={gameModeProperty}
+								icon={faStopwatch}
+								setCurrentValue={setGameMode} />
+						</Col>,
+					)}
 				</Row>
 			</div>
 		</Layout >
