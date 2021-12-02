@@ -1,50 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import {useSocket} from '../hooks';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Homepage from './Homepage/Homepage';
+import JoinLobby from './JoinLobby/JoinLobby';
+import Lobby from './Lobby/Lobby';
+import SnackbarProvider from 'react-simple-snackbar'
 
-interface HelloMessage {
-    timestamp: number;
-    value: string;
-}
-
-export default function Index() : React.ReactNode {
-
-    const socket: SocketIOClient.Socket = useSocket();
-    const [value, setValue] = useState<string>("");
-
-    useEffect(() => {
-        if (socket) {
-            socket.on("hello-room", (message: HelloMessage) => {
-                console.log(message)
-            });
-        }
-    }, [socket]);
-
-    // Handle input change
-    const handleInputChange = (event) => {
-        setValue(event.target.value);
-    };
-
-    
-    /**
-     * Emit <value> to "hello-room" topic.
-     * Check the server.js console to see the message.
-     */ 
-    function emmitData() {
-
-        const msg: HelloMessage = {
-            timestamp: new Date().getTime(),
-            value: value
-        }
-
-        socket &&
-            socket.emit("hello-room", msg);
-    }
-
-    return (
-        <div>
-            <input onChange={handleInputChange}></input>
-            <button onClick={emmitData}>Send</button>
-        </div>
-
-    );
+export default function App(): JSX.Element {
+	return (
+		<SnackbarProvider>
+			<Router>
+				<Switch>
+					<Route path="/join/:lobbyId">
+						<JoinLobby />
+					</Route>
+					<Route path="/game">
+						<Lobby />
+					</Route>
+					<Route path="/">
+						<Homepage />
+					</Route>
+				</Switch>
+			</Router>
+		</SnackbarProvider>
+	);
 }
