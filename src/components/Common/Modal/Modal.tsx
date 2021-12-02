@@ -30,9 +30,8 @@ Modal.defaultProps = {
 
 export default function Modal(props: ModalProps): JSX.Element {
 	const { t } = useTranslation();
-	if (!props.visible) return null;
 	
-	return (
+	return props.visible && (
 		<>
 			<div className="fixed inset-0 z-10 opacity-50 bg-black-black">
 			</div>
