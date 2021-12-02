@@ -15,7 +15,7 @@ const resources = {
 				'validate': 'Validate',
 			},
 			'homepage': {
-				'start': 'Done !',
+				'start': 'Start !',
 				'rules': {
 					'title': 'The Game',
 					1: {

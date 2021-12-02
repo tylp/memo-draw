@@ -27,6 +27,6 @@
 }
 
 .outline-title {
-	-webkit-text-stroke: 3px rgba(0, 64, 99, 1);
+	-webkit-text-stroke: 2.5px rgba(0, 64, 99, 1);
 	letter-spacing: -1px;
 }

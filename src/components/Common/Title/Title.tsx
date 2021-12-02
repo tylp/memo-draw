@@ -7,7 +7,7 @@ interface TitleSpec {
 export default function Title({ children }: TitleSpec): JSX.Element {
 
 	return (
-		<div className="flex space-x-2 mt-2 mb-2">
+		<div className="flex space-x-2 mt-2 mb-3">
 			<svg version="1.1" className="w-4 fill-current text-yellow-light-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 552.611 552.611"
 			>
 				<g>

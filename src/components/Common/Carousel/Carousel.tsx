@@ -77,18 +77,28 @@ export default function Carousel(props: ButtonSpec): JSX.Element {
 
 	return (
 		<>
-			<div ref={leftArrow}>
-				<FontAwesomeIcon opacity={isMaxLeft ? 0.5 : 1} className={`${isMaxLeft ? 'cursor-default' : 'cursor-pointer'} pointer-events-auto text-white-white`} size="4x" icon={faChevronLeft} />
+			<div ref={leftArrow} className="mr-5">
+				<FontAwesomeIcon
+					opacity={isMaxLeft ? 0.5 : 1}
+					className={`${isMaxLeft ? 'cursor-default' : 'cursor-pointer'} pointer-events-auto text-white-white`}
+					size="4x"
+					icon={faChevronLeft}
+				/>
 			</div>
-			<div ref={container} className="overflow-x-scroll no-scrollbar">
-				<div className="flex flex-row items-center">
+			<div ref={container} className="overflow-x-auto no-scrollbar">
+				<div className="p-2 flex flex-row items-center">
 					{
 						props.children
 					}
 				</div>
 			</div>
-			<div ref={rightArrow}>
-				<FontAwesomeIcon opacity={isMaxRight ? 0.5 : 1} className={`${isMaxRight ? 'cursor-default' : 'cursor-pointer'} pointer-events-auto text-white-white`} size="4x" icon={faChevronRight} />
+			<div ref={rightArrow} className="ml-5">
+				<FontAwesomeIcon
+					opacity={isMaxRight ? 0.5 : 1}
+					className={`${isMaxRight ? 'cursor-default' : 'cursor-pointer'} pointer-events-auto text-white-white`}
+					size="4x"
+					icon={faChevronRight}
+				/>
 			</div>
 		</>
 	)
