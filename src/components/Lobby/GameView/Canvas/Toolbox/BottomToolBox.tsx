@@ -7,7 +7,6 @@ import { Box } from '../../../../Common';
 
 interface btnToolBoxProps {
 	selected?: boolean,
-	key?: string,
 	onClick?: () => void,
 	icon: IconProp,
 	color: 'blue' | 'yellow',
@@ -29,7 +28,6 @@ function BtnToolBox(props: btnToolBoxProps): JSX.Element {
 		<button
 			style={{ flex: '1 0' }}
 			className={`rounded-lg m-1 border-2 border-${color}`}
-			key={props.key}
 			onClick={props.onClick}
 		>
 			<Box ml={3.5} mr={3.5} mt={2} mb={2}>
@@ -50,15 +48,17 @@ function ShapesSelection(): JSX.Element {
 
 	return (
 		<>
-			{customShapesInfo.map((shape) => {
-				return (
-					<BtnToolBox
-						selected={shape.type === customDrawState.selectedShape}
-						color='yellow' icon={shape.icon}
-						key={shape.name}
-						onClick={() => { setShape(shape.type) }} />
-				);
-			})}
+			{
+				customShapesInfo.map((shape) => {
+					return (
+						<BtnToolBox
+							selected={shape.type === customDrawState.selectedShape}
+							color='yellow' icon={shape.icon}
+							key={shape.name}
+							onClick={() => { setShape(shape.type) }} />
+					);
+				})
+			}
 		</>
 	);
 }
