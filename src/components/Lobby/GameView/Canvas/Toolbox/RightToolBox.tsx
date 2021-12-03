@@ -36,13 +36,14 @@ function SelectionSummary(): JSX.Element {
 	);
 
 	return (
-		<div style={{
+		<div className="hidden lg:block" style={{
 			position: 'relative',
 			background: alphaColor.toRgba(),
-			width: '6rem',
-			height: '6rem',
-			borderRadius: '6rem',
-			marginBottom: '45px',
+			width: '7rem',
+			height: '7rem',
+			borderRadius: '50%',
+			marginBottom: '35px',
+			marginTop: '15px',
 		}}>
 			<div className="text-yellow-light-yellow" style={{
 				backgroundColor: 'black',
@@ -76,10 +77,11 @@ function ColorSelection(): JSX.Element {
 					onClick={() => setColor(color)}
 					className='hover:opacity-70 duration-200'
 					style={{
+						minHeight: '25px',
+						minWidth: '25px',
 						margin: '5px',
-						height: '30px',
 						background: color.toRgb(),
-						flex: '1 1 30px',
+						flex: '1 1 20%',
 						borderRadius: '2px',
 					}}
 					key={color.toRgb()}
@@ -106,9 +108,12 @@ function ThicknessSlider(): JSX.Element {
 	};
 
 	return (
-		<div style={{ marginBottom: '15px' }}>
+		<div className="px-2 w-full mb-3">
 			<h5 className="font-semibold text-white-white">Thickness</h5>
-			<input value={range} min="10" max="100" onChange={setThickness} type="range"></input>
+			<input
+				style={{ width: '100%' }}
+				value={range} min="10" max="100"
+				onChange={setThickness} type="range" />
 		</div>
 	);
 }
@@ -129,16 +134,19 @@ function OpacitySlider(): JSX.Element {
 	};
 
 	return (
-		<div>
+		<div className="px-2 w-full mb-3">
 			<h5 className="font-semibold text-white-white">Opacity</h5>
-			<input value={range} min="10" max="100" onChange={setOpacity} type="range"></input>
+			<input
+				style={{ width: '100%' }}
+				value={range} min="10" max="100"
+				onChange={setOpacity} type="range" />
 		</div>
 	);
 }
 
 export default function RightToolBox(): JSX.Element {
 	return (
-		<div className="flex-grow flex flex-col items-center p-2 bg-blue-darker-blue rounded-md">
+		<div className="flex-grow flex flex-col items-center p-3 bg-blue-darker-blue rounded-md">
 			<SelectionSummary />
 			<ColorSelection />
 			<ThicknessSlider />
