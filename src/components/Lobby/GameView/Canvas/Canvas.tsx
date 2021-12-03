@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Engine } from 'memo-draw-engine';
 
 // Util function used to trigger when a component is fully painted
@@ -17,7 +17,6 @@ interface CanvasProps {
 }
 
 export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element {
-	const [backgroundStyle, setBackgroundStyle] = useState<CSSProperties>();
 	const canvasRef = useRef<HTMLCanvasElement>();
 
 	useEffect(() => {
@@ -35,26 +34,18 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 		onPainted(() => { engine.canvasManager.updateBounds(); });
 	}, [engine])
 
-	useEffect(() => {
-		initBackgroundStyle();
-	}, [canvasRef])
-
-	const initBackgroundStyle = (): void => {
-		setBackgroundStyle({
-			position: 'absolute',
-			backgroundColor: 'white',
-			backgroundPosition: 'center',
-			borderRadius: '0.5em',
-			zIndex: 0,
-			width: `${canvasRef.current.width}px`,
-			height: `${canvasRef.current.height}px`,
-		});
-	};
-
 	return (
-		<div>
-			<div style={backgroundStyle}></div>
-			<canvas style={{ zIndex: 2, position: 'relative' }} width="800" height="600" ref={canvasRef}></canvas>
+		<div style={{ width: '100%', aspectRatio: '8/6', position: 'relative' }}>
+			<div style={{
+				position: 'absolute',
+				backgroundColor: 'white',
+				backgroundPosition: 'center',
+				borderRadius: '0.5em',
+				zIndex: 0,
+				width: '100%',
+				height: '100%',
+			}}></div>
+			<canvas style={{ zIndex: 2, width: '100%', height: '100%', position: 'absolute' }} ref={canvasRef} />
 		</div>
 	);
 }

@@ -20,6 +20,9 @@ import PlayersAndSpectators from '../PlayersAndSpectators/PlayersAndSpectators';
 import Countdown from './Countdown/Countdown';
 import PlayerSelector from './PlayerSelector/PlayerSelector'
 
+import styles from '../../../../../styles/GameView.module.css';
+import Canvas from '../Canvas/Canvas';
+
 interface PlayerViewProps {
 	lobby: Lobby;
 	socket: Socket;
@@ -156,8 +159,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 
 			<EngineContextProvider engine={props.engine}>
-				<Row className="mt-6">
-					<Col sm={12} md={2}>
+				<div style={{ userSelect: 'none' }} className={`mt-6 ${styles['grid-3']}`}>
+					<div className={`${styles['col-gap']} ${styles['player-overflow']}`}>
 						<PlayersAndSpectators
 							players={props.lobby.game?.players}
 							spectators={props.spectators}
@@ -165,8 +168,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							playerId={playerId}
 							currentPlayer={props.currentPlayer}
 						/>
-					</Col>
-					<Col sm={12} md={8}>
+					</div>
+					<div className={styles['col-gap']}>
 						<div className="relative">
 							<div className="absolute top-0 md:-top-11">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
@@ -179,14 +182,14 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								</div>
 							</div>
 						</div>
-						<div style={{ aspectRatio: '8/6', background: 'white', width: '100%', borderRadius: '6px' }}></div>
+						<Canvas engine={props.engine} setEngine={props.setEngine} />
 						<BottomToolBox />
-					</Col>
-					<Col sm={12} md={2}>
-						<div className="h-full flex flex-col">
-							<RightToolBox />
+					</div>
+					<div className="h-full flex flex-col">
+						<RightToolBox />
+						<div style={{ height: '88px' }} className="flex flex-col">
 							{hasLost && (
-								<div className="mt-2">
+								<div style={{ height: '100%', paddingTop: '12px' }}>
 									<Button
 										color='primary' size='medium'
 										fullHeight fullWidth
@@ -209,9 +212,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								}}
 							/>
 						</div>
-
-					</Col>
-				</Row>
+					</div>
+				</div>
 			</EngineContextProvider>
 		</Layout>
 	)
@@ -229,7 +231,7 @@ function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element
 	const { t } = useTranslation();
 
 	return (
-		<div className="mt-2">
+		<div style={{ height: '100%', paddingTop: '12px' }}>
 			{(props.showDrawingButton ? (
 				<Button
 					color='primary'

@@ -48,17 +48,13 @@ function ShapesSelection(): JSX.Element {
 
 	return (
 		<>
-			{
-				customShapesInfo.map((shape) => {
-					return (
-						<BtnToolBox
-							selected={shape.type === customDrawState.selectedShape}
-							color='yellow' icon={shape.icon}
-							key={shape.name}
-							onClick={() => { setShape(shape.type) }} />
-					);
-				})
-			}
+			{customShapesInfo.map((shape) => (
+				<BtnToolBox
+					selected={shape.type === customDrawState.selectedShape}
+					color='yellow' icon={shape.icon}
+					key={shape.name}
+					onClick={() => { setShape(shape.type) }} />
+			))}
 		</>
 	);
 }
