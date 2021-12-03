@@ -2,6 +2,7 @@
 import { MocketServer } from 'mockets.io';
 import Application from '../classes/Application';
 import Lobby from '../classes/Lobby/Lobby';
+import PlayerFactory from '../factories/PlayerFactory';
 import ISession from '../interfaces/ISession';
 import SocketIdentifierService from '../services/SocketIdentifierService';
 import ResetableApplication from '../tests/ResetableApplication/ResetableApplication';
@@ -184,6 +185,7 @@ describe('LobbyFacade', () => {
 
 	test('startVote should emit start-vote event to everyone in room', () => {
 		const lobby: Lobby = LobbyFacade.create(mockedSocketA);
+		const randomPlayer = PlayerFactory.create(Application.getSessionStorage().generate());
 		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 
@@ -191,7 +193,7 @@ describe('LobbyFacade', () => {
 		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(1);
 		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby').length).toBe(0);
 
-		LobbyFacade.startVote(mockedSocketA, 3);
+		LobbyFacade.startVote(mockedSocketA, randomPlayer);
 		expect(mockedSocketA.receivedEvents.filter(e => e.name === 'update-lobby' || e.name === 'vote-started').length).toBe(2);
 		expect(mockedSocketB.receivedEvents.filter(e => e.name === 'update-lobby' || e.name === 'vote-started').length).toBe(1);
 	})

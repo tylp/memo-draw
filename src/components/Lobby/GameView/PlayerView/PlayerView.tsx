@@ -10,9 +10,9 @@ import { YesOrNo } from '../../../../../server/classes/Votes/YesNoVote';
 import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
 import SocketEventEmitter from '../../../../services/SocketEventEmitter';
+import VoteTargets from '../../../../services/VoteTargets/VoteTargets';
 import { Box, Button, Layout, Modal } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
-import Canvas from '../Canvas/Canvas';
 import BottomToolBox from '../Canvas/Toolbox/BottomToolBox';
 import { EngineContextProvider } from '../Canvas/Toolbox/EngineContext';
 import RightToolBox from '../Canvas/Toolbox/RightToolBox';
@@ -21,6 +21,7 @@ import Countdown from './Countdown/Countdown';
 import PlayerSelector from './PlayerSelector/PlayerSelector'
 
 import styles from '../../../../../styles/GameView.module.css';
+import Canvas from '../Canvas/Canvas';
 
 interface PlayerViewProps {
 	lobby: Lobby;
@@ -71,21 +72,27 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 	}, [props.socket])
 
 	const nextDrawing = () => {
-		if (playerId === props.currentPlayer.id) {
+		if (playerId === props.currentPlayer?.id) {
 			SocketEventEmitter.nextDrawing(props.socket);
 		}
 	}
 
 	const startVote = () => {
-		if (playerId !== props.currentPlayer.id && selectedPlayer) {
+		if (playerId !== props.currentPlayer?.id && selectedPlayer) {
 			SocketEventEmitter.startVote(props.socket, selectedPlayer);
 			setIsStartVoteModalVisible(false);
 		}
 	}
 
 	const vote = (vote: YesOrNo) => {
+		if (currentVote === vote) return;
+
 		setCurrentVote(vote);
 		SocketEventEmitter.vote(props.socket, vote);
+	}
+
+	const getVoteTargets = (): Player[] => {
+		return (new VoteTargets(props.lobby, playerId)).get();
 	}
 
 	return (
@@ -98,7 +105,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				title={t('gameView.startVote')}
 			>
 				<Box mb={2} className={'w-full'}>
-					<PlayerSelector list={props.lobby.game.players.filter((player: Player) => player.id !== playerId)} selected={selectedPlayer} setSelected={setSelectedPlayer} />
+					<PlayerSelector list={getVoteTargets()} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
 			<Modal
@@ -128,7 +135,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				<Row>
 					<Col>
 						<Button
-							color="primary" size="small"
+							color={currentVote !== 'no' ? 'primary' : 'light-secondary'} size="small"
 							selected={currentVote === 'yes'}
 							fullWidth
 							onClick={() => vote('yes')}
@@ -138,7 +145,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 					</Col>
 					<Col>
 						<Button
-							color="primary"
+							color={currentVote !== 'yes' ? 'primary' : 'light-secondary'}
 							selected={currentVote === 'no'}
 							size="small"
 							fullWidth
@@ -149,6 +156,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 					</Col>
 				</Row>
 			</Modal>
+
+
 			<EngineContextProvider engine={props.engine}>
 				<div style={{ userSelect: 'none' }} className={`mt-6 ${styles['grid-3']}`}>
 					<div className={`${styles['col-gap']} ${styles['player-overflow']}`}>
@@ -192,11 +201,15 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								</div>
 							)}
 							<StartVoteOrSendDrawing
-								showDrawingButton={playerId === props.currentPlayer.id}
+								showDrawingButton={playerId === props.currentPlayer?.id}
 								disableDrawingButton={hasLost}
 								onClickDrawingButton={nextDrawing}
 								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
-								onClickStartVoteButton={() => setIsStartVoteModalVisible(true)}
+								onClickStartVoteButton={() => {
+									setSelectedPlayer(undefined);
+									setCurrentVote('yes');
+									setIsStartVoteModalVisible(true);
+								}}
 							/>
 						</div>
 					</div>
