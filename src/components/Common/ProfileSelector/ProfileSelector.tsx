@@ -71,7 +71,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 									borderRadius: '50%',
 									color: 'white',
 								}}
-								className="bg-pink-dark-pink">
+								className="bg-pink-dark-pink hover:bg-pink-light-pink transition duration-300">
 								<FontAwesomeIcon icon={faRandom} />
 							</button>
 						</div>
