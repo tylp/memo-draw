@@ -14,22 +14,22 @@ export const colors: Array<Color> = [
 	new Color(97, 0, 0),
 	new Color(255, 0, 0),
 	new Color(255, 143, 143),
-	
+
 	// yellow
 	new Color(252, 168, 0),
 	new Color(255, 255, 0),
 	new Color(255, 251, 145),
-	
+
 	// green
 	new Color(24, 112, 0),
 	new Color(0, 255, 0),
 	new Color(120, 255, 84),
-	
+
 	// blue
 	new Color(0, 0, 145),
 	new Color(0, 0, 255),
 	new Color(0, 255, 255),
-	
+
 	// pink
 	new Color(92, 0, 153),
 	new Color(255, 0, 255),
@@ -127,7 +127,7 @@ function ThicknessSlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Thickness</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} step="30" min="10" max="100"
+				value={range} step="10" min="10" max="100"
 				onChange={setThickness} type="range" />
 		</div>
 	);
@@ -153,7 +153,7 @@ function OpacitySlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Opacity</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} step="30" min="10" max="100"
+				value={range} step="10" min="10" max="100"
 				onChange={setOpacity} type="range" />
 		</div>
 	);
