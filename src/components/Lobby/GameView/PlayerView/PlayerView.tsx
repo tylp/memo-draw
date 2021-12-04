@@ -135,16 +135,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				<Row>
 					<Col>
 						<Button
-							color={currentVote !== 'no' ? 'primary' : 'light-secondary'} size="small"
-							selected={currentVote === 'yes'}
-							fullWidth
-							onClick={() => vote('yes')}
-						>
-							{t('gameView.yes')}
-						</Button>
-					</Col>
-					<Col>
-						<Button
 							color={currentVote !== 'yes' ? 'primary' : 'light-secondary'}
 							selected={currentVote === 'no'}
 							size="small"
@@ -152,6 +142,16 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							onClick={() => vote('no')}
 						>
 							{t('gameView.no')}
+						</Button>
+					</Col>
+					<Col>
+						<Button
+							color={currentVote !== 'no' ? 'primary' : 'light-secondary'} size="small"
+							selected={currentVote === 'yes'}
+							fullWidth
+							onClick={() => vote('yes')}
+						>
+							{t('gameView.yes')}
 						</Button>
 					</Col>
 				</Row>
