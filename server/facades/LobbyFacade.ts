@@ -72,6 +72,9 @@ export default class LobbyFacade {
 
 		if (LobbyService.start(lobby, player, gameModeProperty)) {
 			socket.in(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
+			setTimeout(() => {
+				socket.in(lobby.getSocketRoomName()).emit('next-drawing')
+			}, lobby?.game?.limitDate.diff(dayjs(), 'milliseconds'))
 		}
 	}
 
