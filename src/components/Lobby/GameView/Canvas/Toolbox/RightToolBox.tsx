@@ -1,24 +1,39 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AlphaColor, Color } from 'memo-draw-engine';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+
 import { customShapesInfo, EngineContext } from './EngineContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const colors: Array<Color> = [
+	// black
 	new Color(0, 0, 0),
-	new Color(255, 255, 255),
 	new Color(125, 125, 125),
+	new Color(255, 255, 255),
+
+	// red
+	new Color(97, 0, 0),
 	new Color(255, 0, 0),
-	new Color(170, 37, 37),
-	new Color(255, 230, 0),
-	new Color(255, 184, 0),
-	new Color(180, 131, 7),
-	new Color(29, 229, 0),
-	new Color(24, 182, 59),
-	new Color(0, 255, 209),
-	new Color(21, 171, 236),
-	new Color(18, 40, 240),
-	new Color(112, 0, 255),
-	new Color(232, 21, 223),
+	new Color(255, 143, 143),
+
+	// yellow
+	new Color(252, 168, 0),
+	new Color(255, 255, 0),
+	new Color(255, 251, 145),
+
+	// green
+	new Color(24, 112, 0),
+	new Color(0, 255, 0),
+	new Color(120, 255, 84),
+
+	// blue
+	new Color(0, 0, 145),
+	new Color(0, 0, 255),
+	new Color(0, 255, 255),
+
+	// pink
+	new Color(92, 0, 153),
+	new Color(255, 0, 255),
+	new Color(251, 148, 255),
 ];
 
 function SelectionSummary(): JSX.Element {
@@ -36,7 +51,7 @@ function SelectionSummary(): JSX.Element {
 	);
 
 	return (
-		<div className="hidden lg:block" style={{
+		<div className='border-4 border-opacity-50 border-black-black hidden lg:block' style={{
 			position: 'relative',
 			background: alphaColor.toRgba(),
 			width: '7rem',
@@ -71,18 +86,18 @@ function ColorSelection(): JSX.Element {
 	};
 
 	return (
-		<div style={{ flexGrow: 1, overflowY: 'auto', display: 'flex', flexWrap: 'wrap', marginBottom: '15px' }}>
+		<div className='flex flex-wrap flex-grow overflow-y-auto'
+			style={{ marginBottom: '15px' }}>
 			{colors.map((color) => (
 				<button
 					onClick={() => setColor(color)}
-					className='hover:opacity-70 duration-200'
+					className='hover:opacity-70 duration-200 border-2 border-opacity-50 border-black-black rounded-lg'
 					style={{
 						minHeight: '25px',
 						minWidth: '25px',
 						margin: '5px',
 						background: color.toRgb(),
 						flex: '1 1 20%',
-						borderRadius: '2px',
 					}}
 					key={color.toRgb()}
 				/>
@@ -112,7 +127,7 @@ function ThicknessSlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Thickness</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} min="10" max="100"
+				value={range} step="10" min="10" max="100"
 				onChange={setThickness} type="range" />
 		</div>
 	);
@@ -138,7 +153,7 @@ function OpacitySlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Opacity</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} min="10" max="100"
+				value={range} step="10" min="10" max="100"
 				onChange={setOpacity} type="range" />
 		</div>
 	);
