@@ -127,7 +127,7 @@ function ThicknessSlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Thickness</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} step="10" min="10" max="100"
+				value={range} step="15" min="10" max="100"
 				onChange={setThickness} type="range" />
 		</div>
 	);
@@ -153,7 +153,7 @@ function OpacitySlider(): JSX.Element {
 			<h5 className="font-semibold text-white-white">Opacity</h5>
 			<input
 				style={{ width: '100%' }}
-				value={range} step="10" min="10" max="100"
+				value={range} step="15" min="10" max="100"
 				onChange={setOpacity} type="range" />
 		</div>
 	);
