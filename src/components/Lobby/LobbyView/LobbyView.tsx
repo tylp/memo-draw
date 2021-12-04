@@ -179,7 +179,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 								currentValue={gameMode}
 								value={gameModeProperty}
 								icon={faStopwatch}
-								setCurrentValue={setGameMode} />
+								setCurrentValue={setGameMode}
+								disabled={props.lobby.hostPlayerId !== playerId} />
 						</Col>,
 					)}
 				</Row>
