@@ -12,6 +12,7 @@ import Box from '../../components/Common/Box/Box';
 import { Row, Col } from 'react-grid-system';
 import SocketEventEmitter from '../../services/SocketEventEmitter';
 import ProfileFactory from '../../../server/factories/ProfileFactory';
+import ProfileValidatorService from 'server/services/ProfileValidatorService';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -39,11 +40,15 @@ export default function Homepage(): JSX.Element {
 	useEffect(() => {
 		if (!socket) return;
 		setIsLoading(false);
-		if (profileStorage) {
+		if (profileStorage && ProfileValidatorService.validate(profileStorage)) {
 			setProfile(profileStorage);
 			return;
 		}
-		setProfile(ProfileFactory.create())
+
+		const newProfile = ProfileFactory.create();
+		setProfile(newProfile)
+		setProfileStorage(newProfile);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {

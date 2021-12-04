@@ -23,6 +23,7 @@ import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import ProfileValidatorService from 'server/services/ProfileValidatorService';
 
 interface LobbyViewProps {
 	lobby: Lobby;
@@ -47,7 +48,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
-		setProfile(localStorageProfile);
+		if (localStorageProfile && ProfileValidatorService.validate(localStorageProfile)) {
+			setProfile(localStorageProfile);
+		} else {
+			const newProfile = ProfileFactory.create();
+			setProfile(newProfile)
+			setLocalStorageProfile(newProfile);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
