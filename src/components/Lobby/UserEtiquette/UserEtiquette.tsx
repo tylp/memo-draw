@@ -68,10 +68,10 @@ function Pill(props: PillProps): JSX.Element {
 
 		switch (position) {
 			case 'r':
-				className += ' -right-6 top-4 pl-1 pr-1 bg-yellow-dark-yellow';
+				className += ' -right-0 md:-right-4 top-4 pl-1 pr-1 bg-yellow-dark-yellow';
 				break;
 			case 'br':
-				className += ' -right-8 bottom-0 pl-1 pr-1 bg-pink-dark-pink';
+				className += ' -right-0 md:-right-6 bottom-0 pl-1 pr-1 bg-pink-dark-pink';
 				break;
 		}
 

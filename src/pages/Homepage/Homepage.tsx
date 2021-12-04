@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import IProfile, { RubberColor, BodyType, BodyColor, FaceType } from '../../../server/interfaces/IProfile';
+import IProfile from '../../../server/interfaces/IProfile';
 import { Layout, LoadingFull, SectionTitle, Button, ProfileSelector } from '../../components/Common';
 import { RuleItem } from '../../components/Homepage';
 import { useSocket } from '../../hooks';
@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import Box from '../../components/Common/Box/Box';
 import { Row, Col } from 'react-grid-system';
 import SocketEventEmitter from '../../services/SocketEventEmitter';
+import ProfileFactory from '../../../server/factories/ProfileFactory';
+import ProfileValidatorService from 'server/services/ProfileValidatorService';
 
 export default function Homepage(): JSX.Element {
 	const socket = useSocket();
@@ -36,22 +38,17 @@ export default function Homepage(): JSX.Element {
 	}, [socket])
 
 	useEffect(() => {
-		if (socket) {
-			setIsLoading(false);
-			if (profileStorage) {
-				setProfile(profileStorage);
-			} else {
-				setProfile({
-					username: '',
-					avatar: {
-						bodyColor: BodyColor.Yellow,
-						bodyType: BodyType.Pencil,
-						faceType: FaceType.Happy,
-						rubberColor: RubberColor.Pink,
-					},
-				})
-			}
+		if (!socket) return;
+		setIsLoading(false);
+		if (profileStorage && ProfileValidatorService.validate(profileStorage)) {
+			setProfile(profileStorage);
+			return;
 		}
+
+		const newProfile = ProfileFactory.create();
+		setProfile(newProfile)
+		setProfileStorage(newProfile);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socket, profileStorage]);
 
 	const handleStart = () => {
@@ -72,43 +69,34 @@ export default function Homepage(): JSX.Element {
 			<LoadingFull />
 		) : (
 			<Layout>
-				<Row>
-					<Col>
-						<Row>
-							<Col offset={{ md: 1 }}>
-								<Row>
-									<Col>
-										<Box mt={6} mb={6}>
-											<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
-										</Box>
-										<Box mb={2}>
-											<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
-										</Box>
-										<Box mb={2}>
-											<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
-										</Box>
-										<Box>
-											<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
-										</Box>
-									</Col>
-								</Row>
-							</Col>
-							<Col offset={{ md: 1 }}>
-								<Box mt={6} mb={6}>
-									<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
-								</Box>
-								<ProfileSelector
-									profile={profile}
-									setProfile={setProfile}
-									setIsProfileValid={setIsStartEnabled}
-									onEnter={handleStart}
-								/>
-								<Box mt={2}>
-									<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
-								</Box>
-							</Col>
-							<Col md={1}></Col>
-						</Row>
+				<Row className="mt-4 md:mt-12" gutterWidth={80}>
+					<Col md={6}>
+						<Box mb={6}>
+							<SectionTitle hintColor="text-pink-dark-pink">{t('homepage.rules.title')}</SectionTitle>
+						</Box>
+						<Box mb={5}>
+							<RuleItem id={1} title={t('homepage.rules.1.title')} content={t('homepage.rules.1.content')} />
+						</Box>
+						<Box mb={5}>
+							<RuleItem id={2} title={t('homepage.rules.2.title')} content={t('homepage.rules.2.content')} />
+						</Box>
+						<Box>
+							<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
+						</Box>
+					</Col>
+					<Col md={6} className='mt-12 md:mt-0'>
+						<Box mb={6}>
+							<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
+						</Box>
+						<ProfileSelector
+							profile={profile}
+							setProfile={setProfile}
+							setIsProfileValid={setIsStartEnabled}
+							onEnter={handleStart}
+						/>
+						<div style={{ width: '250px' }} className="mt-6 mx-auto">
+							<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+						</div>
 					</Col>
 				</Row>
 			</Layout>

@@ -1,12 +1,8 @@
-import { AlphaColor, Color, ShapeType } from 'memo-draw-engine';
+import { AlphaColor, Color } from 'memo-draw-engine';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 
-import { faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faEraser } from '@fortawesome/free-solid-svg-icons';
-import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
-
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-
-import { CustomShapeType, EngineContext } from './EngineContext';
+import { customShapesInfo, EngineContext } from './EngineContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const colors: Array<Color> = [
 	// black
@@ -50,54 +46,34 @@ function SelectionSummary(): JSX.Element {
 		customDrawState.opacity * 255,
 	);
 
+	const selectedShapeInfo = customShapesInfo.find(
+		(shapeInfo) => shapeInfo.type === customDrawState.selectedShape,
+	);
+
 	return (
-		<div className='border-2 border-opacity-50 border-black-black' style={{
+		<div className='border-2 border-opacity-50 border-black-black hidden lg:block' style={{
 			position: 'relative',
 			background: alphaColor.toRgba(),
-			width: '6rem',
-			height: '6rem',
-			borderRadius: '6rem',
-			marginBottom: '45px',
+			width: '7rem',
+			height: '7rem',
+			borderRadius: '50%',
+			marginBottom: '35px',
+			marginTop: '15px',
 		}}>
-			<ToolSelectionSummary/>
-		</div>
-	)
-}
-
-interface ShapeInfo {
-	name: string,
-	icon: IconProp,
-	type: CustomShapeType,
-}
-
-function ToolSelectionSummary(): JSX.Element {
-
-	const { customDrawState } = useContext(EngineContext);
-
-	const shapes: Array<ShapeInfo> = [
-		{ name: 'Pencil', icon: faPen, type: ShapeType.Pencil },
-		{ name: 'Fill', icon: faFill, type: ShapeType.Fill },
-		{ name: 'Rectangle S', icon: faSquare, type: ShapeType.RectangleStroke },
-		{ name: 'Rectangle F', icon: faSquareFill, type: ShapeType.RectangleFull },
-		{ name: 'Ellipse S', icon: faCircle, type: ShapeType.EllipseStroke },
-		{ name: 'Ellipse F', icon: faCircleFill, type: ShapeType.EllipseFull },
-		{ name: 'Line', icon: faWindowMinimize, type: ShapeType.Line },
-		{ name: 'Eraser', icon: faEraser, type: 'Eraser' },
-	]
-
-	console.log(shapes)
-
-	return (
-		<div style={{
-			backgroundColor: 'black',
-			position: 'absolute',
-			width: '3.5rem',
-			height: '3.5rem',
-			borderRadius: '4rem',
-			bottom: -10,
-			right: -10,
-		}}>
-			{customDrawState.selectedShape}
+			<div className="text-yellow-light-yellow" style={{
+				backgroundColor: 'black',
+				position: 'absolute',
+				width: '4rem',
+				height: '4rem',
+				borderRadius: '4rem',
+				bottom: -15,
+				right: -15,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+			}}>
+				<FontAwesomeIcon size="2x" icon={selectedShapeInfo.icon} />
+			</div>
 		</div>
 	)
 }
@@ -110,20 +86,24 @@ function ColorSelection(): JSX.Element {
 	};
 
 	return (
-		<div className='flex flex-row flex-wrap justify-around' 
-			style={{ marginBottom: '15px' }}>
+		<div style={{ flexGrow: 1, overflowY: 'auto', display: 'flex', flexWrap: 'wrap', marginBottom: '15px' }}>
 			{colors.map((color) => (
-				<button onClick={() => setColor(color)} style={{ marginBottom: '10px' }} key={color.toRgb()}>
-					<div className='border-2 border-opacity-50 border-black-black' style={{
-						width: '35px',
-						height: '35px',
-						borderRadius: '10px',
-						backgroundColor: color.toRgb(),
-					}}>
-					</div>
-				</button >
-			))}
-		</div>
+				<button
+					onClick={() => setColor(color)}
+					className='hover:opacity-70 duration-200'
+					style={{
+						minHeight: '25px',
+						minWidth: '25px',
+						margin: '5px',
+						background: color.toRgb(),
+						flex: '1 1 20%',
+						borderRadius: '2px',
+					}}
+					key={color.toRgb()}
+				/>
+			))
+			}
+		</div >
 	);
 }
 
@@ -143,9 +123,12 @@ function ThicknessSlider(): JSX.Element {
 	};
 
 	return (
-		<div style={{ marginBottom: '15px' }}>
-			<h5>Thickness</h5>
-			<input className='w-24' value={range} min="10" max="100" step="30" onChange={setThickness} type="range"></input>
+		<div className="px-2 w-full mb-3">
+			<h5 className="font-semibold text-white-white">Thickness</h5>
+			<input
+				style={{ width: '100%' }}
+				value={range} step="30" min="10" max="100"
+				onChange={setThickness} type="range" />
 		</div>
 	);
 }
@@ -162,24 +145,23 @@ function OpacitySlider(): JSX.Element {
 	const setOpacity = (event: ChangeEvent<HTMLInputElement>): void => {
 		const value = Number(event.currentTarget.value);
 		setRange(value);
-		updateDrawState({ opacity: value / 100});
+		updateDrawState({ opacity: value / 100 });
 	};
 
 	return (
-		<div>
-			<h5>Opacity</h5>
-			<input className='w-24' value={range} min="10" max="100" step="30" onChange={setOpacity} type="range"></input>
+		<div className="px-2 w-full mb-3">
+			<h5 className="font-semibold text-white-white">Opacity</h5>
+			<input
+				style={{ width: '100%' }}
+				value={range} step="30" min="10" max="100"
+				onChange={setOpacity} type="range" />
 		</div>
 	);
 }
 
 export default function RightToolBox(): JSX.Element {
 	return (
-		<div className='flex flex-col items-center'
-			style={{
-				padding: '20px 10px',
-			}}
-		>
+		<div className="flex-grow flex flex-col items-center p-3 bg-blue-darker-blue rounded-md">
 			<SelectionSummary />
 			<ColorSelection />
 			<ThicknessSlider />

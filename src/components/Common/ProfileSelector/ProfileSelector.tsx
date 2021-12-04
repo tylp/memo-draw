@@ -1,14 +1,14 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { Title } from '..';
-import Button from '../Button/Button';
 import Avatar from '../Avatar/Avatar';
-import { faRandom } from '@fortawesome/free-solid-svg-icons';
 import IProfile, { RubberColor, BodyColor, FaceType } from '../../../../server/interfaces/IProfile';
 import { useTranslation } from 'react-i18next';
 import AvatarFactory from '../../../../server/factories/AvatarFactory';
 import SelectButton from './SelectButton/SelectButton';
 import Box from '../Box/Box';
 import ProfileValidatorService from '../../../../server/services/ProfileValidatorService';
+import { faRandom } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ProfileSelectorSpec {
 	profile: IProfile;
@@ -53,14 +53,28 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 		<div>
 			<div className="bg-blue-darker-blue rounded-md p-4 pt-2">
 				<Title>{t('profileSelector.title')}</Title>
-				<div className="mt-4 grid grid-cols-3 grid-flow-col auto-cols-min">
-					<div className="flexflex-col justify-between">
+				<div className=" flex items-center mb-7">
+					<div className="flex flex-col justify-between">
 						<SelectButton<RubberColor> direction="left" name={t('profileSelector.eraser')} value={props.profile.avatar.rubberColor} list={rubberColors} setValue={(v) => setRubberColor(v)} />
 						<SelectButton<BodyColor> direction="left" name={t('profileSelector.color')} value={props.profile.avatar.bodyColor} list={bodyColors} setValue={(v) => setBodyColor(v)} />
 						<SelectButton<FaceType> direction="left" name={t('profileSelector.face')} value={props.profile.avatar.faceType} list={faceTypes} setValue={(v) => setFaceType(v)} />
 					</div>
 
-					<div className="flex items-center">
+					<div style={{ maxHeight: '190px', maxWidth: '190px' }} className="flex flex-grow mx-auto px-4 relative">
+						<div style={{ position: 'absolute', right: 20, bottom: 0, zIndex: 1 }}>
+							<button
+								onClick={randomizeAvatar}
+								style={{
+									border: 'none',
+									height: '40px',
+									width: '40px',
+									borderRadius: '50%',
+									color: 'white',
+								}}
+								className="bg-pink-dark-pink hover:bg-pink-light-pink transition duration-300">
+								<FontAwesomeIcon icon={faRandom} />
+							</button>
+						</div>
 						<Avatar avatar={props.profile.avatar} />
 					</div>
 
@@ -71,8 +85,7 @@ export default function ProfileSelector(props: ProfileSelectorSpec): JSX.Element
 					</div>
 				</div>
 
-				<Box mt={2}>
-					<Button fullWidth color='primary' size='medium' icon={faRandom} onClick={randomizeAvatar}>{t('profileSelector.randomize')}</Button>
+				<Box mt={6}>
 					<Title>{t('profileSelector.nickname')}</Title>
 					<input
 						className="bg-blue-200 w-full border-2 rounded border-yellow-light-yellow pl-2 text-white-white"

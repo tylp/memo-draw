@@ -23,6 +23,7 @@ import Box from '../../Common/Box/Box';
 import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
+import ProfileValidatorService from 'server/services/ProfileValidatorService';
 
 interface LobbyViewProps {
 	lobby: Lobby;
@@ -47,7 +48,14 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
-		setProfile(localStorageProfile);
+		if (localStorageProfile && ProfileValidatorService.validate(localStorageProfile)) {
+			setProfile(localStorageProfile);
+		} else {
+			const newProfile = ProfileFactory.create();
+			setProfile(newProfile)
+			setLocalStorageProfile(newProfile);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [localStorageProfile])
 
 	const handleSaveProfile = () => {
@@ -112,77 +120,68 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 			>
 			</Modal>
 			<div className="flex flex-col justify-center">
-				<div className="flex flex-row justify-center align-middle">
-					<Box mt={6} mb={6}>
+				<div className="my-6 flex flex-col md:flex-row justify-center md:items-center items:start flex-wrap">
+					<div className="mb-4 md:mb-0">
 						<SectionTitle hintColor="text-yellow-light-yellow">{t('lobbyView.playersTitle')}</SectionTitle>
-					</Box>
+					</div>
 					<Divider />
-					<Box mr={2} className="self-center">
-						<Button color='secondary' size='small'
+					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
+						<Button fullWidth color='secondary' size='small'
 							onClick={copyLinkToClipboard}
 							icon={faLink}>
 							{t('lobbyView.inviteBtnLabel')}
 						</Button>
-					</Box>
-					<Box mr={2} className="self-center">
-						<Button color='secondary' size='small'
+					</div>
+					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
+						<Button fullWidth color='secondary' size='small'
 							onClick={() => setIsEditProfileVisible(true)}
 							icon={faEdit}>
 							{t('lobbyView.editProfileBtnLabel')}
 						</Button>
-					</Box>
-					<Box className="self-center">
-						<Button color='secondary' size='small'
+					</div>
+					<div className="w-full md:w-auto">
+						<Button fullWidth color='secondary' size='small'
 							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
 						</Button>
-					</Box>
+					</div>
 				</div>
 				<div className="flex flex-row items-center">
 					<Carousel>
-						{
-							props.lobby?.players.map((player: Player) => (
-								<Box key={player.id} p={2}>
-									<UserCard player={player} currentPlayerId={playerId} creatorId={props.lobby?.hostPlayerId} />
-								</Box>
-							))
-						}
+						{props.lobby?.players.map((player: Player) => (
+							<Box key={player.id}>
+								<UserCard player={player} currentPlayerId={playerId} creatorId={props.lobby?.hostPlayerId} />
+							</Box>
+						))}
 					</Carousel>
 				</div>
-				<div className="flex flex-row align-middle">
-					<Box mt={6} mb={6}>
-						<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
-					</Box>
+				<div className="mt-6 mb-8 flex flex-row align-middle justify-between">
+					<SectionTitle hintColor="text-pink-dark-pink">{t('lobbyView.gameTitle')}</SectionTitle>
 					<Divider />
-					<div className="self-center pl-3 pr-3 m-0 h-5 rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">{props.lobby?.players.length} / 10</div>
-					{
-						props.lobby.hostPlayerId === playerId && (
-							<Box className="self-center" ml={2}>
-								<Button
-									color='primary' size='small' onClick={tryToStartGame}
-									icon={faPlay}
-								>
-									{t('lobbyView.startBtnLabel')}
-								</Button>
-							</Box>
-						)
-					}
+					<div className="self-center px-3 py-2 leading-none rounded-xl bg-pink-dark-pink text-sm font-rubik-bold text-white-white whitespace-nowrap">
+						{props.lobby?.players.length} / 10
+					</div>
+					{props.lobby.hostPlayerId === playerId && (
+						<Box className="self-center" ml={2}>
+							<Button color='primary' size='small' onClick={tryToStartGame} icon={faPlay}>
+								{t('lobbyView.startBtnLabel')}
+							</Button>
+						</Box>
+					)}
 				</div>
 				<Row>
-					{
-						gameModePropertiesValues.map(gameModeProperty =>
-							<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
-								<GameSetting
-									title={t(`gamemodes.${gameModeProperty}.title`)}
-									description={t(`gamemodes.${gameModeProperty}.description`)}
-									currentValue={gameMode}
-									value={gameModeProperty}
-									icon={faStopwatch}
-									setCurrentValue={setGameMode} />
-							</Col>,
-						)
-					}
+					{gameModePropertiesValues.map(gameModeProperty =>
+						<Col xs={12} sm={6} lg={4} key={gameModeProperty}>
+							<GameSetting
+								title={t(`gamemodes.${gameModeProperty}.title`)}
+								description={t(`gamemodes.${gameModeProperty}.description`)}
+								currentValue={gameMode}
+								value={gameModeProperty}
+								icon={faStopwatch}
+								setCurrentValue={setGameMode} />
+						</Col>,
+					)}
 				</Row>
 			</div>
 		</Layout >

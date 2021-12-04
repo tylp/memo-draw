@@ -28,18 +28,18 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 	}
 
 	return (
-		<div>
+		<div style={{ direction: 'ltr' }}>
 			<div className='h-16'>
-				<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.playersTitle')}</SectionTitle>
+				<SectionTitle hintColor="text-yellow-light-yellow">
+					{t('gameView.playersTitle')}
+				</SectionTitle>
 			</div>
 			<div>
-				{
-					props.players.map((player: Player) => (
-						<Box mb={2} key={player.id} >
-							<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
-						</Box>
-					))
-				}
+				{props.players.map((player: Player) => (
+					<Box mb={2} key={player.id} >
+						<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+					</Box>
+				))}
 			</div>
 			{
 				props.spectators.length > 0 && <Spectators spectators={props.spectators} playerId={props.playerId} />
@@ -62,8 +62,10 @@ function Spectators(props: SpectatorsProps): JSX.Element {
 
 	return (
 		<>
-			<div className='h-16'>
-				<SectionTitle hintColor="text-yellow-light-yellow">{t('gameView.spectatorsTitle')}</SectionTitle>
+			<div className='mt-10 h-16'>
+				<SectionTitle hintColor="text-yellow-light-yellow">
+					{t('gameView.spectatorsTitle')}
+				</SectionTitle>
 			</div>
 			<div>
 				{
