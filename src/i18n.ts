@@ -80,6 +80,10 @@ const resources = {
 					'description': 'Faster drawings!',
 				},
 			},
+			'errors': {
+				'goBackHome': 'Go back home',
+				'404': 'Looks like we can\'t find what you\'re looking for!',
+			},
 		},
 	},
 };
