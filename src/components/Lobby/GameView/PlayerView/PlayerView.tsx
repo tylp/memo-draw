@@ -104,7 +104,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				disableValidate={!selectedPlayer}
 				title={t('gameView.startVote')}
 			>
-				<Box mb={2} className={'w-full'}>
+				<Box mb={2} className="w-full">
 					<PlayerSelector list={getVoteTargets()} selected={selectedPlayer} setSelected={setSelectedPlayer} />
 				</Box>
 			</Modal>
@@ -191,7 +191,8 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							{hasLost && (
 								<div style={{ height: '100%', paddingTop: '12px' }}>
 									<Button
-										color='primary' size='medium'
+										color="primary"
+										size="medium"
 										fullHeight fullWidth
 										icon={faArrowRight}
 										disabled={!(hasLost || props.spectators.map(e => e.id).includes(playerId))}
@@ -234,8 +235,8 @@ function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element
 		<div style={{ height: '100%', paddingTop: '12px' }}>
 			{(props.showDrawingButton ? (
 				<Button
-					color='primary'
-					size='medium'
+					color="primary"
+					size="medium"
 					fullHeight
 					fullWidth
 					icon={faArrowRight}
@@ -245,8 +246,8 @@ function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element
 				</Button>
 			) : (
 				<Button
-					color='primary'
-					size='medium'
+					color="primary"
+					size="medium"
 					fullHeight
 					fullWidth
 					icon={faArrowRight}

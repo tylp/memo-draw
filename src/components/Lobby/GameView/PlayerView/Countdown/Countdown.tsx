@@ -44,9 +44,9 @@ export default function Countdown(props: CountdownProps): JSX.Element {
 	const content = props.limitDate ? `${Math.floor(timeLeft / 1000)} s` : (props.timeoutText || '');
 
 	return (
-		<div className='flex flex-row items-center justify-between bg-blue-darker-blue rounded-md px-3 py-1'>
-			<FontAwesomeIcon icon={faClock} className='text-yellow-light-yellow' />
-			<div className='ml-2 text-lg font-semibold text-white-white'>
+		<div className="flex flex-row items-center justify-between bg-blue-darker-blue rounded-md px-3 py-1">
+			<FontAwesomeIcon icon={faClock} className="text-yellow-light-yellow" />
+			<div className="ml-2 text-lg font-semibold text-white-white">
 				{content}
 			</div>
 		</div>

@@ -53,10 +53,10 @@ export default function SpectatorView(props: SpectatorViewProps): JSX.Element {
 									</span>
 								</div>
 							</div>
-							<div className='h-12 absolute bottom-0 right-0'>
+							<div className="h-12 absolute bottom-0 right-0">
 								<Button
-									color='primary'
-									size='medium'
+									color="primary"
+									size="medium"
 									fullHeight
 									fullWidth
 									icon={faArrowRight}

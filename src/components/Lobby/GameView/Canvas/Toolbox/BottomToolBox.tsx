@@ -51,7 +51,8 @@ function ShapesSelection(): JSX.Element {
 			{customShapesInfo.map((shape) => (
 				<BtnToolBox
 					selected={shape.type === customDrawState.selectedShape}
-					color='yellow' icon={shape.icon}
+					color="yellow"
+					icon={shape.icon}
 					key={shape.name}
 					onClick={() => { setShape(shape.type) }} />
 			))}
@@ -72,8 +73,8 @@ function UndoRedoSelection(): JSX.Element {
 
 	return (
 		<>
-			<BtnToolBox icon={faUndoAlt} color='blue' onClick={() => undo()} />
-			<BtnToolBox icon={faRedoAlt} color='blue' onClick={() => redo()} />
+			<BtnToolBox icon={faUndoAlt} color="blue" onClick={() => undo()} />
+			<BtnToolBox icon={faRedoAlt} color="blue" onClick={() => redo()} />
 		</>
 	);
 }
@@ -92,7 +93,7 @@ function VerticalDivider(): JSX.Element {
 export default function BottomToolBox(): JSX.Element {
 
 	return (
-		<div className='flex flex-wrap items-center p-2 mt-3 bg-blue-darker-blue rounded-md'>
+		<div className="flex flex-wrap items-center p-2 mt-3 bg-blue-darker-blue rounded-md">
 			<UndoRedoSelection />
 			<VerticalDivider />
 			<ShapesSelection />

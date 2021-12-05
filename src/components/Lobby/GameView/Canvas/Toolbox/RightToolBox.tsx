@@ -51,7 +51,7 @@ function SelectionSummary(): JSX.Element {
 	);
 
 	return (
-		<div className='border-4 border-opacity-50 border-black-black hidden lg:block' style={{
+		<div className="border-4 border-opacity-50 border-black-black hidden lg:block" style={{
 			position: 'relative',
 			background: alphaColor.toRgba(),
 			width: '7rem',
@@ -86,12 +86,12 @@ function ColorSelection(): JSX.Element {
 	};
 
 	return (
-		<div className='flex flex-wrap flex-grow overflow-y-auto'
+		<div className="flex flex-wrap flex-grow overflow-y-auto"
 			style={{ marginBottom: '15px' }}>
 			{colors.map((color) => (
 				<button
 					onClick={() => setColor(color)}
-					className='hover:opacity-70 duration-200 border-2 border-opacity-50 border-black-black rounded-lg'
+					className="hover:opacity-70 duration-200 border-2 border-opacity-50 border-black-black rounded-lg"
 					style={{
 						minHeight: '25px',
 						minWidth: '25px',

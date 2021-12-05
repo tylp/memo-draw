@@ -96,7 +96,7 @@ function Players(props: { players: Player[], winner: Player }): JSX.Element {
 							<div className="flex-1 pr-2">
 								<UserEtiquette
 									player={player}
-									color='secondary'
+									color="secondary"
 									disabled={index > 0}
 									rPillTitle={getPillTitleItsYou(player)} />
 							</div>
