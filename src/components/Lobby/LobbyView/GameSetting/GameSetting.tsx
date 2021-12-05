@@ -22,19 +22,18 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 				<FontAwesomeIcon className="text-yellow-light-yellow text-2xl" icon={props.icon} />
 			</div>
 			<p className="leading-tight text-white-white mb-5">{props.description}</p>
-			{!props.disabled && (
-				<Box mt={2}>
-					<Button
-						size="large"
-						color="light-secondary"
-						fullWidth
-						selected={props.currentValue === props.value}
-						onClick={() => props.setCurrentValue(props.value)}
-					>
-						{props.title}
-					</Button>
-				</Box>
-			)}
+			<Box mt={2}>
+				<Button
+					size="large"
+					color="light-secondary"
+					fullWidth
+					disabled={props.disabled}
+					selected={props.currentValue === props.value}
+					onClick={() => props.setCurrentValue(props.value)}
+				>
+					{props.title}
+				</Button>
+			</Box>
 		</div>
 	);
 }
