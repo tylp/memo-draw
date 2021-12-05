@@ -39,7 +39,7 @@ export default function Button(props: ButtonSpec): JSX.Element {
 			disabled={props.disabled || false}
 			className={className}
 		>
-			{props.icon ? <span className='pr-1'><FontAwesomeIcon icon={props.icon} /></span> : null}
+			{props.icon ? <span className="pr-1"><FontAwesomeIcon icon={props.icon} /></span> : null}
 			{props.children}
 		</button>
 	)

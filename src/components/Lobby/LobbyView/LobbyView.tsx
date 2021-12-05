@@ -126,21 +126,30 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</div>
 					<Divider />
 					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={copyLinkToClipboard}
 							icon={faLink}>
 							{t('lobbyView.inviteBtnLabel')}
 						</Button>
 					</div>
 					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={() => setIsEditProfileVisible(true)}
 							icon={faEdit}>
 							{t('lobbyView.editProfileBtnLabel')}
 						</Button>
 					</div>
 					<div className="w-full md:w-auto">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
@@ -164,7 +173,11 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</div>
 					{props.lobby.hostPlayerId === playerId && (
 						<Box className="self-center" ml={2}>
-							<Button color='primary' size='small' onClick={tryToStartGame} icon={faPlay}>
+							<Button
+								color="primary"
+								size="small"
+								onClick={tryToStartGame}
+								icon={faPlay}>
 								{t('lobbyView.startBtnLabel')}
 							</Button>
 						</Box>

@@ -46,8 +46,8 @@ export default function Modal(props: ModalProps): JSX.Element {
 							{props.showCancel && (
 								<Box mr={2}>
 									<Button
-										color='primary'
-										size='medium'
+										color="primary"
+										size="medium"
 										icon={faTimes}
 										onClick={() => props?.onClose()}
 										disabled={props.disableCancel}
@@ -58,8 +58,8 @@ export default function Modal(props: ModalProps): JSX.Element {
 							)}
 							{props.showValidate && (
 								<Button
-									color='primary'
-									size='medium'
+									color="primary"
+									size="medium"
 									icon={faCheck}
 									onClick={() => props?.onValidate()}
 									disabled={props.disableValidate}

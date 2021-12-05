@@ -84,7 +84,7 @@ export default function Homepage(): JSX.Element {
 							<RuleItem id={3} title={t('homepage.rules.3.title')} content={t('homepage.rules.3.content')} />
 						</Box>
 					</Col>
-					<Col md={6} className='mt-12 md:mt-0'>
+					<Col md={6} className="mt-12 md:mt-0">
 						<Box mb={6}>
 							<SectionTitle subtitle={t('homepage.profile.subtitle')} hintColor="text-yellow-light-yellow">{t('homepage.profile.title')}</SectionTitle>
 						</Box>
@@ -95,7 +95,7 @@ export default function Homepage(): JSX.Element {
 							onEnter={handleStart}
 						/>
 						<div style={{ width: '250px' }} className="mt-6 mx-auto">
-							<Button fullWidth color='primary' size='medium' icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
+							<Button fullWidth color="primary" size="medium" icon={faPlay} disabled={!isStartEnabled} onClick={handleStart}>{t('homepage.start')}</Button>
 						</div>
 					</Col>
 				</Row>
