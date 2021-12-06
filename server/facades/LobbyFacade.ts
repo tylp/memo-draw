@@ -124,7 +124,7 @@ export default class LobbyFacade {
 		const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 		const lobby = Application.getLobbyStorage().get(lobbyId);
 
-		if(LobbyService.isPlayerHostOfLobby(lobby.hostPlayerId, player.id)) {
+		if (lobby.isPlayerHost(player.id)) {
 			socket.in(Lobby.getLobbyName(lobbyId)).emit('update-game-mode', gameMode);
 		}
 	}
