@@ -3,8 +3,6 @@ import { Button, Title } from '../../../Common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Box from '../../../Common/Box/Box';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import SocketEventEmitter from 'src/services/SocketEventEmitter';
-import { Socket } from 'socket.io-client'; 
 import { GameModeProperty } from 'server/enums/GameProperties';
 
 interface GameSettingSpec {
@@ -15,7 +13,7 @@ interface GameSettingSpec {
 	currentValue: string | number,
 	value: string | number,
 	disabled?: boolean,
-	socket: Socket,
+	onClick?: (v: GameModeProperty) => void
 }
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {
@@ -35,7 +33,7 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 					selected={props.currentValue === props.value}
 					onClick={() => {
 						props.setCurrentValue(props.value)
-						SocketEventEmitter.updateGameMode(props.socket, GameModeProperty[props.value])
+						props.onClick(props.value as GameModeProperty);
 					}}
 				>
 					{props.title}

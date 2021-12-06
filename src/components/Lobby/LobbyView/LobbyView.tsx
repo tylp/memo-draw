@@ -50,7 +50,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
-		props.socket.on('update-gamevote', (newGameMode: GameModeProperty) => {
+		props.socket.on('update-game-mode', (newGameMode: GameModeProperty) => {
 			setGameMode(newGameMode)
 		})
 	}, [props.socket])
@@ -65,6 +65,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [localStorageProfile])
+
+	const gameModeSettingOnClick = (gameMode: GameModeProperty) => {
+		SocketEventEmitter.updateGameMode(props.socket, gameMode)
+	};
 
 	const handleSaveProfile = () => {
 		if (isProfileValid) {
@@ -202,7 +206,7 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 								icon={faStopwatch}
 								setCurrentValue={setGameMode}
 								disabled={props.lobby.hostPlayerId !== playerId}
-								socket={socket} />
+								onClick={gameModeSettingOnClick} />
 						</Col>,
 					)}
 				</Row>

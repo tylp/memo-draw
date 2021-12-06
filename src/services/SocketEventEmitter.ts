@@ -53,7 +53,7 @@ export default class SocketEventEmitter {
 		socket.emit('play-again');
 	}
 
-	public static updateGameMode(socket: Socket, gamemode: GameModeProperty): void {
-		socket.emit('update-gamemode', gamemode)
+	public static updateGameMode(socket: Socket, gameMode: GameModeProperty): void {
+		socket.emit('update-game-mode', gameMode)
 	}
 }

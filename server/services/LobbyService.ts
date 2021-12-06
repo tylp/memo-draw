@@ -25,6 +25,13 @@ export default class LobbyService {
 		Application.getPlayerLobbyStorage().set(sessionId, lobbyId)
 	}
 
+	public static isPlayerHostOfLobby(playerId1: Lobby['hostPlayerId'], playerId2: Player['id']): boolean {
+		if (playerId1 === playerId2) {
+			return true;
+		}
+		return false;
+	}
+
 	public static reassignHost({ playerId, sessionId }: PlayerIdentifiers): Lobby {
 		const session = Application.getSessionStorage().get(sessionId);
 		const lobbyId = Application.getPlayerLobbyStorage().get(sessionId);
@@ -38,7 +45,7 @@ export default class LobbyService {
 	}
 
 	public static start(lobby: Lobby, player: Player, gameModeProperty: GameModeProperty): boolean {
-		if (lobby.hostPlayerId === player.id) {
+		if (LobbyService.isPlayerHostOfLobby(lobby.hostPlayerId, player.id)) {
 			lobby.startGame(gameModeProperty);
 			return true;
 		}
@@ -90,4 +97,5 @@ export default class LobbyService {
 
 		return lobbyOfCurrentPlayer;
 	}
+
 }
