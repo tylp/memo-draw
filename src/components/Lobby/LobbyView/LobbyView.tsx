@@ -67,7 +67,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	}, [localStorageProfile])
 
 	const gameModeSettingOnClick = (gameMode: GameModeProperty) => {
-		SocketEventEmitter.updateGameMode(props.socket, gameMode)
+		if (props.lobby.hostPlayerId === playerId) {
+			SocketEventEmitter.updateGameMode(props.socket, gameMode)
+		}
 	};
 
 	const handleSaveProfile = () => {
