@@ -3,8 +3,8 @@ import type { Player } from '../..';
 import type Game from '../Game';
 import GameMode from './GameMode';
 
-const MIN_SECONDS_POSSIBLE = 4;
-const MAX_SECONDS_POSSIBLE = 10;
+const MIN_SECONDS_POSSIBLE = 8;
+const MAX_SECONDS_POSSIBLE = 15;
 
 export default class ClassicGameMode extends GameMode {
 	protected currentPlayerIndex = 0;
@@ -18,7 +18,7 @@ export default class ClassicGameMode extends GameMode {
 			return MAX_SECONDS_POSSIBLE;
 		if (game.currentDrawingIndex >= 20)
 			return MIN_SECONDS_POSSIBLE;
-		return -2 * Math.log(game.currentDrawingIndex) + 10;
+		return -2 * Math.log(game.currentNumberOfDrawings) + 15;
 	}
 
 	public getNextPlayer(game: Game): Player {
