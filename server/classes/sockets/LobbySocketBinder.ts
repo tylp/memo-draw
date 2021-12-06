@@ -18,6 +18,7 @@ export default class LobbySocketBinder extends SocketBinder {
 		this.onLeaveGame(socket);
 		this.onStartVote(socket);
 		this.onVote(socket);
+		// this.onUpdateGameMode(socket);
 	}
 
 	private static onJoinLobby(socket: Socket): void {
@@ -78,4 +79,8 @@ export default class LobbySocketBinder extends SocketBinder {
 			LobbyFacade.vote(socket, vote);
 		})
 	}
+
+	// private static onUpdateGameMode(socket: Socket): void {
+	// 	//
+	// }
 }

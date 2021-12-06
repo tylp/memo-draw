@@ -24,10 +24,12 @@ import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import ProfileValidatorService from 'server/services/ProfileValidatorService';
+import { Socket } from 'socket.io-client';
 
 interface LobbyViewProps {
 	lobby: Lobby;
 	leaveGame: () => void;
+	socket: Socket;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
@@ -46,6 +48,12 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [isProfileValid, setIsProfileValid] = useState(false);
 
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
+
+	useEffect(() => {
+		props.socket.on('update-gamevote', (newGameMode: GameModeProperty) => {
+			setGameMode(newGameMode)
+		})
+	}, [props.socket])
 
 	useEffect(() => {
 		if (localStorageProfile && ProfileValidatorService.validate(localStorageProfile)) {
@@ -193,7 +201,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 								value={gameModeProperty}
 								icon={faStopwatch}
 								setCurrentValue={setGameMode}
-								disabled={props.lobby.hostPlayerId !== playerId} />
+								disabled={props.lobby.hostPlayerId !== playerId}
+								socket={socket} />
 						</Col>,
 					)}
 				</Row>
