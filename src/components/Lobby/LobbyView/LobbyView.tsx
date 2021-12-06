@@ -53,6 +53,10 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		props.socket.on('update-game-mode', (newGameMode: GameModeProperty) => {
 			setGameMode(newGameMode)
 		})
+
+		return () => {
+			props.socket.off('update-game-mode');
+		}
 	}, [props.socket])
 
 	useEffect(() => {
