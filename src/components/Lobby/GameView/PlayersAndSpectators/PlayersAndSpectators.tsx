@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Player } from '../../../../../server/classes';
 import { Box, SectionTitle } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
+import { faPersonBooth } from '@fortawesome/free-solid-svg-icons';
 
 interface PlayersAndSpectatorsProps {
 	players: Player[];
@@ -10,6 +11,7 @@ interface PlayersAndSpectatorsProps {
 	losers: Player[];
 	currentPlayer: Player;
 	playerId: Player['id'];
+	startVote: (player: Player) => void;
 }
 
 export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): JSX.Element {
@@ -27,8 +29,12 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 		return props.losers.map(e => e.id).includes(player.id)
 	}
 
+	const canVoteAgainst = (player: Player): boolean => {
+		return player.id !== props.playerId && !props.losers.map(e => e.id).includes(player.id)
+	}
+
 	return (
-		<div style={{ direction: 'ltr' }}>
+		<div>
 			<div className="h-16">
 				<SectionTitle hintColor="text-yellow-light-yellow">
 					{t('gameView.playersTitle')}
@@ -37,7 +43,15 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 			<div>
 				{props.players.map((player: Player) => (
 					<Box mb={2} key={player.id} >
-						<UserEtiquette player={player} color="secondary" disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+						<UserEtiquette
+							player={player}
+							color="secondary"
+							disabled={hasPlayerLost(player)}
+							rPillTitle={getPillTitleItsYou(player)}
+							brPillTitle={getPillTitleDrawing(player)}
+							leftPillIcon={faPersonBooth}
+							onLeftPillClick={canVoteAgainst(player) ? () => props.startVote(player) : undefined}
+						/>
 					</Box>
 				))}
 			</div>
