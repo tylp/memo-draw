@@ -24,10 +24,12 @@ import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import ProfileValidatorService from 'server/services/ProfileValidatorService';
+import { Socket } from 'socket.io-client';
 
 interface LobbyViewProps {
 	lobby: Lobby;
 	leaveGame: () => void;
+	socket: Socket;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
@@ -48,6 +50,16 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
+		props.socket.on('update-game-mode', (newGameMode: GameModeProperty) => {
+			setGameMode(newGameMode)
+		})
+
+		return () => {
+			props.socket.off('update-game-mode');
+		}
+	}, [props.socket])
+
+	useEffect(() => {
 		if (localStorageProfile && ProfileValidatorService.validate(localStorageProfile)) {
 			setProfile(localStorageProfile);
 		} else {
@@ -57,6 +69,12 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [localStorageProfile])
+
+	const gameModeSettingOnClick = (gameMode: GameModeProperty) => {
+		if (props.lobby.hostPlayerId === playerId) {
+			SocketEventEmitter.updateGameMode(props.socket, gameMode)
+		}
+	};
 
 	const handleSaveProfile = () => {
 		if (isProfileValid) {
@@ -193,7 +211,8 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 								value={gameModeProperty}
 								icon={faStopwatch}
 								setCurrentValue={setGameMode}
-								disabled={props.lobby.hostPlayerId !== playerId} />
+								disabled={props.lobby.hostPlayerId !== playerId}
+								onClick={gameModeSettingOnClick} />
 						</Col>,
 					)}
 				</Row>

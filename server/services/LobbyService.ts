@@ -38,7 +38,7 @@ export default class LobbyService {
 	}
 
 	public static start(lobby: Lobby, player: Player, gameModeProperty: GameModeProperty): boolean {
-		if (lobby.hostPlayerId === player.id) {
+		if (lobby.isPlayerHost(player.id)) {
 			lobby.startGame(gameModeProperty);
 			return true;
 		}
@@ -49,7 +49,7 @@ export default class LobbyService {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
-		if (lobbyOfCurrentPlayer.hostIs(playerId)) {
+		if (lobbyOfCurrentPlayer.isPlayerHost(playerId)) {
 			this.quit({ playerId: kickedPlayerId, sessionId: kickedSessionId });
 		}
 
@@ -90,4 +90,5 @@ export default class LobbyService {
 
 		return lobbyOfCurrentPlayer;
 	}
+
 }
