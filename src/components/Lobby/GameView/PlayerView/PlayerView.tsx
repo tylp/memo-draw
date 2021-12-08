@@ -170,23 +170,25 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						/>
 					</div>
 					<div className={styles['col-gap']}>
-						<div className="flex flex-row justify-between">
+						<div className="flex flex-row justify-between mb-4">
 							<div className="flex-none md:-top-11 z-10">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
 							</div>
-							<div className="flex-grow top-0 md:-top-11 z-10 text-center antialiased">
-								{props.currentPlayer.id === playerId && (
-									<div className="font-bold font-rubik leading-8">
-										{props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
-										&& ( <p className="text-pink-light-pink">Draw something new to add !</p>
-										) || <p className="text-yellow-light-yellow">Draw what you remember !</p> }
-										
-									</div>
-								) || (
-									<div className="text-white-white font-bold font-rubik leading-8">
-										<p>Memorize each drawing in order !</p>										
-									</div>
-								)}
+							<div className="top-0 md:-top-11 z-10 text-center antialiased">
+								<div className="bg-blue-darker-blue font-bold font-rubik h-full w-auto px-4 rounded-lg flex items-center">
+									{props.currentPlayer.id === playerId && (
+										<>
+											{props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
+											&& ( <div className="text-pink-light-pink">Draw something new to add !</div>
+											) || <div className="text-yellow-light-yellow">Draw what you remember !</div> }
+											
+										</>
+									) || (
+										<>
+											<div className="text-white-white">Memorize each drawing in order !</div>										
+										</>
+									)}
+								</div>
 							</div>
 							<div style={{ right: '0' }} className="flex-none top-0 md:-top-11 z-10">
 								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center antialiased">
