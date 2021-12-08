@@ -198,7 +198,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								</div>
 							</div>
 						</div>
-						<Canvas engine={props.engine} setEngine={props.setEngine} />
+						<Canvas engine={props.engine} setEngine={props.setEngine} isPlayerTurn={props.currentPlayer.id === playerId} isPlayerAddDraw={props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings}/>
 						<BottomToolBox />
 					</div>
 					<div className="h-full flex flex-col">

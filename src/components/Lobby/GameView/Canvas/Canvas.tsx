@@ -13,10 +13,12 @@ function onPainted(callback) {
 
 interface CanvasProps {
 	engine: Engine;
-	setEngine: React.Dispatch<React.SetStateAction<Engine>>
+	setEngine: React.Dispatch<React.SetStateAction<Engine>>;
+	isPlayerTurn?: boolean;
+	isPlayerAddDraw?: boolean;
 }
 
-export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element {
+export default function Canvas({ engine, setEngine, isPlayerTurn, isPlayerAddDraw }: CanvasProps): JSX.Element {
 	const canvasRef = useRef<HTMLCanvasElement>();
 
 	useEffect(() => {
@@ -48,7 +50,7 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 				backgroundPosition: 'center',
 				zIndex: 0,
 				...commonCanvasStyle,
-			}}></div>
+			}} className={isPlayerTurn ? isPlayerAddDraw ? 'ring-4 ring-pink-light-pink ring-inset' : 'ring-4 ring-yellow-light-yellow ring-inset' : ''}></div>
 			<canvas style={{ zIndex: 2, ...commonCanvasStyle }} ref={canvasRef} />
 		</div>
 	);
