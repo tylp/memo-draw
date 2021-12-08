@@ -95,6 +95,21 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		return (new VoteTargets(props.lobby, playerId)).get();
 	}
 
+	const getClassName = (): string => {
+		const isPlayerTurn = props.currentPlayer.id === playerId
+		const isPlayerAddDraw = props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
+
+		if (isPlayerTurn) {
+			if (isPlayerAddDraw) {
+				return 'ring-4 ring-pink-light-pink ring-inset';
+			} else {
+				return 'ring-4 ring-yellow-light-yellow ring-inset';
+			}
+		}
+
+		return '';
+	}
+
 	return (
 		<Layout size="large">
 			<Modal
@@ -179,15 +194,16 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 									{props.currentPlayer.id === playerId && (
 										<>
 											{props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
-											&& ( <div className="text-pink-light-pink">Draw something new to add !</div>
-											) || <div className="text-yellow-light-yellow">Draw what you remember !</div> }
-											
+												&& (<div className="text-pink-light-pink">Draw something new to add !</div>
+												) || <div className="text-yellow-light-yellow">Draw what you remember !</div>}
+
 										</>
-									) || (
-										<>
-											<div className="text-white-white">Memorize each drawing in order !</div>										
-										</>
-									)}
+									)
+										|| (
+											<>
+												<div className="text-white-white">Memorize each drawing in order !</div>
+											</>
+										)}
 								</div>
 							</div>
 							<div style={{ right: '0' }} className="flex-none top-0 md:-top-11 z-10">
@@ -198,7 +214,11 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 								</div>
 							</div>
 						</div>
-						<Canvas engine={props.engine} setEngine={props.setEngine} isPlayerTurn={props.currentPlayer.id === playerId} isPlayerAddDraw={props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings}/>
+						<Canvas
+							engine={props.engine}
+							setEngine={props.setEngine}
+							className={getClassName()}
+						/>
 						<BottomToolBox />
 					</div>
 					<div className="h-full flex flex-col">

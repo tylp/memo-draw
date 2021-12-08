@@ -14,11 +14,14 @@ function onPainted(callback) {
 interface CanvasProps {
 	engine: Engine;
 	setEngine: React.Dispatch<React.SetStateAction<Engine>>;
-	isPlayerTurn?: boolean;
-	isPlayerAddDraw?: boolean;
+	className?: string;
 }
 
-export default function Canvas({ engine, setEngine, isPlayerTurn, isPlayerAddDraw }: CanvasProps): JSX.Element {
+Canvas.defaultProps = {
+	className: '',
+}
+
+export default function Canvas({ engine, setEngine, className }: CanvasProps): JSX.Element {
 	const canvasRef = useRef<HTMLCanvasElement>();
 
 	useEffect(() => {
@@ -37,9 +40,9 @@ export default function Canvas({ engine, setEngine, isPlayerTurn, isPlayerAddDra
 	}, [engine])
 
 	const commonCanvasStyle: CSSProperties = {
-		width: '100%', 
+		width: '100%',
 		height: '100%',
-		position: 'absolute', 
+		position: 'absolute',
 		borderRadius: '0.5em',
 	}
 
@@ -50,7 +53,7 @@ export default function Canvas({ engine, setEngine, isPlayerTurn, isPlayerAddDra
 				backgroundPosition: 'center',
 				zIndex: 0,
 				...commonCanvasStyle,
-			}} className={isPlayerTurn ? isPlayerAddDraw ? 'ring-4 ring-pink-light-pink ring-inset' : 'ring-4 ring-yellow-light-yellow ring-inset' : ''}></div>
+			}} className={className}></div>
 			<canvas style={{ zIndex: 2, ...commonCanvasStyle }} ref={canvasRef} />
 		</div>
 	);
