@@ -29,9 +29,9 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 	useEffect(() => {
 		if (!engine) return;
 
-		// Manually update bounds when component is painted
+		// Manually force resize when component is painted
 		// Needed to correctly handle mouse position on canvas
-		onPainted(() => { engine.canvasManager.updateBounds(); });
+		onPainted(() => { engine.shapeManager.internalEventManager.resize(); });
 	}, [engine])
 
 	const commonCanvasStyle: CSSProperties = {
