@@ -43,10 +43,10 @@ export default function SpectatorView(props: SpectatorViewProps): JSX.Element {
 					</div>
 					<div>
 						<div className="relative">
-							<div className="absolute top-0 md:-top-11">
+							<div className="absolute top-0 md:-top-11 z-10">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} />
 							</div>
-							<div style={{ right: '0' }} className="absolute top-0 md:-top-11">
+							<div style={{ right: '0' }} className="absolute top-0 md:-top-11 z-10">
 								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center">
 									<span className="text-lg font-semibold text-white-white">
 										{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}
