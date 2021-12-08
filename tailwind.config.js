@@ -43,7 +43,7 @@ module.exports = {
 			'pt-1',
 			'pt-5',
 			'relative',
-			'ring-4',
+			'ring-2',
 			'ring-yellow-light-yellow',
 			'text-blue-light-blue',
 			'text-grey-grey',

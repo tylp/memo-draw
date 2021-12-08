@@ -94,21 +94,17 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 				<div style={{ userSelect: 'none' }} className={`mt-6 ${styles['grid-3']}`}>
 					<div className={`${styles['col-gap']} ${styles['player-overflow']}`}>
 						<div style={{ direction: 'ltr' }}>
-							<Box mb={2}>
-								{
-									((props.lobby?.game?.playerErrorVoteManager?.selectedPlayer?.id !== playerId) && props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
-										<>
-											<div className="h-16">
-												<SectionTitle hintColor="text-yellow-light-yellow">
-													{t('gameView.voting')}
-												</SectionTitle>
-											</div>
-											<p className="text-white-white">{t('gameView.hasThisPlayerMadeAnError')}</p>
-											<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
-										</>
-									)
-								}
-							</Box>
+							{
+								((props.lobby?.game?.playerErrorVoteManager?.selectedPlayer?.id !== playerId) && props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
+									<Box mb={6}>
+										<SectionTitle hintColor="text-yellow-light-yellow">
+											{t('gameView.voting')}
+										</SectionTitle>
+										<p className="text-white-white">{t('gameView.hasThisPlayerMadeAnError')}</p>
+										<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
+									</Box>
+								)
+							}
 						</div>
 						<div style={{ direction: 'ltr' }}>
 							<PlayersAndSpectators

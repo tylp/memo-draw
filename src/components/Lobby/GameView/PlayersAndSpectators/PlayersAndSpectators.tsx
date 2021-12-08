@@ -35,11 +35,11 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 
 	return (
 		<div>
-			<div className="h-16">
+			<Box mb={2}>
 				<SectionTitle hintColor="text-yellow-light-yellow">
 					{t('gameView.playersTitle')}
 				</SectionTitle>
-			</div>
+			</Box>
 			<div>
 				{props.players.map((player: Player) => (
 					<Box mb={2} key={player.id} >
