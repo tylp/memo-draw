@@ -10,7 +10,7 @@ import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
 import SocketEventEmitter from '../../../../services/SocketEventEmitter';
 import VoteTargets from '../../../../services/VoteTargets/VoteTargets';
-import { Box, Button, Layout } from '../../../Common'
+import { Box, Button, Layout, SectionTitle } from '../../../Common'
 import BottomToolBox from '../Canvas/Toolbox/BottomToolBox';
 import { EngineContextProvider } from '../Canvas/Toolbox/EngineContext';
 import RightToolBox from '../Canvas/Toolbox/RightToolBox';
@@ -97,7 +97,14 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							<Box mb={2}>
 								{
 									((props.lobby?.game?.playerErrorVoteManager?.selectedPlayer?.id !== playerId) && props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
-										<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
+										<>
+											<div className="h-16">
+												<SectionTitle hintColor="text-yellow-light-yellow">
+													{t('gameView.voting')}
+												</SectionTitle>
+											</div>
+											<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
+										</>
 									)
 								}
 							</Box>

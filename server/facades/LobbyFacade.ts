@@ -99,6 +99,7 @@ export default class LobbyFacade {
 		this.emitToLobby('vote-started', playerLobby, playerLobby);
 
 		setTimeout(() => {
+			if (!playerLobby) return;
 			playerLobby?.game.endVote();
 			Application.getSocketIoInstance().of('/game').to(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
 		}, playerLobby?.game?.playerErrorVoteManager.getVoteEndDate().diff(dayjs(), 'milliseconds'));

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Player } from '../../../../../server/classes';
 import { Box, SectionTitle } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
-import { faPersonBooth } from '@fortawesome/free-solid-svg-icons';
+import { faBomb } from '@fortawesome/free-solid-svg-icons';
 
 interface PlayersAndSpectatorsProps {
 	players: Player[];
@@ -49,7 +49,7 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 							disabled={hasPlayerLost(player)}
 							rPillTitle={getPillTitleItsYou(player)}
 							brPillTitle={getPillTitleDrawing(player)}
-							leftPillIcon={faPersonBooth}
+							leftPillIcon={faBomb}
 							onLeftPillClick={canVoteAgainst(player) ? () => props.startVote?.(player) : undefined}
 						/>
 					</Box>
