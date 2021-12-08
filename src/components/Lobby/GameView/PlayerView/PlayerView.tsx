@@ -170,26 +170,26 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						/>
 					</div>
 					<div className={styles['col-gap']}>
-						<div className="grid grid-cols-3 justify-items-stretch">
-							<div className="justify-self-start md:-top-11 z-10">
+						<div className="flex flex-row justify-between">
+							<div className="flex-none md:-top-11 z-10">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
 							</div>
-							<div className="justify-self-stretch top-0 md:-top-11 z-10 text-center">
+							<div className="flex-grow top-0 md:-top-11 z-10 text-center antialiased">
 								{props.currentPlayer.id === playerId && (
-									<div className="text-lg font-semibold text-white-white">
+									<div className="font-bold font-rubik leading-8">
 										{props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
-										&& ( <p>Draw something new to add !</p>
-										) || <p>Draw what you remember !</p> }
+										&& ( <p className="text-pink-light-pink">Draw something new to add !</p>
+										) || <p className="text-yellow-light-yellow">Draw what you remember !</p> }
 										
 									</div>
 								) || (
-									<div className="text-lg font-semibold text-white-white">
-										<p>Try to memorize each drawing you see in order !</p>										
+									<div className="text-white-white font-bold font-rubik leading-8">
+										<p>Memorize each drawing in order !</p>										
 									</div>
 								)}
 							</div>
-							<div style={{ right: '0' }} className="justify-self-end top-0 md:-top-11 z-10">
-								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center">
+							<div style={{ right: '0' }} className="flex-none top-0 md:-top-11 z-10">
+								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center antialiased">
 									<span className="text-lg font-semibold text-white-white">
 										{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}
 									</span>
