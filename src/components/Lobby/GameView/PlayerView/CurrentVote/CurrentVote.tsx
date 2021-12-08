@@ -23,10 +23,22 @@ export default function CurrentVote(props: CurrentVoteProps): JSX.Element {
 			<Col>
 				<Row>
 					<Col sm={12} lg={6}>
-						<Button size={'small'} selected={props.currentVote === 'yes'} color={'primary'} fullWidth onClick={() => props.vote('yes')}>{t('gameView.yes')}</Button>
+						<Button
+							size="small"
+							selected={props.currentVote === 'yes'}
+							color={props.currentVote !== 'no' ? 'primary' : 'light-secondary'}
+							fullWidth
+							onClick={() => props.vote('yes')}
+						>{t('gameView.yes')}</Button>
 					</Col>
 					<Col sm={12} lg={6}>
-						<Button size={'small'} selected={props.currentVote === 'no'} color={'primary'} fullWidth onClick={() => props.vote('no')}>{t('gameView.no')}</Button>
+						<Button
+							size="small"
+							selected={props.currentVote === 'no'}
+							color={props.currentVote !== 'yes' ? 'primary' : 'light-secondary'}
+							fullWidth
+							onClick={() => props.vote('no')}
+						>{t('gameView.no')}</Button>
 					</Col>
 				</Row>
 			</Col>

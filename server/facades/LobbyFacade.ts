@@ -54,6 +54,7 @@ export default class LobbyFacade {
 	}
 
 	private static emitToLobby(ev: string, lobby: Lobby, ...params: unknown[]): void {
+		if (!lobby) return;
 		params = params || [];
 		Application.getSocketIoInstance()
 			.of('/game')

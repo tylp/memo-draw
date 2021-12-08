@@ -96,7 +96,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						<div style={{ direction: 'ltr' }}>
 							<Box mb={2}>
 								{
-									(props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
+									((props.lobby?.game?.playerErrorVoteManager?.selectedPlayer?.id !== playerId) && props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
 										<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
 									)
 								}
