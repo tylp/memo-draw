@@ -11,7 +11,7 @@ interface PlayersAndSpectatorsProps {
 	losers: Player[];
 	currentPlayer: Player;
 	playerId: Player['id'];
-	startVote: (player: Player) => void;
+	startVote?: undefined | ((player: Player) => void);
 }
 
 export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): JSX.Element {
@@ -50,7 +50,7 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 							rPillTitle={getPillTitleItsYou(player)}
 							brPillTitle={getPillTitleDrawing(player)}
 							leftPillIcon={faPersonBooth}
-							onLeftPillClick={canVoteAgainst(player) ? () => props.startVote(player) : undefined}
+							onLeftPillClick={canVoteAgainst(player) ? () => props.startVote?.(player) : undefined}
 						/>
 					</Box>
 				))}
