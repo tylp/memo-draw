@@ -182,6 +182,10 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 										) || <p>Draw what you remember !</p> }
 										
 									</div>
+								) || (
+									<div className="text-lg font-semibold text-white-white">
+										<p>Try to memorize each drawing you see in order !</p>										
+									</div>
 								)}
 							</div>
 							<div style={{ right: '0' }} className="justify-self-end top-0 md:-top-11 z-10">
