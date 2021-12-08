@@ -36,7 +36,7 @@ export default abstract class StyleBuilder {
 
 	buildSelected(): this {
 		if (this.isSelected) {
-			this.result += ' ring-yellow-light-yellow ring-2';
+			this.result += ' ring-yellow-light-yellow ring-2 ring-inset';
 			this.addSeparator()
 		}
 		return this;
