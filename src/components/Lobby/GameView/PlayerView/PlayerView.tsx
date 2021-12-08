@@ -72,6 +72,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 	const startVote = (player: Player) => {
 		if (playerId !== player.id && getVoteTargets().includes(player)) {
+			setCurrentVote('yes');
 			SocketEventEmitter.startVote(props.socket, player);
 		}
 	}
@@ -96,7 +97,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 							<Box mb={2}>
 								{
 									(props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
-										<CurrentVote vote={vote} currentVote={props.lobby?.game?.playerErrorVoteManager} />
+										<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
 									)
 								}
 							</Box>
@@ -144,59 +145,22 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 									</Button>
 								</div>
 							)}
-							<StartVoteOrSendDrawing
-								showDrawingButton={playerId === props.currentPlayer?.id}
-								disableDrawingButton={hasLost}
-								onClickDrawingButton={nextDrawing}
-								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
-								onClickStartVoteButton={() => {
-									setCurrentVote('yes');
-								}}
-							/>
+							<div style={{ height: '100%', paddingTop: '12px' }}>
+								<Button
+									color="primary"
+									size="medium"
+									fullHeight
+									fullWidth
+									icon={faArrowRight}
+									disabled={!(props.lobby.game.currentPlayer.id === playerId) || hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
+									onClick={nextDrawing}>
+									{t('gameView.sendDrawing')}
+								</Button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</EngineContextProvider>
 		</Layout>
-	)
-}
-
-interface StartVoteOrSendDrawingProps {
-	showDrawingButton: boolean;
-	disableDrawingButton: boolean;
-	onClickDrawingButton: () => void;
-	disableStartVoteButton: boolean;
-	onClickStartVoteButton: () => void;
-}
-
-function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element {
-	const { t } = useTranslation();
-
-	return (
-		<div style={{ height: '100%', paddingTop: '12px' }}>
-			{(props.showDrawingButton ? (
-				<Button
-					color="primary"
-					size="medium"
-					fullHeight
-					fullWidth
-					icon={faArrowRight}
-					disabled={props.disableDrawingButton}
-					onClick={props.onClickDrawingButton}>
-					{t('gameView.sendDrawing')}
-				</Button>
-			) : (
-				<Button
-					color="primary"
-					size="medium"
-					fullHeight
-					fullWidth
-					icon={faArrowRight}
-					disabled={props.disableStartVoteButton}
-					onClick={props.onClickStartVoteButton}>
-					{t('gameView.startVote')}
-				</Button>
-			))}
-		</div>
 	)
 }
