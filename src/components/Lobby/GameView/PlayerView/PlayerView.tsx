@@ -103,6 +103,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 													{t('gameView.voting')}
 												</SectionTitle>
 											</div>
+											<p className="text-white-white">{t('gameView.hasThisPlayerMadeAnError')}</p>
 											<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
 										</>
 									)
