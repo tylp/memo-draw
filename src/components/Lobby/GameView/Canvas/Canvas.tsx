@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { CSSProperties, useEffect, useRef } from 'react';
 import { Engine } from 'memo-draw-engine';
 
 // Util function used to trigger when a component is fully painted
@@ -34,18 +34,22 @@ export default function Canvas({ engine, setEngine }: CanvasProps): JSX.Element 
 		onPainted(() => { engine.canvasManager.updateBounds(); });
 	}, [engine])
 
+	const commonCanvasStyle: CSSProperties = {
+		width: '100%', 
+		height: '100%',
+		position: 'absolute', 
+		borderRadius: '0.5em',
+	}
+
 	return (
 		<div style={{ width: '100%', aspectRatio: '8/6', position: 'relative' }}>
 			<div style={{
-				position: 'absolute',
 				backgroundColor: 'white',
 				backgroundPosition: 'center',
-				borderRadius: '0.5em',
 				zIndex: 0,
-				width: '100%',
-				height: '100%',
+				...commonCanvasStyle,
 			}}></div>
-			<canvas style={{ zIndex: 2, width: '100%', height: '100%', position: 'absolute' }} ref={canvasRef} />
+			<canvas style={{ zIndex: 2, ...commonCanvasStyle }} ref={canvasRef} />
 		</div>
 	);
 }
