@@ -27,7 +27,7 @@ export default class Lobby {
 		const index = this.players.findIndex(e => e.id === playerId);
 		if (index !== -1) {
 			this.players.splice(index, 1);
-			if (this.hostIs(playerId)) {
+			if (this.isPlayerHost(playerId)) {
 				this.assignRandomHost();
 			}
 		}
@@ -39,7 +39,7 @@ export default class Lobby {
 		return this.players.findIndex(e => e.id === playerId) !== -1;
 	}
 
-	hostIs(playerId: string): boolean {
+	isPlayerHost(playerId: string): boolean {
 		return this.hostPlayerId === playerId;
 	}
 

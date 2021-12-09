@@ -54,6 +54,7 @@ export default class LobbyFacade {
 	}
 
 	private static emitToLobby(ev: string, lobby: Lobby, ...params: unknown[]): void {
+		if (!lobby) return;
 		params = params || [];
 		Application.getSocketIoInstance()
 			.of('/game')
@@ -101,6 +102,7 @@ export default class LobbyFacade {
 		this.emitToLobby('vote-started', playerLobby, playerLobby);
 
 		setTimeout(() => {
+			if (!playerLobby) return;
 			playerLobby?.game.endVote();
 			Application.getSocketIoInstance().of('/game').to(playerLobby.getSocketRoomName()).emit('stop-vote', playerLobby);
 		}, playerLobby?.game?.playerErrorVoteManager.getVoteEndDate().diff(dayjs(), 'milliseconds'));
@@ -120,5 +122,15 @@ export default class LobbyFacade {
 		const lobby = LobbyService.playAgain(SocketIdentifierService.getIdentifiersOf(socket));
 
 		this.updateLobby(lobby);
+	}
+
+	public static updateGameMode(socket: Socket, gameMode: GameModeProperty): void {
+		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+		const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
+		const lobby = Application.getLobbyStorage().get(lobbyId);
+
+		if (lobby.isPlayerHost(player.id)) {
+			socket.in(Lobby.getLobbyName(lobbyId)).emit('update-game-mode', gameMode);
+		}
 	}
 }

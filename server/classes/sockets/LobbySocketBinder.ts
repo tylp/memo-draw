@@ -18,6 +18,7 @@ export default class LobbySocketBinder extends SocketBinder {
 		this.onLeaveGame(socket);
 		this.onStartVote(socket);
 		this.onVote(socket);
+		this.onUpdateGameMode(socket);
 	}
 
 	private static onJoinLobby(socket: Socket): void {
@@ -48,7 +49,7 @@ export default class LobbySocketBinder extends SocketBinder {
 		socket.on('disconnect', () => {
 			const lobbyId = Application.getPlayerLobbyStorage().get(SocketIdentifierService.getSessionIdentifier(socket));
 			const lobby: Lobby = Application.getLobbyStorage().removePlayer(lobbyId, playerId);
-			if (lobby?.hostIs(playerId)) {
+			if (lobby?.isPlayerHost(playerId)) {
 				lobby.assignRandomHost();
 			}
 			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', lobby);
@@ -76,6 +77,12 @@ export default class LobbySocketBinder extends SocketBinder {
 	private static onVote(socket: Socket): void {
 		socket.on('vote', (vote) => {
 			LobbyFacade.vote(socket, vote);
+		})
+	}
+
+	private static onUpdateGameMode(socket: Socket): void {
+		socket.on('update-game-mode', (gameMode) => {
+			LobbyFacade.updateGameMode(socket, gameMode);
 		})
 	}
 }

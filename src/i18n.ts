@@ -56,6 +56,7 @@ const resources = {
 				'itsYouLabel': 'It\'s You',
 				'yes': 'Yes',
 				'no': 'No',
+				'voting': 'Voting',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',

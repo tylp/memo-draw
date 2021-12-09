@@ -24,10 +24,12 @@ import { Col, Row } from 'react-grid-system';
 import SocketEventEmitter from '../../../services/SocketEventEmitter';
 import { useSuccessSnackbar, useWarningSnackbar } from '../../../hooks/useSnackbar/useSnackbar';
 import ProfileValidatorService from 'server/services/ProfileValidatorService';
+import { Socket } from 'socket.io-client';
 
 interface LobbyViewProps {
 	lobby: Lobby;
 	leaveGame: () => void;
+	socket: Socket;
 }
 
 export default function LobbyView(props: LobbyViewProps): JSX.Element {
@@ -48,6 +50,16 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 	const [gameMode, setGameMode] = useState(GameModeProperty.Classic);
 
 	useEffect(() => {
+		props.socket.on('update-game-mode', (newGameMode: GameModeProperty) => {
+			setGameMode(newGameMode)
+		})
+
+		return () => {
+			props.socket.off('update-game-mode');
+		}
+	}, [props.socket])
+
+	useEffect(() => {
 		if (localStorageProfile && ProfileValidatorService.validate(localStorageProfile)) {
 			setProfile(localStorageProfile);
 		} else {
@@ -57,6 +69,12 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [localStorageProfile])
+
+	const gameModeSettingOnClick = (gameMode: GameModeProperty) => {
+		if (props.lobby.hostPlayerId === playerId) {
+			SocketEventEmitter.updateGameMode(props.socket, gameMode)
+		}
+	};
 
 	const handleSaveProfile = () => {
 		if (isProfileValid) {
@@ -126,21 +144,30 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</div>
 					<Divider />
 					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={copyLinkToClipboard}
 							icon={faLink}>
 							{t('lobbyView.inviteBtnLabel')}
 						</Button>
 					</div>
 					<div className="w-full md:w-auto mb-2 md:mb-0 mr-0 md:mr-2">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={() => setIsEditProfileVisible(true)}
 							icon={faEdit}>
 							{t('lobbyView.editProfileBtnLabel')}
 						</Button>
 					</div>
 					<div className="w-full md:w-auto">
-						<Button fullWidth color='secondary' size='small'
+						<Button
+							fullWidth
+							color="secondary"
+							size="small"
 							onClick={props.leaveGame}
 							icon={faTimes}>
 							{t('lobbyView.leaveBtnLabel')}
@@ -164,7 +191,11 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 					</div>
 					{props.lobby.hostPlayerId === playerId && (
 						<Box className="self-center" ml={2}>
-							<Button color='primary' size='small' onClick={tryToStartGame} icon={faPlay}>
+							<Button
+								color="primary"
+								size="small"
+								onClick={tryToStartGame}
+								icon={faPlay}>
 								{t('lobbyView.startBtnLabel')}
 							</Button>
 						</Box>
@@ -179,7 +210,9 @@ export default function LobbyView(props: LobbyViewProps): JSX.Element {
 								currentValue={gameMode}
 								value={gameModeProperty}
 								icon={faStopwatch}
-								setCurrentValue={setGameMode} />
+								setCurrentValue={setGameMode}
+								disabled={props.lobby.hostPlayerId !== playerId}
+								onClick={gameModeSettingOnClick} />
 						</Col>,
 					)}
 				</Row>
