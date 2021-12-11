@@ -4,7 +4,7 @@ import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
 import PlayerLobbyStorage from './Storage/PlayerLobbyStorage';
 import LobbyStorage from './Storage/LobbyStorage';
 import SessionStorage from './Storage/SessionStorage';
-import { Lobby } from '.';
+import type { Game, Lobby } from '.';
 
 export default class Application {
 	protected static instance: Application;
@@ -58,5 +58,9 @@ export default class Application {
 
 	static getSocketIoInstance(): Server {
 		return Application.getInstance().io;
+	}
+
+	static nextDrawingFor(game: Game): void {
+		console.log(game);
 	}
 }

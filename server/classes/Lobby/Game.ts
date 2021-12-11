@@ -4,6 +4,11 @@ import _, { shuffle } from 'lodash';
 import type { Dayjs } from 'dayjs';
 import GameMode from './GameMode/GameMode';
 import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteManager';
+import Application from '../Application';
+
+interface GameSubscriber {
+	update: (game: Game) => void;
+}
 
 export default class Game {
 	id: string;
@@ -21,6 +26,10 @@ export default class Game {
 	limitDate: Dayjs;
 	playerErrorVoteManager = new PlayerErrorVoteManager();
 
+	subscribers: GameSubscriber[] = [];
+
+	drawingEndTimeout: NodeJS.Timer;
+
 	constructor(lobby: Lobby, gameMode: GameMode) {
 		this.id = lobby.id;
 		this.hostPlayerId = lobby.hostPlayerId;
@@ -28,6 +37,15 @@ export default class Game {
 		this.gameMode = gameMode;
 		this.currentPlayer = this.players[0];
 		this.refreshLimitDate();
+		this.refreshDrawingEndTimeout();
+	}
+
+	protected refreshDrawingEndTimeout(): void {
+		if (this.drawingEndTimeout) clearTimeout(this.drawingEndTimeout);
+
+		this.drawingEndTimeout = setTimeout(() => {
+			Application.nextDrawingFor(this);
+		})
 	}
 
 	protected refreshLimitDate(): void {
