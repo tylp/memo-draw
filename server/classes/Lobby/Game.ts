@@ -5,6 +5,7 @@ import type { Dayjs } from 'dayjs';
 import GameMode from './GameMode/GameMode';
 import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteManager';
 import Application from '../Application';
+import dayjs from 'dayjs';
 
 interface GameSubscriber {
 	update: (game: Game) => void;
@@ -37,19 +38,27 @@ export default class Game {
 		this.gameMode = gameMode;
 		this.currentPlayer = this.players[0];
 		this.refreshLimitDate();
-		this.refreshDrawingEndTimeout();
 	}
 
 	protected refreshDrawingEndTimeout(): void {
-		if (this.drawingEndTimeout) clearTimeout(this.drawingEndTimeout);
+		this.clearPreviousTimeoutIfPossible();
+		this.createTimeout();
+	}
 
+	protected clearPreviousTimeoutIfPossible(): void {
+		if (this.drawingEndTimeout) clearTimeout(this.drawingEndTimeout);
+		this.drawingEndTimeout = undefined;
+	}
+
+	protected createTimeout(): void {
 		this.drawingEndTimeout = setTimeout(() => {
-			Application.nextDrawingFor(this);
-		})
+			Application.nextDrawingFor(Application.getLobbyStorage().get(this.id));
+		}, this.limitDate.diff(dayjs(), 'milliseconds'))
 	}
 
 	protected refreshLimitDate(): void {
 		this.limitDate = this.gameMode.getNewLimitDate(this);
+		this.refreshDrawingEndTimeout();
 	}
 
 	public isTurnOf(player: Player): boolean {
@@ -118,6 +127,7 @@ export default class Game {
 	}
 
 	protected endGame(): void {
+		this.clearPreviousTimeoutIfPossible();
 		this.hasEnded = true;
 		this.winner = this.getWinner();
 	}
