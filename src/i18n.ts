@@ -59,6 +59,7 @@ const resources = {
 				'drawSomethingNew': 'Draw something new to add !',
 				'drawWhatYouRemember': 'Draw what you remember !',
 				'memorizeEachDraw': 'Memorize each drawing in order !',
+				'voting': 'Voting',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',

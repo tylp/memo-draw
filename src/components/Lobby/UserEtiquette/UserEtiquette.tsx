@@ -3,6 +3,8 @@ import Player from '../../../../server/classes/Player';
 import { Color } from '../../../../server/types/Color';
 import { Avatar } from '../../Common';
 import UserEtiquetteStyleBuilder from './UserEtiquetteStyleBuilder';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface UserEtiquetteSpec {
 	player: Player;
@@ -10,6 +12,8 @@ interface UserEtiquetteSpec {
 	brPillTitle?: string | undefined;
 	color: Color;
 	disabled?: boolean | undefined;
+	onLeftPillClick?: (() => void) | undefined;
+	leftPillIcon?: IconProp
 }
 
 UserEtiquette.defaultProps = {
@@ -48,6 +52,25 @@ export default function UserEtiquette(props: UserEtiquetteSpec): JSX.Element {
 			}
 			{
 				props.brPillTitle && <Pill position="br" title={props.brPillTitle} />
+			}
+			{
+				props.onLeftPillClick && (
+					<div style={{ position: 'absolute', left: 0, bottom: 2, zIndex: 1 }}>
+						<button
+							onClick={props.onLeftPillClick}
+							style={{
+								border: 'none',
+								height: '25px',
+								width: '25px',
+								borderRadius: '50%',
+								color: 'white',
+							}}
+							className="bg-pink-dark-pink hover:bg-pink-light-pink transition duration-300">
+							<FontAwesomeIcon icon={props.leftPillIcon} />
+						</button>
+					</div>
+
+				)
 			}
 		</div>
 	)
