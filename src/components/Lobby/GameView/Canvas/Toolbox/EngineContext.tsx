@@ -1,4 +1,4 @@
-import { Color, drawState, Engine, ShapeType } from 'memo-draw-engine';
+import { Color, Engine, ShapeType } from 'memo-draw-engine';
 import React, { createContext, useState } from 'react';
 import { faPen, faFill, faSquare as faSquareFill, faCircle as faCircleFill, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as faSquare, faCircle, faWindowMinimize } from '@fortawesome/free-regular-svg-icons';
@@ -51,16 +51,16 @@ export const EngineContext = createContext<EngineContextSpec>({
 	engine: null,
 });
 
-export function EngineContextProvider ({ engine, children }: { engine : Engine, children: React.ReactNode }): JSX.Element {
+export function EngineContextProvider({ engine, children }: { engine: Engine, children: React.ReactNode }): JSX.Element {
 	const [customDrawState, setCustomDrawState] = useState<CustomDrawState>(defaultDrawState);
 
 	const setEngineProperties = (newCustomDrawState: CustomDrawState) => {
-		drawState.color = newCustomDrawState.selectedShape === 'Eraser'
+		engine.drawState.color = newCustomDrawState.selectedShape === 'Eraser'
 			? backgroundColor
 			: newCustomDrawState.color;
-		drawState.opacity = newCustomDrawState.opacity;
-		drawState.thickness = newCustomDrawState.thickness;
-		drawState.shapeType = newCustomDrawState.selectedShape === 'Eraser'
+		engine.drawState.opacity = newCustomDrawState.opacity;
+		engine.drawState.thickness = newCustomDrawState.thickness;
+		engine.drawState.shapeType = newCustomDrawState.selectedShape === 'Eraser'
 			? ShapeType.Pencil
 			: newCustomDrawState.selectedShape;
 	}

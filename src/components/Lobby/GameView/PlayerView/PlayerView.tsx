@@ -2,7 +2,6 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 import { Engine } from 'memo-draw-engine';
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-grid-system';
 import { useTranslation } from 'react-i18next';
 import { Socket } from 'socket.io-client';
 import { Lobby, Player } from '../../../../../server/classes';
@@ -11,18 +10,17 @@ import useLocalStorage from '../../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../../hooks/useLocalStorage/useLocalStorage.types';
 import SocketEventEmitter from '../../../../services/SocketEventEmitter';
 import VoteTargets from '../../../../services/VoteTargets/VoteTargets';
-import { Box, Button, Layout, Modal } from '../../../Common'
-import UserEtiquette from '../../UserEtiquette/UserEtiquette';
+import { Box, Button, Layout, SectionTitle } from '../../../Common'
 import BottomToolBox from '../Canvas/Toolbox/BottomToolBox';
 import { EngineContextProvider } from '../Canvas/Toolbox/EngineContext';
 import RightToolBox from '../Canvas/Toolbox/RightToolBox';
 import PlayersAndSpectators from '../PlayersAndSpectators/PlayersAndSpectators';
 import Countdown from './Countdown/Countdown';
-import PlayerSelector from './PlayerSelector/PlayerSelector'
 
 import styles from '../../../../../styles/GameView.module.css';
 import Canvas from '../Canvas/Canvas';
 import { PlayerTurnCue } from './PlayerTurnCue/PlayerTurnCue';
+import CurrentVote from './CurrentVote/CurrentVote';
 
 interface PlayerViewProps {
 	lobby: Lobby;
@@ -40,9 +38,6 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 	const [playerId] = useLocalStorage<Player['id']>(LocalStorageKey.PlayerId);
 
-	const [isStartVoteModalVisible, setIsStartVoteModalVisible] = useState(false);
-	const [selectedPlayer, setSelectedPlayer] = useState<Player | undefined>();
-	const [isCurrentVoteModalVisible, setIsCurrentVoteModalVisible] = useState(false);
 	const [currentVote, setCurrentVote] = useState<YesOrNo>();
 	const [hasLost, setHasLost] = useState<boolean>();
 
@@ -56,12 +51,10 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 	useEffect(() => {
 		props.socket.on('vote-started', (lobby: Lobby) => {
-			setIsCurrentVoteModalVisible(lobby.game.playerErrorVoteManager.selectedPlayer.id !== playerId);
 			props.updateLobby(lobby);
 		})
 
 		props.socket.on('stop-vote', () => {
-			setIsCurrentVoteModalVisible(false)
 			setCurrentVote(undefined);
 		})
 
@@ -78,10 +71,10 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		}
 	}
 
-	const startVote = () => {
-		if (playerId !== props.currentPlayer?.id && selectedPlayer) {
-			SocketEventEmitter.startVote(props.socket, selectedPlayer);
-			setIsStartVoteModalVisible(false);
+	const startVote = (player: Player) => {
+		if (playerId !== player.id && getVoteTargets().includes(player)) {
+			setCurrentVote('yes');
+			SocketEventEmitter.startVote(props.socket, player);
 		}
 	}
 
@@ -113,77 +106,32 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 
 	return (
 		<Layout size="large">
-			<Modal
-				visible={isStartVoteModalVisible}
-				onClose={() => setIsStartVoteModalVisible(false)}
-				onValidate={startVote}
-				disableValidate={!selectedPlayer}
-				title={t('gameView.startVote')}
-			>
-				<Box mb={2} className="w-full">
-					<PlayerSelector list={getVoteTargets()} selected={selectedPlayer} setSelected={setSelectedPlayer} />
-				</Box>
-			</Modal>
-			<Modal
-				visible={isCurrentVoteModalVisible}
-				onClose={() => setIsCurrentVoteModalVisible(false)}
-				showValidate={false}
-				showCancel={false}
-				title={t('gameView.hasThisPlayerMadeAnError')}
-			>
-				<Row>
-					<Col>
-						<div className="flex h-16 mb-2">
-							<Box mr={2} className="flex-1">
-								{props.lobby.game?.playerErrorVoteManager?.selectedPlayer && (
-									<UserEtiquette
-										player={props.lobby.game.playerErrorVoteManager.selectedPlayer}
-										color="secondary"
-									/>
-								)}
-							</Box>
-							<div>
-								<Countdown limitDate={dayjs(props.lobby.game.playerErrorVoteManager.voteEndDate)} />
-							</div>
-						</div>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<Button
-							color={currentVote !== 'yes' ? 'primary' : 'light-secondary'}
-							selected={currentVote === 'no'}
-							size="small"
-							fullWidth
-							onClick={() => vote('no')}
-						>
-							{t('gameView.no')}
-						</Button>
-					</Col>
-					<Col>
-						<Button
-							color={currentVote !== 'no' ? 'primary' : 'light-secondary'} size="small"
-							selected={currentVote === 'yes'}
-							fullWidth
-							onClick={() => vote('yes')}
-						>
-							{t('gameView.yes')}
-						</Button>
-					</Col>
-				</Row>
-			</Modal>
-
-
 			<EngineContextProvider engine={props.engine}>
 				<div style={{ userSelect: 'none' }} className={`mt-6 ${styles['grid-3']}`}>
 					<div className={`${styles['col-gap']} ${styles['player-overflow']}`}>
-						<PlayersAndSpectators
-							players={props.lobby.game?.players}
-							spectators={props.spectators}
-							losers={props.lobby.game.losers}
-							playerId={playerId}
-							currentPlayer={props.currentPlayer}
-						/>
+						<div style={{ direction: 'ltr' }}>
+							{
+								((props.lobby?.game?.playerErrorVoteManager?.selectedPlayer?.id !== playerId) && props.lobby?.game?.playerErrorVoteManager?.currentVote) && (!props.lobby?.game?.playerErrorVoteManager?.currentVote?.isClosed) && (
+									<Box mb={6}>
+										<SectionTitle hintColor="text-yellow-light-yellow">
+											{t('gameView.voting')}
+										</SectionTitle>
+										<p className="text-white-white">{t('gameView.hasThisPlayerMadeAnError')}</p>
+										<CurrentVote vote={vote} currentVote={currentVote} currentVoteManager={props.lobby?.game?.playerErrorVoteManager} />
+									</Box>
+								)
+							}
+						</div>
+						<div style={{ direction: 'ltr' }}>
+							<PlayersAndSpectators
+								players={props.lobby.game?.players}
+								spectators={props.spectators}
+								losers={props.lobby.game.losers}
+								playerId={playerId}
+								currentPlayer={props.currentPlayer}
+								startVote={startVote}
+							/>
+						</div>
 					</div>
 					<div className={styles['col-gap']}>
 						<div className="flex flex-row justify-between mb-4">
@@ -224,61 +172,22 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 									</Button>
 								</div>
 							)}
-							<StartVoteOrSendDrawing
-								showDrawingButton={playerId === props.currentPlayer?.id}
-								disableDrawingButton={hasLost}
-								onClickDrawingButton={nextDrawing}
-								disableStartVoteButton={hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
-								onClickStartVoteButton={() => {
-									setSelectedPlayer(undefined);
-									setCurrentVote('yes');
-									setIsStartVoteModalVisible(true);
-								}}
-							/>
+							<div style={{ height: '100%', paddingTop: '12px' }}>
+								<Button
+									color="primary"
+									size="medium"
+									fullHeight
+									fullWidth
+									icon={faArrowRight}
+									disabled={!(props.lobby.game.currentPlayer.id === playerId) || hasLost || !props.lobby.game.players.map(e => e.id).includes(playerId)}
+									onClick={nextDrawing}>
+									{t('gameView.sendDrawing')}
+								</Button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</EngineContextProvider>
 		</Layout>
-	)
-}
-
-interface StartVoteOrSendDrawingProps {
-	showDrawingButton: boolean;
-	disableDrawingButton: boolean;
-	onClickDrawingButton: () => void;
-	disableStartVoteButton: boolean;
-	onClickStartVoteButton: () => void;
-}
-
-function StartVoteOrSendDrawing(props: StartVoteOrSendDrawingProps): JSX.Element {
-	const { t } = useTranslation();
-
-	return (
-		<div style={{ height: '100%', paddingTop: '12px' }}>
-			{(props.showDrawingButton ? (
-				<Button
-					color="primary"
-					size="medium"
-					fullHeight
-					fullWidth
-					icon={faArrowRight}
-					disabled={props.disableDrawingButton}
-					onClick={props.onClickDrawingButton}>
-					{t('gameView.sendDrawing')}
-				</Button>
-			) : (
-				<Button
-					color="primary"
-					size="medium"
-					fullHeight
-					fullWidth
-					icon={faArrowRight}
-					disabled={props.disableStartVoteButton}
-					onClick={props.onClickStartVoteButton}>
-					{t('gameView.startVote')}
-				</Button>
-			))}
-		</div>
 	)
 }
