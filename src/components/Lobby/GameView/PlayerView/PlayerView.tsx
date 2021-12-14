@@ -24,20 +24,21 @@ import styles from '../../../../../styles/GameView.module.css';
 import Canvas from '../Canvas/Canvas';
 
 function PlayerTurnCue(props: {lobby: Lobby, playerId: Player['id']}): JSX.Element {
+	const { t } = useTranslation();
 
 	return(
 		<div className="bg-blue-darker-blue font-bold font-rubik h-full w-auto px-4 rounded-lg flex items-center">
 			{props.lobby.game.currentPlayer.id === props.playerId && (
 				<>
 					{props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
-						&& (<div className="text-pink-light-pink">Draw something new to add !</div>
-						) || <div className="text-yellow-light-yellow">Draw what you remember !</div>}
+						&& (<div className="text-pink-light-pink">{t('gameView.drawSomethingNew')}</div>
+						) || <div className="text-yellow-light-yellow">{t('gameView.drawWhatYouRemember')}</div>}
 
 				</>
 			)
 				|| (
 					<>
-						<div className="text-white-white">Memorize each drawing in order !</div>
+						<div className="text-white-white">{t('gameView.memorizeEachDraw')}</div>
 					</>
 				)}
 		</div>

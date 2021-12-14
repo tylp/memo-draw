@@ -56,6 +56,9 @@ const resources = {
 				'itsYouLabel': 'It\'s You',
 				'yes': 'Yes',
 				'no': 'No',
+				'drawSomethingNew': 'Draw something new to add !',
+				'drawWhatYouRemember': 'Draw what you remember !',
+				'memorizeEachDraw': 'Memorize each drawing in order !',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',
