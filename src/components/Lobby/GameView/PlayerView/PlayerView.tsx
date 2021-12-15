@@ -89,7 +89,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		return (new VoteTargets(props.lobby, playerId)).get();
 	}
 
-	const getClassName = (): string => {
+	const getCanvaClassName = (): string => {
 		const isPlayerTurn = props.currentPlayer.id === playerId
 		const isPlayerAddDraw = props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
 
@@ -152,7 +152,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						<Canvas
 							engine={props.engine}
 							setEngine={props.setEngine}
-							className={getClassName()}
+							className={getCanvaClassName()}
 						/>
 						<BottomToolBox />
 					</div>
