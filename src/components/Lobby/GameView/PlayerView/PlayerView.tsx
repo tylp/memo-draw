@@ -19,6 +19,7 @@ import Countdown from './Countdown/Countdown';
 
 import styles from '../../../../../styles/GameView.module.css';
 import Canvas from '../Canvas/Canvas';
+import { PlayerTurnCue } from './PlayerTurnCue/PlayerTurnCue';
 import CurrentVote from './CurrentVote/CurrentVote';
 
 interface PlayerViewProps {
@@ -88,6 +89,21 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 		return (new VoteTargets(props.lobby, playerId)).get();
 	}
 
+	const getCanvaClassName = (): string => {
+		const isPlayerTurn = props.currentPlayer.id === playerId
+		const isPlayerAddDraw = props.lobby.game.currentDrawingIndex === props.lobby.game.currentNumberOfDrawings
+
+		if (isPlayerTurn) {
+			if (isPlayerAddDraw) {
+				return 'ring-4 ring-pink-light-pink ring-inset';
+			} else {
+				return 'ring-4 ring-yellow-light-yellow ring-inset';
+			}
+		}
+
+		return '';
+	}
+
 	return (
 		<Layout size="large">
 			<EngineContextProvider engine={props.engine}>
@@ -118,19 +134,26 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 						</div>
 					</div>
 					<div className={styles['col-gap']}>
-						<div className="relative">
-							<div className="absolute top-0 md:-top-11 z-10">
+						<div className="flex flex-row justify-between mb-4">
+							<div className="flex-none md:-top-11 z-10">
 								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
 							</div>
-							<div style={{ right: '0' }} className="absolute top-0 md:-top-11 z-10">
-								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center">
+							<div className="top-0 md:-top-11 z-10 text-center antialiased">
+								<PlayerTurnCue lobby={props.lobby} playerId={playerId}/>
+							</div>
+							<div style={{ right: '0' }} className="flex-none top-0 md:-top-11 z-10">
+								<div className="bg-pink-dark-pink rounded-md px-3 py-1 text-center antialiased">
 									<span className="text-lg font-semibold text-white-white">
 										{props.lobby.game.currentDrawingIndex}/{props.lobby.game.currentNumberOfDrawings}
 									</span>
 								</div>
 							</div>
 						</div>
-						<Canvas engine={props.engine} setEngine={props.setEngine} />
+						<Canvas
+							engine={props.engine}
+							setEngine={props.setEngine}
+							className={getCanvaClassName()}
+						/>
 						<BottomToolBox />
 					</div>
 					<div className="h-full flex flex-col">
