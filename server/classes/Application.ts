@@ -61,8 +61,9 @@ export default class Application {
 		return Application.getInstance().io;
 	}
 
-	static nextDrawingFor(lobby: Lobby): void {
+	static nextDrawingFor(lobby: Lobby, asyncCurrentDrawingIdentifier: number): void {
 		if (!lobby?.game) return;
+		if (lobby?.game.currentDrawingIdentifier !== asyncCurrentDrawingIdentifier) return;
 
 		lobby.game.nextDrawing();
 		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());

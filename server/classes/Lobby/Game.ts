@@ -7,10 +7,6 @@ import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteMana
 import Application from '../Application';
 import dayjs from 'dayjs';
 
-interface GameSubscriber {
-	update: (game: Game) => void;
-}
-
 export default class Game {
 	id: string;
 	hostPlayerId: string;
@@ -23,13 +19,12 @@ export default class Game {
 
 	currentDrawingIndex = 0;
 	currentNumberOfDrawings = 0;
+	currentDrawingIdentifier = 0;
 
 	limitDate: Dayjs;
 	playerErrorVoteManager = new PlayerErrorVoteManager();
 
-	subscribers: GameSubscriber[] = [];
-
-	drawingEndTimeout: NodeJS.Timer;
+	drawingEndTimeout: NodeJS.Timeout;
 
 	constructor(lobby: Lobby, gameMode: GameMode) {
 		this.id = lobby.id;
@@ -47,12 +42,12 @@ export default class Game {
 
 	protected clearPreviousTimeoutIfPossible(): void {
 		if (this.drawingEndTimeout) clearTimeout(this.drawingEndTimeout);
-		this.drawingEndTimeout = undefined;
 	}
 
 	protected createTimeout(): void {
+		const asyncCurrentDrawingIdentifier = this.currentDrawingIdentifier;
 		this.drawingEndTimeout = setTimeout(() => {
-			Application.nextDrawingFor(Application.getLobbyStorage().get(this.id));
+			Application.nextDrawingFor(Application.getLobbyStorage().get(this.id), asyncCurrentDrawingIdentifier);
 		}, this.limitDate.diff(dayjs(), 'milliseconds'))
 	}
 
@@ -66,6 +61,7 @@ export default class Game {
 	}
 
 	public nextDrawing(): void {
+		this.currentDrawingIdentifier++;
 		this.refreshLimitDate();
 		if (this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;

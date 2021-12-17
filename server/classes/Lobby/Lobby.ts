@@ -22,7 +22,8 @@ export default class Lobby implements IHasSocketRoom, ISocketJsonable {
 
 	toSocketJson(): unknown {
 		const toSocketJson = { ...this }
-		delete toSocketJson.game.drawingEndTimeout;
+		if (toSocketJson?.game?.drawingEndTimeout)
+			delete toSocketJson.game.drawingEndTimeout;
 		return toSocketJson;
 	}
 

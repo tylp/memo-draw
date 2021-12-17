@@ -61,7 +61,7 @@ export default class LobbyService {
 		if (!lobby?.game) return;
 
 		lobby.game.nextDrawing();
-		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby);
+		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
 		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('network-manager-update', {
 			type: ActionType.Reset,
 			parameters: undefined,

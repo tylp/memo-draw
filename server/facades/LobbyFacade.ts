@@ -28,7 +28,7 @@ export default class LobbyFacade {
 		lobby.add(player);
 		socket.join(lobby.getSocketRoomName());
 		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, lobby.id);
-		socket.to(lobby.getSocketRoomName()).emit('update-lobby', lobby);
+		socket.to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
 
 		return lobby;
 	}
@@ -63,7 +63,7 @@ export default class LobbyFacade {
 	}
 
 	private static updateLobby(lobby: Lobby): void {
-		LobbyFacade.emitToLobby('update-lobby', lobby, lobby);
+		LobbyFacade.emitToLobby('update-lobby', lobby, lobby.toSocketJson());
 	}
 
 	public static startGame(socket: Socket, gameModeProperty: GameModeProperty): void {
