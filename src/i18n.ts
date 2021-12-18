@@ -56,6 +56,10 @@ const resources = {
 				'itsYouLabel': 'It\'s You',
 				'yes': 'Yes',
 				'no': 'No',
+				'drawSomethingNew': 'Draw something new to add !',
+				'drawWhatYouRemember': 'Draw what you remember !',
+				'memorizeEachDraw': 'Memorize each drawing in order !',
+				'voting': 'Voting',
 			},
 			'lobbyView': {
 				'playersTitle': 'Players',
@@ -79,6 +83,10 @@ const resources = {
 					'title': 'Anarchy',
 					'description': 'Faster drawings!',
 				},
+			},
+			'errors': {
+				'goBackHome': 'Go back home',
+				'404': 'Looks like we can\'t find what you\'re looking for!',
 			},
 		},
 	},

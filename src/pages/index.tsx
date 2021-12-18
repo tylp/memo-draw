@@ -4,6 +4,7 @@ import Homepage from './Homepage/Homepage';
 import JoinLobby from './JoinLobby/JoinLobby';
 import Lobby from './Lobby/Lobby';
 import SnackbarProvider from 'react-simple-snackbar'
+import NotFound from './Error/NotFound';
 
 export default function App(): JSX.Element {
 	return (
@@ -16,8 +17,11 @@ export default function App(): JSX.Element {
 					<Route path="/game">
 						<Lobby />
 					</Route>
-					<Route path="/">
+					<Route path="/" exact>
 						<Homepage />
+					</Route>
+					<Route path="*">
+						<NotFound />
 					</Route>
 				</Switch>
 			</Router>

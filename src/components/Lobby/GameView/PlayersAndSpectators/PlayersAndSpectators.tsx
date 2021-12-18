@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Player } from '../../../../../server/classes';
 import { Box, SectionTitle } from '../../../Common'
 import UserEtiquette from '../../UserEtiquette/UserEtiquette';
+import { faBomb } from '@fortawesome/free-solid-svg-icons';
 
 interface PlayersAndSpectatorsProps {
 	players: Player[];
@@ -10,6 +11,7 @@ interface PlayersAndSpectatorsProps {
 	losers: Player[];
 	currentPlayer: Player;
 	playerId: Player['id'];
+	startVote?: undefined | ((player: Player) => void);
 }
 
 export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): JSX.Element {
@@ -27,17 +29,29 @@ export default function PlayersAndSpectators(props: PlayersAndSpectatorsProps): 
 		return props.losers.map(e => e.id).includes(player.id)
 	}
 
+	const canVoteAgainst = (player: Player): boolean => {
+		return player.id !== props.playerId && !props.losers.map(e => e.id).includes(player.id)
+	}
+
 	return (
-		<div style={{ direction: 'ltr' }}>
-			<div className='h-16'>
+		<div>
+			<Box mb={2}>
 				<SectionTitle hintColor="text-yellow-light-yellow">
 					{t('gameView.playersTitle')}
 				</SectionTitle>
-			</div>
+			</Box>
 			<div>
 				{props.players.map((player: Player) => (
 					<Box mb={2} key={player.id} >
-						<UserEtiquette player={player} color='secondary' disabled={hasPlayerLost(player)} rPillTitle={getPillTitleItsYou(player)} brPillTitle={getPillTitleDrawing(player)} />
+						<UserEtiquette
+							player={player}
+							color="secondary"
+							disabled={hasPlayerLost(player)}
+							rPillTitle={getPillTitleItsYou(player)}
+							brPillTitle={getPillTitleDrawing(player)}
+							leftPillIcon={faBomb}
+							onLeftPillClick={canVoteAgainst(player) ? () => props.startVote?.(player) : undefined}
+						/>
 					</Box>
 				))}
 			</div>
@@ -62,7 +76,7 @@ function Spectators(props: SpectatorsProps): JSX.Element {
 
 	return (
 		<>
-			<div className='mt-10 h-16'>
+			<div className="mt-10 h-16">
 				<SectionTitle hintColor="text-yellow-light-yellow">
 					{t('gameView.spectatorsTitle')}
 				</SectionTitle>
@@ -71,7 +85,11 @@ function Spectators(props: SpectatorsProps): JSX.Element {
 				{
 					props.spectators.map((player: Player) => (
 						<Box mb={2} key={player.id} >
-							<UserEtiquette player={player} color='light-secondary' rPillTitle={getPillTitleItsYou(player)} />
+							<UserEtiquette
+								player={player}
+								color="light-secondary"
+								rPillTitle={getPillTitleItsYou(player)}
+							/>
 						</Box>
 					))
 				}

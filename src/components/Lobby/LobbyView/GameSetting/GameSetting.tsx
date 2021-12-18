@@ -3,14 +3,17 @@ import { Button, Title } from '../../../Common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Box from '../../../Common/Box/Box';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { GameModeProperty } from 'server/enums/GameProperties';
 
 interface GameSettingSpec {
 	title: string,
 	description: string,
 	icon: IconProp,
 	setCurrentValue: Dispatch<SetStateAction<string | number>>,
-	currentValue: string | number
-	value: string | number
+	currentValue: string | number,
+	value: string | number,
+	disabled?: boolean,
+	onClick?: (v: GameModeProperty) => void
 }
 
 export function GameSetting(props: GameSettingSpec): JSX.Element {
@@ -26,8 +29,12 @@ export function GameSetting(props: GameSettingSpec): JSX.Element {
 					size="large"
 					color="light-secondary"
 					fullWidth
+					disabled={props.disabled}
 					selected={props.currentValue === props.value}
-					onClick={() => props.setCurrentValue(props.value)}
+					onClick={() => {
+						props.setCurrentValue(props.value)
+						props.onClick(props.value as GameModeProperty);
+					}}
 				>
 					{props.title}
 				</Button>

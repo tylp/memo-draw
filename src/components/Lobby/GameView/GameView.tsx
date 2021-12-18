@@ -4,7 +4,7 @@ import Player from '../../../../server/classes/Player';
 import useLocalStorage from '../../../hooks/useLocalStorage/useLocalStorage';
 import { LocalStorageKey } from '../../../hooks/useLocalStorage/useLocalStorage.types';
 import { Socket } from 'socket.io-client';
-import { DrawPermission, drawState, Engine, IAction, ShapeType } from 'memo-draw-engine';
+import { DrawPermission, Engine, IAction, ShapeType } from 'memo-draw-engine';
 import NetworkManager from '../../../services/NetworkManager/NetworkManager';
 import _ from 'lodash';
 import EndGameScreen from './EndGameScreen/EndGameScreen';
@@ -39,20 +39,21 @@ export default function GameView(props: GameProps): JSX.Element {
 		if (!engine) return;
 
 		engine.eventManager.registerDefaultCanvasAndDocumentEvents();
-		drawState.shapeType = ShapeType.Pencil;
-		drawState.drawPermission = DrawPermission.Slave;
-		drawState.thickness = 5;
+		engine.drawState.shapeType = ShapeType.Pencil;
+		engine.drawState.drawPermission = DrawPermission.Slave;
+		engine.drawState.thickness = 5;
 
-		updateDrawingPermission();
+		updateDrawingPermission(engine);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [engine])
 
-	const updateDrawingPermission = () => {
-		drawState.drawPermission = currentPlayer?.id === playerId ? DrawPermission.Master : DrawPermission.Slave;
+	const updateDrawingPermission = (engine: Engine) => {
+		engine.drawState.drawPermission = (currentPlayer?.id === playerId) ? DrawPermission.Master : DrawPermission.Slave;
 	}
 
 	useEffect(() => {
-		updateDrawingPermission();
+		if (!engine) return;
+		updateDrawingPermission(engine);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentPlayer])
 

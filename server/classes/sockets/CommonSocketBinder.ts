@@ -60,7 +60,7 @@ export default class CommonSocketBinder extends SocketBinder {
 
 			if (lobby) {
 				lobby.players = lobby.players.map(e => e.id === playerId ? new Player(SocketIdentifierService.getSessionOf(socket)) : e)
-				socket.in(lobby.getSocketRoomName()).emit('update-lobby', lobby);
+				socket.in(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
 			}
 		})
 	}

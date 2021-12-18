@@ -6,6 +6,7 @@ import PlayerFactory from '../factories/PlayerFactory';
 import LobbyFactory from '../factories/LobbyFactory';
 import ISession from '../interfaces/ISession';
 import { YesOrNo } from '../classes/Votes/YesNoVote';
+import { ActionType } from 'memo-draw-engine';
 
 interface PlayerIdentifiers {
 	playerId: string;
@@ -38,7 +39,7 @@ export default class LobbyService {
 	}
 
 	public static start(lobby: Lobby, player: Player, gameModeProperty: GameModeProperty): boolean {
-		if (lobby.hostPlayerId === player.id) {
+		if (lobby.isPlayerHost(player.id)) {
 			lobby.startGame(gameModeProperty);
 			return true;
 		}
@@ -49,11 +50,22 @@ export default class LobbyService {
 		const lobbyOfCurrentPlayer = Application.getPlayerLobbyStorage().getLobbyOf(sessionId)
 		const kickedSessionId = Application.getPlayerIdSessionIdStorage().get(kickedPlayerId);
 
-		if (lobbyOfCurrentPlayer.hostIs(playerId)) {
+		if (lobbyOfCurrentPlayer.isPlayerHost(playerId)) {
 			this.quit({ playerId: kickedPlayerId, sessionId: kickedSessionId });
 		}
 
 		return lobbyOfCurrentPlayer;
+	}
+
+	public static nextDrawing(lobby: Lobby): void {
+		if (!lobby?.game) return;
+
+		lobby.game.nextDrawing();
+		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
+		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('network-manager-update', {
+			type: ActionType.Reset,
+			parameters: undefined,
+		});
 	}
 
 	public static quit({ playerId, sessionId }: PlayerIdentifiers): Lobby {
@@ -90,4 +102,5 @@ export default class LobbyService {
 
 		return lobbyOfCurrentPlayer;
 	}
+
 }

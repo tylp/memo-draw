@@ -79,6 +79,7 @@ module.exports = {
 			grey: {
 				'grey': '#4D4D4D',
 				'light-grey': '#42788F',
+				'lighter-grey': '#f5f5f5',
 			},
 			pink: {
 				'dark-pink': '#ED1E79',

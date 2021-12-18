@@ -15,11 +15,6 @@
 }
 
 .container.large {
-	max-width: 1300px;
-	width: 80vw;
-}
-
-.container.large {
   max-width: 1300px;
   width: 80vw;
   margin-top: 80px;
