@@ -28,7 +28,7 @@ export default class LobbyFacade {
 		lobby.add(player);
 		socket.join(lobby.getSocketRoomName());
 		LobbyService.linkPlayerToLobby(sessionOfSocket.sessionId, lobby.id);
-		socket.to(lobby.getSocketRoomName()).emit('update-lobby', lobby);
+		socket.to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
 
 		return lobby;
 	}
@@ -63,7 +63,7 @@ export default class LobbyFacade {
 	}
 
 	private static updateLobby(lobby: Lobby): void {
-		LobbyFacade.emitToLobby('update-lobby', lobby, lobby);
+		LobbyFacade.emitToLobby('update-lobby', lobby, lobby.toSocketJson());
 	}
 
 	public static startGame(socket: Socket, gameModeProperty: GameModeProperty): void {
@@ -72,7 +72,15 @@ export default class LobbyFacade {
 		const lobby = Application.getLobbyStorage().get(lobbyId);
 
 		if (LobbyService.start(lobby, player, gameModeProperty)) {
-			socket.in(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby);
+			socket.in(Lobby.getLobbyName(lobbyId)).emit('game-started', lobby.toSocketJson());
+		}
+	}
+
+	public static nextDrawing(socket: Socket): void {
+		const player = PlayerFactory.create(SocketIdentifierService.getSessionOf(socket));
+		const lobby = Application.getPlayerLobbyStorage().getLobbyOf(SocketIdentifierService.getSessionIdentifier(socket));
+		if (lobby?.game?.isTurnOf(player)) {
+			LobbyService.nextDrawing(lobby);
 		}
 	}
 

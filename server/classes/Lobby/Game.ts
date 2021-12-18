@@ -4,6 +4,8 @@ import _, { shuffle } from 'lodash';
 import type { Dayjs } from 'dayjs';
 import GameMode from './GameMode/GameMode';
 import PlayerErrorVoteManager from './PlayerErrorVoteManager/PlayerErrorVoteManager';
+import Application from '../Application';
+import dayjs from 'dayjs';
 
 export default class Game {
 	id: string;
@@ -17,9 +19,12 @@ export default class Game {
 
 	currentDrawingIndex = 0;
 	currentNumberOfDrawings = 0;
+	currentDrawingIdentifier = 0;
 
 	limitDate: Dayjs;
 	playerErrorVoteManager = new PlayerErrorVoteManager();
+
+	drawingEndTimeout: NodeJS.Timeout;
 
 	constructor(lobby: Lobby, gameMode: GameMode) {
 		this.id = lobby.id;
@@ -30,8 +35,25 @@ export default class Game {
 		this.refreshLimitDate();
 	}
 
+	protected refreshDrawingEndTimeout(): void {
+		this.clearPreviousTimeoutIfPossible();
+		this.createTimeout();
+	}
+
+	protected clearPreviousTimeoutIfPossible(): void {
+		if (this.drawingEndTimeout) clearTimeout(this.drawingEndTimeout);
+	}
+
+	protected createTimeout(): void {
+		const asyncCurrentDrawingIdentifier = this.currentDrawingIdentifier;
+		this.drawingEndTimeout = setTimeout(() => {
+			Application.nextDrawingFor(Application.getLobbyStorage().get(this.id), asyncCurrentDrawingIdentifier);
+		}, this.limitDate.diff(dayjs(), 'milliseconds'))
+	}
+
 	protected refreshLimitDate(): void {
 		this.limitDate = this.gameMode.getNewLimitDate(this);
+		this.refreshDrawingEndTimeout();
 	}
 
 	public isTurnOf(player: Player): boolean {
@@ -39,6 +61,7 @@ export default class Game {
 	}
 
 	public nextDrawing(): void {
+		this.currentDrawingIdentifier++;
 		this.refreshLimitDate();
 		if (this.currentDrawingIndex === this.currentNumberOfDrawings) {
 			this.currentNumberOfDrawings++;
@@ -100,6 +123,7 @@ export default class Game {
 	}
 
 	protected endGame(): void {
+		this.clearPreviousTimeoutIfPossible();
 		this.hasEnded = true;
 		this.winner = this.getWinner();
 	}

@@ -52,7 +52,7 @@ export default class LobbySocketBinder extends SocketBinder {
 			if (lobby?.isPlayerHost(playerId)) {
 				lobby.assignRandomHost();
 			}
-			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', lobby);
+			socket.to(Lobby.getLobbyName(lobbyId)).emit('update-lobby', lobby.toSocketJson());
 		})
 	}
 

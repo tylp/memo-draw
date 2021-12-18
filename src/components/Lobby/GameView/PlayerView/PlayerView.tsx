@@ -136,7 +136,7 @@ export default function PlayerView(props: PlayerViewProps): JSX.Element {
 					<div className={styles['col-gap']}>
 						<div className="flex flex-row justify-between mb-4">
 							<div className="flex-none md:-top-11 z-10">
-								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} onFinish={nextDrawing} />
+								<Countdown limitDate={dayjs(props.lobby.game.limitDate)} />
 							</div>
 							<div className="top-0 md:-top-11 z-10 text-center antialiased">
 								<PlayerTurnCue lobby={props.lobby} playerId={playerId}/>

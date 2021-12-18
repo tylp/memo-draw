@@ -1,10 +1,12 @@
+import { ISocketJsonable } from './../../interfaces/ISocketJsonable';
 import { GameModeProperty } from './../../enums/GameProperties';
 import Application from '../Application';
 import { Game, Player } from '..';
 import { random } from 'lodash';
 import GameModeFactory from './GameMode/GameModeFactory';
+import { IHasSocketRoom } from 'server/interfaces/IHasSocketRoom';
 
-export default class Lobby {
+export default class Lobby implements IHasSocketRoom, ISocketJsonable {
 	id: string;
 	hostPlayerId: string;
 	players: Array<Player>;
@@ -16,6 +18,13 @@ export default class Lobby {
 		this.hostPlayerId = hostPlayerId;
 		this.hasStarted = false;
 		this.players = [];
+	}
+
+	toSocketJson(): unknown {
+		const toSocketJson = { ...this }
+		if (toSocketJson?.game?.drawingEndTimeout)
+			delete toSocketJson.game.drawingEndTimeout;
+		return toSocketJson;
 	}
 
 	add(player: Player): this {

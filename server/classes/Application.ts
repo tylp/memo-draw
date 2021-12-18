@@ -4,7 +4,8 @@ import PlayerIdSessionIdStorage from './Storage/PlayerIdSessionIdStorage';
 import PlayerLobbyStorage from './Storage/PlayerLobbyStorage';
 import LobbyStorage from './Storage/LobbyStorage';
 import SessionStorage from './Storage/SessionStorage';
-import { Lobby } from '.';
+import type { Lobby } from '.';
+import { ActionType } from 'memo-draw-engine';
 
 export default class Application {
 	protected static instance: Application;
@@ -58,5 +59,17 @@ export default class Application {
 
 	static getSocketIoInstance(): Server {
 		return Application.getInstance().io;
+	}
+
+	static nextDrawingFor(lobby: Lobby, asyncCurrentDrawingIdentifier: number): void {
+		if (!lobby?.game) return;
+		if (lobby?.game.currentDrawingIdentifier !== asyncCurrentDrawingIdentifier) return;
+
+		lobby.game.nextDrawing();
+		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('update-lobby', lobby.toSocketJson());
+		Application.getSocketIoInstance().of('/game').to(lobby.getSocketRoomName()).emit('network-manager-update', {
+			type: ActionType.Reset,
+			parameters: undefined,
+		});
 	}
 }
